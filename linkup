@@ -1,6 +1,10 @@
 #!/bin/bash
 
+GTPDIR="$HOME/.gconf/apps/gnome-terminal"
+
 rm ~/{.R,.Rprofile,.bashrc,.gitignore,.gitconfig,.gvimrc,.inputrc,.screenrc,.vim,.vimrc,scripts,.tmux.conf}
+mkdir -p "$GTPDIR"
+rm "$GTPDIR/profiles"
 
 ln -s $PWD/R ~/.R
 ln -s $PWD/Rprofile ~/.Rprofile
@@ -14,5 +18,6 @@ ln -s $PWD/vim ~/.vim
 ln -s $PWD/vimrc ~/.vimrc
 ln -s $PWD/tmux.conf ~/.tmux.conf
 ln -s $PWD/scripts ~/scripts
+ln -s $PWD/gnome-term-profiles ~/.gconf/apps/gnome-terminal/profiles
 
 exit 0

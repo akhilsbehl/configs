@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<gconf>
+	<entry name="font" mtime="1350555707" type="string">
+		<stringvalue>Monospace 10</stringvalue>
+	</entry>
+	<entry name="use_system_font" mtime="1350555707" type="bool" value="false"/>
+	<entry name="bold_color_same_as_fg" mtime="1350555707" type="bool" value="false"/>
+	<entry name="use_theme_colors" mtime="1350555707" type="bool" value="false"/>
+	<entry name="foreground_color" mtime="1350555707" type="string">
+		<stringvalue>#000000000000</stringvalue>
+	</entry>
+	<entry name="background_color" mtime="1350555707" type="string">
+		<stringvalue>#FFFFFFFFFFFF</stringvalue>
+	</entry>
+	<entry name="bold_color" mtime="1350555707" type="string">
+		<stringvalue>#000000000000</stringvalue>
+	</entry>
+	<entry name="scrollback_unlimited" mtime="1350555707" type="bool" value="true"/>
+	<entry name="palette" mtime="1350555707" type="string">
+		<stringvalue>#000000000000:#CDCD00000000:#0000CDCD0000:#CDCDCDCD0000:#00000000CDCD:#CDCD0000CDCD:#0000CDCDCDCD:#FAFAEBEBD7D7:#404040404040:#FFFF00000000:#0000FFFF0000:#FFFFFFFF0000:#00000000FFFF:#FFFF0000FFFF:#0000FFFFFFFF:#FFFFFFFFFFFF</stringvalue>
+	</entry>
+	<entry name="title_mode" mtime="1350555707" type="string">
+		<stringvalue>ignore</stringvalue>
+	</entry>
+	<entry name="title" mtime="1350555707" type="string">
+		<stringvalue>Dumbledore</stringvalue>
+	</entry>
+	<entry name="default_size_rows" mtime="1350555707" type="int" value="38"/>
+	<entry name="use_custom_default_size" mtime="1350555707" type="bool" value="true"/>
+	<entry name="visible_name" mtime="1350555707" type="string">
+		<stringvalue>Dumbledore</stringvalue>
+	</entry>
+</gconf>
