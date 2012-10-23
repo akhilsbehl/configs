@@ -1,0 +1,13 @@
+[user]
+  name = akhilsbehl
+  email = akhilsbehl@gmail.com
+[core]
+  editor = vim
+  pager = vim - -R -c 'set filetype=git' -c 'set foldmethod=syntax'
+  excludesfile = /home/akhilsbehl/.gitignore
+[merge]
+  tool = gvimdiff
+[alias]
+  hist = log --pretty=format:\"%h %ad | %an | %s %d\" --graph --date=short
+  unstage = reset HEAD
+  visual = !gitk

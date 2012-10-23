@@ -1,0 +1,38 @@
+#!/bin/bash
+
+BASEDIR="$HOME"/.crclient
+cd "$BASEDIR"
+
+function lout(){
+  ./crclient -l
+  if [ -e /tmp/crclient.pid ]; then
+    rm /tmp/crclient.pid
+  fi
+  killall -9 crclient
+}
+
+if [ "$1" == "-lin" ]; then
+  if ! [ -e "$BASEDIR"/crclient.conf ]; then
+    echo "It seems that you are logging in for the first time."
+    echo "Or your config file has been lost."
+    echo "Please provide the following information:"
+    echo "Cyberoam login name:"
+    read LOGIN
+    ./crclient -u "$LOGIN"
+    sleep 3s && mv -f "$HOME"/crclient.{conf,log} "$BASEDIR"/
+    # Don't ask me why it needs to sleep a few seconds.
+  elif ! [ -e "$BASEDIR"/crclient.log ]; then
+    touch "$BASEDIR"/crclient.log
+  else
+    lout &> /dev/null 
+    LOGIN=$(grep ^User "$BASEDIR"/crclient.conf | awk '{print $2}')
+    ./crclient -u "$LOGIN" -f $BASEDIR/crclient.conf -d "$BASEDIR"/crclient.log
+  fi
+elif [[ "$1" == "-lout" ]]; then
+  lout
+else
+  echo "Usage: cyberoam -lin[lout] to log-in[out]"
+  echo "All further parameters will be silently ignored."
+fi
+
+exit 0

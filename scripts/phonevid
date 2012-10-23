@@ -1,0 +1,45 @@
+#!/bin/bash
+
+OIFS=$IFS
+IFS=$'\n'
+
+function restore_ifs {
+IFS=$OIFS
+unset OIFS
+exit 0
+}
+
+OUTDIR="$HOME"/videos/phonevids
+LOGDIR="$HOME"/.log
+LOGFILE="$LOGDIR"/phonevid_$(date +%d%B%y_%H%M%S)
+
+if ! [ -d "$OUTDIR" ]; then
+  mkdir -p "$OUTDIR"
+fi
+
+if ! [ -d "$LOGDIR" ]; then
+  mkdir -p "$LOGDIR"
+fi
+
+function print_help(){
+echo "
+Usage:	phonevid /path/to/file(s)
+Help:	phonevid
+"
+}
+
+if [ -z "$1" ]
+then
+  print_help
+  restore_ifs
+else
+  for VID in $*
+  do
+    INPUTNAME=$(basename "$VID")
+    OUTPUTNAME=${INPUTNAME%.*}.mp4
+    echo "Processing $VID"
+    ffmpeg -i "$VID" -strict -2 -b:v 900K -r 30 -s 640x360 -aspect "16:10" \
+      -ar 44100 -b:a 192K -ac 2 "$OUTDIR"/"$OUTPUTNAME" &> "$LOGFILE"
+  done
+  restore_ifs
+fi

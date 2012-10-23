@@ -1,0 +1,54 @@
+#!/bin/bash
+
+cd "$HOME"/.bcmwl
+tar -xzf *.tar.gz
+
+make -C /lib/modules/$(uname -r)/build M=$(pwd) clean > /dev/null
+make -C /lib/modules/$(uname -r)/build M=$(pwd) > /dev/null
+install -D -m 755 wl.ko /lib/modules/$(uname \
+  -r)/kernel/drivers/net/wireless/wl.ko
+
+depmod -a
+
+if [ "$(lsmod | grep -w -e ^b43)" != "" ]
+then
+  rmmod b43
+fi
+
+if [ "$(lsmod | grep -w -e ^ssb)" != "" ]
+then
+  rmmod ssb
+fi
+
+if [ "$(lsmod | grep -w -e ^wl)" != "" ]
+then
+  rmmod wl
+fi
+
+if [ "$(lsmod | grep -w -e ^lib80211_crypt_tkip)" != "" ]
+then
+  rmmod lib80211_crypt_tkip
+fi
+
+modprobe wl
+modprobe lib80211_crypt_tkip
+
+/usr/sbin/iwconfig
+
+TMPFILE=/tmp/"$RANDOM".txt
+
+cat /etc/modprobe.d/blacklist.conf | grep -v -e ssb -e b43 > "$TMPFILE"
+echo "blacklist b43" >> "$TMPFILE"
+echo "blacklist ssb" >> "$TMPFILE"
+mv "$TMPFILE" /etc/modprobe.d/blacklist.conf
+
+gvim /etc/rc.conf
+echo 'Make sure the modules array blacklists `ssb` and `b43` modules.'
+echo 'Make sure the modules array includes `wl` and `lib80211_crypt_tkip`.'
+read
+
+cat /etc/pm/config.d/modules | grep -v "SUSPEND_MODULES" > "$TMPFILE"
+echo 'SUSPEND_MODULES="wl"' >> "$TMPFILE"
+mv "$TMPFILE" /etc/pm/config.d/modules 
+
+exit 0

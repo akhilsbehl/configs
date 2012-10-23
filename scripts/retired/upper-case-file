@@ -1,0 +1,33 @@
+#!/bin/bash
+
+OIFS=$IFS
+IFS=$'\n'
+
+if [ -z "$1" ]
+then
+  echo "No input. Exiting."
+
+  IFS=$OIFS
+  unset OIFS
+  exit 0
+
+else
+  for d in $*
+  do
+    if ! [ -e "$d" ]
+    then
+      echo "The file "$d" does not exist."
+    else
+      FPATH=$(readlink -m $(dirname "$d"))
+      NAME=$(basename "$d")
+      NEW_NAME="$NAME".up
+      cat "$FPATH"/"$NAME" | tr [:lower:] [:upper:] > "$FPATH"/"$NEW_NAME"
+      echo "The new file is "$FPATH"/"$NEW_NAME"."
+    fi
+  done
+
+  IFS=$OIFS
+  unset OIFS
+  exit 0
+
+fi

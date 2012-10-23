@@ -1,0 +1,21 @@
+#!/bin/bash
+
+RETVAL=()
+
+PID=$(ps x | grep libflashplayer.so | grep -v grep | awk '{print $1}')
+
+for ID in $PID
+do
+  FDS=$(lsof -p "$ID" | grep "/tmp/Flash" | awk '{print $4}')
+  for d in $FDS
+  do
+    FILENAME=$(lsof -p "$ID" | grep "/tmp/Flash" | grep "$d" | \
+      awk '{print $9}' | cut -f 3 -d '/')
+    FD=${d:0:2}
+    APPEND=(/proc/"$ID"/fd/"$FD")
+    RETVAL=(${RETVAL[*]} $APPEND)
+  done
+done
+echo ${RETVAL[*]}
+
+exit 0

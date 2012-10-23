@@ -1,0 +1,15 @@
+#!/bin/bash
+
+remove-autofs-shares
+remove-sshfs-shares
+sudo /etc/rc.d/networkmanager stop
+sudo pm-suspend &
+lock &&
+  sudo /etc/rc.d/networkmanager start
+
+exit 0
+
+# If you are going to use this script in a non-interactive environment, make
+# sure that you are in the sudoers list or you are explicitly supplying your
+# password to sudo in the script itself. Please refer to sudo man page to see
+# how to do this.

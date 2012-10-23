@@ -1,0 +1,46 @@
+#!/bin/bash
+
+OIFS=$IFS
+IFS=$'\n'
+
+function ask_consent() {
+CONSENT=""
+while [[ "$CONSENT" != "y" && "$CONSENT" != "n" ]]
+do
+  echo "y/n"
+  read CONSENT
+done
+}
+
+if [ -z "$1" ]
+then
+  echo
+  echo "No file to restore. Exiting."
+else
+  for d in $*
+  do
+    FPATH=/$(readlink -m $(dirname $d) | cut -f 4- -d '/')
+    if ! [ -d $FPATH ]
+    then
+      echo "The directory to restore to does not exist."
+      echo "Create $FPATH now?"
+
+      ask_consent
+
+      if [ "$CONSENT" = "y" ]
+      then
+        mkdir -p $FPATH
+        mv -iv $d $FPATH
+      else
+        echo "Exiting. File not restored."
+      fi
+    else
+      mv -iv $d $FPATH
+    fi
+  done
+fi
+
+IFS=$OIFS
+unset OIFS
+
+exit 0

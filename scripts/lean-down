@@ -1,0 +1,20 @@
+#!/bin/bash
+
+function lean_down()
+{
+  sudo /etc/rc.d/autofs stop
+  sudo /etc/rc.d/cupsd stop
+  sudo /etc/rc.d/bluetooth stop
+  sudo cpufreq-set -r --governor conservative
+  sleep 1
+  cpufreq-info | grep current | sort -u
+}
+
+if [[ "$1" == "-n" ]]; then
+  lean_down
+else
+  lean_down
+  sudo /etc/rc.d/networkmanager stop
+fi
+
+exit 0

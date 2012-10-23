@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ ! -z "$1" ]]; then
+  sudo mount -t tmpfs tmpfs /mnt -o size="$1"m
+fi
+
+exit 0

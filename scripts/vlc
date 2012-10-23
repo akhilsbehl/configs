@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/usr/bin/vlc $* &> /dev/null &
+
+exit 0

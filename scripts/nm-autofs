@@ -1,0 +1,12 @@
+#!/bin/bash
+
+case "$2" in
+  "up")
+    /usr/local/bin/add-autofs-shares
+    ;;
+  "down")
+    if [ ! $(nm-tool | grep State | cut -f 2 -d ' ') == "connected" ]; then
+      /usr/local/bin/remove-autofs-shares
+    fi
+    ;;
+esac

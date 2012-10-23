@@ -1,0 +1,15 @@
+#!/bin/bash
+
+sudo -u akhilsbehl /usr/local/bin/add-xhost
+sudo -u root /usr/local/bin/add-xhost
+/usr/bin/devilspie &> /dev/null &
+/usr/local/bin/distwtype &
+libreoffice --nologo --quickstart &
+/usr/bin/artha &
+sudo /usr/bin/cpufreq-set -c 0 -g performance
+sudo /usr/bin/cpufreq-set -c 1 -g performance
+sudo /usr/bin/cpufreq-set -c 2 -g performance
+sudo /usr/bin/cpufreq-set -c 3 -g performance
+/usr/local/bin/fortune-cookie && /usr/bin/gnome-terminal
+
+exit 0

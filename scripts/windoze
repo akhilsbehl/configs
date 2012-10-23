@@ -1,0 +1,5 @@
+#!/bin/bash
+
+VirtualBox --fullscreen --start-running --startvm WinXP 2>&1 /dev/null
+
+exit 0

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bkup
+
+/usr/bin/rankmirrors -n 5 /etc/pacman.d/mirrorlist.bkup > /etc/pacman.d/mirrorlist
+
+exit 0

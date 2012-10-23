@@ -1,0 +1,10 @@
+#!/bin/bash
+
+while [[ true ]]; do
+  wget http://dynamic.xkcd.com/comic/random/ -O - | \
+    grep '<img src="http://imgs.xkcd.com/comics' | \
+    cut -f 2 -d '"' | wget -i - -O /tmp/xkcd.png && \
+    display /tmp/xkcd.png && echo
+done
+
+exit 0

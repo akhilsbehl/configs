@@ -1,0 +1,14 @@
+#!/bin/bash
+
+OIFS="$IFS"
+IFS=$'\n'
+
+for d in $*
+do
+  unlink "$d"
+done
+
+IFS="$OIFS"
+unset OIFS
+
+exit 0

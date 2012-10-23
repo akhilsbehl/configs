@@ -1,0 +1,35 @@
+#!/bin/bash
+
+DIR="$(basename "$1" /)"
+
+if [[ -z "$1" ]]; then
+  DIR="$PWD"
+fi
+
+du -sk "$DIR"/* | sort -n | awk '
+  BEGIN {
+    pref[1]="K";
+    pref[2]="M";
+    pref[3]="G";
+  }
+
+  {
+    y = 1;
+    x = $1;
+    total = total + x;
+    while (x > 1024) {
+      x = (x + 1023)/1024; y++;
+    }
+    printf("%6.1f%s\t%s\n", int(x*10)/10, pref[y], $2);
+  }
+
+  END {
+    y = 1;
+    while (total > 1024) {
+      total = (total + 1023)/1024; y++;
+    }
+    printf("%6.1f%s\tTotal Size\n", int(total*10)/10, pref[y]);
+  }
+'
+
+exit 0

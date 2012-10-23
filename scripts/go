@@ -1,0 +1,14 @@
+#!/bin/bash
+
+OIFS="$IFS"
+IFS=$'\n'
+
+for d in $*
+do
+  xdg-open "$d" &> /dev/null
+done
+
+IFS="$OIFS"
+unset OIFS
+
+exit 0

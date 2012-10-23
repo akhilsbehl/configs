@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ -z ${1} ]
+then
+  echo "Please provide a name for the new beamer project."
+  echo
+  read name
+else
+  name=${1}
+fi
+
+echo
+echo "Making a new beamer project called "${name}"."
+echo
+
+if [ -d "${HOME}/latex/"${name}"" ]
+then
+  echo "A project by that name already exists."
+  echo "Please provide another name for the project."
+  echo
+  read name
+
+  echo
+  echo "Making a new beamer project called "${name}"."
+  echo
+fi
+
+mkdir -v ${HOME}/latex/"${name}"
+cp -v ${HOME}/latex/beamer_template*tex ${HOME}/latex/"${name}"/"${name}".tex
+cp -v ${HOME}/latex/beamer_template*pdf ${HOME}/latex/"${name}"/"${name}".pdf
+
+gvim "${HOME}"/latex/"${name}"/"${name}".tex &
+evince "${HOME}"/latex/"${name}"/"${name}".pdf &
+
+exit 0

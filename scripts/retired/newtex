@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ -z ${1} ]
+then
+  echo "Please provide a name for the new article project."
+  echo
+  read name
+else
+  name=${1}
+fi
+
+echo
+echo "Making a new article project called "${name}"."
+echo
+
+if [ -d "${HOME}/latex/"${name}"" ]
+then
+  echo "A project by that name already exists."
+  echo "Please provide another name for the project."
+  echo
+  read name
+
+  echo
+  echo "Making a new article project called "${name}"."
+  echo
+fi
+
+mkdir -v ${HOME}/latex/"${name}"
+
+touch "${HOME}"/latex/"${name}"/"${name}".tex &
+gvim "${HOME}"/latex/"${name}"/"${name}".tex &
+
+exit 0

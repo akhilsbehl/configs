@@ -1,0 +1,34 @@
+#!/bin/bash
+
+LOGDIR="$HOME"/.log
+LOGFILE="$LOGDIR"/batterymon.log
+LOGTIME="[$(date +"%d %b; %H:%M:%S")]"
+
+BATSTATUS=$(acpi -b | cut -f 4 -d ' ' | cut -c 1-2)
+CHGSTATUS=$(acpi -b | cut -f 3 -d ' ')
+
+ALARM_HIGH_HEAD="Battery Charged"
+ALARM_HIGH_BODY="Time to switch off the external power source."
+
+ALARM_LOW_HEAD="Battery Low"
+ALARM_LOW_BODY="Time to switch in to external power source."
+
+function raise_alarm {
+DISPLAY=:0 notify-send "$1" "$2"
+echo "$LOGTIME" "$1" "$2" >> "$LOGFILE"
+}
+
+function main {
+if [[ "$1" -lt "40" && "$2" == "Discharging," ]]; then
+  raise_alarm "$ALARM_LOW_HEAD" "$ALARM_LOW_BODY"
+elif [[ "$1" -gt "80" && "$2" == "Charging," ]]; then
+  raise_alarm "$ALARM_HIGH_HEAD" "$ALARM_HIGH_BODY"
+fi
+}
+
+if ! [[ -e "$LOGDIR" ]]; then
+  mkdir -p "$LOGDIR"
+fi
+main "$BATSTATUS" "$CHGSTATUS"
+
+exit 0

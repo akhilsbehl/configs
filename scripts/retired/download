@@ -1,0 +1,69 @@
+#!/bin/bash
+
+function print_help {
+echo "
+Usage:	download -d=downloaddir -f=sourcefile
+Help:	download -h
+
+In absence of -d switch or if the specified directory does not exist, the
+current working directory for the script shall be used as the download
+directory.
+
+When using the -f option, make sure the source urls in the file are not
+quoted.
+
+In absence of the -f switch or if the specified sourcefile does not exist,
+the sources shall be retrieved interactively. Provide all source links on
+stdin, enclosed in single quotes '', and ending in newline (press enter).
+Press Ctrl-C after having entered all sources. 
+
+Specifying the -h flag (even with any other options) shall print help and
+exit.
+"
+exit 0
+}
+
+for option in $*
+do
+  case "$option" in
+    -d=*)
+      DOWNLOADDIR=$(echo "$option" | cut -f 2- -d '=')
+      ;;
+    -f=*)
+      SOURCEFILE=$(echo "$option" | cut -f 2- -d '=')
+      ;;
+    -h)
+      WANTHELP="y"
+      ;;
+    *)
+      ;;
+  esac
+done
+
+if [[ $# -eq 0 || $WANTHELP = "y" ]]
+then
+  print_help
+fi
+
+if (! [ -d "$DOWNLOADDIR" ]) || [ "$DOWNLOADDIR" == "" ]
+then
+  DOWNLOADDIR="$HOME"/tmp
+fi
+
+if  (! [ -e "$SOURCEFILE" ]) || [ "$SOURCEFILE" == "" ]
+then
+  echo
+  echo "Please enter the sources."
+  cat > /tmp/10_download_tmp.txt
+  SOURCEFILE=/tmp/10_download_tmp.txt
+fi
+
+EXITCODE=0
+
+for source in $(cat "$SOURCEFILE")
+do
+  wget --continue --timestamping --directory-prefix="$DOWNLOADDIR" $source
+  EXITCODE=$((exit_code+$?))
+done
+
+exit "$EXITCODE"

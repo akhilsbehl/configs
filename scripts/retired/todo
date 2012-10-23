@@ -1,0 +1,20 @@
+#!/bin/bash
+
+ARCHIVEDIR="$HOME"/todo
+
+if [ -z "$1" ]
+then
+  if [ -e "$TMP_DIR"/$(date +%d_%B_%Y).todo ]
+  then
+    gvim "$TMP_DIR"/$(date +%d_%B_%Y).todo
+  else
+    mktodo
+  fi
+elif [ "$1" == "-p" ]
+then
+  cat "$TMP_DIR"/$(date +%d_%B_%Y).todo | grep -v '$$$'
+else
+  echo "Usage: todo [OPITONAL] -p"
+fi
+
+exit 0

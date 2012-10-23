@@ -1,0 +1,34 @@
+#!/bin/bash
+
+OIFS=$IFS
+IFS=$'\n'
+
+if [ -z "$1" ]
+then
+  echo
+  echo "No file to delete. Exiting."
+
+  IFS=$OIFS
+  unset OIFS
+  exit 0
+
+else
+  for d in $*
+  do
+    FPATH=$(readlink -m $(dirname "$d") | cut -f 2- -d '/')
+    if ! [ -d $HOME/trash/"$FPATH" ]
+    then
+      mkdir -p $HOME/trash/"$FPATH"
+    fi
+    if [ -e $HOME/trash/"$FPATH"/"$d" ]
+    then
+      rm -rf $HOME/trash/"$FPATH"/"$d"
+    fi
+    mv -fv "$d" $HOME/trash/"$FPATH"/
+  done
+
+  IFS=$OIFS
+  unset OIFS
+  exit 0
+
+fi

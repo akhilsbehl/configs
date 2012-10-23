@@ -1,0 +1,23 @@
+#!/bin/bash
+
+ARCHIVEDIR=$HOME/todo
+YEAR=$(date +%Y)
+MONTH=$(date +%B | tr '[:upper:]' '[:lower:]')
+DAY=$(date +%d-%B-%Y | tr '[:upper:]' '[:lower:]')
+ENTRY="$ARCHIVEDIR/$YEAR/$MONTH/$DAY.txt"
+
+if ! [[ -e "$ARCHIVEDIR/$YEAR/$MONTH" ]]; then
+  mkdir -p "$ARCHIVEDIR/$YEAR/$MONTH"
+fi
+
+if ! [[ -e "$ENTRY" ]]; then
+  LAST=$(find "$ARCHIVEDIR" -type f -printf "%C@ %p\n" | sort -r | \
+    head -1 | cut -f 2 -d ' ')
+  if [[ -f "$LAST" ]]; then
+    cat "$LAST" | grep -v '$$$' | uniq > "$ENTRY"
+  fi
+fi
+
+gvim "$ENTRY"
+
+exit 0

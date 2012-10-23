@@ -1,0 +1,73 @@
+#!/bin/bash
+
+SCRIPTHOME="$HOME"/scripts
+DESTDIR=/usr/local/bin
+
+function print_help {
+echo "
+Usage:	binlink -s=name -o=destination [ for a script in "$SCRIPTHOME" ]
+Usage:	binlink -e=/path/to/script -o=destination [ for any script elsewhere ]
+Help:	binlink -h
+
+'-o' flag is optional. Default is the recommended directory /usr/local/bin.
+Raising the flag -h even with other options shall give help and exit.
+Inconsistent/unknown options will make the script print help and abort.
+"
+}
+
+function check_if_found {
+if ! [[ -e "$1" ]]; then
+  echo "$1 not found. No link made. Exiting."
+  exit 1
+fi
+}
+
+function parse_arg {
+case "$1" in
+  -s=*)
+    INSCRIPTHOME="y"
+    SCRIPT=$(echo "$1" | cut -f 2- -d '=')
+    ;;
+  -e=*)
+    ELSEWHERE="y"
+    SCRIPT=$(echo "$1" | cut -f 2- -d '=')
+    ;;
+  -o=*)
+    DESTDIR=$(echo "$1" | cut -f 2- -d '=')
+    ;;
+  -h)
+    WANTHELP="y"
+    ;;
+  *)
+    WANTHELP="y"
+    ;;
+esac
+}
+
+function parse_args {
+for d in $*; do
+  parse_arg "$d"
+done
+}
+
+function main {
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+  print_help
+elif [[ "$WANTHELP" == "y" ]]; then
+  print_help
+elif [[ "$INSCRIPTHOME" == "y" ]]; then
+  check_if_found "$SCRIPTHOME"/"$SCRIPT"
+  sudo ln -s $(readlink -m "$SCRIPTHOME/$SCRIPT") "$DESTDIR"
+elif [[ "$ELSEWHERE" == "y" ]]; then
+  check_if_found "$SCRIPT"
+  sudo ln -s $(readlink -m "$SCRIPT") "$DESTDIR"
+fi
+}
+
+parse_args $*
+main $*
+
+# If you are going to use this script in a non-interactive environment, make
+# sure that you are in the sudoers list or you are explicitly supplying your
+# password to sudo in the script itself. Please refer to sudo man page to see
+# how to do this.

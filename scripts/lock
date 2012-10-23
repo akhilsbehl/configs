@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+  MODE="marquee"
+else
+  MODE="$1"
+fi
+
+FONT="-monotype-arial-*-r-*-*-*-*-*-*-*-*-*-*"
+
+xlock \
+  -font "$FONT" \
+  -planfont "$FONT" \
+  -fpsfont "$FONT" \
+  -messagefont "$FONT" \
+  -fnt "$FONT" \
+  -info "Pandora's Rule: Never open a box you did not close." \
+  -mode "$MODE" \
+  -program fortune \
+  -ncolors 2 +description -echokeys -echokey "*" -usefirst &> /dev/null
+
+exit 0

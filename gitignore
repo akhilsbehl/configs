@@ -1,0 +1,4 @@
+.*.sw*
+\#*#
+.Rbuildignore
+.svn
