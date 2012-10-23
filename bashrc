@@ -141,7 +141,7 @@ if [[ "$USER@$HOSTNAME" == "akhil@Standby" ]]; then
 fi
 
 if [[ "$USER@$HOSTNAME"  == "dataman@Standby" ]]; then
-  export PS1='\[\e[33;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
+  export PS1='\[\e[32;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 fi
 
 export LS_COLORS
