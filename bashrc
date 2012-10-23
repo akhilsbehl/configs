@@ -108,9 +108,9 @@ alias clean-dhcpcd-lease='sudo rm /var/lib/dhcpcd/dhcpcd-*.lease /run/dhcpcd-*.p
 
 alias redevil='killall -9 devilspie && devilspie -a &> /dev/null &'
 
-alias mighty='ssh -Y akhil@192.9.10.230'
+alias standby='ssh -Y akhil@192.9.10.230'
 
-alias nsedm='ssh -Y nsedm@192.9.10.230'
+alias dataman='ssh -Y dataman@192.9.10.230'
 
 alias back='cdl -'
 
