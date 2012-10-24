@@ -5,8 +5,8 @@ cd $HOME
 tmux start-server
 
 tmux new-session -d -s Dumbledore -n launchpad
-tmux new-window -t Dumbledore:2 -n akhil@mighty
-tmux new-window -t Dumbledore:3 -n dataman@mighty
+tmux new-window -t Dumbledore:2 -n akhil@Standby
+tmux new-window -t Dumbledore:3 -n dataman@Standby
 
 tmux send-keys -t Dumbledore:2 "ssh -Y akhil@192.9.10.230" C-m
 tmux send-keys -t Dumbledore:3 "ssh -Y dataman@192.9.10.230" C-m
