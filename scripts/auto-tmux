@@ -4,12 +4,16 @@ cd $HOME
 
 tmux start-server
 
-tmux new-session -d -s Dumbledore -n launchpad
+tmux new-session -d -s Dumbledore -n akhilsbehl@TheArchWizard
 tmux new-window -t Dumbledore:2 -n akhil@Standby
 tmux new-window -t Dumbledore:3 -n dataman@Standby
+tmux new-window -t Dumbledore:4 -n dataman@Uraniborg
+tmux new-window -t Dumbledore:5 -n dataman@Mighty
+tmux new-window -t Dumbledore:6 -n dataman@German
 
-tmux send-keys -t Dumbledore:2 "ssh -Y akhil@192.9.10.230" C-m
-tmux send-keys -t Dumbledore:3 "ssh -Y dataman@192.9.10.230" C-m
+#tmux send-keys -t Dumbledore:2 "ssh -Y akhil@192.9.10.230" C-m
+#tmux send-keys -t Dumbledore:3 "ssh -Y dataman@192.9.10.230" C-m
+#tmux send-keys -t Dumbledore:4 "ssh -Y admin1@192.9.10.231" C-m
 
 tmux select-window -t Dumbledore:1
 tmux attach-session -t Dumbledore
