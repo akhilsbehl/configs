@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sudo -u akhilsbehl /usr/local/bin/nm-cyberoam $*
+
+exit 0
