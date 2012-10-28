@@ -1,0 +1,93 @@
+snippet #! "Expand the shebang" b
+#!/usr/bin/R
+
+# Filename: `!p snip.rv = fn`
+# Created: `date +%c`
+
+
+endsnippet
+
+snippet lib "Add a library"
+library(${1:library})
+endsnippet
+
+snippet if "Expands the if command" b
+if (${1:test} ${2:operator} ${3:boolean}) {
+  ${4:# code}
+}
+endsnippet
+
+snippet ifs "One liner `small' if" b
+if (${1:test} ${2:operator} ${3:boolean}) ${4:code}
+endsnippet
+
+snippet ifel "If else block" b
+if (${1:test} ${2:operator} ${3:boolean}) {
+  ${4:# code}
+} else {
+  ${5:# code}
+}
+endsnippet
+
+snippet for "The `for' loop" b
+for (${1:member} in ${2:set}) {
+  ${4:# code}
+}
+endsnippet
+
+snippet while "The `while' loop" b
+while (${1:test} ${2:operator} ${3:boolean}) {
+ ${4:# code}
+}
+endsnippet
+
+snippet repeat "The `repeat' loop" b
+repeat {
+  ${1:# code ; remember to include the break command to avoid infinite loops}
+}
+endsnippet
+
+snippet < "Gives an assigment statement" b
+${1:foo} <- ${2:bar}
+endsnippet
+
+snippet fun "Defines a new function" b
+${1:verb}.${2:subject} <- function (${3:args}) {
+  ${4:# code}
+}
+endsnippet
+
+snippet fundoc "Defines a function with a docstring" b
+${1:verb}_${2:subject} <- function (${3:args}) {
+  # $1_$2:
+  #
+  # ${4:Description}
+  #
+  # Args:
+  #
+  # Returns:
+  # $2: ${6:Description}
+  #
+  ${7:# code}
+}
+endsnippet
+
+snippet rm "Clear current list of objects" b
+rm(list=ls())
+endsnippet
+
+snippet color "Library `colorout'" b
+library(colorout)${1:}
+endsnippet
+
+snippet plyr "Library `colorout'" b
+library(plyr)${1:}
+endsnippet
+
+snippet gg "Library `colorout'" b
+library(ggplot2)${1:}
+endsnippet
+
+snippet warn "Set warnings to options" !b
+options(warn=2)
+endsnippet
