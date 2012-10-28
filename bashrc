@@ -112,6 +112,8 @@ alias standby='ssh -Y akhil@192.9.10.230'
 
 alias dataman='ssh -Y dataman@192.9.10.230'
 
+alias uraniborg='ssh -Y root@192.9.10.231'
+
 alias back='cdl -'
 
 alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
@@ -142,6 +144,18 @@ fi
 
 if [[ "$USER@$HOSTNAME"  == "dataman@Standby" ]]; then
   export PS1='\[\e[32;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
+fi
+
+if [[ "$USER@$HOSTNAME"  == "dataman@Uraniborg" ]]; then
+  export PS1='\[\e[33;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
+fi
+
+if [[ "$USER@$HOSTNAME" == "akhil@ifrogs" ]]; then
+  export PS1='\[\e[35;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
+fi
+
+if [[ "$USER@$HOSTNAME" == "nsedm@mighty" ]]; then
+  export PS1='\[\e[36;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 fi
 
 export LS_COLORS
