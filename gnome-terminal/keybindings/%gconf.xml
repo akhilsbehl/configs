@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<gconf>
+	<entry name="next_tab" mtime="1339589594" type="string">
+		<stringvalue>&lt;Alt&gt;k</stringvalue>
+	</entry>
+	<entry name="detach_tab" mtime="1339589584" type="string">
+		<stringvalue>&lt;Alt&gt;d</stringvalue>
+	</entry>
+	<entry name="move_tab_right" mtime="1339589578" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
+	<entry name="move_tab_left" mtime="1339589575" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
+	<entry name="prev_tab" mtime="1339589547" type="string">
+		<stringvalue>&lt;Alt&gt;j</stringvalue>
+	</entry>
+	<entry name="paste" mtime="1339589527" type="string">
+		<stringvalue>&lt;Primary&gt;v</stringvalue>
+	</entry>
+	<entry name="copy" mtime="1339589523" type="string">
+		<stringvalue>&lt;Primary&gt;x</stringvalue>
+	</entry>
+	<entry name="close_tab" mtime="1339589511" type="string">
+		<stringvalue>&lt;Alt&gt;w</stringvalue>
+	</entry>
+	<entry name="new_window" mtime="1339589506" type="string">
+		<stringvalue>&lt;Alt&gt;n</stringvalue>
+	</entry>
+	<entry name="new_tab" mtime="1339589501" type="string">
+		<stringvalue>&lt;Alt&gt;o</stringvalue>
+	</entry>
+</gconf>

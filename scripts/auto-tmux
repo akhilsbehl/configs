@@ -8,14 +8,14 @@ tmux new-session -d -s Dumbledore -n akhilsbehl@TheArchWizard
 tmux new-window -t Dumbledore:2 -n dataman@Standby
 tmux new-window -t Dumbledore:3 -n akhil@Standby
 tmux new-window -t Dumbledore:4 -n dataman@Uraniborg
-tmux new-window -t Dumbledore:5 -n nsedm@Mighty
-tmux new-window -t Dumbledore:6 -n akhil@ifrogs
+tmux new-window -t Dumbledore:5 -n akhil@ifrogs
+#tmux new-window -t Dumbledore:6 -n nsedm@Mighty
 
 tmux send-keys -t Dumbledore:2 "ssh -Y dataman@192.9.10.230" C-m
 tmux send-keys -t Dumbledore:3 "ssh -Y akhil@192.9.10.230" C-m
 tmux send-keys -t Dumbledore:4 "ssh -Y dataman@192.9.10.231" C-m
-tmux send-keys -t Dumbledore:5 "ssh -Y nsedm@192.9.10.232" C-m
-tmux send-keys -t Dumbledore:6 "ssh -Y akhil@78.46.69.107" C-m
+tmux send-keys -t Dumbledore:5 "ssh -Y akhil@78.46.69.107" C-m
+#tmux send-keys -t Dumbledore:6 "ssh -Y nsedm@192.9.10.232" C-m
 
 tmux select-window -t Dumbledore:1
 tmux attach-session -t Dumbledore
