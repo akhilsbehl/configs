@@ -7,7 +7,7 @@ if [[ "$1" == "-cli" ]]
 then
   cowsay "$MSG"
 else
-  DISPLAY=:0 notify-send "Fortune Cookie" "$MSG"
+  DISPLAY="$DISPLAY" notify-send "Fortune Cookie" "$MSG"
 fi
 
 exit 0

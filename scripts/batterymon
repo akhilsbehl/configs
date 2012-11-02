@@ -13,17 +13,17 @@ ALARM_HIGH_BODY="Time to switch off the external power source."
 ALARM_LOW_HEAD="Battery Low"
 ALARM_LOW_BODY="Time to switch in to external power source."
 
-function raise_alarm {
-DISPLAY=:0 notify-send "$1" "$2"
-echo "$LOGTIME" "$1" "$2" >> "$LOGFILE"
+raise_alarm () {
+  DISPLAY="$DISPLAY" notify-send "$1" "$2"
+  echo "$LOGTIME" "$1" "$2" >> "$LOGFILE"
 }
 
-function main {
-if [[ "$1" -lt "40" && "$2" == "Discharging," ]]; then
-  raise_alarm "$ALARM_LOW_HEAD" "$ALARM_LOW_BODY"
-elif [[ "$1" -gt "80" && "$2" == "Charging," ]]; then
-  raise_alarm "$ALARM_HIGH_HEAD" "$ALARM_HIGH_BODY"
-fi
+main () {
+  if [[ "$1" -lt "40" && "$2" == "Discharging," ]]; then
+    raise_alarm "$ALARM_LOW_HEAD" "$ALARM_LOW_BODY"
+  elif [[ "$1" -gt "80" && "$2" == "Charging," ]]; then
+    raise_alarm "$ALARM_HIGH_HEAD" "$ALARM_HIGH_BODY"
+  fi
 }
 
 if ! [[ -e "$LOGDIR" ]]; then

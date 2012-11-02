@@ -10,37 +10,37 @@ SUCCESSFUL_LOG_BODY="Logged into Cyberoam server."
 FAILURE_LOG_HEAD="Network Inaccessible" 
 FAILURE_LOG_BODY="Cyberoam server not available."
 
-function raise_alarm {
-DISPLAY=:0 notify-send "$1" "$2"
-echo "$LOGTIME" "$1" "$2" >> "$LOGFILE"
+raise_alarm () {
+  DISPLAY="$DISPLAY" notify-send "$1" "$2"
+  echo "$LOGTIME" "$1" "$2" >> "$LOGFILE"
 }
 
-function do_if_up {
-/usr/local/bin/cyberoam -lin
-TEST=$(ping -c 3 www.google.com 2> /dev/null | grep [1-3]\ received)
-if [[ "$TEST" != "" ]]; then
-  raise_alarm "$SUCCESSFUL_LOG_HEAD" "$SUCCESSFUL_LOG_BODY"
-else
-  raise_alarm "$FAILURE_LOG_HEAD" "$FAILURE_LOG_BODY"
-fi
+do_if_up () {
+  /usr/local/bin/cyberoam -lin
+  TEST=$(ping -c 3 www.google.com 2> /dev/null | grep [1-3]\ received)
+  if [[ "$TEST" != "" ]]; then
+    raise_alarm "$SUCCESSFUL_LOG_HEAD" "$SUCCESSFUL_LOG_BODY"
+  else
+    raise_alarm "$FAILURE_LOG_HEAD" "$FAILURE_LOG_BODY"
+  fi
 }
 
-function make_dir_if_not_found {
-if ! [[ -e "$1" ]]; then
-  mkdir -p "$1"
-fi
+make_dir_if_not_found () {
+  if ! [[ -e "$1" ]]; then
+    mkdir -p "$1"
+  fi
 }
 
-function main {
-case "$1" in
-  "up")
-    do_if_up
-    exit 0
-    ;;
-  "down")
-    exit 0
-    ;;
-esac
+main () {
+  case "$1" in
+    "up")
+      do_if_up
+      exit 0
+      ;;
+    "down")
+      exit 0
+      ;;
+  esac
 }
 
 make_dir_if_not_found "$LOGDIR"
