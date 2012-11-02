@@ -2,3 +2,4 @@
 \#*#
 .Rbuildignore
 .svn
+*.pyc
