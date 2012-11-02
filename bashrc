@@ -205,19 +205,6 @@ alias quotes='$EDITOR + "$HOME"/tmp/perm/quotes.txt'
 
 alias wipwd='cat "$HOME"/tmp/perm/wireless-passwords.txt'
 
-###########
-# Retired #
-###########
+#sudo sed -i '/title_vertical_pad/s|value="[0-9]\{1,2\}"|value="0"|g' /usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
 
-#export http_proxy='http://192.9.10.3:3128/'
-#export https_proxy='http://192.9.10.3:3128/'
-
-#alias mp='mplayer -idx -fs'
-
-#alias dvd='mplayer -idx -fs -stop-xscreensaver -nocache -alang en'
-
-#alias all-music='mp -shuffle $(find "$HOME"/music/* -type f)'
-
-#alias remove-accessibility-icon='gvim +/STANDARD_TRAY_ICON_ORDER /usr/share/gnome-shell/js/ui/panel.js'
-
-#sed -i '/title_vertical_pad/s|value="[0-9]\{1,2\}"|value="0"|g' /usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
+#sudo sed -i -r 's|(<frame_geometry name="max")|\1 has_title="false"|' /usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
