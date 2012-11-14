@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/akhilsbehl/rstat/rohini-vix-lib/R'
-let g:netrw_dirhist_2='/home/akhilsbehl/rstat/rohini-vix-lib/R/new'
-let g:netrw_dirhist_3='/home/akhilsbehl/rstat/rohini-vix-lib/R/lib'
-let g:netrw_dirhist_4='/home/akhilsbehl/svn/ifrogs/SRC/ifrogs.Rcheck'
-let g:netrw_dirhist_5='/home/akhilsbehl/svn/systemic-risk/SRC/R'
