@@ -156,7 +156,7 @@ if [[ "$USER@$HOSTNAME" == "akhil@ifrogs" ]]; then
   export PS1='\[\e[35;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 fi
 
-if [[ "$USER@$HOSTNAME" == "dataman@mighty" ]]; then
+if [[ "$USER@$HOSTNAME" == "dataman@Mighty" ]]; then
   export PS1='\[\e[36;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 fi
 
