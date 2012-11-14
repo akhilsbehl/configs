@@ -36,19 +36,19 @@ endsnippet
 ########################
 snippet enum "Enumerate" b
 \begin{enumerate}
-  \item${1:<$2-$3>} $0
+  \item $0
 \end{enumerate}
 endsnippet
 
 snippet item "Itemize" b
 \begin{itemize}
-  \item${1:<$2-$3>} $0
+  \item $0
 \end{itemize}
 endsnippet
 
 snippet desc "Description" b
 \begin{description}
-  \item${1:<$2-$3>} $0
+  \item $0
 \end{description}
 endsnippet
 
@@ -140,8 +140,13 @@ snippet cp "Cite in parantheses" w
 \citep{${1:text}} ${0}
 endsnippet
 
+snippet p "pause" w
+\pause
+$0
+endsnippet
+
 snippet i "item" w
-\item${1:<$2-$3>} $0
+\item $0
 endsnippet
 
 snippet und "Underline" w
@@ -176,7 +181,7 @@ snippet frame "Beamer Frame" !b
 \begin{frame}
   \frametitle{${1:frametitle}}
   \begin{itemize}
-    \item${2:<$3-$4>} $5
+    \item $5
   \end{itemize}
 \end{frame}
 

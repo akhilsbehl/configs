@@ -91,3 +91,28 @@ endsnippet
 snippet warn "Set warnings to options" !b
 options(warn=2)
 endsnippet
+
+snippet app "apply" w
+apply(X=${1:},
+      MARGIN=${2:2},
+      FUN=function (${3:}) {
+         ${4:# code}
+       }${5:,
+       ...})$0
+endsnippet
+
+snippet lap "l/sapply" w
+${1:l}apply(X=${2:},
+  FUN=${3:function (${4:k}) {
+      ${5:# code}
+    }}${6:,
+    ...})$0
+endsnippet
+
+snippet map "mapply" w
+mapply(FUN=${1:function (${2:k}, ${3:l}) {
+    ${4:# code}
+  }},
+  ${5:K}, ${6:L}${7:,
+  MoreArgs=list(${8:...})})$0
+endsnippet
