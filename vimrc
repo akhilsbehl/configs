@@ -18,8 +18,8 @@ filetype indent plugin on
 syntax enable
 
 " colorscheme
-"colorscheme desert
-colorscheme default
+colorscheme desert
+"colorscheme default
 
 "-------------------------
 
@@ -97,6 +97,7 @@ map <LocalLeader>nc :call RAction("colnames")<CR>
 map <LocalLeader>nh :call RAction("head")<CR>
 map <LocalLeader>nt :call RAction("tail")<CR>
 map <LocalLeader>nl :call RAction("length")<CR>
+map <LocalLeader>cc :call RAction("class")<CR>
 map <LocalLeader>nw :call SendCmdToR("system('clear')")<CR>
 map <LocalLeader>sb :call SendCmdToR("system.time({")<CR>
 map <LocalLeader>se :call SendCmdToR("})")<CR>
