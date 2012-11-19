@@ -148,6 +148,10 @@ let g:Tex_DefaultTargetFormat='pdf'
 
 " do not convert my quotes
 let g:Tex_SmartKeyQuote=0
+
+" Ignore any makefiles when called from vim
+let g:Tex_UseMakefile=0
+
 "-------------------------
 
 " This setting stops the annoying autocompletion of single quotes
