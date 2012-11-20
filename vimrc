@@ -66,6 +66,7 @@ set omnifunc=syntaxcomplete#Complete
 
 " folding text
 " set foldmethod=marker foldmarker=#<<<,>>>#
+set nofoldenable
 
 "-------------------------
 
@@ -151,6 +152,11 @@ let g:Tex_SmartKeyQuote=0
 
 " Ignore any makefiles when called from vim
 let g:Tex_UseMakefile=0
+
+" Do not fold anything for me
+let g:Tex_FoldedSections=""
+let g:Tex_FoldedEnvironments=""
+let g:Tex_FoldedMisc=""
 
 "-------------------------
 
