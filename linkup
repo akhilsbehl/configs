@@ -46,11 +46,13 @@ ln -s $PWD/scripts ~/scripts
 rm -rf "$GTPDIR/gnome-terminal"
 ln -s $PWD/gnome-terminal "$GTPDIR"
 
+if [[ "$1" == "-vundle" ]]; then
+  rm -rf ~/.vim
+  mkdir -p ~/.vim/bundle
+  git clone 'https://github.com/gmarik/vundle' ~/.vim/bundle/vundle
+fi
+
 rm -rf ~/.vim/snippets
 ln -s $(readlink -m "$PWD"/snippets) ~/.vim
-
-rm -rf ~/.vim
-mkdir -p ~/.vim/bundle
-git clone 'https://github.com/gmarik/vundle' ~/.vim/bundle/vundle
 
 exit 0
