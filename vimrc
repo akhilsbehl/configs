@@ -25,9 +25,6 @@ Bundle 'scrooloose/nerdcommenter'
 " The awesome dirtree
 Bundle 'scrooloose/nerdtree'
 
-" The python autocompleter
-Bundle 'vim-scripts/Pydiction'
-
 " Python documentation inside vim
 Bundle 'vim-scripts/pydoc.vim'
 
@@ -37,7 +34,7 @@ Bundle 'ervandew/screen'
 " Overload the fucking tab!
 Bundle 'ervandew/supertab'
 
-" Overload the fucking tab!
+" Surround the shit outta 'em
 Bundle 'tpope/vim-surround'
 
 " Syntax for .txt files (and miscellaneous)
@@ -99,7 +96,7 @@ set nojoinspaces
 set secure
 
 " config
-set history=50 undolevels=100 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1
+set history=50 undolevels=100 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1 timeoutlen=250
 
 " printing options
 set printdevice=pdf printoptions=right:10pc,left:10pc,top:5pc,bottom:5pc,syntax:y,wrap:y,header:0,paper:A4
@@ -150,7 +147,9 @@ map <LocalLeader>sb :call SendCmdToR("system.time({")<CR>
 map <LocalLeader>se :call SendCmdToR("})")<CR>
 
 " Misc options
-let vimrplugin_tmux = 0
+let vimrplugin_tmux = 1
+
+let vimrplugin_notmuxconf = 1
 
 let vimrplugin_routmorecolors = 1
 
@@ -159,13 +158,15 @@ let vimrplugin_indent_commented = 0
 "-------------------------
 " These options are for UltiSnips
 
-let g:UltiSnipsEditSplit="horizontal"
+let g:UltiSnipsEditSplit = "horizontal"
 
-let g:UltiSnipsSnippetsDir="~/git/configs/snippets"
+let g:UltiSnipsSnippetsDir = "~/git/configs/snippets"
 
-let g:UltiSnipsJumpForwardTrigger="<C-k>"
+let g:UltiSnipsSnippetDirectories = ["Ultisnips", "snippets"]
 
-let g:UltiSnipsJumpBackwardTrigger="<C-j>"
+let g:UltiSnipsJumpForwardTrigger = "<C-k>"
+
+let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
 
 "-------------------------
 
@@ -201,7 +202,7 @@ let g:Tex_FoldedMisc=""
 
 " This setting stops the annoying autocompletion of single quotes
 
-let g:AutoClosePairs={'(': ')', '{': '}', '[': ']', '"': '"'}
+let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 

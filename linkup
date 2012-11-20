@@ -2,25 +2,51 @@
 
 GTPDIR="$HOME/.gconf/apps/"
 
-rm -rf ~/{.R,.Rprofile,.bashrc,.gitignore,.gitconfig,.gvimrc,.inputrc,.screenrc,.vim,.vimrc,scripts,.tmux.conf,.crclient,.bash_profile}
-rm -rf "$GTPDIR/gnome-terminal"
-
 mkdir -p "$GTPDIR"
 
+rm -rf ~/.R
 ln -s $PWD/R ~/.R
+
+rm -rf ~/.Rprofile
 ln -s $PWD/Rprofile ~/.Rprofile
+
+rm -rf ~/.bashrc
 ln -s $PWD/bashrc ~/.bashrc
+
+rm -rf ~/.bash_profile
 ln -s $PWD/bash_profile ~/.bash_profile
+
+rm -rf ~/.gitignore
 ln -s $PWD/gitignore ~/.gitignore
+
+rm -rf ~/.gitconfig
 ln -s $PWD/gitconfig ~/.gitconfig
+
+rm -rf ~/.gvimrc
 ln -s $PWD/gvimrc ~/.gvimrc
+
+rm -rf ~/.inputrc
 ln -s $PWD/inputrc ~/.inputrc
+
+rm -rf ~/.screenrc
 ln -s $PWD/screenrc ~/.screenrc
-ln -s $PWD/vim ~/.vim
+
+rm -rf ~/.vimrc
 ln -s $PWD/vimrc ~/.vimrc
+
+rm -rf ~/.tmux.conf
 ln -s $PWD/tmux.conf ~/.tmux.conf
+
+rm -rf ~/.crclient
 ln -s $PWD/crclient ~/.crclient
+
+rm -rf ~/scripts
 ln -s $PWD/scripts ~/scripts
-ln -s $PWD/gnome-terminal ~/.gconf/apps/
+
+rm -rf "$GTPDIR/gnome-terminal"
+ln -s $PWD/gnome-terminal "$GTPDIR"
+
+rm -rf ~/.vim/snippets
+ln -s $(readlink -m "$PWD"/snippets) ~/.vim
 
 exit 0
