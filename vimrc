@@ -1,11 +1,56 @@
 "-------------------------
 
-" These are the requirements to use the `pathogen' plugin
+" Vundle it!
 
 filetype off
-call pathogen#infect()
-call pathogen#runtime_append_all_bundles()
-"call pathogen#helptags()
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+
+"-------------------------
+
+" Add my bundles here:
+
+" The bundle manager
+Bundle 'gmarik/vundle'
+
+" Provides autoclose feature
+Bundle 'Townk/vim-autoclose'
+
+" Provides the GUI colorscheme in the terminal
+Bundle 'vim-scripts/CSApprox'
+
+" The awesome commenter
+Bundle 'scrooloose/nerdcommenter'
+
+" The awesome dirtree
+Bundle 'scrooloose/nerdtree'
+
+" The python autocompleter
+Bundle 'vim-scripts/Pydiction'
+
+" Python documentation inside vim
+Bundle 'vim-scripts/pydoc.vim'
+
+" The screen / tmux plugin
+Bundle 'ervandew/screen'
+
+" Overload the fucking tab!
+Bundle 'ervandew/supertab'
+
+" Overload the fucking tab!
+Bundle 'tpope/vim-surround'
+
+" Syntax for .txt files (and miscellaneous)
+Bundle 'txt.vim'
+
+" Snippets FTW \m/
+Bundle 'vim-scripts/UltiSnips'
+
+" R plugin
+Bundle 'vim-scripts/Vim-R-plugin'
+
+" Latex suite
+Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 
 "-------------------------
 
@@ -55,6 +100,7 @@ set secure
 
 " config
 set history=50 undolevels=100 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1
+
 " printing options
 set printdevice=pdf printoptions=right:10pc,left:10pc,top:5pc,bottom:5pc,syntax:y,wrap:y,header:0,paper:A4
 
@@ -79,10 +125,10 @@ let maplocalleader=","
 " These options are for the vim-R-plugin
 
 " don't replace underscores in R
-let vimrplugin_underscore=0
+let vimrplugin_underscore = 0
 
 " use a single R process for all buffers of a single instance	
-let vimrplugin_by_vim_instance=1
+let vimrplugin_by_vim_instance = 1
 
 " use gnome-terminal with profile R
 let vimrplugin_term_cmd = "gnome-terminal --profile R -e"
@@ -105,28 +151,21 @@ map <LocalLeader>se :call SendCmdToR("})")<CR>
 
 " Misc options
 let vimrplugin_tmux = 0
+
 let vimrplugin_routmorecolors = 1
+
 let vimrplugin_indent_commented = 0
 
 "-------------------------
 " These options are for UltiSnips
 
-let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsEditSplit="horizontal"
 
-let g:UltiSnipsSnippetsDir="~/.vim/bundle/UltiSnips-1.5/UltiSnips/"
+let g:UltiSnipsSnippetsDir="~/git/configs/snippets"
 
 let g:UltiSnipsJumpForwardTrigger="<C-k>"
 
 let g:UltiSnipsJumpBackwardTrigger="<C-j>"
-"-------------------------
-
-" These options are for the showmarks plugin
-
-" keep these marks visible
-let showmarks_include="abcdefghijklmnopqrstuvwxyz"
-
-" I don't frickin' know what that means
-let marksCloseWhenSelected=1
 
 "-------------------------
 
@@ -166,14 +205,6 @@ let g:AutoClosePairs={'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 
-" These settings are for Taglist plugin
-
-let Tlist_Exit_OnlyWindow=1
-
-let Tlist_Show_One_File=1
-
-"-------------------------
-
 " This is a setting that helps `supertab' to switch between the various forms
 " of text-completion on its own based on the context in which it is being used.
 
@@ -186,20 +217,6 @@ let g:SuperTabDefaultCompletionType='context'
 " Make a file executable if found #!/bin/ at the start of a file.
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod u+x <afile> | endif | endif
 
-" This one helps one toggle search highlighting
-
-function ToggleHighLightsearch()
-  if &hlsearch
-    set nohlsearch
-  else
-    set hlsearch
-  endif
-endfunction
-
-imap <C-h> <Esc>:call ToggleHighLightsearch()<CR>
-nmap <C-h> <Esc>:call ToggleHighLightsearch()<CR>
-vmap <C-h> <Esc>:call ToggleHighLightsearch()<CR>
-
 " Change tabs, buffers and delete buffers.
 
 imap <M-j> <Esc>:tabp<CR>
@@ -209,14 +226,6 @@ vmap <M-j> <Esc>:tabp<CR>
 imap <M-k> <Esc>:tabn<CR>
 nmap <M-k> <Esc>:tabn<CR>
 vmap <M-k> <Esc>:tabn<CR>
-
-imap <M-p> <Esc>:bprevious<CR>
-nmap <M-p> <Esc>:bprevious<CR>
-vmap <M-p> <Esc>:bprevious<CR>
-
-imap <M-n> <Esc>:bnext<CR>
-nmap <M-n> <Esc>:bnext<CR>
-vmap <M-n> <Esc>:bnext<CR>
 
 imap <M-d> <Esc>:bdelete<CR>
 nmap <M-d> <Esc>:bdelete<CR>
