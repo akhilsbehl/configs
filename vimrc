@@ -96,7 +96,7 @@ set nojoinspaces
 set secure
 
 " config
-set history=50 undolevels=100 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1 timeoutlen=250
+set history=50 undolevels=100 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1 timeoutlen=500
 
 " printing options
 set printdevice=pdf printoptions=right:10pc,left:10pc,top:5pc,bottom:5pc,syntax:y,wrap:y,header:0,paper:A4
