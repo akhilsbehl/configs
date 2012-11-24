@@ -3,7 +3,7 @@
 OIFS=${IFS}
 IFS=$'\n'
 
-PERLPATH="~/rstat/lib/gdata/perl/"
+PERLPATH="$HOME/rstat/lib/gdata/perl/"
 perl "${PERLPATH}/xls2csv.pl" $*
 
 IFS=${OIFS}
