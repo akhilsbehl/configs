@@ -130,6 +130,8 @@ alias test-ifs='echo -n "$IFS" | od -abc'
 
 alias ig-svn='svn propset svn:ingore -F ./.svnignore .'
 
+alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o credentials=/root/.credentials'
+
 #########################
 # Variables and Exports #
 #########################
