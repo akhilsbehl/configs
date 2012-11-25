@@ -13,8 +13,8 @@ call vundle#rc()
 " The bundle manager
 Bundle 'gmarik/vundle'
 
-" Provides autoclose feature
-Bundle 'Townk/vim-autoclose'
+" Provides autoclose feature: Remember Karl Guertin's autoclose
+Bundle 'AutoClose'
 
 " Provides the GUI colorscheme in the terminal
 Bundle 'vim-scripts/CSApprox'
@@ -206,10 +206,9 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 
-" This is a setting that helps `supertab' to switch between the various forms
-" of text-completion on its own based on the context in which it is being used.
+" Contexts and other things for supertab
 
-let g:SuperTabDefaultCompletionType='context'
+let g:SuperTabDefaultCompletionType = 'context'
 
 "-------------------------
 
@@ -235,9 +234,7 @@ vmap <M-d> <Esc>:bdelete<CR>
 " puts an empty line above and below the cursor position and enters the insert
 " mode.
 
-imap <M-o> <Esc>o<Esc>O
-vmap <M-o> <Esc>o<Esc>O
-nmap <M-o> <Esc>o<Esc>O
+nmap <M-o> <Esc>O<CR>
 
 " Taken from command-line fu. Save system files when you forget to sudo while
 " opening vim.
