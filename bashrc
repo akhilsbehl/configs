@@ -132,6 +132,8 @@ alias ig-svn='svn propset svn:ingore -F ./.svnignore .'
 
 alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o credentials=/root/.credentials'
 
+alias lock='gnome-screensaver-command --lock'
+
 #########################
 # Variables and Exports #
 #########################
