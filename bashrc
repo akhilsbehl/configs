@@ -40,31 +40,17 @@ alias cd..='cd ..'
 
 alias locate='locate -e'
 
-alias locite='locate -ie'
-
 alias free='free -mt'
 
-alias mv='mv -v'
-
-alias cp='cp -rv'
+alias cp='cp -r'
 
 alias df='df -h'
 
-alias rm='rm -v'
-
 alias grep='grep --color=auto'
-
-alias grip='grep -i'
 
 alias rmd='rm -rv'
 
-alias eject='eject -rv'
-
-alias wcl='wmctrl -c'
-
-alias wls='wmctrl -l | grip -w 0 | cut -f 5- -d " "'
-
-alias du='du -h'
+alias du='du -sh'
 
 alias zip='zip -r1v'
 
@@ -95,16 +81,6 @@ alias logout='gnome-session-quit --logout'
 alias swap='setxkbmap -option caps:swapescape'
 
 alias unswap='setxkbmap -option'
-
-alias idle='idle & sleep 1s && redevil'
-
-alias fire='firefox -P default &> /dev/null &'
-
-alias fox='firefox -P private -no-remote &> /dev/null &'
-
-alias blank='xset dpms force off'
-
-alias clean-dhcpcd-lease='sudo rm /var/lib/dhcpcd/dhcpcd-*.lease /run/dhcpcd-*.pid'
 
 alias redevil='killall -9 devilspie && devilspie -a &> /dev/null &'
 
@@ -168,7 +144,7 @@ export LS_COLORS
 
 export TERM="screen-256color"
 
-export PATH="~/.gem/ruby/1.9.1/bin:~/scripts:$PATH"
+export PATH="~/scripts:$PATH"
 
 export GREP_COLOR='1;31'
 
@@ -181,7 +157,7 @@ then
   BROWSER=firefox
   EDITOR=gvim
 else
-  BROWSER=lynx
+  BROWSER=elinks
   EDITOR=vim
 fi
 
@@ -199,17 +175,7 @@ alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
 
-alias rc='sudo $EDITOR + /etc/rc.conf &'
-
 alias paclog='sudo $EDITOR + /var/log/pacman.log &'
-
-alias grub='sudo $EDITOR /etc/default/grub &'
-
-alias cbash='cat "$HOME"/.bashrc'
-
-alias quotes='$EDITOR + "$HOME"/tmp/perm/quotes.txt'
-
-alias wipwd='cat "$HOME"/tmp/perm/wireless-passwords.txt'
 
 #sudo sed -i '/title_vertical_pad/s|value="[0-9]\{1,2\}"|value="0"|g' /usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
 

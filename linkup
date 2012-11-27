@@ -28,9 +28,6 @@ ln -s $PWD/gvimrc ~/.gvimrc
 rm -rf ~/.inputrc
 ln -s $PWD/inputrc ~/.inputrc
 
-rm -rf ~/.screenrc
-ln -s $PWD/screenrc ~/.screenrc
-
 rm -rf ~/.vimrc
 ln -s $PWD/vimrc ~/.vimrc
 
