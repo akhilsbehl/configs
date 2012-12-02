@@ -1,9 +1,10 @@
 #!/bin/bash
 
 if [[ "$1" == "--tor" ]]; then
-  CMD_ARGS="--proxy-server='socks://localhost:9050'"
+  shift
+  /usr/bin/chromium --user-data-dir='/tmp/chromium-tor' --incognito --enable-seccomp-sandbox --proxy-server='socks://localhost:9050' check.torproject.org "$@" &> /dev/null &
+else
+  /usr/bin/chromium --enable-seccomp-sandbox "$@" &> /dev/null &
 fi
-
-/usr/bin/chromium --enable-seccomp-sandbox "$CMD_ARGS"
 
 exit 0
