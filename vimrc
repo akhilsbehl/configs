@@ -13,8 +13,8 @@ call vundle#rc()
 " The bundle manager
 Bundle 'gmarik/vundle'
 
-" Provides autoclose feature: Remember Karl Guertin's autoclose
-Bundle 'AutoClose'
+" Provides autoclose feature. Repeat with me: Hail Thiago Alves!'
+Bundle 'vim-scripts/AutoClose--Alves'
 
 " Provides the GUI colorscheme in the terminal
 Bundle 'vim-scripts/CSApprox'
