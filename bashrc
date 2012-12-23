@@ -106,7 +106,7 @@ alias test-ifs='echo -n "$IFS" | od -abc'
 
 alias ig-svn='svn propset svn:ingore -F ./.svnignore .'
 
-alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o credentials=/root/.credentials'
+alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o credentials=/root/.credentials,uid=1000,gid=100'
 
 alias lock='gnome-screensaver-command --lock'
 
