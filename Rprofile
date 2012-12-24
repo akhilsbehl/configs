@@ -39,6 +39,6 @@ options(repos=c("http://cran.cnr.berkeley.edu/", "http://stat.ethz.ch/CRAN/"))
     out
 }
 
-lsos <- function(..., n=10) {
+.lsos <- function(..., n=10) {
     .ls.objects(..., order.by="Size", decreasing=TRUE, head=TRUE, n=n)
 }
