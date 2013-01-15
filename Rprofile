@@ -14,7 +14,7 @@ grDevices::X11.options(type="nbcairo")
 options(prompt="R> ")
 options("pdfviewer"="mupdf")
 options(showWarnCalls=TRUE, showErrorCalls=TRUE)
-options(max.print=100)
+options(max.print=1000)
 options(repos=c("http://cran.cnr.berkeley.edu/", "http://stat.ethz.ch/CRAN/"))
 
 .ls.objects <- function (pos = 1, pattern, order.by,
