@@ -1,6 +1,5 @@
 #!/bin/bash
 
-dbus-send --system --print-reply --dest="org.freedesktop.UPower" \
-  /org/freedesktop/UPower org.freedesktop.UPower.Suspend > /dev/null
+sudo systemctl suspend
 
 exit 0
