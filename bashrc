@@ -106,6 +106,12 @@ alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o 
 
 alias lock='gnome-screensaver-command --lock'
 
+alias susp='sudo systemctl suspend'
+
+alias shutd='sudo systemctl poweroff'
+
+alias reboot='sudo systemctl reboot'
+
 #########################
 # Variables and Exports #
 #########################

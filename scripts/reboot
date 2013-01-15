@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo systemctl reboot
-
-exit 0

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo systemctl poweroff
-
-exit 0
