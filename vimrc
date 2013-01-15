@@ -60,7 +60,8 @@ filetype indent plugin on
 syntax enable
 
 " colorscheme
-colorscheme desert
+colorscheme zellner
+"colorscheme desert
 "colorscheme default
 
 "-------------------------

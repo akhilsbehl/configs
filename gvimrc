@@ -1,6 +1,6 @@
-set guifont=Monospace\ 11	        " set gui font to x
-set lines=24
-set columns=85                          " characters per line = 80
-set guioptions-=T			" somehow removes the toolbar at the top.
-set novisualbell			" no visual bells
-set noerrorbells			" no error bells
+set guifont=Monospace\ 11
+set lines=43
+set columns=81
+set novisualbell
+set noerrorbells
+set guioptions-=T                       " removes the toolbar at the top.
