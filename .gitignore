@@ -2,3 +2,4 @@ crclient/crclient.log
 vim/.netrwhist
 *.pyc
 vim
+crclient/crclient.conf
