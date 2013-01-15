@@ -54,10 +54,6 @@ alias du='du -sh'
 
 alias zip='zip -r1v'
 
-alias shutd='sudo shutdown -hP 0'
-
-alias reboot='sudo shutdown -r 0'
-
 alias upgrade='packer -Syu --noconfirm --noedit'
 
 alias apt-upgrade='sudo apt-get update && sudo apt-get upgrade'
