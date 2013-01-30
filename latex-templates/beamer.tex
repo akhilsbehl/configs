@@ -1,0 +1,57 @@
+\documentclass[9pt]{beamer}
+
+\usetheme{Antibes}
+\usecolortheme{dolphin}
+\usefonttheme{default}
+\usefonttheme{structurebold}
+\setbeamertemplate{enumerate items}[]
+
+\usepackage{Sweave}
+\usepackage[T1]{fontenc}
+\usepackage{ragged2e}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{color}
+
+\newcommand{\hi}[1]{\textcolor{blue}{#1}}
+
+\title[<++>]{<++>}
+\author{<++>} 
+\institute{<++>}
+\date{\today}
+
+\begin{document}
+
+\justifying
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\AtBeginSection[]
+{
+\begin{frame}<beamer>
+  \frametitle{Outline}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+}
+
+\AtBeginSubsection[]
+{
+\begin{frame}<beamer>
+  \frametitle{Outline}
+  \tableofcontents[currentsection,currentsubsection]
+\end{frame}
+}
+
+<++>
+
+\begin{frame}
+  \vfill
+  \centering
+  \Huge{Thank You}
+  \vfill
+\end{frame}
+
+\end{document}

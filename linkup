@@ -52,4 +52,8 @@ fi
 rm -rf ~/.vim/snippets
 ln -s $(readlink -m "$PWD"/snippets) ~/.vim
 
+rm ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
+ln -s ./latex-templates/article.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
+ln -s ./latex-templates/beamer.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
+
 exit 0
