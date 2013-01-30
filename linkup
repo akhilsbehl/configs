@@ -5,43 +5,43 @@ GTPDIR="$HOME/.gconf/apps/"
 mkdir -p "$GTPDIR"
 
 rm -rf ~/.R
-ln -s $PWD/R ~/.R
+ln -s "$PWD"/R ~/.R
 
 rm -rf ~/.Rprofile
-ln -s $PWD/Rprofile ~/.Rprofile
+ln -s "$PWD"/Rprofile ~/.Rprofile
 
 rm -rf ~/.bashrc
-ln -s $PWD/bashrc ~/.bashrc
+ln -s "$PWD"/bashrc ~/.bashrc
 
 rm -rf ~/.bash_profile
-ln -s $PWD/bash_profile ~/.bash_profile
+ln -s "$PWD"/bash_profile ~/.bash_profile
 
 rm -rf ~/.gitignore
-ln -s $PWD/gitignore ~/.gitignore
+ln -s "$PWD"/gitignore ~/.gitignore
 
 rm -rf ~/.gitconfig
-ln -s $PWD/gitconfig ~/.gitconfig
+ln -s "$PWD"/gitconfig ~/.gitconfig
 
 rm -rf ~/.gvimrc
-ln -s $PWD/gvimrc ~/.gvimrc
+ln -s "$PWD"/gvimrc ~/.gvimrc
 
 rm -rf ~/.inputrc
-ln -s $PWD/inputrc ~/.inputrc
+ln -s "$PWD"/inputrc ~/.inputrc
 
 rm -rf ~/.vimrc
-ln -s $PWD/vimrc ~/.vimrc
+ln -s "$PWD"/vimrc ~/.vimrc
 
 rm -rf ~/.tmux.conf
-ln -s $PWD/tmux.conf ~/.tmux.conf
+ln -s "$PWD"/tmux.conf ~/.tmux.conf
 
 rm -rf ~/.crclient
-ln -s $PWD/crclient ~/.crclient
+ln -s "$PWD"/crclient ~/.crclient
 
 rm -rf ~/scripts
-ln -s $PWD/scripts ~/scripts
+ln -s "$PWD"/scripts ~/scripts
 
 rm -rf "$GTPDIR/gnome-terminal"
-ln -s $PWD/gnome-terminal "$GTPDIR"
+ln -s "$PWD"/gnome-terminal "$GTPDIR"
 
 if [[ "$1" == "-vundle" ]]; then
   rm -rf ~/.vim
@@ -50,10 +50,11 @@ if [[ "$1" == "-vundle" ]]; then
 fi
 
 rm -rf ~/.vim/snippets
-ln -s $(readlink -m "$PWD"/snippets) ~/.vim
+ln -s "$(readlink -m "$PWD"/snippets)" ~/.vim
 
 rm ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
-ln -s ./latex-templates/article.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
-ln -s ./latex-templates/beamer.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
+rm ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
+ln -s "$PWD"/latex-templates/article.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
+ln -s "$PWD"/latex-templates/beamer.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 
 exit 0
