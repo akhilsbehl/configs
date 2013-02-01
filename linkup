@@ -43,10 +43,13 @@ ln -s "$PWD"/scripts ~/scripts
 rm -rf "$GTPDIR/gnome-terminal"
 ln -s "$PWD"/gnome-terminal "$GTPDIR"
 
-if [[ "$1" == "-vundle" ]]; then
+if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
   mkdir -p ~/.vim/bundle
   git clone 'https://github.com/gmarik/vundle' ~/.vim/bundle/vundle
+  gvim +BundleInstall
+  echo "Call ./linkup once again now to link snippets and templates etc."
+  exit 0
 fi
 
 rm -rf ~/.vim/snippets
