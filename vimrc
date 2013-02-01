@@ -16,17 +16,11 @@ Bundle 'gmarik/vundle'
 " Provides autoclose feature. Repeat with me: Hail Thiago Alves!'
 Bundle 'vim-scripts/AutoClose--Alves'
 
-" Provides the GUI colorscheme in the terminal
-Bundle 'vim-scripts/CSApprox'
-
 " The awesome commenter
 Bundle 'scrooloose/nerdcommenter'
 
 " The awesome dirtree
 Bundle 'scrooloose/nerdtree'
-
-" Python documentation inside vim
-Bundle 'vim-scripts/pydoc.vim'
 
 " The screen / tmux plugin
 Bundle 'ervandew/screen'
@@ -36,9 +30,6 @@ Bundle 'ervandew/supertab'
 
 " Surround the shit outta 'em
 Bundle 'tpope/vim-surround'
-
-" Syntax for .txt files (and miscellaneous)
-Bundle 'txt.vim'
 
 " Snippets FTW \m/
 Bundle 'vim-scripts/UltiSnips'
