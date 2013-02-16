@@ -72,8 +72,6 @@ alias gping='ping -c 3 www.google.com'
 
 alias sbcl='rlwrap sbcl'
 
-alias logout='gnome-session-quit --logout'
-
 alias swap='setxkbmap -option caps:swapescape'
 
 alias unswap='setxkbmap -option'
@@ -87,6 +85,8 @@ alias dataman='ssh -Y dataman@192.9.10.230'
 alias uraniborg='ssh -Y dataman@192.9.10.231'
 
 alias mighty='ssh -Y dataman@192.9.10.232'
+
+alias german='ssh -Y akhil@78.46.69.107'
 
 alias back='cdl -'
 
@@ -104,13 +104,21 @@ alias ig-svn='svn propset svn:ingore -F ./.svnignore .'
 
 alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o credentials=/root/.credentials,uid=1000,gid=100'
 
-alias lock='gnome-screensaver-command --lock'
+alias logout='enlightenment_remote -exit'
+
+alias lock='enlightenment_remote -desktop-lock'
 
 alias susp='sudo systemctl suspend'
 
 alias shutd='sudo systemctl poweroff'
 
 alias reboot='sudo systemctl reboot'
+
+alias twoface='xrandr --output LVDS1 --auto --output VGA1 --auto --right-of LVDS1'
+
+alias sc1='xrandr --output LVDS1 --auto --output VGA1 --off'
+
+alias sc2='xrandr --output VGA1 --auto --output LVDS1 --off'
 
 #########################
 # Variables and Exports #
@@ -146,7 +154,7 @@ export LS_COLORS
 
 export TERM="screen-256color"
 
-export PATH="~/scripts:$PATH"
+export PATH="$HOME/scripts:$PATH"
 
 export GREP_COLOR='1;31'
 
