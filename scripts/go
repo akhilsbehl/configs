@@ -5,7 +5,7 @@ IFS=$'\n'
 
 for d in $*
 do
-  xdg-open "$d" &> /dev/null &
+  gvfs-open "$d" &> /dev/null &
 done
 
 IFS="$OIFS"
