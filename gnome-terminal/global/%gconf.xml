@@ -2,15 +2,12 @@
 <gconf>
 	<entry name="use_menu_accelerators" mtime="1339589565" type="bool" value="false"/>
 	<entry name="use_mnemonics" mtime="1339589563" type="bool" value="false"/>
-	<entry name="default_profile" mtime="1339589027" type="string">
+	<entry name="default_profile" mtime="1362242252" type="string">
 		<stringvalue>Default</stringvalue>
 	</entry>
-	<entry name="profile_list" mtime="1340351338" type="list" ltype="string">
+	<entry name="profile_list" mtime="1362242252" type="list" ltype="string">
 		<li type="string">
 			<stringvalue>Default</stringvalue>
-		</li>
-		<li type="string">
-			<stringvalue>Profile0</stringvalue>
 		</li>
 	</entry>
 </gconf>
