@@ -120,7 +120,7 @@ let vimrplugin_underscore = 0
 let vimrplugin_by_vim_instance = 1
 
 " use gnome-terminal with profile R
-let vimrplugin_term_cmd = "gnome-terminal --profile R -e"
+let vimrplugin_term_cmd = "gnome-terminal -e"
 
 " help-pager configuration
 let vimrplugin_vimpager = "vertical"
