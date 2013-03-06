@@ -37,6 +37,9 @@ ln -s "$PWD"/tmux.conf ~/.tmux.conf
 rm -rf ~/.crclient
 ln -s "$PWD"/crclient ~/.crclient
 
+rm -rf ~/.conkyrc
+ln -s "$PWD"/conkyrc ~/.conkyrc
+
 rm -rf ~/scripts
 ln -s "$PWD"/scripts ~/scripts
 
