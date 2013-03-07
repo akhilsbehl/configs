@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SSHFSDIR="$HOME/sshfs"
+
+declare -A SHARES="($(cat /etc/mtab | grep fuse.sshfs | cut -f 1-2 -d ' ' | \
+  awk '{print "[\""$1"\"]=\""$2"\""}'))"
+
+for SHARE in "${!SHARES[@]}"; do
+  fusermount -u "${SHARES["$SHARE"]}"
+done
+
+rmdir "$SSHFSDIR"/* &> /dev/null
+
+exit 0

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ $# -gt 2 ]]; then
+  echo "Too many args. Usage: lsd path_to_dir"
+fi
+
+path_to_dir=$(readlink -m "$1")
+
+if [[ -z "$1" ]]; then
+  path_to_dir=$(readlink -m "$PWD")
+fi
+
+prune_chars=$(readlink -m "$path_to_dir" | wc -c)
+
+TEST="$(find "$path_to_dir" -maxdepth 1 -type d | \
+  cut --complement -c 1-$prune_chars | sort)"
+
+if [ "$TEST" == "" ]; then
+  exit 0
+else
+  echo "$TEST"
+  exit 0
+fi

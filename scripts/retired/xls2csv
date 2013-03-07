@@ -1,0 +1,12 @@
+#!/bin/bash
+
+OIFS=${IFS}
+IFS=$'\n'
+
+PERLPATH="$HOME/rstat/lib/gdata/perl/"
+perl "${PERLPATH}/xls2csv.pl" $*
+
+IFS=${OIFS}
+unset OIFS
+
+exit 0

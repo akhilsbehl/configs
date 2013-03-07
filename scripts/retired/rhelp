@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function print_help(){
+echo "
+Usage:	rhelp object [for any R object or method]
+Usage:	rhelp -m=object [for more help using '??']
+Usage:	rhelp -l=foobar [for a library]
+Help:	rhelp -h
+"
+}
+
+if [[ $# -ne 1 ]]
+then
+  print_help
+  exit 0
+fi
+
+case "$1" in
+  -l=*)
+    OBJ=$(echo "$1" | cut -f 2- -d '=')
+    echo "library(help="$OBJ")" | R --slave
+    exit 0
+    ;;
+  -m=*)
+    OBJ=$(echo "$1" | cut -f 2- -d '=')
+    echo "??$OBJ" | R --slave
+    exit 0
+    ;;
+  -h)
+    print_help
+    exit 0
+    ;;
+  *)
+    OBJ="$1"
+    echo "?$1" | R --slave
+    exit 0
+    ;;
+esac
+
+exit 0

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+OIFS="$IFS"
+IFS=$'\n'
+
+for VIDEO in $*
+do
+  CONSENT=r
+  while [ "$CONSENT" == "r" ]
+  do
+    echo
+    echo -e "\E[31;1m"$VIDEO""
+    mp "$VIDEO" 2> /dev/null &&
+      echo -e "\E[30;1m"
+    echo "Say 'y' to delete the video. Say 'r' to repeat."
+    read CONSENT
+    if [ "$CONSENT" == "y" ]
+    then
+      rm -v "$VIDEO"
+    fi
+  done
+done
+
+IFS="$OIFS"
+unset OIFS
+
+exit 0

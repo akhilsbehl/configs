@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SSHFSDIR="$HOME/sshfs"
+if [[ ! -e "$SSHFSDIR" ]]; then
+  mkdir -p "$SSHFSDIR"
+fi
+
+declare -A SHARES=( \
+  ["akhil@192.9.10.230:/home/akhil"]="$SSHFSDIR/akhil" \
+  ["akhil@192.9.10.230:/"]="$SSHFSDIR/root" \
+  )
+
+echo
+
+for SHARE in "${!SHARES[@]}"; do
+  MNTPT="${SHARES["$SHARE"]}"
+  mkdir -p "$MNTPT"
+  if [[ $(cat /etc/mtab | grep "$MNTPT") ]]; then
+    echo "$MNTPT is not empty."
+    echo $(mount | grep "$MNTPT" | cut -f 1-3 -d ' ')
+    echo
+  else
+    sshfs "$SHARE" "$MNTPT"
+  fi
+done
+
+exit 0
