@@ -1,11 +1,14 @@
 #!/bin/bash
 
-sudo -u akhilsbehl /usr/local/bin/add-xhost
 /usr/local/bin/distwtype &
 trayer --expand true --transparent true --alpha 255 --edge bottom \
   --align right --expand true --SetDockType true --widthtype request &
 /usr/bin/conky -c "$HOME"/.conkyrc/conky_launchpad &
 /usr/bin/artha &
-/usr/bin/gnome-terminal
+/usr/bin/gnome-terminal &
+
+sleep 3s && zenity --info \
+  --title 'Fortune cookie for the cookie monster!' \
+  --text "$(fortune -a)"
 
 exit 0
