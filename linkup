@@ -13,6 +13,9 @@ ln -s "$PWD"/Rprofile ~/.Rprofile
 rm -rf ~/.bashrc
 ln -s "$PWD"/bashrc ~/.bashrc
 
+rm -rf ~/.zshrc
+ln -s "$PWD"/zshrc ~/.zshrc
+
 rm -rf ~/.bash_profile
 ln -s "$PWD"/bash_profile ~/.bash_profile
 
