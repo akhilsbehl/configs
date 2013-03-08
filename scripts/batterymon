@@ -1,34 +1,41 @@
 #!/bin/bash
 
-LOGDIR="$HOME"/.log
-LOGFILE="$LOGDIR"/batterymon.log
-LOGTIME="[$(date +"%d %b; %H:%M:%S")]"
-
-BATSTATUS=$(acpi -b | cut -f 4 -d ' ' | tr -dc '[0-9]')
-CHGSTATUS=$(acpi -a | cut -f 3 -d ' ')
-
-ALARM_HIGH_HEAD="Battery Charged"
+ALARM_HIGH_HEAD="Battery Charged!"
 ALARM_HIGH_BODY="Time to switch off the external power source."
 
-ALARM_LOW_HEAD="Battery Low"
+ALARM_LOW_HEAD="Battery Low!"
 ALARM_LOW_BODY="Time to switch in to external power source."
 
+ask_to_sleep () {
+  zenity --question \
+    --title 'Battery critically low!' \
+    --text 'Go to sleep till plugged in?'
+  if [[ "$?" == "0" ]]; then
+    sudo systemctl suspend
+  fi
+}
+
 raise_alarm () {
-  DISPLAY="$DISPLAY" notify-send "$1" "$2"
-  echo "$LOGTIME" "$1" "$2" >> "$LOGFILE"
+  zenity --warning --title "$1" --text "$2" --timeout 5
 }
 
 main () {
-  if [[ "$1" -lt "40" && "$2" == "off-line" ]]; then
+  if [[ "$1" -lt "10" && "$2" == "off-line" ]]; then
+    sudo systemctl suspend
+  elif [[ "$1" -lt "20" && "$2" == "off-line" ]]; then
+    ask_to_sleep
+  elif [[ "$1" -lt "40" && "$2" == "off-line" ]]; then
     raise_alarm "$ALARM_LOW_HEAD" "$ALARM_LOW_BODY"
   elif [[ "$1" -gt "80" && "$2" == "on-line" ]]; then
     raise_alarm "$ALARM_HIGH_HEAD" "$ALARM_HIGH_BODY"
   fi
 }
 
-if ! [[ -e "$LOGDIR" ]]; then
-  mkdir -p "$LOGDIR"
-fi
-main "$BATSTATUS" "$CHGSTATUS"
+while true; do
+  BATSTATUS=$(acpi -b | cut -f 4 -d ' ' | tr -dc '[0-9]')
+  CHGSTATUS=$(acpi -a | cut -f 3 -d ' ')
+  main "$BATSTATUS" "$CHGSTATUS"
+  sleep 60
+done
 
 exit 0

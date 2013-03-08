@@ -1,5 +1,0 @@
-#!/bin/bash
-
-syndaemon -d -k -i 0.5s
-
-exit 0

@@ -1,13 +1,14 @@
 #!/bin/bash
 
-/usr/local/bin/distwtype &
+/usr/local/bin/batterymon &
 trayer --expand true --transparent true --alpha 255 --edge bottom \
   --align right --expand true --SetDockType true --widthtype request &
+syndaemon -d -k -i 0.5s &
 /usr/bin/conky -c "$HOME"/.conkyrc/conky_launchpad &
 /usr/bin/artha &
 /usr/bin/gnome-terminal &
 
-sleep 3s && zenity --info \
+sleep 1s && zenity --info \
   --title 'Fortune cookie for the cookie monster!' \
   --text "$(fortune -a)"
 
