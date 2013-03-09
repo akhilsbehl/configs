@@ -5,7 +5,7 @@ IFS=$'\n'
 
 sudo updatedb
 
-FILES=$(locate -i {~$,thumbs.db,.sw{p,o,n}})
+FILES=$(locate -i {~$,thumbs.db,.sw{p,o,n},*~lock*})
 
 if [[ ! -z "$FILES" ]]; then
   rm -i $FILES

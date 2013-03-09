@@ -2,7 +2,7 @@
 
 /usr/local/bin/batterymon &
 trayer --expand true --transparent true --alpha 255 --edge bottom \
-  --align right --expand true --SetDockType true --widthtype request &
+  --align left --expand true --SetDockType true --widthtype request &
 syndaemon -d -k -i 0.5s &
 /usr/bin/conky -c "$HOME"/.conkyrc/conky_launchpad &
 /usr/bin/artha &
