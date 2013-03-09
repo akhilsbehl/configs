@@ -120,6 +120,14 @@ alias sc1='xrandr --output LVDS1 --auto --output VGA1 --off'
 
 alias sc2='xrandr --output VGA1 --auto --output LVDS1 --off'
 
+alias t='cdl "$HOME"/tmp'
+
+alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
+
+alias s='cdl /run/media/akhilsbehl/Snapper'
+
+alias c='cdl "$HOME"/git/configs'
+
 #########################
 # Variables and Exports #
 #########################
@@ -186,7 +194,3 @@ alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 alias fstab='sudo $EDITOR /etc/fstab &'
 
 alias paclog='sudo $EDITOR + /var/log/pacman.log &'
-
-#sudo sed -i '/title_vertical_pad/s|value="[0-9]\{1,2\}"|value="0"|g' /usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
-
-#sudo sed -i -r 's|(<frame_geometry name="max")|\1 has_title="false"|' /usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
