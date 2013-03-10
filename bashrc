@@ -20,6 +20,12 @@ function upsvn () {
   )
 }
 
+function retray () {
+  pkill trayer
+  trayer --expand true --transparent true --alpha 255 --edge top \
+    --align right --expand true --SetDockType true --widthtype request &
+}
+
 ###################
 # Command Aliases #
 ###################
