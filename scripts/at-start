@@ -1,8 +1,9 @@
 #!/bin/bash
 
 /usr/local/bin/batterymon &
-trayer --expand true --transparent true --alpha 255 --edge bottom \
-  --align left --expand true --SetDockType true --widthtype request &
+/usr/bin/nm-applet &
+trayer --expand true --transparent true --alpha 255 --edge top \
+  --align right --expand true --SetDockType true --widthtype request &
 syndaemon -d -k -i 0.5s &
 /usr/bin/conky -c "$HOME"/.conkyrc/conky_launchpad &
 /usr/bin/artha &
