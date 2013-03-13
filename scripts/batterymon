@@ -35,7 +35,7 @@ while true; do
   BATSTATUS=$(acpi -b | cut -f 4 -d ' ' | tr -dc '[0-9]')
   CHGSTATUS=$(acpi -a | cut -f 3 -d ' ')
   main "$BATSTATUS" "$CHGSTATUS"
-  sleep 60
+  sleep 180
 done
 
 exit 0
