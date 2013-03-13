@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [[ -z "$1" ]];then
+  echo "No input. Exiting."
+  exit 1
+fi
+
+if ! [[ "$1" == "-u" || "$1" == "-d" || "$1" == "-l" || "$1" == "-r" ]]; then
+  echo "Usage: $0 -u | -d | -l | -r"
+  exit 2
+fi
+
+WIDTH=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -f 1 -d 'x')
+HEIGHT=$(xdpyinfo | grep dimensions | awk '{print $2}' | cut -f 2 -d 'x')
+
+HWIDTH=$(($WIDTH / 2))
+HHEIGHT=$(($HEIGHT / 2))
+
+snap_up () {
+  wmctrl -r :ACTIVE: -e 0,0,0,$WIDTH,$HHEIGHT
+}
+
+snap_down () {
+  wmctrl -r :ACTIVE: -e 0,0,$HHEIGHT,$WIDTH,$HHEIGHT
+}
+
+snap_left () {
+  wmctrl -r :ACTIVE: -e 0,0,0,$HWIDTH,$HEIGHT
+}
+
+snap_right () {
+  wmctrl -r :ACTIVE: -e 0,$HWIDTH,0,$HWIDTH,$HEIGHT
+}
+
+wmctrl -r :ACTIVE: -b remove,maximized_vert,maximized_horz
+
+[[ "$1" == "-u" ]] && snap_up && exit 0
+[[ "$1" == "-d" ]] && snap_down && exit 0
+[[ "$1" == "-l" ]] && snap_left && exit 0
+[[ "$1" == "-r" ]] && snap_right && exit 0
