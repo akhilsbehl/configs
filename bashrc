@@ -137,6 +137,10 @@ alias sc1='xrandr --output LVDS1 --auto --output VGA1 --off'
 
 alias sc2='xrandr --output VGA1 --auto --output LVDS1 --off'
 
+alias tpoff='synclient TouchpadOff=1'
+
+alias tpon='synclient TouchpadOff=0'
+
 alias t='cdl "$HOME"/tmp'
 
 alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
