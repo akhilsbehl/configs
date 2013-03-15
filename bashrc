@@ -2,7 +2,7 @@
 if [[ -z "$PS1" ]];then 
   exit
 else
-  export PS1='\[\e[30;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
+  export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 fi
 
 #############
