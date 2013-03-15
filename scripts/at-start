@@ -1,12 +1,8 @@
 #!/bin/bash
 
-/usr/local/bin/batterymon &
-/usr/bin/nm-applet &
-trayer --expand true --transparent true --alpha 255 --edge top \
-  --align right --expand true --SetDockType true --widthtype request &
+pkill batterymon; /usr/local/bin/batterymon &
 /usr/bin/synclient TouchpadOff=1 &
 /usr/bin/setxkbmap -option caps:swapescape
-/usr/bin/conky -c "$HOME"/.conkyrc/conky_launchpad &
 /usr/bin/artha &
 /usr/bin/gnome-terminal &
 

@@ -27,12 +27,6 @@ function upsvn () {
   )
 }
 
-function retray () {
-  pkill trayer
-  trayer --expand true --transparent true --alpha 255 --edge top \
-    --align right --expand true --SetDockType true --widthtype request &
-}
-
 ###################
 # Command Aliases #
 ###################
@@ -89,8 +83,6 @@ alias swap='setxkbmap -option caps:swapescape'
 
 alias unswap='setxkbmap -option'
 
-alias redevil='killall -9 devilspie && devilspie -a &> /dev/null &'
-
 alias ak230='ssh -Y akhil@192.9.10.230'
 
 alias ak231='ssh -Y akhil@192.9.10.231'
@@ -111,31 +103,15 @@ alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mp
 
 alias new='/usr/bin/gnome-terminal && exit'
 
-alias reset-ifs="export IFS=$' \t\n'"
+alias logout='gnome-session-quit'
 
-alias line-ifs="export IFS=$'\n'"
-
-alias test-ifs='echo -n "$IFS" | od -abc'
-
-alias ig-svn='svn propset svn:ingore -F ./.svnignore .'
-
-alias temp='sudo mount.cifs //storage.igidr.ac.in/temp /home/akhilsbehl/temp -o credentials=/root/.credentials,uid=1000,gid=100'
-
-alias logout='enlightenment_remote -exit'
-
-alias lock='enlightenment_remote -desktop-lock'
+alias lock='gnome-screensaver-command --lock'
 
 alias susp='sudo systemctl suspend'
 
 alias shutd='sudo systemctl poweroff'
 
 alias reboot='sudo systemctl reboot'
-
-alias twoface='xrandr --output LVDS1 --auto --output VGA1 --auto --right-of LVDS1'
-
-alias sc1='xrandr --output LVDS1 --auto --output VGA1 --off'
-
-alias sc2='xrandr --output VGA1 --auto --output LVDS1 --off'
 
 alias tpoff='synclient TouchpadOff=1'
 
