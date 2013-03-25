@@ -236,6 +236,12 @@ function SaveWithoutSudo()
 endfunction
 nmap <M-w> <Esc>:call SaveWithoutSudo()<CR>
 
+" Delete all blank lines in a file.
+function DeleteBlankLines()
+  g:^$:d
+endfunction
+nmap <M-w> <Esc>:call SaveWithoutSudo()<CR>
+
 " Move by display lines in place of actual lines.
 
 nnoremap j gj
