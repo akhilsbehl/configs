@@ -130,6 +130,9 @@ let vimrplugin_editor_h = 60
 " Define new commands
 map <LocalLeader>nr :call RAction("rownames")<CR>
 map <LocalLeader>nc :call RAction("colnames")<CR>
+map <LocalLeader>n2 :call RAction("names")<CR>
+map <LocalLeader>nn :call RAction("dimnames")<CR>
+map <LocalLeader>nd :call RAction("dim")<CR>
 map <LocalLeader>nh :call RAction("head")<CR>
 map <LocalLeader>nt :call RAction("tail")<CR>
 map <LocalLeader>nl :call RAction("length")<CR>
