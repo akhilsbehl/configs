@@ -107,7 +107,7 @@ alias logout='gnome-session-quit'
 
 alias lock='gnome-screensaver-command --lock'
 
-alias susp='sudo systemctl suspend'
+alias susp='sudo systemctl suspend && lock'
 
 alias shutd='sudo systemctl poweroff'
 
