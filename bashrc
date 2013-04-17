@@ -57,7 +57,7 @@ alias grep='grep --color=auto'
 
 alias rmd='rm -rv'
 
-alias du='du -sh'
+alias dus='du -sh'
 
 alias zip='zip -r1v'
 
