@@ -20,13 +20,13 @@ raise_alarm () {
 }
 
 main () {
-  if [[ "$1" -lt "20" && "$2" == "off-line" ]]; then
+  if [[ "$1" -lt "15" && "$2" == "off-line" ]]; then
     sudo systemctl suspend
-  elif [[ "$1" -lt "30" && "$2" == "off-line" ]]; then
+  elif [[ "$1" -lt "25" && "$2" == "off-line" ]]; then
     ask_to_sleep
-  elif [[ "$1" -lt "40" && "$2" == "off-line" ]]; then
+  elif [[ "$1" -lt "35" && "$2" == "off-line" ]]; then
     raise_alarm "$ALARM_LOW_HEAD" "$ALARM_LOW_BODY"
-  elif [[ "$1" -gt "80" && "$2" == "on-line" ]]; then
+  elif [[ "$1" -gt "90" && "$2" == "on-line" ]]; then
     raise_alarm "$ALARM_HIGH_HEAD" "$ALARM_HIGH_BODY"
   fi
 }
