@@ -60,7 +60,7 @@ colorscheme zellner
 " These are values for global vim `options'. To deactivate any option,
 " prepend `no' to the option. To activate, simply remove the `no'.
 
-" Use Vim defaults (much better!)
+" Use Vim defaults
 set nocompatible
 
 " auto-switch to dir of the file
@@ -77,9 +77,6 @@ set autoindent smartindent expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
 " round to 'shiftwidth' for '<<' and '>>'
 set shiftround
-
-" save hidden buffers
-set hidden
 
 " don't use two spaces when joining a line after a '.', '?' or '!'
 set nojoinspaces
@@ -102,6 +99,9 @@ set omnifunc=syntaxcomplete#Complete
 " folding text
 " set foldmethod=marker foldmarker=#<<<,>>>#
 set nofoldenable
+
+" Stop backups and swap files.
+set nobackup noswapfile
 
 "-------------------------
 
@@ -235,7 +235,7 @@ nmap <M-o> <Esc>O<CR>
 " opening vim.
 
 function SaveWithoutSudo()
-  write !sudo tee %
+  write !sudo tee % > /dev/null
 endfunction
 nmap <M-w> <Esc>:call SaveWithoutSudo()<CR>
 
