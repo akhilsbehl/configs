@@ -103,6 +103,13 @@ set nofoldenable
 " Stop backups and swap files.
 set nobackup noswapfile
 
+" Always keep at least 3 lines above and below the cursor, except at the ends
+" of the file.
+set scrolloff=3
+
+" Formatting options: read 'help formatoptions'.
+set formatoptions=tcrqanj
+
 "-------------------------
 
 let mapleader=","
@@ -214,42 +221,37 @@ au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !ch
 
 " Change tabs, buffers and delete buffers.
 
-imap <M-j> <Esc>:tabp<CR>
-nmap <M-j> <Esc>:tabp<CR>
-vmap <M-j> <Esc>:tabp<CR>
-
-imap <M-k> <Esc>:tabn<CR>
-nmap <M-k> <Esc>:tabn<CR>
-vmap <M-k> <Esc>:tabn<CR>
-
-imap <M-d> <Esc>:bdelete<CR>
-nmap <M-d> <Esc>:bdelete<CR>
-vmap <M-d> <Esc>:bdelete<CR>
+map <M-j> <Esc>:tabp<CR>
+map! <M-j> <Esc>:tabp<CR>
+map <M-k> <Esc>:tabn<CR>
+map! <M-k> <Esc>:tabn<CR>
+map <M-d> <Esc>:bdelete<CR>
+map! <M-d> <Esc>:bdelete<CR>
 
 " puts an empty line above and below the cursor position and enters the insert
 " mode.
 
-nmap <M-o> <Esc>O<CR>
+nnoremap <M-o> <Esc>O<CR>
 
 " Taken from command-line fu. Save system files when you forget to sudo while
 " opening vim.
-
-function SaveWithoutSudo()
-  write !sudo tee % > /dev/null
-endfunction
-nmap <M-w> <Esc>:call SaveWithoutSudo()<CR>
-
-" Delete all blank lines in a file.
-function DeleteBlankLines()
-  g:^$:d
-endfunction
-nmap <M-w> <Esc>:call SaveWithoutSudo()<CR>
 
 " Move by display lines in place of actual lines.
 
 nnoremap j gj
 nnoremap k gk
 
-" format a paragraph after making changes to it.
+" Delete all trailing whitespace.
+nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 
-nmap <M-f> gqapgw$j
+" Delete all blank lines.
+nnoremap <leader><leader>d :g:^$:d<CR>
+
+" Save when file was opened without sudo.
+function SaveWithoutSudo()
+  write !sudo tee % > /dev/null
+endfunction
+nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
+
+" Reformat the paragraph.
+nnoremap <leader><leader>f gqipj
