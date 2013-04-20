@@ -10,6 +10,6 @@ find "$DIR" -maxdepth 1 \
   \( -name '*log' -o -name '*nav' -o -name '*out' -o -name '*snm' \
   -o -name '*toc' -o -name '*blg' -o -name '*bbl' -o -name '*vrb' \
   -o -name '*aux' \) \
-  -exec rm -v {} \;
+  -delete
 
 exit 0
