@@ -51,9 +51,7 @@ filetype indent plugin on
 syntax enable
 
 " colorscheme
-colorscheme zellner
-"colorscheme desert
-"colorscheme default
+colorscheme mustang
 
 "-------------------------
 
@@ -103,12 +101,15 @@ set nofoldenable
 " Stop backups and swap files.
 set nobackup noswapfile
 
+" Set hidden: Seems like I want it afterall.
+set hidden
+
 " Always keep at least 3 lines above and below the cursor, except at the ends
 " of the file.
 set scrolloff=3
 
 " Formatting options: read 'help formatoptions'.
-set formatoptions=tcrqanj
+set formatoptions=tcqn
 
 "-------------------------
 
@@ -123,7 +124,7 @@ let maplocalleader=","
 " don't replace underscores in R
 let vimrplugin_underscore = 0
 
-" use a single R process for all buffers of a single instance	
+" use a single R process for all buffers of a single instance
 let vimrplugin_by_vim_instance = 1
 
 " use gnome-terminal with profile R
