@@ -13,9 +13,6 @@ ln -s "$PWD"/Rprofile ~/.Rprofile
 rm -rf ~/.bashrc
 ln -s "$PWD"/bashrc ~/.bashrc
 
-rm -rf ~/.zshrc
-ln -s "$PWD"/zshrc ~/.zshrc
-
 rm -rf ~/.bash_profile
 ln -s "$PWD"/bash_profile ~/.bash_profile
 
@@ -39,9 +36,6 @@ ln -s "$PWD"/tmux.conf ~/.tmux.conf
 
 rm -rf ~/.crclient
 ln -s "$PWD"/crclient ~/.crclient
-
-rm -rf ~/.conkyrc
-ln -s "$PWD"/conkyrc ~/.conkyrc
 
 rm -rf ~/scripts
 ln -s "$PWD"/scripts ~/scripts
