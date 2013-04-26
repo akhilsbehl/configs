@@ -95,8 +95,8 @@ set fileformat=unix fileformats=unix,dos,mac
 set omnifunc=syntaxcomplete#Complete
 
 " folding text
-set foldmethod=indent
-" set nofoldenable
+" set foldmethod=marker foldmarker=#<<<,>>>#
+set nofoldenable
 
 " Stop backups and swap files.
 set nobackup noswapfile
