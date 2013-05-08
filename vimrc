@@ -127,8 +127,6 @@ let vimrplugin_underscore = 0
 
 let vimrplugin_by_vim_instance = 1
 
-let vimrplugin_term_cmd = "xterm -fa monaco -fs 10 -bg black -fg white -e"
-
 let vimrplugin_vimpager = "vertical"
 
 let vimrplugin_editor_w = 80
