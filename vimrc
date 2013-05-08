@@ -248,3 +248,6 @@ nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
 
 " Reformat the paragraph.
 nnoremap <leader><leader>f gqipj
+
+" Remap to start the file path completion
+inoremap <C-z><C-f> <C-x><C-f>
