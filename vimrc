@@ -10,47 +10,47 @@ call vundle#rc()
 
 " Add my bundles here:
 
-" The bundle manager
+" The bundle manager.
 Bundle 'gmarik/vundle'
 
-" Provides autoclose feature. Repeat with me: Hail Thiago Alves!'
+" Provides autoclose feature. Repeat with me: Hail Thiago Alves!
 Bundle 'vim-scripts/AutoClose--Alves'
 
-" The awesome commenter
+" The awesome commenter.
 Bundle 'scrooloose/nerdcommenter'
 
-" The awesome dirtree
+" The awesome dirtree.
 Bundle 'scrooloose/nerdtree'
 
-" The screen / tmux plugin
+" The screen / tmux plugin.
 Bundle 'ervandew/screen'
 
 " Overload the fucking tab!
 Bundle 'ervandew/supertab'
 
-" Surround the shit outta 'em
+" Surround the shit outta 'em.
 Bundle 'tpope/vim-surround'
 
-" Snippets FTW \m/
+" Snippets FTW \m/.
 Bundle 'vim-scripts/UltiSnips'
 
-" R plugin
+" R plugin.
 Bundle 'vim-scripts/Vim-R-plugin'
 
-" Latex suite
+" Latex suite.
 Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 
 "-------------------------
 
 " These are global Vim options.
 
-" auto-detect the file type
+" Auto-detect the file type.
 filetype indent plugin on
 
-" highlight syntax
+" Highlight syntax.
 syntax enable
 
-" colorscheme
+" Colorscheme.
 colorscheme mustang
 
 "-------------------------
@@ -58,44 +58,40 @@ colorscheme mustang
 " These are values for global vim `options'. To deactivate any option,
 " prepend `no' to the option. To activate, simply remove the `no'.
 
-" Use Vim defaults
+" Use Vim defaults.
 set nocompatible
 
-" auto-switch to dir of the file
+" Auto-switch to dir of the file.
 set autochdir
 
-" look and feel options
+" Look and feel options.
 set cursorline ruler number numberwidth=4 showmode showcmd mousefocus textwidth=79
 
-" search options
+" Search options.
 set incsearch ignorecase smartcase nohlsearch
 
-" indentations (tabstops)
+" Indentations (tabstops).
 set autoindent smartindent expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
-" round to 'shiftwidth' for '<<' and '>>'
+" Round to 'shiftwidth' for '<<' and '>>'.
 set shiftround
 
-" don't use two spaces when joining a line after a '.', '?' or '!'
+" Don't use two spaces when joining a line after a '.', '?' or '!'.
 set nojoinspaces
 
-" keep local rcs from executing harmful commands.
+" Keep local rcs from executing harmful commands.
 set secure
 
-" config
-set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1 timeoutlen=500
-
-" printing options
+" Printing options.
 set printdevice=pdf printoptions=right:10pc,left:10pc,top:5pc,bottom:5pc,syntax:y,wrap:y,header:0,paper:A4
 
-" end-of-line formats: 'dos', 'unix' or 'mac'
+" End-of-line formats: 'dos', 'unix' or 'mac'.
 set fileformat=unix fileformats=unix,dos,mac
 
-" function for filetype-specific Insert
+" Function for filetype-specific insert.
 set omnifunc=syntaxcomplete#Complete
 
-" folding text
-" set nofoldenable
+" Folding text.
 set foldmethod=indent foldlevel=0 foldenable
 
 " Stop backups and swap files.
@@ -111,6 +107,12 @@ set scrolloff=3
 " Formatting options: read 'help formatoptions'.
 set formatoptions=tcqn
 
+" Filename completion in ex mode.
+set wildmenu wildmode=longest,list,full
+
+" Config.
+set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1 timeoutlen=500
+
 "-------------------------
 
 let mapleader=","
@@ -121,21 +123,27 @@ let maplocalleader=","
 
 " These options are for the vim-R-plugin
 
-" don't replace underscores in R
 let vimrplugin_underscore = 0
 
-" use a single R process for all buffers of a single instance
 let vimrplugin_by_vim_instance = 1
 
-" use gnome-terminal with profile R
 let vimrplugin_term_cmd = "gnome-terminal -e"
 
-" help-pager configuration
 let vimrplugin_vimpager = "vertical"
+
 let vimrplugin_editor_w = 80
+
 let vimrplugin_editor_h = 60
 
-" Define new commands
+let vimrplugin_tmux = 1
+
+let vimrplugin_notmuxconf = 1
+
+let vimrplugin_routmorecolors = 1
+
+let vimrplugin_indent_commented = 0
+
+" Custom commands
 map <LocalLeader>nr :call RAction("rownames")<CR>
 map <LocalLeader>nc :call RAction("colnames")<CR>
 map <LocalLeader>n2 :call RAction("names")<CR>
@@ -148,15 +156,6 @@ map <LocalLeader>cc :call RAction("class")<CR>
 map <LocalLeader>nw :call SendCmdToR("system('clear')")<CR>
 map <LocalLeader>sb :call SendCmdToR("system.time({")<CR>
 map <LocalLeader>se :call SendCmdToR("})")<CR>
-
-" Misc options
-let vimrplugin_tmux = 1
-
-let vimrplugin_notmuxconf = 1
-
-let vimrplugin_routmorecolors = 1
-
-let vimrplugin_indent_commented = 0
 
 "-------------------------
 " These options are for UltiSnips
@@ -175,28 +174,24 @@ let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
 
 " These options are for the tex-suite plugin.
 
-" required for the tex-suite plugin
+" Required for the tex-suite plugin
 set grepprg=grep\ -nH\ $*
 
-" required for the tex-suite plugin
 let g:tex_flavor='latex'
 
-" sets the pdflatex compile rule
 let g:Tex_CompileRule_pdf='pdflatex -interaction=nonstopmode'
 
-" sets the pdf file viewer
 let g:Tex_ViewRule_pdf='evince'
 
-" sets the default build format to pdf
 let g:Tex_DefaultTargetFormat='pdf'
 
-" do not convert my quotes
+" Do not convert my quotes.
 let g:Tex_SmartKeyQuote=0
 
-" Ignore any makefiles when called from vim
+" Ignore any makefiles when called from vim.
 let g:Tex_UseMakefile=0
 
-" Do not fold anything for me
+" Do not fold anything for me.
 let g:Tex_FoldedSections=""
 let g:Tex_FoldedEnvironments=""
 let g:Tex_FoldedMisc=""
@@ -209,13 +204,11 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 
-" Contexts and other things for supertab
+" Contexts and other things for supertab.
 
 let g:SuperTabDefaultCompletionType = 'context'
 
 "-------------------------
-
-" Some nifty hacks from all over (some are my own)
 
 " Make a file executable if found #!/bin/ at the start of a file.
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod u+x <afile> | endif | endif
@@ -229,9 +222,8 @@ map! <M-k> <Esc>:tabn<CR>
 map <M-d> <Esc>:bdelete<CR>
 map! <M-d> <Esc>:bdelete<CR>
 
-" puts an empty line above and below the cursor position and enters the insert
+" Puts an empty line above and below the cursor position and enters the insert
 " mode.
-
 nnoremap <M-o> <Esc>O<CR>
 
 " Taken from command-line fu. Save system files when you forget to sudo while
