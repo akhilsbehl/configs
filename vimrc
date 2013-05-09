@@ -51,7 +51,11 @@ filetype indent plugin on
 syntax enable
 
 " Colorscheme.
-colorscheme mustang
+if has('gui_running')
+  colorscheme mustang
+else
+  colorscheme default
+endif
 
 "-------------------------
 
