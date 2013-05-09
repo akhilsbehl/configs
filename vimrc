@@ -211,18 +211,17 @@ let g:SuperTabDefaultCompletionType = 'context'
 " Make a file executable if found #!/bin/ at the start of a file.
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod u+x <afile> | endif | endif
 
-" Change tabs, buffers and delete buffers.
+" Navigate between and delete tabs.
 
-map <M-j> <Esc>:tabp<CR>
-map! <M-j> <Esc>:tabp<CR>
-map <M-k> <Esc>:tabn<CR>
-map! <M-k> <Esc>:tabn<CR>
-map <M-d> <Esc>:bdelete<CR>
-map! <M-d> <Esc>:bdelete<CR>
+nnoremap gj :tabprevious<CR>
+nnoremap gk :tabnext<CR>
+nnoremap gh :tabfirst<CR>
+nnoremap gl :tablast<CR>
+nnoremap gd :bdelete<CR>
 
 " Puts an empty line above and below the cursor position and enters the insert
 " mode.
-nnoremap <M-o> <Esc>O<CR>
+nnoremap <leader><leader>o <Esc>O<CR>
 
 " Taken from command-line fu. Save system files when you forget to sudo while
 " opening vim.
