@@ -41,5 +41,7 @@ options(pager="/usr/bin/less")
 }
 
 .lsos <- function(..., n=10) {
-    .ls.objects(..., order.by="Size", decreasing=TRUE, head=TRUE, n=n)
+    tt <- .ls.objects(..., order.by="Size", decreasing=TRUE, head=TRUE, n=n)
+    tt[["Size"]] <- round(tt[["Size"]] / 1e6, digits=2)
+    tt
 }
