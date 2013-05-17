@@ -69,7 +69,7 @@ set nocompatible
 set autochdir
 
 " Look and feel options.
-set cursorline ruler number numberwidth=4 showmode showcmd mousefocus textwidth=79
+set cursorline ruler number numberwidth=4 showmode showcmd mousefocus textwidth=79 colorcolumn=+1
 
 " Search options.
 set incsearch ignorecase smartcase nohlsearch
