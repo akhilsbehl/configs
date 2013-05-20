@@ -69,7 +69,8 @@ set nocompatible
 set autochdir
 
 " Look and feel options.
-set cursorline ruler number numberwidth=4 showmode showcmd mousefocus textwidth=79 colorcolumn=+1
+set cursorline ruler number numberwidth=4 showmode showcmd mousefocus
+set textwidth=79 colorcolumn=+1
 
 " Search options.
 set incsearch ignorecase smartcase nohlsearch
@@ -87,7 +88,8 @@ set nojoinspaces
 set secure
 
 " Printing options.
-set printdevice=pdf printoptions=right:10pc,left:10pc,top:5pc,bottom:5pc,syntax:y,wrap:y,header:0,paper:A4
+set printdevice=pdf
+set printoptions=right:10pc,left:10pc,top:5pc,bottom:5pc,syntax:y,wrap:y,header:0,paper:A4
 
 " End-of-line formats: 'dos', 'unix' or 'mac'.
 set fileformat=unix fileformats=unix,dos,mac
@@ -115,7 +117,8 @@ set formatoptions=tcqn
 set wildmenu wildmode=longest,list,full
 
 " Config.
-set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no showtabline=1 timeoutlen=500
+set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no
+set showtabline=1 timeoutlen=500
 
 "-------------------------
 
@@ -145,7 +148,8 @@ let vimrplugin_routmorecolors = 1
 
 let vimrplugin_indent_commented = 0
 
-" Custom commands
+" Custom commands.
+
 map <LocalLeader>nr :call RAction("rownames")<CR>
 map <LocalLeader>nc :call RAction("colnames")<CR>
 map <LocalLeader>n2 :call RAction("names")<CR>
@@ -161,13 +165,14 @@ map <LocalLeader>sb :call SendCmdToR("system.time({")<CR>
 map <LocalLeader>se :call SendCmdToR("})")<CR>
 
 "-------------------------
-" These options are for UltiSnips
+
+" These options are for UltiSnips.
 
 let g:UltiSnipsEditSplit = "horizontal"
 
 let g:UltiSnipsSnippetsDir = "~/git/configs/snippets"
 
-let g:UltiSnipsSnippetDirectories = ["Ultisnips", "snippets"]
+let g:UltiSnipsSnippetDirectories = ["snippets"]
 
 let g:UltiSnipsJumpForwardTrigger = "<C-k>"
 
@@ -177,7 +182,6 @@ let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
 
 " These options are for the tex-suite plugin.
 
-" Required for the tex-suite plugin
 set grepprg=grep\ -nH\ $*
 
 let g:tex_flavor='latex'
@@ -189,34 +193,41 @@ let g:Tex_ViewRule_pdf='evince'
 let g:Tex_DefaultTargetFormat='pdf'
 
 " Do not convert my quotes.
+
 let g:Tex_SmartKeyQuote=0
 
 " Ignore any makefiles when called from vim.
+
 let g:Tex_UseMakefile=0
 
-" Do not fold anything for me.
+" Do not let this plugin fold anything for me.
+
 let g:Tex_FoldedSections=""
 let g:Tex_FoldedEnvironments=""
 let g:Tex_FoldedMisc=""
 
 "-------------------------
 
-" This setting stops the annoying autocompletion of single quotes
+" Remove single quotes from the set of autocompletions.
 
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 
-" Contexts and other things for supertab.
+" Supertab config. For some reason filename completion does not work anymore.
 
 let g:SuperTabDefaultCompletionType = 'context'
 
 "-------------------------
 
 " Make a file executable if found #!/bin/ at the start of a file.
-au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod u+x <afile> | endif | endif
+
+au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent
+  !chmod u+x <afile> | endif | endif
 
 " Navigate between and delete tabs.
+
+"-------------------------
 
 if has("gui_running")
   nnoremap <M-j> :tabprevious<CR>
@@ -232,9 +243,6 @@ nnoremap gh :tabfirst<CR>
 nnoremap gl :tablast<CR>
 nnoremap gd :bdelete<CR>
 
-" Taken from command-line fu. Save system files when you forget to sudo while
-" opening vim.
-
 " Move by display lines in place of actual lines.
 
 nnoremap j gj
@@ -242,22 +250,32 @@ nnoremap k gk
 
 " Puts an empty line above and below the cursor position and enters the insert
 " mode.
+
+"-------------------------
+
 nnoremap <leader><leader>o <Esc>O<CR>
 
 " Delete all trailing whitespace.
+
 nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 
 " Delete all blank lines.
+
 nnoremap <leader><leader>d :g:^$:d<CR>
 
 " Save when file was opened without sudo.
+
 function SaveWithoutSudo()
   write !sudo tee % > /dev/null
 endfunction
 nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
 
 " Reformat the paragraph.
+
 nnoremap <leader><leader>f gqipj
 
-" Remap to start the file path completion
+"-------------------------
+
+" Remap file path completion bindings.
+
 inoremap <C-z><C-f> <C-x><C-f>
