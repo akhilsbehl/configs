@@ -156,6 +156,7 @@ map <LocalLeader>nt :call RAction("tail")<CR>
 map <LocalLeader>nl :call RAction("length")<CR>
 map <LocalLeader>cc :call RAction("class")<CR>
 map <LocalLeader>nw :call SendCmdToR("system('clear')")<CR>
+map <LocalLeader>ne :call SendCmdToR("system('traceback()')")<CR>
 map <LocalLeader>sb :call SendCmdToR("system.time({")<CR>
 map <LocalLeader>se :call SendCmdToR("})")<CR>
 
@@ -217,15 +218,19 @@ au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !ch
 
 " Navigate between and delete tabs.
 
+if has("gui_running")
+  nnoremap <M-j> :tabprevious<CR>
+  nnoremap <M-k> :tabnext<CR>
+  nnoremap <M-h> :tabfirst<CR>
+  nnoremap <M-l> :tablast<CR>
+  nnoremap <M-d> :bdelete<CR>
+endif
+
 nnoremap gj :tabprevious<CR>
 nnoremap gk :tabnext<CR>
 nnoremap gh :tabfirst<CR>
 nnoremap gl :tablast<CR>
 nnoremap gd :bdelete<CR>
-
-" Puts an empty line above and below the cursor position and enters the insert
-" mode.
-nnoremap <leader><leader>o <Esc>O<CR>
 
 " Taken from command-line fu. Save system files when you forget to sudo while
 " opening vim.
@@ -234,6 +239,10 @@ nnoremap <leader><leader>o <Esc>O<CR>
 
 nnoremap j gj
 nnoremap k gk
+
+" Puts an empty line above and below the cursor position and enters the insert
+" mode.
+nnoremap <leader><leader>o <Esc>O<CR>
 
 " Delete all trailing whitespace.
 nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
