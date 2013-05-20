@@ -223,7 +223,7 @@ let g:SuperTabDefaultCompletionType = 'context'
 " Make a file executable if found #!/bin/ at the start of a file.
 
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent
-  !chmod u+x <afile> | endif | endif
+      \ !chmod u+x <afile> | endif | endif
 
 " Navigate between and delete tabs.
 
