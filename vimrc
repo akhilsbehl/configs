@@ -31,6 +31,9 @@ Bundle 'ervandew/supertab'
 " Surround the shit outta 'em.
 Bundle 'tpope/vim-surround'
 
+" And repeat the surrounds. Hallelujah!
+Bundle 'tpope/vim-repeat'
+
 " Snippets FTW \m/.
 Bundle 'vim-scripts/UltiSnips'
 
@@ -39,6 +42,15 @@ Bundle 'vim-scripts/Vim-R-plugin'
 
 " Latex suite.
 Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
+
+" YankRing like the EMACS kill ring.
+Bundle 'vim-scripts/YankRing.vim'
+
+" Graphical UNDO
+Bundle 'sjl/gundo.vim'
+
+" Slime vim-tmux integration for REPLs.
+Bundle 'jpalardy/vim-slime'
 
 "-------------------------
 
@@ -54,7 +66,8 @@ syntax enable
 if has('gui_running')
   colorscheme mustang
 else
-  colorscheme default
+  colorscheme mustang
+  " colorscheme default
 endif
 
 "-------------------------
@@ -193,15 +206,12 @@ let g:Tex_ViewRule_pdf='evince'
 let g:Tex_DefaultTargetFormat='pdf'
 
 " Do not convert my quotes.
-
 let g:Tex_SmartKeyQuote=0
 
 " Ignore any makefiles when called from vim.
-
 let g:Tex_UseMakefile=0
 
 " Do not let this plugin fold anything for me.
-
 let g:Tex_FoldedSections=""
 let g:Tex_FoldedEnvironments=""
 let g:Tex_FoldedMisc=""
@@ -243,25 +253,33 @@ nnoremap gh :tabfirst<CR>
 nnoremap gl :tablast<CR>
 nnoremap gd :bdelete<CR>
 
+"-------------------------
+
 " Move by display lines in place of actual lines.
 
 nnoremap j gj
 nnoremap k gk
 
+"-------------------------
+
 " Puts an empty line above and below the cursor position and enters the insert
 " mode.
 
-"-------------------------
-
 nnoremap <leader><leader>o <Esc>O<CR>
+
+"-------------------------
 
 " Delete all trailing whitespace.
 
 nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
 
+"-------------------------
+
 " Delete all blank lines.
 
 nnoremap <leader><leader>d :g:^$:d<CR>
+
+"-------------------------
 
 " Save when file was opened without sudo.
 
@@ -269,6 +287,8 @@ function SaveWithoutSudo()
   write !sudo tee % > /dev/null
 endfunction
 nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
+
+"-------------------------
 
 " Reformat the paragraph.
 
@@ -279,3 +299,37 @@ nnoremap <leader><leader>f gqipj
 " Remap file path completion bindings.
 
 inoremap <C-z><C-f> <C-x><C-f>
+
+"-------------------------
+
+" Turn on spell-check and en_US language for text files.
+
+autocmd BufRead,BufNewFile *.txt setlocal spell spelllang=en_us
+
+"-------------------------
+
+" Only show cursorline in the current window and in normal mode
+
+au WinLeave,InsertEnter * set nocursorline
+au WinEnter,InsertLeave * set cursorline
+
+"-------------------------
+
+" From Steve Losh's gist: https://gist.github.com/sjl/3360978
+
+function! MyFoldText() " {{{
+    let line = getline(v:foldstart)
+ 
+    let nucolwidth = &fdc + &number * &numberwidth
+    let windowwidth = winwidth(0) - nucolwidth - 3
+    let foldedlinecount = v:foldend - v:foldstart
+ 
+    " expand tabs into spaces
+    let onetab = strpart('          ', 0, &tabstop)
+    let line = substitute(line, '\t', onetab, 'g')
+ 
+    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
+    let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
+    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
+endfunction " }}}
+set foldtext=MyFoldText()
