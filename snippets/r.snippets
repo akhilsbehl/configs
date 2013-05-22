@@ -4,57 +4,64 @@ snippet #! "Expand the shebang" b
 # Filename: `!p snip.rv = fn`
 # Created: `date +%c`
 
-
+${0}
 endsnippet
 
 snippet lib "Add a library"
 library(${1:library})
+${0}
 endsnippet
 
-snippet if "Expands the if command" b
-if (${1:test} ${2:operator} ${3:boolean}) {
-  ${4:# code}
-}
+snippet req "Add a library using require()"
+require(${1:library})
+${0}
 endsnippet
 
-snippet ifs "One liner `small' if" b
+snippet if "One liner `small' if" b
 if (${1:test} ${2:operator} ${3:boolean}) ${4:code}
+${0}
 endsnippet
 
-snippet ifel "If else block" b
-if (${1:test} ${2:operator} ${3:boolean}) {
-  ${4:# code}
-} else {
-  ${5:# code}
+snippet if "The if command" b
+if (${1:x} ${2:==} ${3:0L}) {
+  ${4:###}
 }
+${0}
+endsnippet
+
+snippet if "If else block" b
+if (${1:test} ${2:operator} ${3:boolean}) {
+  ${4:###}
+} else {
+  ${5:###}
+}
+${0}
 endsnippet
 
 snippet for "The `for' loop" b
-for (${1:member} in ${2:set}) {
-  ${4:# code}
+for (${1:x} in ${2:s}) {
+  ${4:###}
 }
+${0}
 endsnippet
 
 snippet while "The `while' loop" b
-while (${1:test} ${2:operator} ${3:boolean}) {
- ${4:# code}
+while (${1:x} ${2:==} ${3:0L}) {
+ ${4:###}
 }
-endsnippet
-
-snippet repeat "The `repeat' loop" b
-repeat {
-  ${1:# code ; remember to include the break command to avoid infinite loops}
-}
+${0}
 endsnippet
 
 snippet < "Gives an assigment statement" b
 ${1:foo} <- ${2:bar}
+${0}
 endsnippet
 
 snippet fun "Defines a new function" b
 ${1:verb}.${2:subject} <- function (${3:args}) {
-  ${4:# code}
+  ${4:###}
 }
+${0}
 endsnippet
 
 snippet fundoc "Defines a function with a docstring" b
@@ -68,51 +75,24 @@ ${1:verb}_${2:subject} <- function (${3:args}) {
   # Returns:
   # $2: ${6:Description}
   #
-  ${7:# code}
+  ${7:###}
 }
+${0}
 endsnippet
 
 snippet rm "Clear current list of objects" b
 rm(list=ls())
 endsnippet
 
-snippet color "Library `colorout'" b
-library(colorout)${1:}
+snippet apply "apply" w
+apply(X=${1:x}, MARGIN=${2:2},
+      FUN=function (${3:k}) {
+         ${4:###}
+       })
+${0}
 endsnippet
 
-snippet plyr "Library `colorout'" b
-library(plyr)${1:}
-endsnippet
-
-snippet gg "Library `colorout'" b
-library(ggplot2)${1:}
-endsnippet
-
-snippet warn "Set warnings to options" !b
-options(warn=2)
-endsnippet
-
-snippet app "apply" w
-apply(X=${1:},
-      MARGIN=${2:2},
-      FUN=function (${3:}) {
-         ${4:# code}
-       }${5:,
-       ...})$0
-endsnippet
-
-snippet lap "l/sapply" w
-${1:l}apply(X=${2:},
-  FUN=${3:function (${4:k}) {
-      ${5:# code}
-    }}${6:,
-    ...})$0
-endsnippet
-
-snippet map "mapply" w
-mapply(FUN=${1:function (${2:k}, ${3:l}) {
-    ${4:# code}
-  }},
-  ${5:K}, ${6:L}${7:,
-  MoreArgs=list(${8:...})})$0
+snippet apply "sapply" w
+sapply(X=${1:x},
+       FUN=${2:fun})
 endsnippet
