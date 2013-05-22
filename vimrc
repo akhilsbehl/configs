@@ -290,6 +290,20 @@ nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
 
 "-------------------------
 
+" Toggle search highlighting.
+"
+function ToggleHighLightsearch()
+  if &hlsearch
+    set nohlsearch
+  else
+    set hlsearch
+  endif
+endfunction
+
+nnoremap <leader><leader>h :call ToggleHighLightsearch()<CR>
+
+"-------------------------
+
 " Reformat the paragraph.
 
 nnoremap <leader><leader>f gqipj
@@ -298,7 +312,7 @@ nnoremap <leader><leader>f gqipj
 
 " Remap file path completion bindings.
 
-inoremap <C-z><C-f> <C-x><C-f>
+inoremap <C-z> <C-x><C-f>
 
 "-------------------------
 
@@ -312,24 +326,3 @@ autocmd BufRead,BufNewFile *.txt setlocal spell spelllang=en_us
 
 au WinLeave,InsertEnter * set nocursorline
 au WinEnter,InsertLeave * set cursorline
-
-"-------------------------
-
-" From Steve Losh's gist: https://gist.github.com/sjl/3360978
-
-function! MyFoldText() " {{{
-    let line = getline(v:foldstart)
- 
-    let nucolwidth = &fdc + &number * &numberwidth
-    let windowwidth = winwidth(0) - nucolwidth - 3
-    let foldedlinecount = v:foldend - v:foldstart
- 
-    " expand tabs into spaces
-    let onetab = strpart('          ', 0, &tabstop)
-    let line = substitute(line, '\t', onetab, 'g')
- 
-    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
-    let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
-    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
-endfunction " }}}
-set foldtext=MyFoldText()
