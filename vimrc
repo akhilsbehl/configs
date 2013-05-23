@@ -230,6 +230,38 @@ let g:SuperTabDefaultCompletionType = 'context'
 
 "-------------------------
 
+" YankRing configuration.
+
+let g:yankring_min_element_length = 2
+
+let g:yankring_max_display = 79
+
+let g:yankring_persist = 0
+
+let g:yankring_paste_using_g = 0
+
+let g:yankring_history_file = '.yankring'
+
+nnoremap <silent> gp :YRShow<CR>
+
+"-------------------------
+
+" Gundo's config.
+
+nnoremap gu :GundoToggle<CR>
+
+let g:gundo_preview_bottom = 1
+
+let g:gundo_right = 1
+
+"-------------------------
+
+" Slime config.
+
+let g:slime_target = "tmux"
+
+"-------------------------
+
 " Make a file executable if found #!/bin/ at the start of a file.
 
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent
