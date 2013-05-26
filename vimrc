@@ -302,13 +302,19 @@ nnoremap <leader><leader>o <Esc>O<CR>
 
 " Delete all trailing whitespace.
 
-nnoremap <leader><leader>w :%s/\s\+$//<cr>:let @/=''<CR>
+nnoremap <leader><leader>w :%s/\s\+$//e<CR>:let @/=''<CR>
 
 "-------------------------
 
-" Delete all blank lines.
+" Delete all blank lines (or containing only whitespace).
 
-nnoremap <leader><leader>d :g:^$:d<CR>
+nnoremap <leader><leader>d :g:^\s*$:d<CR>
+
+"-------------------------
+
+" Condense multiple blanks lines (or containing only whitespace) into one.
+
+nnoremap <leader><leader>c :%s/\s\+$//e<CR>:let @/=''<CR>:g/^$/,/./-j<CR>
 
 "-------------------------
 
@@ -322,7 +328,7 @@ nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
 "-------------------------
 
 " Toggle search highlighting.
-"
+
 function ToggleHighLightsearch()
   if &hlsearch
     set nohlsearch
