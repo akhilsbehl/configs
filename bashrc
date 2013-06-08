@@ -137,7 +137,7 @@ LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:c
 
 export LS_COLORS
 
-export TERM="xterm"
+export TERM='xterm'
 
 export PATH="$HOME/scripts:$PATH"
 
@@ -145,7 +145,9 @@ export GREP_COLOR='1;31'
 
 export OIFS=$IFS
 
-export HISTCONTROL="ignoredups"
+export HISTCONTROL='ignoredups'
+
+export SVN_EDITOR='vim'
 
 if [ -n "$DISPLAY" ]
 then
