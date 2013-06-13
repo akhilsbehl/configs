@@ -129,6 +129,8 @@ alias c='cdl "$HOME"/git/configs'
 
 alias igimov='sudo mount.cifs //192.9.10.10/movie /mnt -o username=fsrr,password=20igi13frgdr,uid=1000,gid=100 && cdl /mnt'
 
+alias igitemp='sudo mount.cifs //storage.igidr.ac.in/temp /mnt -o username=fsrr,password=20igi13frgdr,uid=1000,gid=100 && cdl /mnt'
+
 #########################
 # Variables and Exports #
 #########################
