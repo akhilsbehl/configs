@@ -263,8 +263,15 @@ let g:slime_target = "tmux"
 
 " Make a file executable if found #!/bin/ at the start of a file.
 
-au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent
-      \ !chmod u+x <afile> | endif | endif
+function ModeChange()
+  if getline(1) =~ "^#!"
+    if getline(1) =~ "/bin/"
+      silent execute "!chmod u+x <afile>"
+    endif
+  endif
+endfunction
+
+au BufWritePost * call ModeChange()
 
 " Navigate between and delete tabs.
 
