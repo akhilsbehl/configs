@@ -85,7 +85,7 @@ set cursorline ruler number numberwidth=4 showmode showcmd mousefocus
 set textwidth=79 colorcolumn=+1
 
 " Search options.
-set incsearch ignorecase smartcase nohlsearch
+set incsearch ignorecase smartcase hlsearch
 
 " Indentations (tabstops).
 set autoindent smartindent expandtab tabstop=8 softtabstop=2 shiftwidth=2
