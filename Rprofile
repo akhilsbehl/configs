@@ -45,3 +45,5 @@ options(pager="/usr/bin/less")
     tt[["Size"]] <- round(tt[["Size"]] / 1e6, digits=2)
     tt
 }
+
+clear <- function () system('clear')
