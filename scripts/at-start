@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pkill batterymon; /usr/local/bin/batterymon &
+#pkill batterymon; /usr/local/bin/batterymon &
 /usr/bin/synclient TouchpadOff=1 &
 /usr/bin/setxkbmap -option caps:swapescape
 /usr/bin/artha &
