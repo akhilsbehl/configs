@@ -1,0 +1,45 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+  echo "Usage:    compress-pdf inputfile [outputfile [quality]]"
+  echo "Quality:  0: default"
+  echo "          1: screen view [72 dpi]"
+  echo "          2: low quality [150 dpi]"
+  echo "          3: high quality [300 dpi]"
+  echo "          4: high quality and color preserving [dpi]"
+  exit 1
+fi
+
+INF="$1"
+OUTF="$2"
+
+if [[ -z "$2" ]]; then
+  OUTF="$(basename $1 .pdf)-1.pdf"
+fi
+
+if [[ -f "$OUTF" ]]; then
+  echo "Output file already exists. Will not overwrite."
+  exit 2
+fi
+
+if [[ "$3" -eq 1 ]]; then
+  QUAL="screen"
+elif [[ "$3" -eq 2 ]]; then
+  QUAL="ebook"
+elif [[ "$3" -eq 3 ]]; then
+  QUAL="printer"
+elif [[ "$3" -eq 4 ]]; then
+  QUAL="prepress"
+else
+  QUAL="default"
+fi
+
+  gs -sDEVICE=pdfwrite \
+    -dCompatibilityLevel=1.4 \
+    -dPDFSETTINGS=/"$QUAL" \
+    -dNOPAUSE \
+    -dQUIET \
+    -dBATCH \
+    -sOutputFile="$OUTF" "$INF"
+
+exit 0
