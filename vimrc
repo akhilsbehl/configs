@@ -370,3 +370,11 @@ autocmd BufRead,BufNewFile *.txt setlocal spell spelllang=en_us
 
 au WinLeave,InsertEnter * set nocursorline
 au WinEnter,InsertLeave * set cursorline
+
+"-------------------------
+
+" Reload and source the vim config at will
+
+nnoremap <leader>ev :tabnew $MYVIMRC<CR>
+nnoremap <leader>eg :tabnew $MYGVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
