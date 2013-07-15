@@ -52,6 +52,12 @@ Bundle 'sjl/gundo.vim'
 " Slime vim-tmux integration for REPLs.
 Bundle 'jpalardy/vim-slime'
 
+" Markdown highlighting.
+Bundle 'tpope/vim-markdown'
+
+" Vim-flavored-markdown.
+Bundle 'jtratner/vim-flavored-markdown'
+
 "-------------------------
 
 " These are global Vim options.
@@ -378,3 +384,12 @@ au WinEnter,InsertLeave * set cursorline
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
 nnoremap <leader>eg :tabnew $MYGVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
+
+"-------------------------
+
+" Use the github flavored markdown by default.
+
+augroup markdown
+    au!
+    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=0 wrapmargin=79
+augroup END
