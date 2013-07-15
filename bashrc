@@ -141,7 +141,7 @@ export LS_COLORS
 
 export TERM='xterm'
 
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/scripts:$HOME/.rvm/bin:$PATH"
 
 export GREP_COLOR='1;31'
 
