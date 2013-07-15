@@ -391,5 +391,5 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 augroup markdown
     au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=0 wrapmargin=79
+    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=0 wrapmargin=79 colorcolumn=80
 augroup END
