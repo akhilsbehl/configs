@@ -133,7 +133,7 @@ export SVN_EDITOR='vim'
 
 if [ -n "$DISPLAY" ]
 then
-  BROWSER=firefox
+  BROWSER=chromium
   EDITOR=gvim
 else
   BROWSER=elinks
