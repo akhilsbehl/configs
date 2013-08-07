@@ -77,25 +77,9 @@ alias wget='wget -c --directory-prefix="$HOME"/tmp'
 
 alias gping='ping -c 3 www.google.com'
 
-alias sbcl='rlwrap sbcl'
-
 alias swap='setxkbmap -option caps:swapescape'
 
 alias unswap='setxkbmap -option'
-
-alias ak230='ssh -Y akhil@192.9.10.230'
-
-alias ak231='ssh -Y akhil@192.9.10.231'
-
-alias ak232='ssh -Y akhil@192.9.10.232'
-
-alias dman230='ssh -Y dataman@192.9.10.230'
-
-alias dman231='ssh -Y dataman@192.9.10.231'
-
-alias dman232='ssh -Y dataman@192.9.10.232'
-
-alias german='ssh -Y akhil@78.46.69.107'
 
 alias back='cdl -'
 
@@ -127,10 +111,6 @@ alias s='cdl /run/media/akhilsbehl/Snapper'
 
 alias c='cdl "$HOME"/git/configs'
 
-alias igimov='sudo mount.cifs //192.9.10.10/movie /mnt -o username=fsrr,password=20igi13frgdr,uid=1000,gid=100 && cdl /mnt'
-
-alias igitemp='sudo mount.cifs //storage.igidr.ac.in/temp /mnt -o username=fsrr,password=20igi13frgdr,uid=1000,gid=100 && cdl /mnt'
-
 #########################
 # Variables and Exports #
 #########################
@@ -141,7 +121,7 @@ export LS_COLORS
 
 export TERM='xterm'
 
-export PATH="$HOME/scripts:$HOME/.rvm/bin:$PATH"
+export PATH="$HOME/scripts:$PATH"
 
 export GREP_COLOR='1;31'
 
@@ -173,5 +153,3 @@ alias vimrc='$EDITOR "$HOME"/.vimrc &'
 alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
-
-alias paclog='sudo $EDITOR + /var/log/pacman.log &'
