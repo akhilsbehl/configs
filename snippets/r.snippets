@@ -1,19 +1,43 @@
 snippet #! "Expand the shebang" b
-#!/usr/bin/R
+#!/usr/bin/r
 
-# Filename: `!p snip.rv = fn`
+###############################################################################
+# Purpose: ${1:...}
+# Author: ${2:...}
+# Dependencies: ${3:...}
 # Created: `date +%c`
+###############################################################################
+${0}
+endsnippet
+
+snippet lib "Source lib.R" b
+# Source packages and custom functions.
+source("./lib.R")
+${0}
+endsnippet
+
+snippet pkgmg "Package management boilerplate" b
+# Package management boilerplate
+deps = c(${1:"package"})
+depsNA = deps[!deps %in% rownames(installed.packages())]
+if (length(depsNA) > 0) install.packages(depsNA, dependencies=TRUE)
+for (d in deps) library(d, character.only=TRUE)
 
 ${0}
 endsnippet
 
-snippet lib "Add a library"
+snippet pkg "Add a library"
 library(${1:library})
 ${0}
 endsnippet
 
 snippet req "Add a library using require()"
 require(${1:library})
+${0}
+endsnippet
+
+snippet rm "Clear current list of objects" b
+rm(list=ls())
 ${0}
 endsnippet
 
@@ -52,21 +76,21 @@ while (${1:x} ${2:==} ${3:0L}) {
 ${0}
 endsnippet
 
-snippet < "Gives an assigment statement" b
-${1:foo} <- ${2:bar}
+snippet = "Gives an assigment statement" b
+${1:foo} = ${2:bar}
 ${0}
 endsnippet
 
 snippet fun "Defines a new function" b
-${1:verb}.${2:subject} <- function (${3:args}) {
+${1:verb}${2:Subject} = function (${3:args}) {
   ${4:###}
 }
 ${0}
 endsnippet
 
 snippet fundoc "Defines a function with a docstring" b
-${1:verb}_${2:subject} <- function (${3:args}) {
-  # $1_$2:
+${1:verb}${2:Subject} = function (${3:args}) {
+  # $1$2:
   #
   # ${4:Description}
   #
@@ -78,10 +102,6 @@ ${1:verb}_${2:subject} <- function (${3:args}) {
   ${7:###}
 }
 ${0}
-endsnippet
-
-snippet rm "Clear current list of objects" b
-rm(list=ls())
 endsnippet
 
 snippet app "apply" w
