@@ -22,6 +22,7 @@ deps = c(${1:"package"})
 depsNA = deps[!deps %in% rownames(installed.packages())]
 if (length(depsNA) > 0) install.packages(depsNA, dependencies=TRUE)
 for (d in deps) library(d, character.only=TRUE)
+rm(d, deps, depsNA)
 
 ${0}
 endsnippet
