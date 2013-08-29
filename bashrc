@@ -5,6 +5,8 @@ else
   export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 fi
 
+OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
+
 #############
 # Functions #
 #############
@@ -61,9 +63,12 @@ alias dus='du -sh'
 
 alias zip='zip -r1v'
 
-alias upgrade='packer -Syu --noconfirm --noedit'
-
-alias apt-upgrade='sudo apt-get update && sudo apt-get upgrade'
+if [[ "$OS" == "Ubuntu" ]];
+then
+  alias upgrade='packer -Syu --noconfirm --noedit'
+else
+  alias apt-upgrade='sudo apt-get update && sudo apt-get upgrade'
+fi
 
 alias now='date +%d%m%y-%H%M%S'
 
@@ -91,11 +96,16 @@ alias logout='gnome-session-quit'
 
 alias lock='gnome-screensaver-command --lock'
 
-alias susp='sudo systemctl suspend && lock'
+if [[ "$OS" == "Ubuntu" ]];
+then
+  alias susp='sudo pm-suspend && lock'
+else
+  alias susp='sudo systemctl suspend && lock'
+fi
 
-alias shutd='sudo systemctl poweroff'
+alias shutd='sudo shutdown -h 0'
 
-alias reboot='sudo systemctl reboot'
+alias reboot='sudo shutdown -r 0'
 
 alias tpoff='synclient TouchpadOff=1'
 
@@ -103,11 +113,17 @@ alias tpon='synclient TouchpadOff=0'
 
 alias t='cdl "$HOME"/tmp'
 
-alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
+if [[ "$OS" != "Ubuntu" ]];
+then
+  alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
+  alias s='cdl /run/media/akhilsbehl/Snapper'
+else
+  alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
+    -o username=akhil.behl,password=SteelBank\(1,uid=1000,gid=1000'
+  alias fm24='cdl "$HOME"/winshare/falmum24'
+fi
 
 alias m='cdl "$HOME"/music'
-
-alias s='cdl /run/media/akhilsbehl/Snapper'
 
 alias c='cdl "$HOME"/git/configs'
 
