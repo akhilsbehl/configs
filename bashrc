@@ -29,6 +29,17 @@ function upsvn () {
   )
 }
 
+bashclean() {
+    local tmpdir="$(mktemp -d)"
+    local tmprc="$(mktemp)"
+    cat > "$tmprc" << EOF
+PS1='\$ '
+cd "$tmpdir"
+EOF
+    env - HOME="$HOME" TERM="$TERM" bash --noprofile --rcfile "$tmprc"
+    rm -r "$tmpdir" "$tmprc"
+}
+
 ###################
 # Command Aliases #
 ###################
