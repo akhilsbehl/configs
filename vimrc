@@ -70,7 +70,8 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme mustang
+  "colorscheme mustang
+  colorscheme default
 else
   colorscheme default
 endif
