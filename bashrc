@@ -1,8 +1,11 @@
 # If not an interactive shell, just give up.
 if [[ -z "$PS1" ]];then 
-  exit
-else
-  export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
+  exit 0
+fi
+
+# If an ssh tty, give up as well.
+if [[ -z "$SSH_TTY" ]];then 
+  exit 0
 fi
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
@@ -157,6 +160,8 @@ export OIFS=$IFS
 export HISTCONTROL='ignoredups'
 
 export SVN_EDITOR='vim'
+
+export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 
 if [ -n "$DISPLAY" ]
 then
