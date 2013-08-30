@@ -1,8 +1,3 @@
-# If not an interactive shell, just give up.
-if [[ -z "$PS1" ]];then 
-  exit 0
-fi
-
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
 #############
