@@ -4,7 +4,7 @@ if [[ -z "$PS1" ]];then
 fi
 
 # If an ssh tty, give up as well.
-if [[ -z "$SSH_TTY" ]];then 
+if [[ "$SSH_TTY" ]];then 
   exit 0
 fi
 
