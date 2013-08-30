@@ -65,9 +65,9 @@ alias zip='zip -r1v'
 
 if [[ "$OS" == "Ubuntu" ]];
 then
-  alias upgrade='packer -Syu --noconfirm --noedit'
+  alias upgrade='sudo apt-get update && sudo apt-get upgrade'
 else
-  alias apt-upgrade='sudo apt-get update && sudo apt-get upgrade'
+  alias upgrade='packer -Syu --noconfirm --noedit'
 fi
 
 alias now='date +%d%m%y-%H%M%S'
