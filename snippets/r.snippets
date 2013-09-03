@@ -1,4 +1,4 @@
-snippet bp "Expand the shebang" b
+snippet bp "Expand the shebang and add boilerplate text." b
 #!/usr/bin/r
 
 ###############################################################################
@@ -8,6 +8,10 @@ snippet bp "Expand the shebang" b
 # Created: `date +%c`
 ###############################################################################
 ${0}
+endsnippet
+
+snippet mod "Add modification time to the boilerplate." b
+# Modified: `date +%c` ${0}
 endsnippet
 
 snippet lib "Source lib.R" b
