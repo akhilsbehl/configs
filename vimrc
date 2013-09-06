@@ -49,9 +49,6 @@ Bundle 'vim-scripts/YankRing.vim'
 " Graphical UNDO
 Bundle 'sjl/gundo.vim'
 
-" Slime vim-tmux integration for REPLs.
-Bundle 'jpalardy/vim-slime'
-
 " Markdown highlighting.
 Bundle 'tpope/vim-markdown'
 
@@ -134,6 +131,9 @@ set formatoptions=tcqn
 
 " Filename completion in ex mode.
 set wildmenu wildmode=longest,list,full
+
+" Make the standard clipboard the default one.
+set clipboard=unnamed
 
 " Config.
 set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no
@@ -262,9 +262,9 @@ let g:gundo_right = 1
 
 "-------------------------
 
-" Slime config.
+" Turn on PEP8 style guidelines for python files.
 
-let g:slime_target = "tmux"
+autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
 
 "-------------------------
 
