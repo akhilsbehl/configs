@@ -43,9 +43,6 @@ Bundle 'vim-scripts/Vim-R-plugin'
 " Latex suite.
 Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 
-" YankRing like the EMACS kill ring.
-Bundle 'vim-scripts/YankRing.vim'
-
 " Graphical UNDO
 Bundle 'sjl/gundo.vim'
 
@@ -233,22 +230,6 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 " Supertab config. For some reason filename completion does not work anymore.
 
 let g:SuperTabDefaultCompletionType = 'context'
-
-"-------------------------
-
-" YankRing configuration.
-
-let g:yankring_min_element_length = 2
-
-let g:yankring_max_display = 79
-
-let g:yankring_persist = 0
-
-let g:yankring_paste_using_g = 0
-
-let g:yankring_history_file = '.yankring'
-
-nnoremap <silent> gp :YRShow<CR>
 
 "-------------------------
 
