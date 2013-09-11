@@ -1,0 +1,10 @@
+#!/bin/bash
+
+gvfs-mime --set application/pdf mupdf.desktop
+gvfs-mime --set inode/directory nautilus-folder-handler.desktop
+gvfs-mime --set text/plain gvim.desktop
+gvfs-mime --set text/x-c gvim.desktop
+gvfs-mime --set text/x-python gvim.desktop
+gvfs-mime --set text/x-r-source gvim.desktop
+
+exit 0
