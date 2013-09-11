@@ -79,12 +79,6 @@ def write_slots_args(args, snip):
     snip += '__slots__ = (%s,)' % ', '.join(args)
 
 endglobal
-#! header
-snippet #! "Shebang header for python scripts" b
-#!/usr/bin/env python3
-# encoding: utf-8
-$0
-endsnippet
 
 snippet main "ifmain" b
 if __name__ == '__main__':
@@ -108,10 +102,6 @@ snip += format_return(style)
 snip.rv += '\n' + snip.mkline('', indent='')
 snip += '"""' `
 	${0:pass}
-endsnippet
-
-snippet from "from module import name" b
-from ${1:module} import ${2:Stuff}
 endsnippet
 
 ##########################
@@ -151,6 +141,59 @@ else:
 	${6:pass}
 finally:
 	${7:pass}
+endsnippet
+
+#################
+#  My snippets  #
+#################
+
+snippet bp2 "Expand the shebang and add boilerplate." b
+#!/usr/bin/env python2
+# encoding: utf-8
+
+###############################################################################
+# Purpose: ${1:...}
+# Author: ${2:...}
+# Dependencies: ${3:...}
+# Created: `date +%c`
+###############################################################################
+${0}
+endsnippet
+
+snippet bp3 "Shebang header for python scripts" b
+#!/usr/bin/env python3
+
+###############################################################################
+# Purpose: ${1:...}
+# Author: ${2:...}
+# Dependencies: ${3:...}
+# Created: `date +%c`
+###############################################################################
+${0}
+endsnippet
+
+snippet mod "Add modification time to the boilerplate." b
+# Modified: `date +%c`${0}
+endsnippet
+
+snippet imp "Import module." b
+import ${1:module}${0}
+endsnippet
+
+snippet imp "Import module as `shortname'." b
+import ${1:module} as ${2:shortname}${0}
+endsnippet
+
+snippet imp "From module import *." b
+from ${1:module} import *${0}
+endsnippet
+
+snippet imp "From module import `stuff'." b
+from ${1:module} import ${2:stuff}${0}
+endsnippet
+
+snippet imp "From module import `stuff' as `shortname'." b
+from ${1:module} import ${2:stuff} as ${3:shortname}${0}
 endsnippet
 
 # vim:ft=snippets:
