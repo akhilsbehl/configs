@@ -129,9 +129,6 @@ set formatoptions=tcqn
 " Filename completion in ex mode.
 set wildmenu wildmode=longest,list,full
 
-" Make the standard clipboard the default one.
-set clipboard=unnamed
-
 " Config.
 set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no
 set showtabline=1 timeoutlen=500
