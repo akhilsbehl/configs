@@ -67,13 +67,6 @@ alias dus='du -sh'
 
 alias zip='zip -r1v'
 
-if [[ "$OS" == "Ubuntu" ]];
-then
-  alias upgrade='sudo apt-get update && sudo apt-get upgrade'
-else
-  alias upgrade='packer -Syu --noconfirm --noedit'
-fi
-
 alias now='date +%d%m%y-%H%M%S'
 
 alias today='date +%d%m%y'
@@ -100,36 +93,38 @@ alias logout='gnome-session-quit'
 
 alias lock='gnome-screensaver-command --lock'
 
-if [[ "$OS" == "Ubuntu" ]];
-then
-  alias susp='sudo pm-suspend && lock'
-else
-  alias susp='sudo systemctl suspend && lock'
-fi
-
-alias shutd='sudo shutdown -h 0'
-
-alias reboot='sudo shutdown -r 0'
-
 alias tpoff='synclient TouchpadOff=1'
 
 alias tpon='synclient TouchpadOff=0'
 
 alias t='cdl "$HOME"/tmp'
 
-if [[ "$OS" != "Ubuntu" ]];
-then
-  alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
-  alias s='cdl /run/media/akhilsbehl/Snapper'
-else
-  alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
-    -o username=akhil.behl,password=SteelBank\(1,uid=1000,gid=1000'
-  alias fm24='cdl "$HOME"/winshare/falmum24'
-fi
-
 alias m='cdl "$HOME"/music'
 
 alias c='cdl "$HOME"/git/configs'
+
+if [[ "$OS" == "Ubuntu" ]];
+then
+  alias upgrade='sudo apt-get update && sudo apt-get upgrade'
+  alias susp='sudo pm-suspend && lock'
+  alias shutd='sudo shutdown -h 0'
+  alias reboot='sudo shutdown -r 0'
+  alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
+    -o username=akhil.behl,password=SteelBank\(1,uid=1000,gid=1000'
+  alias fm24='cdl "$HOME"/winshare/falmum24'
+  alias fal56='ssh -Y 192.168.18.56'
+  alias fal57='ssh -Y 192.168.18.57'
+  alias fal58='ssh -Y 192.168.18.58'
+  alias fal59='ssh -Y 192.168.18.59'
+  alias fal60='ssh -Y 192.168.18.60'
+else
+  alias upgrade='packer -Syu --noconfirm --noedit'
+  alias susp='sudo systemctl suspend && lock'
+  alias shutd='sudo systemctl shutdown'
+  alias reboot='sudo systemctl reboot'
+  alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
+  alias s='cdl /run/media/akhilsbehl/Snapper'
+fi
 
 #########################
 # Variables and Exports #
@@ -147,8 +142,7 @@ export GREP_COLOR='1;31'
 
 export OIFS=$IFS
 
-export HISTCONTROL='ignoredups'
-
+export HISTCONTROL='ignoredups' 
 export SVN_EDITOR='vim'
 
 export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
