@@ -112,11 +112,9 @@ then
   alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
     -o username=akhil.behl,password=SteelBank\(1,uid=1000,gid=1000'
   alias fm24='cdl "$HOME"/winshare/falmum24'
-  alias fal56='ssh -Y 192.168.18.56'
-  alias fal57='ssh -Y 192.168.18.57'
-  alias fal58='ssh -Y 192.168.18.58'
-  alias fal59='ssh -Y 192.168.18.59'
-  alias fal60='ssh -Y 192.168.18.60'
+  alias fal51='ssh -Y 192.168.18.51'
+  alias fal52='ssh -Y 192.168.18.52'
+  alias fal53='ssh -Y 192.168.18.53'
 else
   alias upgrade='packer -Syu --noconfirm --noedit'
   alias susp='sudo systemctl suspend && lock'
