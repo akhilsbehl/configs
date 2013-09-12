@@ -1,10 +1,59 @@
 #!/bin/bash
 
 gvfs-mime --set application/pdf mupdf.desktop
+
 gvfs-mime --set inode/directory nautilus-folder-handler.desktop
+
 gvfs-mime --set text/plain gvim.desktop
 gvfs-mime --set text/x-c gvim.desktop
 gvfs-mime --set text/x-python gvim.desktop
 gvfs-mime --set text/x-r-source gvim.desktop
+gvfs-mime --set text/richtext gvim.desktop
+gvfs-mime --set text/tab-separated-value gvim.desktop
+gvfs-mime --set text/x-vcard gvim.desktop
+gvfs-mime --set text/x-vcalendar gvim.desktop
+gvfs-mime --set text/english gvim.desktop
+gvfs-mime --set text/rtf gvim.desktop
+gvfs-mime --set text/x-c++src gvim.desktop
+gvfs-mime --set text/x-bibtex gvim.desktop
+gvfs-mime --set text/x-crontab gvim.desktop
+gvfs-mime --set text/x-csh gvim.desktop
+gvfs-mime --set text/x-csrc gvim.desktop
+gvfs-mime --set text/x-diff gvim.desktop
+gvfs-mime --set text/x-java gvim.desktop
+gvfs-mime --set text/x-makefile gvim.desktop
+gvfs-mime --set text/x-perl gvim.desktop
+gvfs-mime --set text/x-python gvim.desktop
+gvfs-mime --set text/x-sh gvim.desktop
+gvfs-mime --set text/x-tex gvim.desktop
+
+gvfs-mime --set video/x-msvideo vlc.desktop
+gvfs-mime --set video/quicktime vlc.desktop
+gvfs-mime --set video/mpeg vlc.desktop
+gvfs-mime --set video/3gpp vlc.desktop
+gvfs-mime --set video/mp4 vlc.desktop
+gvfs-mime --set video/webm vlc.desktop
+gvfs-mime --set video/x-flv vlc.desktop
+gvfs-mime --set video/x-ms-wm vlc.desktop
+gvfs-mime --set video/x-ms-wmv vlc.desktop
+gvfs-mime --set video/x-matroska vlc.desktop
+gvfs-mime --set video/x-sgi-movie vlc.desktop
+
+gvfs-mime --set audio/amr vlc.desktop
+gvfs-mime --set audio/midi vlc.desktop
+gvfs-mime --set audio/mpeg vlc.desktop
+gvfs-mime --set audio/ogg vlc.desktop
+gvfs-mime --set audio/x-ms-wma vlc.desktop
+gvfs-mime --set audio/x-ms-wax vlc.desktop
+gvfs-mime --set audio/x-pn-realaudio vlc.desktop
+gvfs-mime --set audio/x-realaudio vlc.desktop
+gvfs-mime --set audio/x-wav vlc.desktop
+
+gvfs-mime --set image/gif eog.desktop
+gvfs-mime --set image/jpeg eog.desktop
+gvfs-mime --set image/png eog.desktop
+gvfs-mime --set image/svg+xml eog.desktop
+gvfs-mime --set image/tiff eog.desktop
+gvfs-mime --set image/x-ms-bmp eog.desktop
 
 exit 0
