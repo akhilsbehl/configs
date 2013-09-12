@@ -46,4 +46,6 @@ if [[ "$1" == "--vundle" ]]; then
   ln -s "$PWD"/latex-templates/beamer.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 fi
 
+[[ ! -d ~/.fonts ]] && mkdir -p ~/.fonts && cp "$PWD"/Monaco_Linux.ttf ~/.fonts
+
 exit 0
