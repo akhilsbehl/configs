@@ -52,6 +52,9 @@ Bundle 'tpope/vim-markdown'
 " Vim-flavored-markdown.
 Bundle 'jtratner/vim-flavored-markdown'
 
+" YankRing like the EMACS kill ring.
+Bundle 'vim-scripts/YankRing.vim'
+
 "-------------------------
 
 " These are global Vim options.
@@ -237,6 +240,22 @@ nnoremap gu :GundoToggle<CR>
 let g:gundo_preview_bottom = 1
 
 let g:gundo_right = 1
+
+"-------------------------
+
+" YankRing configuration.
+
+let g:yankring_min_element_length = 2
+
+let g:yankring_max_display = 79
+
+let g:yankring_persist = 0
+
+let g:yankring_paste_using_g = 0
+
+let g:yankring_history_file = '.yankring'
+
+nnoremap <silent> gp :YRShow<CR>
 
 "-------------------------
 
