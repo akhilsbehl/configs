@@ -118,7 +118,7 @@ then
 else
   alias upgrade='packer -Syu --noconfirm --noedit'
   alias susp='sudo systemctl suspend && lock'
-  alias shutd='sudo systemctl shutdown'
+  alias shutd='sudo systemctl poweroff'
   alias reboot='sudo systemctl reboot'
   alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
   alias s='cdl /run/media/akhilsbehl/Snapper'
