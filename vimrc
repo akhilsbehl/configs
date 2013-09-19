@@ -358,6 +358,16 @@ nnoremap <leader><leader>f gqipj
 
 "-------------------------
 
+" Copy a paragraph to the os clipboard.
+
+nnoremap <leader><leader>y mz"+yip`z
+
+" Copy the whole buffer to the os clipboard.
+ 
+nnoremap <leader><leader>Y mzgg"+yG`z
+
+"-------------------------
+
 " Remap file path completion bindings.
 
 inoremap <C-z> <C-x><C-f>
