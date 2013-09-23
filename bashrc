@@ -110,7 +110,7 @@ then
   alias shutd='sudo shutdown -h 0'
   alias reboot='sudo shutdown -r 0'
   alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
-    -o username=akhil.behl,password=SteelBank\(1,uid=1000,gid=1000'
+    -o credentials=~/.credentials,uid=1000,gid=1000'
   alias fm24='cdl "$HOME"/winshare/falmum24'
   alias fal51='ssh -Y 192.168.18.51'
   alias fal52='ssh -Y 192.168.18.52'
