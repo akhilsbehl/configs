@@ -1,37 +1,24 @@
 #!/bin/bash
 
-rm -rf ~/.bashrc
-ln -s "$PWD"/bashrc ~/.bashrc
+update () {
+  rm -rf "$HOME/.$1"
+  ln -s "$PWD/$1" "$HOME/.$1"
+}
 
-rm -rf ~/.bash_profile
-ln -s "$PWD"/bash_profile ~/.bash_profile
+update bashrc
+update bash_profile
+update inputrc
+update gvimrc
+update vimrc
+update tmux.conf
+update gitignore
+update gitconfig
+update R
+update Rprofile
+update sbcl_completions
 
-rm -rf ~/.inputrc
-ln -s "$PWD"/inputrc ~/.inputrc
-
-rm -rf ~/.gvimrc
-ln -s "$PWD"/gvimrc ~/.gvimrc
-
-rm -rf ~/.vimrc
-ln -s "$PWD"/vimrc ~/.vimrc
-
-rm -rf ~/.tmux.conf
-ln -s "$PWD"/tmux.conf ~/.tmux.conf
-
-rm -rf ~/.gitignore
-ln -s "$PWD"/gitignore ~/.gitignore
-
-rm -rf ~/.gitconfig
-ln -s "$PWD"/gitconfig ~/.gitconfig
-
-rm -rf ~/.R
-ln -s "$PWD"/R ~/.R
-
-rm -rf ~/.Rprofile
-ln -s "$PWD"/Rprofile ~/.Rprofile
-
-rm -rf ~/scripts
-ln -s "$PWD"/scripts ~/scripts
+rm -rf "$HOME/scripts"
+ln -s "$PWD/scripts" "$HOME/scripts"
 
 if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
@@ -46,6 +33,7 @@ if [[ "$1" == "--vundle" ]]; then
   ln -s "$PWD"/latex-templates/beamer.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 fi
 
-[[ ! -d ~/.fonts ]] && mkdir -p ~/.fonts && cp "$PWD"/Monaco_Linux.ttf ~/.fonts
+[[ ! -d ~/.fonts ]] && mkdir -p ~/.fonts
+[[ ! -f ~/.fonts/Monaco_Linux.ttf ]] && cp "$PWD"/Monaco_Linux.ttf ~/.fonts
 
 exit 0
