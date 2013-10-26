@@ -1,0 +1,25 @@
+#!/bin/bash
+
+/usr/bin/stjerm \
+  -ab true \
+  -ah true \
+  -bg White \
+  -bell false \
+  -b none \
+  -fn 'Monaco 10' \
+  -fg Black \
+  -h '100%' \
+  -k return \
+  -m alt \
+  -o 100 \
+  -p bottom \
+  -st one \
+  -tf true \
+  -tl 'Tab #' \
+  -tp top \
+  -w '100%' \
+  -uc black \
+  -cb on \
+  -cs underline &
+
+exit 0

@@ -1,10 +1,15 @@
 #!/bin/bash
 
 /usr/bin/synclient TouchpadOff=1 &
+
 /usr/bin/artha &
+
 sudo su -c 'echo -n 50 > /sys/devices/platform/i8042/serio1/serio2/speed'
 sudo su -c 'echo -n 255 > /sys/devices/platform/i8042/serio1/serio2/sensitivity'
+
 devilspie &> /dev/null &
+
+/usr/local/bin/quake &
 
 sleep 1s && zenity --info \
   --title 'Fortune cookie for the cookie monster!' \
