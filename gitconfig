@@ -3,7 +3,7 @@
   email = akhilsbehl@gmail.com
 [core]
   editor = vim
-  pager = vim - -R -c 'set filetype=git' -c 'set foldmethod=syntax'
+  pager = vim - -R -c 'AnsiEsc'
   excludesfile = /home/akhilsbehl/.gitignore
 [merge]
   tool = gvimdiff

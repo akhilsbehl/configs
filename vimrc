@@ -55,6 +55,9 @@ Bundle 'jtratner/vim-flavored-markdown'
 " YankRing like the EMACS kill ring.
 Bundle 'vim-scripts/YankRing.vim'
 
+" Escape shell color codes in Vim.
+Bundle 'AnsiEsc.vim'
+
 "-------------------------
 
 " These are global Vim options.
