@@ -8,18 +8,19 @@
   -b none \
   -fn 'Monaco 10' \
   -fg Black \
-  -h '100%' \
+  -h 768 \
   -k return \
+  -km alt \
   -m alt \
   -o 100 \
   -p bottom \
   -st one \
   -tf true \
-  -tl 'Tab #' \
+  -tl '#' \
   -tp top \
-  -w '100%' \
+  -w 1366 \
   -uc black \
   -cb on \
-  -cs underline &
+  -cs block &
 
 exit 0
