@@ -139,7 +139,7 @@ set formatoptions=tcqn
 set wildmenu wildmode=longest,list,full
 
 " Config.
-set history=50 undolevels=500 tabpagemax=100 t_Co=256 winaltkeys=no
+set history=50 undolevels=500 tabpagemax=100 t_Co=256 t_ut="" winaltkeys=no
 set showtabline=1 timeoutlen=500
 
 "-------------------------
