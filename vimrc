@@ -58,9 +58,6 @@ Bundle 'vim-scripts/YankRing.vim'
 " Escape shell color codes in Vim.
 Bundle 'AnsiEsc.vim'
 
-" Use my GUI colorscheme in the terminal as well.
-Bundle 'vim-scripts/CSApprox'
-
 "-------------------------
 
 " These are global Vim options.
@@ -262,12 +259,6 @@ let g:yankring_paste_using_g = 0
 let g:yankring_history_file = '.yankring'
 
 nnoremap <silent> gp :YRShow<CR>
-
-"-------------------------
-
-" CSApprox configuration
-
-let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 
 "-------------------------
 
