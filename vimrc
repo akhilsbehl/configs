@@ -58,6 +58,9 @@ Bundle 'vim-scripts/YankRing.vim'
 " Escape shell color codes in Vim.
 Bundle 'AnsiEsc.vim'
 
+" Escape shell color codes in Vim.
+Bundle 'vim-scripts/CSApprox'
+
 "-------------------------
 
 " These are global Vim options.

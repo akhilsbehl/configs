@@ -51,6 +51,8 @@ alias lsa='lsg -A'
 
 alias cd..='cd ..'
 
+alias tmux='tmux -2'
+
 alias locate='locate -e'
 
 alias free='free -mt'
