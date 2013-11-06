@@ -161,8 +161,6 @@ let vimrplugin_editor_w = 80
 
 let vimrplugin_editor_h = 60
 
-let vimrplugin_tmux = 1
-
 let vimrplugin_notmuxconf = 1
 
 let vimrplugin_routmorecolors = 1
