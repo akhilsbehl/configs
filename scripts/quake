@@ -21,23 +21,6 @@
   -w 1366 \
   -uc black \
   -cb on \
-  -cs block \
-  -c0 4D4D4D \
-  -c1 FF2B2B \
-  -c2 98FB98 \
-  -c3 F0E68C \
-  -c4 CD853F \
-  -c5 FFDEAD \
-  -c6 FFA0A0 \
-  -c7 F5DEB3 \
-  -c8 555555 \
-  -c9 FF5555 \
-  -c10 55FF55 \
-  -c11 FFFF55 \
-  -c12 87CEFF \
-  -c13 FF55FF \
-  -c14 FFD700 \
-  -c15 FFFFFF &
-
+  -cs block &
 
 exit 0
