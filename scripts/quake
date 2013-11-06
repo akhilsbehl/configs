@@ -3,11 +3,11 @@
 /usr/bin/stjerm \
   -ab true \
   -ah true \
-  -bg 333333 \
+  -bg FFFFFF \
   -bell false \
   -b none \
   -fn 'Monaco 10' \
-  -fg FFFFFF \
+  -fg 000000 \
   -h 768 \
   -k return \
   -km alt \
