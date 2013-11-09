@@ -73,9 +73,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme desert
+  colorscheme mustang
 else
-  colorscheme desert
+  colorscheme mustang
 endif
 
 "-------------------------
