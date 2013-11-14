@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/usr/bin/stjerm \
+stjerm \
   -ab true \
   -ah true \
   -bg FFFFFF \
