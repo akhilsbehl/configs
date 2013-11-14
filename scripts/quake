@@ -8,7 +8,7 @@ stjerm \
   -b none \
   -fn 'Monaco 10' \
   -fg 000000 \
-  -h 768 \
+  -h $2 \
   -k return \
   -km alt \
   -m alt \
@@ -18,7 +18,7 @@ stjerm \
   -tf true \
   -tl '#' \
   -tp top \
-  -w 1366 \
+  -w $1 \
   -uc black \
   -cb on \
   -cs block &
