@@ -169,3 +169,9 @@ alias vimrc='$EDITOR "$HOME"/.vimrc &'
 alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
+
+############################
+#  Print a fortune cookie  #
+############################
+
+fortune
