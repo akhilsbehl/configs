@@ -170,6 +170,12 @@ alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
 
+####################################
+#  Source stuff local to each box  #
+####################################
+
+[[ -f ~/.bashrc.more ]] && source ~/.bashrc.more
+
 ############################
 #  Print a fortune cookie  #
 ############################
