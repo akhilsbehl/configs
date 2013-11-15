@@ -69,9 +69,9 @@ alias dus='du -sh'
 
 alias zip='zip -r1v'
 
-alias now='date +%d%m%y-%H%M%S'
+alias now='date +%Y-%m-%d-%H-%M'
 
-alias today='date +%d%m%y'
+alias today='date +%Y-%m-%d'
 
 alias mkdir='mkdir -v'
 

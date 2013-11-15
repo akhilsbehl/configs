@@ -1,6 +1,17 @@
 #!/bin/bash
 
-stjerm \
+STJERM=$(which stjerm)
+
+DIMS=$(xdpyinfo | grep dimensions: | head -1 | awk '{print $2}')
+
+WIDTH=$(echo $DIMS | cut -f 1 -d 'x')
+HEIGHT=$(echo $DIMS | cut -f 2 -d 'x')
+
+echo $WIDTH $HEIGHT 
+
+[[ $(pidof stjerm) ]] && pkill stjerm
+
+$STJERM \
   -ab true \
   -ah true \
   -bg FFFFFF \
@@ -8,7 +19,7 @@ stjerm \
   -b none \
   -fn 'Monaco 10' \
   -fg 000000 \
-  -h $2 \
+  -h $HEIGHT \
   -k return \
   -km alt \
   -m alt \
@@ -18,7 +29,7 @@ stjerm \
   -tf true \
   -tl '#' \
   -tp top \
-  -w $1 \
+  -w $WIDTH \
   -uc black \
   -cb on \
   -cs block &
