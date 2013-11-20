@@ -2,6 +2,7 @@ set editing-mode vi
 set bell-style none
 
 $if mode=vi
+  "\C-i": complete
   set keymap vi
   set keymap vi-command
   Control-l: clear-screen
