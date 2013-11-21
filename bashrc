@@ -176,6 +176,10 @@ alias fstab='sudo $EDITOR /etc/fstab &'
 
 [[ -f ~/.bashrc.more ]] && source ~/.bashrc.more
 
+# For tmux command completion in bash.
+[[ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]] && \
+  source /usr/share/doc/tmux/examples/bash_completion_tmux.sh
+
 ############################
 #  Print a fortune cookie  #
 ############################
