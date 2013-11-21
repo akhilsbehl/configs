@@ -73,9 +73,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme mustang
+  colorscheme desert
 else
-  colorscheme mustang
+  colorscheme desert
 endif
 
 "-------------------------
@@ -91,7 +91,7 @@ set autochdir
 
 " Look and feel options.
 set cursorline ruler number numberwidth=4 showmode showcmd mousefocus
-set textwidth=79 colorcolumn=+1
+set textwidth=79 colorcolumn=+1 laststatus=2
 
 " Search options.
 set incsearch ignorecase smartcase hlsearch
