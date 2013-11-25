@@ -46,15 +46,6 @@ Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 " Graphical UNDO
 Bundle 'sjl/gundo.vim'
 
-" Markdown highlighting.
-Bundle 'tpope/vim-markdown'
-
-" Vim-flavored-markdown.
-Bundle 'jtratner/vim-flavored-markdown'
-
-" YankRing like the EMACS kill ring.
-Bundle 'vim-scripts/YankRing.vim'
-
 " Escape shell color codes in Vim.
 Bundle 'AnsiEsc.vim'
 
