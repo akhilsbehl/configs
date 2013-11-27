@@ -52,6 +52,9 @@ Bundle 'AnsiEsc.vim'
 " Escape shell color codes in Vim.
 Bundle 'vim-scripts/CSApprox'
 
+" Draw indentation guides.
+Bundle 'Yggdroot/indentLine'
+
 "-------------------------
 
 " These are global Vim options.
