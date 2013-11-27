@@ -21,6 +21,10 @@ rm -rf "$HOME/scripts"
 ln -s "$PWD/scripts" "$HOME/scripts"
 
 if [[ "$1" == "--vundle" ]]; then
+  [[ -d ~/.vim/eclim/ ]] && ECLIM=true
+  if [[ "$ECLIM" ]]; then
+    mv ~/.vim/eclim /tmp/eclim
+  fi
   rm -rf ~/.vim
   mkdir -p ~/.vim/colors
   ln -s "$PWD"/mustang.vim ~/.vim/colors/mustang.vim
@@ -31,6 +35,9 @@ if [[ "$1" == "--vundle" ]]; then
   rm ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/{beamer,article}.tex
   ln -s "$PWD"/latex-templates/article.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
   ln -s "$PWD"/latex-templates/beamer.tex ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
+  if [[ "$ECLIM" ]]; then
+    mv /tmp/eclim ~/.vim/eclim 
+  fi
 fi
 
 [[ ! -d ~/.fonts ]] && mkdir -p ~/.fonts
