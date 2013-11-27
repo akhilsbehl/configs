@@ -1,0 +1,47 @@
+#!/bin/bash
+
+Help() {
+  echo "Usage: ./pgproxy -a | --add"
+  echo "Usage: ./pgproxy -r | --remove"
+  echo "Help:  ./pgproxy"
+}
+
+update () {
+  GET=$(gsettings get $1)
+  gsettings set $1 "$2"
+  SET=$(gsettings get $1)
+  echo "Changed $1 from $GET to $SET"
+}
+
+add () {
+  update 'org.gnome.system.proxy mode' 'manual' 
+  echo
+  update 'org.gnome.system.proxy.http host' 'proxy.com'
+  update 'org.gnome.system.proxy.http port' '8080'
+  echo
+  update 'org.gnome.system.proxy.ftp host' 'proxy.com'
+  update 'org.gnome.system.proxy.ftp port' '8080'
+  echo
+  update 'org.gnome.system.proxy.https host' 'proxy.com'
+  update 'org.gnome.system.proxy.https port' '8080'
+  echo
+  update 'org.gnome.system.proxy.socks host' 'proxy.com'
+  update 'org.gnome.system.proxy.socks port' '8080'
+  echo
+  update 'org.gnome.system.proxy ignore-hosts' \
+    '["localhost", "127.0.0.0/8", "::1", "*.localdomain.com"]'
+}
+
+remove () {
+  update 'org.gnome.system.proxy mode' 'none' 
+}
+
+if [[ "$1" == "-a" || "$1" == "--add" ]]; then
+  add
+elif [[ "$1" == "-r" || "$1" == "--remove" ]]; then
+  remove
+else
+  Help
+fi
+
+exit 0
