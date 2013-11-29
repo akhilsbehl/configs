@@ -1,16 +1,13 @@
 #!/bin/bash
 
 Help() {
-  echo "Usage: ./pgproxy -a | --add"
-  echo "Usage: ./pgproxy -r | --remove"
-  echo "Help:  ./pgproxy"
+  echo "Usage: ./proxy -a | --add"
+  echo "Usage: ./proxy -r | --remove"
+  echo "Help:  ./proxy"
 }
 
 update () {
-  GET=$(gsettings get $1)
-  gsettings set $1 "$2"
-  SET=$(gsettings get $1)
-  echo "Changed $1 from $GET to $SET"
+  gsettings set $1 "$2" && echo "$1: Changed to $2"
 }
 
 add () {
