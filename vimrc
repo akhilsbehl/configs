@@ -49,11 +49,11 @@ Bundle 'sjl/gundo.vim'
 " Escape shell color codes in Vim.
 Bundle 'AnsiEsc.vim'
 
-" Escape shell color codes in Vim.
+" Use the GUI colorscheme in terminal.
 Bundle 'vim-scripts/CSApprox'
 
-" Draw indentation guides.
-Bundle 'Yggdroot/indentLine'
+" Use multiple cursors a la Sublime Text.
+Bundle 'terryma/vim-multiple-cursors'
 
 "-------------------------
 
