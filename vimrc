@@ -240,22 +240,12 @@ let g:gundo_right = 1
 
 "-------------------------
 
-" YankRing configuration.
+" Multi-cursor configuration.
+let g:multi_cursor_exit_from_visual_mode = 0
 
-let g:yankring_min_element_length = 2
-
-let g:yankring_max_display = 79
-
-let g:yankring_persist = 0
-
-let g:yankring_paste_using_g = 0
-
-let g:yankring_history_file = '.yankring'
-
-nnoremap <silent> gp :YRShow<CR>
+let g:multi_cursor_exit_from_visual_mode = 0
 
 "-------------------------
-
 " Turn on PEP8 style guidelines for python files.
 
 autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
