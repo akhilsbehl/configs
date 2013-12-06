@@ -1,4 +1,4 @@
-set guifont=Monaco\ 10
+set guifont=Monaco\ Italic\ 10
 set lines=43
 set columns=84
 set novisualbell
