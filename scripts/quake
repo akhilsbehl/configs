@@ -17,7 +17,7 @@ $STJERM \
   -bg FFFFFF \
   -bell false \
   -b none \
-  -fn 'Monaco 10' \
+  -fn 'Monaco Italic 10' \
   -fg 000000 \
   -h $HEIGHT \
   -k return \
