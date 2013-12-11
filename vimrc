@@ -241,11 +241,13 @@ let g:gundo_right = 1
 "-------------------------
 
 " Multi-cursor configuration.
+ 
 let g:multi_cursor_exit_from_visual_mode = 0
 
 let g:multi_cursor_exit_from_visual_mode = 0
 
 "-------------------------
+ 
 " Turn on PEP8 style guidelines for python files.
 
 autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
