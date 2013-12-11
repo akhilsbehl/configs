@@ -108,7 +108,8 @@ alias c='cdl "$HOME"/git/configs'
 if [[ "$OS" == "Ubuntu" ]];
 then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
-  alias susp='sudo pm-suspend && lock'
+  alias sleep='sudo pm-suspend && lock'
+  alias freeze='sudo pm-hibernate && lock'
   alias shutd='sudo shutdown -h 0'
   alias reboot='sudo shutdown -r 0'
   alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
@@ -119,7 +120,8 @@ then
   alias fal53='ssh -Y 192.168.18.53'
 else
   alias upgrade='packer -Syu --noconfirm --noedit'
-  alias susp='sudo systemctl suspend && lock'
+  alias sleep='sudo systemctl suspend && lock'
+  alias freeze='sudo systemctl hibernate && lock'
   alias shutd='sudo systemctl poweroff'
   alias reboot='sudo systemctl reboot'
   alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
