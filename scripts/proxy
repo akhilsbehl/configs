@@ -27,15 +27,10 @@ add () {
   echo
   update 'org.gnome.system.proxy ignore-hosts' \
     '["localhost", "127.0.0.0/8", "::1", "*.localdomain.com"]'
-
-  export http_proxy='http://proxy.com:8080'
-  export https_proxy='https://proxy.com:8080'
 }
 
 remove () {
   update 'org.gnome.system.proxy mode' 'none' 
-  unset http_proxy
-  unset https_proxy
 }
 
 if [[ "$1" == "-a" || "$1" == "--add" ]]; then
