@@ -2,7 +2,7 @@
 
 gvfs-mime --set application/pdf mupdf.desktop
 
-gvfs-mime --set inode/directory nautilus-folder-handler.desktop
+gvfs-mime --set inode/directory nautilus.desktop
 
 gvfs-mime --set text/plain gvim.desktop
 gvfs-mime --set text/x-c gvim.desktop
