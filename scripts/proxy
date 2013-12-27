@@ -42,3 +42,9 @@ else
 fi
 
 exit 0
+
+# If the proxy server requires authentication as well, these settings may be
+# useful:
+#org.gnome.system.proxy.http use-authentication false
+#org.gnome.system.proxy.http authentication-user ''
+#org.gnome.system.proxy.http authentication-password ''
