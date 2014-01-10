@@ -26,8 +26,6 @@ if [[ "$1" == "--vundle" ]]; then
     mv ~/.vim/eclim /tmp/eclim
   fi
   rm -rf ~/.vim
-  mkdir -p ~/.vim/colors
-  ln -s "$PWD"/mustang.vim ~/.vim/colors/mustang.vim
   mkdir -p ~/.vim/bundle
   git clone 'https://github.com/gmarik/vundle' ~/.vim/bundle/vundle
   vim +BundleInstall
