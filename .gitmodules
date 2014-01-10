@@ -1,6 +1,3 @@
-[submodule "stjerm"]
-	path = stjerm
-	url = https://github.com/icebreaker/stjerm
 [submodule "packer"]
 	path = packer
 	url = https://github.com/keenerd/packer
