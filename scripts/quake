@@ -1,37 +1,18 @@
 #!/bin/bash
 
-STJERM=$(which stjerm)
+ISOPEN=$(wmctrl -l | grep ArchWizard | grep 0)
+if [[ $ISOPEN == "" ]]; then
+  gnome-terminal --profile='archwizard' --command='tmux new-session -s ASB' &&
+  wmctrl -r 'ArchWizard' -b add,fullscreen
+  wmctrl -a 'ArchWizard'
+fi
 
-DIMS=$(xdpyinfo | grep dimensions: | head -1 | awk '{print $2}')
-
-WIDTH=$(echo $DIMS | cut -f 1 -d 'x')
-HEIGHT=$(echo $DIMS | cut -f 2 -d 'x')
-
-echo $WIDTH $HEIGHT 
-
-[[ $(pidof stjerm) ]] && pkill stjerm
-
-$STJERM \
-  -ab true \
-  -ah true \
-  -bg FFFFFF \
-  -bell false \
-  -b none \
-  -fn 'Monaco Italic 10' \
-  -fg 000000 \
-  -h $HEIGHT \
-  -k return \
-  -km alt \
-  -m alt \
-  -o 100 \
-  -p bottom \
-  -st one \
-  -tf true \
-  -tl '#' \
-  -tp top \
-  -w $WIDTH \
-  -uc black \
-  -cb on \
-  -cs block &
+ISFOCUSED=$(xdotool getwindowname $(xdotool getwindowfocus))
+if [[ $ISFOCUSED != "ArchWizard" ]]; then
+  wmctrl -r 'ArchWizard' -b remove,below
+  wmctrl -a 'ArchWizard'
+else
+  wmctrl -r 'ArchWizard' -b add,below
+fi
 
 exit 0

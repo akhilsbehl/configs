@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ISOPEN=$(wmctrl -l | grep Firefox | grep 0)
+if [[ $ISOPEN == "" ]]; then
+  firefox &&
+  wmctrl -r 'ArchWizard' -b add,fullscreen
+  wmctrl -a 'Firefox'
+fi
+
+ISFOCUSED=$(xdotool getwindowname $(xdotool getwindowfocus) | awk '{print $NF}')
+if [[ $ISFOCUSED != "Firefox" ]]; then
+  wmctrl -r 'Firefox' -b remove,below
+  wmctrl -a 'Firefox'
+else
+  wmctrl -r 'Firefox' -b add,below
+fi
+
+exit 0
