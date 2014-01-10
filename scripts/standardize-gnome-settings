@@ -24,7 +24,7 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ reset ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ reset-and-clear ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ save-contents ''
-gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ set-terminal-title 'Dumbledore'
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ set-terminal-title ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ switch-to-tab-1 ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ switch-to-tab-10 ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ switch-to-tab-11 ''
@@ -70,6 +70,7 @@ gsettings set org.gnome.Terminal.Legacy.Settings encodings "['UTF-8']"
 gsettings set org.gnome.Terminal.Legacy.Settings menu-accelerator-enabled false
 gsettings set org.gnome.Terminal.Legacy.Settings mnemonics-enabled false
 gsettings set org.gnome.desktop.datetime automatic-timezone true
+gsettings set org.gnome.desktop.default-applications.terminal exec 'gnome-terminal'
 gsettings set org.gnome.desktop.file-sharing bluetooth-accept-files 'bonded'
 gsettings set org.gnome.desktop.file-sharing bluetooth-notify true
 gsettings set org.gnome.desktop.file-sharing bluetooth-obexpush-enabled true
