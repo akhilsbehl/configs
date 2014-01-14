@@ -10,7 +10,7 @@ fi
 ISFOCUSED=$(xdotool getwindowname $(xdotool getwindowfocus))
 if [[ $ISFOCUSED != "ArchWizard" ]]; then
   wmctrl -r 'ArchWizard' -b remove,below
-  wmctrl -a 'ArchWizard'
+  wmctrl -R 'ArchWizard'
 else
   wmctrl -r 'ArchWizard' -b add,below
 fi

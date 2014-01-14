@@ -10,7 +10,7 @@ fi
 ISFOCUSED=$(xdotool getwindowname $(xdotool getwindowfocus) | awk '{print $NF}')
 if [[ $ISFOCUSED != "Firefox" ]]; then
   wmctrl -r 'Firefox' -b remove,below
-  wmctrl -a 'Firefox'
+  wmctrl -R 'Firefox'
 else
   wmctrl -r 'Firefox' -b add,below
 fi
