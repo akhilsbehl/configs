@@ -13,7 +13,7 @@ gvfs-mime --set text/tab-separated-value gvim.desktop
 gvfs-mime --set text/x-vcard gvim.desktop
 gvfs-mime --set text/x-vcalendar gvim.desktop
 gvfs-mime --set text/english gvim.desktop
-gvfs-mime --set text/rtf gvim.desktop
+gvfs-mime --set text/rtf libreoffice-writer.desktop
 gvfs-mime --set text/x-c++src gvim.desktop
 gvfs-mime --set text/x-bibtex gvim.desktop
 gvfs-mime --set text/x-crontab gvim.desktop
