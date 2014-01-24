@@ -339,6 +339,18 @@ endfunction
 
 nnoremap <leader><leader>h :call ToggleHighLightsearch()<CR>
 
+" Toggle paste mode.
+
+function TogglePasteMode()
+  if &paste
+    set nopaste
+  else
+    set paste
+  endif
+endfunction
+
+nnoremap <leader><leader>p :call TogglePasteMode()<CR>
+
 "-------------------------
 
 " Reformat the paragraph.
