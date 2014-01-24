@@ -9,7 +9,7 @@ if(interactive()){
 }
 
 # Workaround for the Arch Cairo bug.
-grDevices::X11.options(type="nbcairo")
+grDevices::X11.options(type="dbcairo")
 
 options(prompt="R> ")
 options("pdfviewer"="mupdf")
