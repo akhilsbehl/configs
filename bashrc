@@ -53,6 +53,8 @@ alias cd..='cd ..'
 
 alias tmux='tmux -2'
 
+alias fixmux='killall -s SIGUSR1 tmux'
+
 alias locate='locate -e'
 
 alias free='free -mt'
