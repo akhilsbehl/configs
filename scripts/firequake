@@ -3,7 +3,7 @@
 ISOPEN=$(wmctrl -l | grep Firefox | grep 0)
 if [[ $ISOPEN == "" ]]; then
   firefox &&
-  wmctrl -r 'ArchWizard' -b add,fullscreen
+  wmctrl -r 'Firefox' -b add,fullscreen &&
   wmctrl -a 'Firefox'
 fi
 
