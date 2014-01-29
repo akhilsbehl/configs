@@ -4,8 +4,6 @@ artha &
 
 devilspie &> /dev/null &
 
-/usr/local/bin/quake &
-
 sleep 1s && zenity --info \
   --title 'Fortune cookie for the cookie monster!' \
   --text "$(fortune -s)"
