@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ISOPEN=$(wmctrl -l | grep ArchWizard | grep 0)
-if [[ $ISOPEN == "" ]]; then
+ISOPEN=$(wmctrl -l | grep ArchWizard$)
+if [[ -z $ISOPEN ]]; then
   gnome-terminal --profile='archwizard' &&
   wmctrl -r 'ArchWizard' -b add,fullscreen &&
   wmctrl -a 'ArchWizard'
