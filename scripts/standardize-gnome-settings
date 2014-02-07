@@ -84,7 +84,7 @@ gsettings set org.gnome.desktop.interface cursor-blink true
 gsettings set org.gnome.desktop.interface cursor-blink-time 1200
 gsettings set org.gnome.desktop.interface cursor-blink-timeout 1000
 gsettings set org.gnome.desktop.interface cursor-size 24
-gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+gsettings set org.gnome.desktop.interface cursor-theme 'Vanilla-DMZ'
 gsettings set org.gnome.desktop.interface document-font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface gtk-key-theme 'Default'
