@@ -36,5 +36,7 @@ fi
 
 [[ ! -d ~/.fonts ]] && mkdir -p ~/.fonts
 [[ ! -f ~/.fonts/Monaco_Linux.ttf ]] && cp "$PWD"/Monaco_Linux.ttf ~/.fonts
+[[ ! -d ~/.icons/default/ ]] && mkdir ~/.icons/default && \
+  cp "$PWD"/index.theme ~/.icons/default/index.theme
 
 exit 0
