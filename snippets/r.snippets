@@ -18,9 +18,9 @@ source("./lib.R")
 ${0}
 endsnippet
 
-snippet pkgmg "Package management boilerplate" b
+snippet pm "Package management boilerplate" b
 # Package management boilerplate
-deps = c(${1:"package"})
+deps = c("${1:package}")
 depsNA = deps[!deps %in% rownames(installed.packages())]
 if (length(depsNA) > 0) install.packages(depsNA, dependencies=TRUE)
 for (d in deps) library(d, character.only=TRUE)
