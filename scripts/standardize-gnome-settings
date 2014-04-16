@@ -241,10 +241,6 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 900
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'suspend'
-gsettings set org.gnome.settings-daemon.plugins.power percentage-action 5
-gsettings set org.gnome.settings-daemon.plugins.power percentage-critical 10
-gsettings set org.gnome.settings-daemon.plugins.power percentage-low 15
-gsettings set org.gnome.settings-daemon.plugins.power use-time-for-policy false
 gsettings set org.gnome.settings-daemon.plugins.xsettings active true
 gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing 'grayscale'
 gsettings set org.gnome.settings-daemon.plugins.xsettings hinting 'medium'
