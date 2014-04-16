@@ -2,9 +2,9 @@
 
 ISOPEN=$(wmctrl -l | grep ArchWizard$)
 if [[ -z $ISOPEN ]]; then
-  gnome-terminal --profile='archwizard' &&
-  wmctrl -r 'ArchWizard' -b add,fullscreen &&
-  wmctrl -a 'ArchWizard'
+  roxterm -f -p 'ArchWizard' -d "/home/$(whoami)/tmp" &&
+    wmctrl -r 'ArchWizard' -b add,fullscreen &&
+    wmctrl -a 'ArchWizard'
 fi
 
 ISFOCUSED=$(xdotool getwindowname $(xdotool getwindowfocus))

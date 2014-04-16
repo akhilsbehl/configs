@@ -1,0 +1,25 @@
+
+[roxterm shortcuts scheme]
+File/New Window=
+File/New Tab=
+File/Close Window=
+File/Close Tab=<Alt>w
+Tabs/Previous Tab=<Alt>j
+Tabs/Next Tab=<Alt>k
+Edit/Copy=
+Edit/Paste=
+View/Zoom In=<Control>plus
+View/Zoom Out=<Control>minus
+View/Normal Size=<Control>0
+View/Full Screen=F11
+View/Scroll Up One Line=
+View/Scroll Down One Line=
+Help/Help=F1
+Edit/Copy & Paste=
+Search/Find...=
+Search/Find Next=
+Search/Find Previous=
+File/New Window With Profile/ArchWizard=<Alt>n
+File/New Tab With Profile/ArchWizard=<Alt>o
+File/New Window With Profile/Default=
+File/New Tab With Profile/Default=

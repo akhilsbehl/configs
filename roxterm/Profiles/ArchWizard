@@ -1,0 +1,16 @@
+[roxterm profile]
+colour_scheme=
+win_title=ArchWizard
+full_screen=1
+always_show_tabs=0
+show_add_tab_btn=0
+hide_menubar=1
+show_resize_grip=0
+use_custom_command=0
+login_shell=0
+browser=/usr/bin/firefox -no-remote
+scrollbar_pos=0
+scroll_on_output=1
+scroll_on_keystroke=1
+tab_pos=0
+title_string=%s
