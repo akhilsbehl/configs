@@ -320,10 +320,10 @@ nnoremap <leader><leader>c :%s/\s\+$//e<CR>:let @/=''<CR>:g/^$/,/./-j<CR>
 
 " Save when file was opened without sudo.
 
-function SaveWithoutSudo()
+function SudoOnTheFly()
   write !sudo tee % > /dev/null
 endfunction
-nnoremap <leader><leader>s :call SaveWithoutSudo()<CR>
+nnoremap <leader><leader>s :call SudoOnTheFly()<CR>
 
 "-------------------------
 
