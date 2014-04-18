@@ -185,7 +185,7 @@ let g:UltiSnipsEditSplit = "horizontal"
 
 let g:UltiSnipsSnippetsDir = "~/git/configs/snippets"
 
-let g:UltiSnipsSnippetDirectories = ["snippets"]
+let g:UltiSnipsSnippetDirectories = ["mysnippets"]
 
 let g:UltiSnipsJumpForwardTrigger = "<C-k>"
 
