@@ -20,7 +20,7 @@ update sbcl_completions
 rm -rf "$HOME/scripts"
 ln -s "$PWD/scripts" "$HOME/scripts"
 
-rm -rf "$HOME/.config/roxterm.sourceforge.net/"
+rm -rf "$HOME/.config/roxterm.sourceforge.net"
 ln -s "$PWD/roxterm" "$HOME/.config/roxterm.sourceforge.net"
 
 if [[ "$1" == "--vundle" ]]; then
