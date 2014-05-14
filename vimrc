@@ -55,6 +55,9 @@ Bundle 'vim-scripts/CSApprox'
 " Use multiple cursors a la Sublime Text.
 Bundle 'terryma/vim-multiple-cursors'
 
+" Monokai colorscheme similar to Sublime Text.
+Bundle 'sickill/vim-monokai'
+
 "-------------------------
 
 " These are global Vim options.
@@ -67,9 +70,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme desert
+  colorscheme monokai
 else
-  colorscheme desert
+  colorscheme monokai
 endif
 
 "-------------------------
@@ -183,7 +186,7 @@ map <LocalLeader>se :call SendCmdToR("})")<CR>
 
 let g:UltiSnipsEditSplit = "horizontal"
 
-let g:UltiSnipsSnippetsDir = "~/git/configs/snippets"
+let g:UltiSnipsSnippetsDir = "~/git/configs/mysnippets"
 
 let g:UltiSnipsSnippetDirectories = ["mysnippets"]
 
