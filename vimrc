@@ -70,9 +70,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme monokai
+  colorscheme desert
 else
-  colorscheme monokai
+  colorscheme desert
 endif
 
 "-------------------------
