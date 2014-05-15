@@ -58,6 +58,9 @@ Bundle 'terryma/vim-multiple-cursors'
 " Monokai colorscheme similar to Sublime Text.
 Bundle 'sickill/vim-monokai'
 
+" GHCi plugin: SHIM for Vim.
+Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
+
 "-------------------------
 
 " These are global Vim options.
@@ -70,9 +73,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme desert
+  colorscheme monokai
 else
-  colorscheme desert
+  colorscheme monokai
 endif
 
 "-------------------------
