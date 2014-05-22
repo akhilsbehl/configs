@@ -61,6 +61,9 @@ Bundle 'sickill/vim-monokai'
 " GHCi plugin: SHIM for Vim.
 Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
 
+" Flake8 linter.
+Bundle 'nvie/vim-flake8'
+
 "-------------------------
 
 " These are global Vim options.
@@ -230,7 +233,7 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 
-" Supertab config. For some reason filename completion does not work anymore.
+" Supertab config.
 
 let g:SuperTabDefaultCompletionType = 'context'
 
@@ -253,10 +256,12 @@ let g:multi_cursor_exit_from_visual_mode = 0
 let g:multi_cursor_exit_from_visual_mode = 0
 
 "-------------------------
- 
+
 " Turn on PEP8 style guidelines for python files.
 
-autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
+autocmd BufRead,BufNewFile *.py
+      \ setlocal shiftwidth=4 tabstop=4 softtabstop=4
+      \ map <buffer> <F8> :call Flake8()<CR>
 
 "-------------------------
 
