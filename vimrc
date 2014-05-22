@@ -259,9 +259,8 @@ let g:multi_cursor_exit_from_visual_mode = 0
 
 " Turn on PEP8 style guidelines for python files.
 
-autocmd BufRead,BufNewFile *.py
-      \ setlocal shiftwidth=4 tabstop=4 softtabstop=4
-      \ map <buffer> <F8> :call Flake8()<CR>
+autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
+autocmd FileType python map <buffer> <F8> :call Flake8()<CR>
 
 "-------------------------
 
