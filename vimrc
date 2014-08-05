@@ -154,7 +154,7 @@ let maplocalleader=","
 
 " These options are for the vim-R-plugin
 
-let vimrplugin_underscore = 0
+let vimrplugin_assign = 0
 
 let vimrplugin_by_vim_instance = 1
 
@@ -264,6 +264,82 @@ autocmd FileType python map <buffer> <F8> :call Flake8()<CR>
 
 "-------------------------
 
+" ervandew/screen configuration to send commands to ipython.
+
+let g:ScreenImpl = "Tmux"
+
+" Open an ipython3 shell.
+autocmd FileType python map <LocalLeader>p :ScreenShell! ipython3<CR>
+
+" Open an ipython2 shell.
+autocmd FileType python map <LocalLeader>pp :ScreenShell! ipython2<CR>
+
+" Close whichever shell is running.
+autocmd FileType python map <LocalLeader>q :ScreenQuit<CR>
+
+" Send current line to python and move to next line.
+autocmd FileType python map <LocalLeader>r V:ScreenSend<CR>j
+
+" Send visual selection to python and move to next line.
+autocmd FileType python map <LocalLeader>v :ScreenSend<CR>`>0j
+
+" Send a carriage return line to python.
+autocmd FileType python map <LocalLeader>a :call g:ScreenShellSend("\r")<CR>
+
+" Clear screen.
+autocmd FileType python map <LocalLeader>L
+      \ :call g:ScreenShellSend('!clear')<CR>
+
+" Start a time block to execute code in.
+autocmd FileType python map <LocalLeader>t
+      \ :call g:ScreenShellSend('%%time')<CR>
+
+" Start a timeit block to execute code in.
+autocmd FileType python map <LocalLeader>tt
+      \ :call g:ScreenShellSend('%%timeit')<CR>
+
+" Start a debugger repl to execute code in.
+autocmd FileType python map <LocalLeader>db
+      \ :call g:ScreenShellSend('%%debug')<CR>
+
+" Start a profiling block to execute code in.
+autocmd FileType python map <LocalLeader>pr
+      \ :call g:ScreenShellSend('%%prun')<CR>
+
+" Print the current working directory.
+autocmd FileType python map <LocalLeader>gw
+      \ :call g:ScreenShellSend('!pwd')<CR>
+
+" Set working directory to current file's folder.
+function SetWD()
+  let wd = '!cd ' . expand('%:p:h')
+  :call g:ScreenShellSend(wd)
+endfunction
+autocmd FileType python map <LocalLeader>sw :call SetWD()<CR>
+
+" Get ipython help for word under cursor. Complement it with Shift + K.
+function GetHelp()
+  let w = expand("<cword>") . "??"
+  :call g:ScreenShellSend(w)
+endfunction
+autocmd FileType python map <LocalLeader>h :call GetHelp()<CR>
+
+" Get `dir` help for word under cursor.
+function GetDir()
+  let w = "dir(" . expand("<cword>") . ")"
+  :call g:ScreenShellSend(w)
+endfunction
+autocmd FileType python map <LocalLeader>d :call GetDir()<CR>
+
+" Get `dir` help for word under cursor.
+function GetLen()
+  let w = "len(" . expand("<cword>") . ")"
+  :call g:ScreenShellSend(w)
+endfunction
+autocmd FileType python map <LocalLeader>l :call GetLen()<CR>
+
+"-------------------------
+
 " Make a file executable if found #!/bin/ at the start of a file.
 
 function ModeChange()
@@ -318,7 +394,7 @@ nnoremap <leader><leader>w :%s/\s\+$//e<CR>:let @/=''<CR>
 
 " Delete all blank lines (or containing only whitespace).
 
-nnoremap <leader><leader>d :g:^\s*$:d<CR>
+nnoremap <leader><leader>dd :g:^\s*$:d<CR>
 
 "-------------------------
 
@@ -410,5 +486,6 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 augroup markdown
     au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown textwidth=0
+    au BufNewFile,BufRead *.md,*.markdown setlocal
+          \ filetype=ghmarkdown textwidth=0
 augroup END
