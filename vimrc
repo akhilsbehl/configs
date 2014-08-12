@@ -352,9 +352,9 @@ endfunction
 
 au BufWritePost * call ModeChange()
 
-" Navigate between and delete tabs.
-
 "-------------------------
+
+" Navigate between and delete tabs.
 
 if has("gui_running")
   nnoremap <M-j> :tabprevious<CR>
@@ -482,10 +482,20 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 "-------------------------
 
+" Preview markdown in Firefox
+
+function! PreviewMarkdown()
+  let outFile = expand('%:r') . '.html'
+  silent execute '!cd %:p:h'
+  silent execute '!python -m markdown % >' . outFile
+endfunction
+
 " Use the github flavored markdown by default.
 
 augroup markdown
     au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal
-          \ filetype=ghmarkdown textwidth=0
+    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    au BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
+    autocmd FileType ghmarkdown map <LocalLeader>p
+          \ :call PreviewMarkdown()<CR>
 augroup END
