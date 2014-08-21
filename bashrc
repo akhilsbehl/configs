@@ -43,8 +43,6 @@ alias ls='ls --color=auto'
 
 alias lsg='ls -shHF --group-directories-first'
 
-alias lst='ls -shHtF'
-
 alias lsm='ls -shHFltr'
 
 alias lsa='lsg -A'
@@ -53,7 +51,7 @@ alias cd..='cd ..'
 
 alias tmux='tmux -2'
 
-alias fixmux='killall -s SIGUSR1 tmux'
+alias launchpad='tmux new-session -s launchPad'
 
 alias locate='locate -e'
 
@@ -91,8 +89,6 @@ alias back='cdl -'
 
 alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
 
-alias new='/usr/bin/gnome-terminal && exit'
-
 alias logout='gnome-session-quit'
 
 alias lock='gnome-screensaver-command --lock'
@@ -107,6 +103,8 @@ alias m='cdl "$HOME"/music'
 
 alias c='cdl "$HOME"/git/configs'
 
+alias c='cdl "$HOME"/git/configs'
+
 if [[ "$OS" == "Ubuntu" ]];
 then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
@@ -114,20 +112,12 @@ then
   alias freeze='sudo pm-hibernate && lock'
   alias shutd='sudo shutdown -h 0'
   alias reboot='sudo shutdown -r 0'
-  alias mfm24='sudo mount.cifs //192.168.18.24/aig ~/winshare/falmum24 \
-    -o credentials=~/.credentials,uid=1000,gid=1000'
-  alias fm24='cdl "$HOME"/winshare/falmum24'
-  alias fal51='ssh -Y 192.168.18.51'
-  alias fal52='ssh -Y 192.168.18.52'
-  alias fal53='ssh -Y 192.168.18.53'
 else
   alias upgrade='packer -Syu --noconfirm --noedit'
   alias sleep='sudo systemctl suspend && lock'
   alias freeze='sudo systemctl hibernate && lock'
   alias shutd='sudo systemctl poweroff'
   alias reboot='sudo systemctl reboot'
-  alias n='cdl /run/media/akhilsbehl/Nebucchadnezzar'
-  alias s='cdl /run/media/akhilsbehl/Snapper'
 fi
 
 #########################
