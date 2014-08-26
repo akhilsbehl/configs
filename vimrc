@@ -76,9 +76,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme monokai
+  colorscheme slate
 else
-  colorscheme monokai
+  colorscheme slate
 endif
 
 "-------------------------
