@@ -6,7 +6,7 @@
   pager = vim - -R -c 'AnsiEsc'
   excludesfile = /home/akhilsbehl/.gitignore
 [merge]
-  tool = gvimdiff
+  tool = vimdiff
 [alias]
   hist = log --pretty=format:\"%h %ad | %an | %s %d\" --graph --date=short
   unstage = reset HEAD
