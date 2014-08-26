@@ -55,8 +55,8 @@ Bundle 'vim-scripts/CSApprox'
 " Use multiple cursors a la Sublime Text.
 Bundle 'terryma/vim-multiple-cursors'
 
-" Monokai colorscheme similar to Sublime Text.
-Bundle 'sickill/vim-monokai'
+" My modification of the Monokai colorscheme.
+Bundle 'akhilsbehl/vim-monokai'
 
 " GHCi plugin: SHIM for Vim.
 Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
@@ -76,9 +76,9 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme slate
+  colorscheme monokai
 else
-  colorscheme slate
+  colorscheme monokai
 endif
 
 "-------------------------
