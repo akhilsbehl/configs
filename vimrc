@@ -64,6 +64,9 @@ Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
 " Flake8 linter.
 Bundle 'nvie/vim-flake8'
 
+" Flake8 linter.
+Bundle 'pangloss/vim-javascript'
+
 "-------------------------
 
 " These are global Vim options.
@@ -499,3 +502,10 @@ augroup markdown
     autocmd FileType ghmarkdown map <LocalLeader>p
           \ :call PreviewMarkdown()<CR>
 augroup END
+
+"-------------------------
+
+" HTML / JS: Don't break my lines; just wrap them visually.
+
+autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
+autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
