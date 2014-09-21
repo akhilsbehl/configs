@@ -156,6 +156,9 @@ set wildmenu wildmode=longest,list,full
 set history=50 undolevels=500 tabpagemax=100 t_Co=256 t_ut="" winaltkeys=no
 set showtabline=1 timeoutlen=500
 
+" Buffer switching behavior.
+set switchbuf="useopen,usetab"
+
 "-------------------------
 
 let mapleader=","
@@ -364,6 +367,17 @@ endfunction
 
 au BufWritePost * call ModeChange()
 
+
+"-------------------------
+
+" Buffer navigation.
+
+" List buffers and let me choose one.
+map <leader><leader>b :ls<CR>:b<Space>
+
+" TODO: Use CtrlP buffer selection:
+" map <leader><leader>B ???
+
 "-------------------------
 
 " Navigate between and delete tabs.
@@ -470,12 +484,6 @@ nnoremap <leader><leader>Y mzgg"+yG`z
 " Remap file path completion bindings.
 
 inoremap <C-z> <C-x><C-f>
-
-"-------------------------
-
-" Turn on spell-check and en_US language for text files.
-
-autocmd BufRead,BufNewFile *.txt setlocal spell spelllang=en_us
 
 "-------------------------
 
