@@ -89,7 +89,7 @@ gsettings set org.gnome.desktop.interface document-font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface font-name 'Cantarell 11'
 gsettings set org.gnome.desktop.interface gtk-key-theme 'Default'
 gsettings set org.gnome.desktop.interface gtk-theme 'elementary'
-gsettings set org.gnome.desktop.interface icon-theme 'Faience-Azur'
+gsettings set org.gnome.desktop.interface icon-theme 'Faience'
 gsettings set org.gnome.desktop.interface monospace-font-name 'Monaco Italic 10'
 gsettings set org.gnome.desktop.media-handling automount false
 gsettings set org.gnome.desktop.media-handling automount-open false
