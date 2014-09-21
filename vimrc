@@ -64,6 +64,15 @@ Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
 " Flake8 linter.
 Bundle 'nvie/vim-flake8'
 
+" Scala by derekwyatt.
+Bundle 'derekwyatt/vim-scala'
+
+" CtrlP fuzzy finder for vim.
+Bundle 'kien/ctrlp.vim'
+
+" Ag for even more searching.
+Bundle 'rking/ag.vim'
+
 "-------------------------
 
 " These are global Vim options.
