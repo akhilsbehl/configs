@@ -76,6 +76,9 @@ Bundle 'rking/ag.vim'
 " Javascript indentation for vim.
 Bundle 'pangloss/vim-javascript'
 
+" Julia for Vim.
+Bundle 'JuliaLang/julia-vim'
+
 "-------------------------
 
 " These are global Vim options.
