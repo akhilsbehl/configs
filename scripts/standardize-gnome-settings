@@ -24,7 +24,6 @@ gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/k
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ reset ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ reset-and-clear ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ save-contents ''
-gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ set-terminal-title ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ switch-to-tab-1 ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ switch-to-tab-10 ''
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ switch-to-tab-11 ''
@@ -74,7 +73,6 @@ gsettings set org.gnome.desktop.default-applications.terminal exec 'gnome-termin
 gsettings set org.gnome.desktop.file-sharing bluetooth-accept-files 'bonded'
 gsettings set org.gnome.desktop.file-sharing bluetooth-notify true
 gsettings set org.gnome.desktop.file-sharing bluetooth-obexpush-enabled true
-gsettings set org.gnome.desktop.file-sharing enabled true
 gsettings set org.gnome.desktop.file-sharing require-password 'never'
 gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
 gsettings set org.gnome.desktop.interface clock-format '12h'
@@ -254,7 +252,6 @@ gsettings set org.gnome.shell.keybindings open-application-menu "[]"
 gsettings set org.gnome.shell.keybindings toggle-application-view "[]"
 gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"
 gsettings set org.gnome.shell.keybindings toggle-overview "[]"
-gsettings set org.gnome.shell.overrides button-layout ':close'
 gsettings set org.gnome.shell.overrides dynamic-workspaces true
 gsettings set org.gnome.shell.overrides edge-tiling true
 gsettings set org.gnome.shell.overrides focus-change-on-pointer-rest true

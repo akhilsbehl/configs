@@ -511,6 +511,7 @@ function! PreviewMarkdown()
   let outFile = expand('%:r') . '.html'
   silent execute '!cd %:p:h'
   silent execute '!python -m markdown % >' . outFile
+  silent execute 'redraw!'
 endfunction
 
 " Use the github flavored markdown by default.
