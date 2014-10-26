@@ -68,7 +68,7 @@ autorun-x-content-ignore=@as []
 autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 'x-content/unix-software']
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/akhilsbehl/images/2.png'
+picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
@@ -153,7 +153,7 @@ ignore-phase2-ca-cert=false
 ignore-ca-cert=false
 
 [org/gnome/desktop/background]
-picture-uri='file:///home/akhilsbehl/images/2.png'
+picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
 
 [org/gnome/libgnomekbd/keyboard]
 options=['caps\tcaps:escape']
