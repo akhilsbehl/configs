@@ -5,6 +5,7 @@ update () {
   ln -s "$PWD/$1" "$HOME/.$1"
 }
 
+update xinitrc
 update bashrc
 update bash_profile
 update inputrc
