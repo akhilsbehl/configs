@@ -1,6 +1,6 @@
-[/]
+[org/cinnamon]
 active-display-scale=1
-number-workspaces=3
+number-workspaces=4
 enabled-extensions=['cinnamon-maximus@fmete', 'gTile@shuairan', 'AppSwitcher@entelechy']
 command-history=['roxterm', 'shortcuts', 'r']
 next-desklet-id=2
@@ -21,59 +21,59 @@ prevent-focus-stealing=true
 window-list-applet-alert=false
 workspace-name-overrides=@as []
 
-[settings-daemon/plugins/power]
+[org/cinnamon/settings-daemon/plugins/power]
 lock-on-suspend=true
 sleep-display-battery=300
 sleep-display-ac=0
 lid-close-ac-action='suspend'
 sleep-inactive-battery-timeout=300
 
-[settings-daemon/plugins/media-keys]
+[org/cinnamon/settings-daemon/plugins/media-keys]
 terminal='<Super>t'
 logout='<Shift><Super>l'
 screensaver='<Super>l'
 shutdown='<Super>Delete'
 
-[settings-daemon/plugins/xsettings]
+[org/cinnamon/settings-daemon/plugins/xsettings]
 buttons-have-icons=false
 menus-have-icons=false
 
-[settings-daemon/peripherals/touchpad]
+[org/cinnamon/settings-daemon/peripherals/touchpad]
 touchpad-enabled=false
 
-[settings-daemon/peripherals/keyboard]
+[org/cinnamon/settings-daemon/peripherals/keyboard]
 numlock-state='off'
 
-[settings-daemon/peripherals/mouse]
+[org/cinnamon/settings-daemon/peripherals/mouse]
 motion-threshold=4
 motion-acceleration=4.0
 middle-button-enabled=true
 
-[keybindings/custom-keybindings/custom1]
+[org/cinnamon/keybindings/custom-keybindings/custom1]
 binding='<Shift><Alt>Return'
 command='/home/akhilsbehl/scripts/firequake'
 name='Firequake'
 
-[keybindings/custom-keybindings/custom0]
+[org/cinnamon/keybindings/custom-keybindings/custom0]
 binding='<Alt>Return'
 command='/home/akhilsbehl/scripts/quake'
 name='Quake'
 
-[keybindings]
+[org/cinnamon/keybindings]
 custom-list=['custom0', 'custom1']
 
-[desktop/media-handling]
+[org/cinnamon/desktop/media-handling]
 autorun-x-content-start-app=['x-content/audio-cdda', 'x-content/video-dvd']
 autorun-x-content-ignore=@as []
 autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 'x-content/unix-software']
 
-[desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/got-linux.jpg'
+[org/cinnamon/desktop/background]
+picture-uri='file:///home/akhilsbehl/images/2.png'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
 
-[desktop/interface]
+[org/cinnamon/desktop/interface]
 clock-show-date=true
 cursor-size=13
 icon-theme='Faience'
@@ -82,10 +82,10 @@ clock-use-24h=false
 cursor-theme='Vanilla-DMZ'
 gtk-theme='Adwaita'
 
-[desktop/session]
+[org/cinnamon/desktop/session]
 idle-delay=uint32 300
 
-[desktop/wm/preferences]
+[org/cinnamon/desktop/wm/preferences]
 mouse-button-modifier=''
 action-middle-click-titlebar='toggle-shade'
 theme='Adwaita'
@@ -95,7 +95,7 @@ auto-raise=true
 focus-mode='click'
 min-window-opacity=0
 
-[muffin]
+[org/cinnamon/muffin]
 workspace-cycle=false
 attach-modal-dialogs=true
 overlay-key='Super_L'
@@ -105,7 +105,7 @@ snap-modifier=''
 workspaces-only-on-primary=true
 button-layout='maximize:close'
 
-[muffin/keybindings]
+[org/cinnamon/muffin/keybindings]
 maximize=@as []
 toggle-recording=['<Shift><Super>r']
 toggle-maximized=['<Super>f']
@@ -129,9 +129,40 @@ maximize-horizontally=['<Super>h']
 cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
 switch-to-workspace-up=['<Super>e']
 
-[theme]
+[org/cinnamon/theme]
 name='Elementary Luna Mod'
 
-[screensaver]
+[org/cinnamon/screensaver]
 ask-for-away-message=false
 default-message="Pandora's rule: Never open a box you did not close."
+
+[org/gnome/clocks/state/window]
+size=(877, 690)
+state=128
+panel-id='world'
+
+[org/gnome/eog/view]
+background-color='rgb(0,0,0)'
+use-background-color=true
+
+[org/gnome/nautilus/window-state]
+maximized=true
+
+[org/gnome/nm-applet/eap/e64402cb-f4d5-49f8-ac0d-9d24bde6a96c]
+ignore-phase2-ca-cert=false
+ignore-ca-cert=false
+
+[org/gnome/desktop/background]
+picture-uri='file:///home/akhilsbehl/images/2.png'
+
+[org/gnome/libgnomekbd/keyboard]
+options=['caps\tcaps:escape']
+
+[org/nemo/desktop]
+show-desktop-icons=false
+
+[ca/desrt/dconf-editor]
+window-is-fullscreen=false
+window-height=1018
+window-width=499
+window-is-maximized=false

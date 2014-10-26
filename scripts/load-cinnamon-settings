@@ -1,5 +1,5 @@
 #!/bin/bash
 
-dconf load /org/cinnamon/ < ~/git/configs/cinnamon-settings.dconf
+dconf load / < ~/git/configs/cinnamon-settings.dconf
 
 exit 0
