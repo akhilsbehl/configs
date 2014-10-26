@@ -89,9 +89,9 @@ alias back='cdl -'
 
 alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
 
-alias logout='gnome-session-quit'
+alias logout='cinnamon-session-quit'
 
-alias lock='gnome-screensaver-command --lock'
+alias lock='cinnamon-screensaver-command --lock'
 
 alias tpoff='synclient TouchpadOff=1'
 
