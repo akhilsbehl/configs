@@ -1,0 +1,135 @@
+[/]
+active-display-scale=1
+number-workspaces=3
+enabled-extensions=['cinnamon-maximus@fmete', 'gTile@shuairan']
+command-history=['roxterm', 'shortcuts', 'r']
+next-desklet-id=2
+desktop-effects-on-dialogs=true
+desktop-layout='flipped'
+enable-vfade=false
+enabled-applets=['panel1:left:0:expo@cinnamon.org:17', 'panel1:right:0:removable-drives@cinnamon.org:6', 'panel1:right:6:menu@cinnamon.org:28', 'panel1:right:2:power@cinnamon.org:11', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:network@cinnamon.org:9', 'panel1:right:5:calendar@cinnamon.org:13']
+overview-corner=['expo:false:false', 'scale:false:false', 'scale:false:false', 'desktop:false:false']
+next-applet-id=29
+enabled-desklets=@as []
+alttab-switcher-style='icons'
+desktop-effects=false
+panel-edit-mode=false
+panel-autohide=false
+workspace-expo-view-as-grid=true
+enable-looking-glass-logs=true
+prevent-focus-stealing=true
+workspace-name-overrides=@as []
+
+[settings-daemon/plugins/power]
+lock-on-suspend=true
+sleep-display-battery=300
+sleep-display-ac=0
+lid-close-ac-action='suspend'
+sleep-inactive-battery-timeout=300
+
+[settings-daemon/plugins/media-keys]
+terminal='<Super>t'
+logout='<Shift><Super>l'
+screensaver='<Super>l'
+shutdown='<Super>Delete'
+
+[settings-daemon/plugins/xsettings]
+buttons-have-icons=false
+menus-have-icons=false
+
+[settings-daemon/peripherals/touchpad]
+touchpad-enabled=false
+
+[settings-daemon/peripherals/keyboard]
+numlock-state='off'
+
+[settings-daemon/peripherals/mouse]
+motion-threshold=4
+motion-acceleration=4.0
+middle-button-enabled=true
+
+[keybindings/custom-keybindings/custom1]
+binding='<Shift><Alt>Return'
+command='/home/akhilsbehl/scripts/firequake'
+name='Firequake'
+
+[keybindings/custom-keybindings/custom0]
+binding='<Alt>Return'
+command='/home/akhilsbehl/scripts/quake'
+name='Quake'
+
+[keybindings]
+custom-list=['custom0', 'custom1']
+
+[desktop/media-handling]
+autorun-x-content-start-app=['x-content/audio-cdda', 'x-content/video-dvd']
+autorun-x-content-ignore=@as []
+autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 'x-content/unix-software']
+
+[desktop/background]
+picture-uri='file:///home/akhilsbehl/git/configs/got-linux.jpg'
+primary-color='#023c88'
+picture-options='zoom'
+secondary-color='#5789ca'
+
+[desktop/interface]
+clock-show-date=true
+cursor-size=13
+icon-theme='Faience'
+clock-show-seconds=true
+clock-use-24h=false
+cursor-theme='Vanilla-DMZ'
+gtk-theme='Adwaita'
+
+[desktop/session]
+idle-delay=uint32 300
+
+[desktop/wm/preferences]
+mouse-button-modifier=''
+action-middle-click-titlebar='toggle-shade'
+theme='Adwaita'
+num-workspaces=3
+action-scroll-titlebar='opacity'
+auto-raise=true
+focus-mode='click'
+min-window-opacity=0
+
+[muffin]
+workspace-cycle=false
+attach-modal-dialogs=true
+overlay-key='Super_L'
+edge-tiling=true
+workspaces-only-on-primary=true
+snap-modifier=''
+button-layout='maximize:close'
+
+[muffin/keybindings]
+maximize=@as []
+toggle-recording=['<Shift><Super>r']
+toggle-maximized=['<Super>f']
+switch-windows-backward=['<Shift><Alt>ISO_Left_Tab']
+unmaximize=@as []
+close=['<Super>q']
+switch-to-workspace-left=['<Primary><Alt>j']
+panel-run-dialog=['<Super>r']
+begin-resize=['<Super>period']
+switch-to-workspace-down=['<Super>s']
+move-to-workspace-right=['<Primary><Alt>l']
+cycle-windows=['<Control><Alt>Tab']
+maximize-vertically=['<Super>v']
+switch-to-workspace-right=['<Primary><Alt>k']
+cycle-panels=['<Alt>Tab']
+move-to-center=['<Super>c']
+move-to-workspace-left=['<Primary><Alt>h']
+begin-move=['<Super>comma']
+switch-windows=['<Alt>Tab']
+maximize-horizontally=['<Super>h']
+cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
+switch-to-workspace-up=['<Super>e']
+
+[theme]
+name='Elementary Luna Mod'
+
+[screensaver]
+ask-for-away-message=false
+default-message="Pandora's rule: Never open a box you did not close."

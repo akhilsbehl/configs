@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dconf dump /org/cinnamon/ > ~/git/configs/cinnamon-settings.dconf
+
+exit 0
