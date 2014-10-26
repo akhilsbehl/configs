@@ -1,23 +1,24 @@
 [/]
 active-display-scale=1
 number-workspaces=3
-enabled-extensions=['cinnamon-maximus@fmete', 'gTile@shuairan']
+enabled-extensions=['cinnamon-maximus@fmete', 'gTile@shuairan', 'AppSwitcher@entelechy']
 command-history=['roxterm', 'shortcuts', 'r']
 next-desklet-id=2
 desktop-effects-on-dialogs=true
 desktop-layout='flipped'
 enable-vfade=false
-enabled-applets=['panel1:left:0:expo@cinnamon.org:17', 'panel1:right:0:removable-drives@cinnamon.org:6', 'panel1:right:6:menu@cinnamon.org:28', 'panel1:right:2:power@cinnamon.org:11', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:network@cinnamon.org:9', 'panel1:right:5:calendar@cinnamon.org:13']
+enabled-applets=['panel1:left:0:expo@cinnamon.org:17', 'panel1:right:0:removable-drives@cinnamon.org:6', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:2:sound@cinnamon.org:10', 'panel1:right:3:network@cinnamon.org:9', 'panel1:right:5:separator@cinnamon.org:30', 'panel1:right:6:calendar@cinnamon.org:13', 'panel1:right:7:separator@cinnamon.org:29', 'panel1:right:8:menu@cinnamon.org:28']
 overview-corner=['expo:false:false', 'scale:false:false', 'scale:false:false', 'desktop:false:false']
-next-applet-id=29
+next-applet-id=31
 enabled-desklets=@as []
-alttab-switcher-style='icons'
+alttab-switcher-style='icons+preview'
 desktop-effects=false
 panel-edit-mode=false
 panel-autohide=false
 workspace-expo-view-as-grid=true
 enable-looking-glass-logs=true
 prevent-focus-stealing=true
+window-list-applet-alert=false
 workspace-name-overrides=@as []
 
 [settings-daemon/plugins/power]
@@ -99,8 +100,9 @@ workspace-cycle=false
 attach-modal-dialogs=true
 overlay-key='Super_L'
 edge-tiling=true
-workspaces-only-on-primary=true
+tile-maximize=true
 snap-modifier=''
+workspaces-only-on-primary=true
 button-layout='maximize:close'
 
 [muffin/keybindings]
