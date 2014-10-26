@@ -2,8 +2,8 @@
 
 ISOPEN=$(wmctrl -l | grep ArchWizard$)
 if [[ -z $ISOPEN ]]; then
-  roxterm -f -p 'ArchWizard' -d "/home/$(whoami)/tmp" &&
-    wmctrl -r 'ArchWizard' -b add,fullscreen &&
+  roxterm -p 'ArchWizard' -d "/home/$(whoami)/tmp" &&
+    wmctrl -r 'ArchWizard' -b add,maximixed_vert,maximized_horz &&
     wmctrl -a 'ArchWizard'
 fi
 

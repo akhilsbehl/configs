@@ -1,7 +1,7 @@
 [roxterm profile]
 colour_scheme=
 win_title=ArchWizard
-full_screen=1
+full_screen=0
 always_show_tabs=0
 show_add_tab_btn=0
 hide_menubar=1
