@@ -41,7 +41,7 @@ alias up='cdl ..'
 
 alias ls='ls --color=auto'
 
-alias ls='ls -l'
+alias ll='ls -l'
 
 alias lsg='ls -shHF --group-directories-first'
 
