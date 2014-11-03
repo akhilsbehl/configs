@@ -1,23 +1,20 @@
 [org/cinnamon]
 active-display-scale=1
 number-workspaces=4
-enabled-extensions=['cinnamon-maximus@fmete', 'gTile@shuairan', 'AppSwitcher@entelechy']
-command-history=['roxterm', 'shortcuts', 'r']
-next-desklet-id=2
-desktop-effects-on-dialogs=true
-desktop-layout='flipped'
-enable-vfade=false
-enabled-applets=['panel1:left:0:expo@cinnamon.org:17', 'panel1:right:0:removable-drives@cinnamon.org:6', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:2:sound@cinnamon.org:10', 'panel1:right:3:network@cinnamon.org:9', 'panel1:right:5:separator@cinnamon.org:30', 'panel1:right:6:calendar@cinnamon.org:13', 'panel1:right:7:separator@cinnamon.org:29', 'panel1:right:8:menu@cinnamon.org:28']
+alttab-switcher-delay=0
+enabled-extensions=@as []
 overview-corner=['expo:false:false', 'scale:false:false', 'scale:false:false', 'desktop:false:false']
-next-applet-id=31
+desktop-effects-on-dialogs=true
+enable-vfade=true
+enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
+next-applet-id=17
+desktop-layout='flipped'
+alttab-switcher-style='coverflow'
 enabled-desklets=@as []
-alttab-switcher-style='icons+preview'
-desktop-effects=false
+panel-launchers=['DEPRECATED']
 panel-edit-mode=false
-panel-autohide=false
-workspace-expo-view-as-grid=true
-enable-looking-glass-logs=true
 prevent-focus-stealing=true
+workspace-expo-view-as-grid=true
 window-list-applet-alert=false
 workspace-name-overrides=@as []
 
@@ -62,16 +59,9 @@ name='Quake'
 [org/cinnamon/keybindings]
 custom-list=['custom0', 'custom1']
 
-[org/cinnamon/desktop/media-handling]
-autorun-x-content-start-app=['x-content/audio-cdda', 'x-content/video-dvd']
-autorun-x-content-ignore=@as []
-autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 'x-content/unix-software']
-
-[org/cinnamon/desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
-primary-color='#023c88'
-picture-options='zoom'
-secondary-color='#5789ca'
+[org/cinnamon/screensaver]
+ask-for-away-message=false
+default-message="Pandora's rule: Never open a box you did not close."
 
 [org/cinnamon/desktop/interface]
 clock-show-date=true
@@ -82,18 +72,82 @@ clock-use-24h=false
 cursor-theme='Vanilla-DMZ'
 gtk-theme='Adwaita'
 
+[org/cinnamon/desktop/keybindings/custom-keybindings/custom1]
+binding=['<Shift><Alt>Return']
+command='/home/akhilsbehl/scripts/firequake'
+name='Firequake'
+
+[org/cinnamon/desktop/keybindings/custom-keybindings/custom0]
+binding=['<Alt>Return']
+command='/home/akhilsbehl/scripts/quake'
+name='Quake'
+
+[org/cinnamon/desktop/keybindings]
+looking-glass-keybinding=@as []
+custom-list=['custom0', 'custom1']
+
+[org/cinnamon/desktop/keybindings/media-keys]
+terminal=['<Super>t']
+logout=['<Shift><Super>l']
+screensaver=['<Super>l', 'XF86ScreenSaver']
+home=['<Super>n', 'XF86Explorer']
+calculator=['XF86Calculator', '<Super>c']
+
+[org/cinnamon/desktop/keybindings/wm]
+toggle-maximized=['<Super>f']
+close=['<Super>q']
+switch-to-workspace-left=['<Primary><Alt>j']
+panel-run-dialog=['<Super>r']
+switch-to-workspace-down=['<Super>s']
+switch-to-workspace-right=['<Primary><Alt>k']
+maximize-vertically=['<Super>v']
+maximize-horizontally=['<Super>h']
+switch-to-workspace-up=['<Super>e', '<Alt>F1']
+
+[org/cinnamon/desktop/media-handling]
+autorun-x-content-start-app=['x-content/audio-cdda', 'x-content/video-dvd']
+autorun-x-content-ignore=@as []
+autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 'x-content/unix-software']
+
+[org/cinnamon/desktop/screensaver]
+use-custom-format=true
+ask-for-away-message=false
+date-format='%A, %e %B %Y'
+lock-delay=uint32 60
+default-message="Pandora's rule: never open a box you did not close."
+time-format='%r'
+
+[org/cinnamon/desktop/applications/terminal]
+exec='roxterm'
+
+[org/cinnamon/desktop/notifications]
+fade-opacity=25
+remove-old=true
+
 [org/cinnamon/desktop/session]
-idle-delay=uint32 300
+idle-delay=uint32 0
+
+[org/cinnamon/desktop/privacy]
+remember-recent-files=false
 
 [org/cinnamon/desktop/wm/preferences]
 mouse-button-modifier=''
 action-middle-click-titlebar='toggle-shade'
 theme='Adwaita'
-num-workspaces=3
+num-workspaces=4
 action-scroll-titlebar='opacity'
 auto-raise=true
 focus-mode='click'
 min-window-opacity=0
+
+[org/cinnamon/desktop/background]
+picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
+primary-color='#023c88'
+picture-options='zoom'
+secondary-color='#5789ca'
+
+[org/cinnamon/desktop/background/slideshow]
+image-source='xml:///usr/share/gnome-background-properties/gnome-backgrounds.xml'
 
 [org/cinnamon/muffin]
 workspace-cycle=false
@@ -129,34 +183,122 @@ maximize-horizontally=['<Super>h']
 cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
 switch-to-workspace-up=['<Super>e']
 
+[org/cinnamon/sounds]
+login-enabled=false
+
 [org/cinnamon/theme]
 name='Elementary Luna Mod'
 
-[org/cinnamon/screensaver]
-ask-for-away-message=false
-default-message="Pandora's rule: Never open a box you did not close."
+[org/gnome/brasero/plugins/dvd-rw-format]
+priority=0
+
+[org/gnome/brasero/plugins/dvdauthor]
+priority=0
+
+[org/gnome/brasero/plugins/image-checksum]
+priority=0
+
+[org/gnome/brasero/plugins/audio2cue]
+priority=0
+
+[org/gnome/brasero/plugins/file-checksum]
+priority=0
+
+[org/gnome/brasero/plugins/normalize]
+priority=0
+
+[org/gnome/brasero/plugins/cdrdao]
+priority=0
+
+[org/gnome/brasero/plugins/burn-uri]
+priority=0
+
+[org/gnome/brasero/plugins/wodim]
+priority=0
+
+[org/gnome/brasero/plugins/file-downloader]
+priority=0
+
+[org/gnome/brasero/plugins/genisoimage]
+priority=0
+
+[org/gnome/brasero/plugins/growisofs]
+priority=0
+
+[org/gnome/brasero/plugins/readcd]
+priority=0
+
+[org/gnome/brasero/plugins/readom]
+priority=0
+
+[org/gnome/brasero/plugins/cdrecord]
+priority=0
+
+[org/gnome/brasero/plugins/transcode]
+priority=0
+
+[org/gnome/brasero/plugins/transcode2vob]
+priority=0
+
+[org/gnome/brasero/plugins/cdda2wav]
+priority=0
+
+[org/gnome/brasero/plugins/dvdcss]
+priority=0
+
+[org/gnome/brasero/plugins/mkisofs]
+priority=0
+
+[org/gnome/brasero/plugins/vcdimager]
+priority=0
+
+[org/gnome/calculator]
+target-currency=''
+show-zeroes=false
+source-currency=''
+show-thousands=false
+button-mode='basic'
+target-units='radian'
+word-size=64
+number-format='automatic'
+angle-units='degrees'
+base=10
+source-units='degree'
+accuracy=9
 
 [org/gnome/clocks/state/window]
 size=(877, 690)
 state=128
 panel-id='world'
 
+[org/gnome/nautilus/window-state]
+maximized=true
+
+[org/gnome/desktop/background]
+picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
+
+[org/gnome/libgnomekbd/preview]
+width=1464
+height=605
+x=240
+y=135
+
+[org/gnome/libgnomekbd/keyboard]
+options=['caps\tcaps:escape']
+
 [org/gnome/eog/view]
 background-color='rgb(0,0,0)'
 use-background-color=true
-
-[org/gnome/nautilus/window-state]
-maximized=true
 
 [org/gnome/nm-applet/eap/e64402cb-f4d5-49f8-ac0d-9d24bde6a96c]
 ignore-phase2-ca-cert=false
 ignore-ca-cert=false
 
-[org/gnome/desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
-
-[org/gnome/libgnomekbd/keyboard]
-options=['caps\tcaps:escape']
+[org/nemo/window-state]
+start-with-sidebar=true
+geometry='800x550+0+26'
+maximized=false
+sidebar-bookmark-breakpoint=4
 
 [org/nemo/desktop]
 show-desktop-icons=false
