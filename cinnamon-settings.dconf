@@ -2,7 +2,7 @@
 active-display-scale=1
 number-workspaces=4
 alttab-switcher-delay=0
-enabled-extensions=@as []
+enabled-extensions=['cinnamon-maximus@fmete']
 overview-corner=['expo:false:false', 'scale:false:false', 'scale:false:false', 'desktop:false:false']
 desktop-effects-on-dialogs=true
 enable-vfade=true
@@ -112,10 +112,10 @@ autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 
 [org/cinnamon/desktop/screensaver]
 use-custom-format=true
 ask-for-away-message=false
-date-format='%A, %e %B %Y'
+date-format='%A, %e %b %Y'
 lock-delay=uint32 60
 default-message="Pandora's rule: never open a box you did not close."
-time-format='%r'
+time-format='%H:%M:%S'
 
 [org/cinnamon/desktop/applications/terminal]
 exec='roxterm'
