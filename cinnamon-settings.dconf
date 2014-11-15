@@ -2,19 +2,20 @@
 active-display-scale=1
 number-workspaces=4
 alttab-switcher-delay=0
-enabled-extensions=['cinnamon-maximus@fmete']
+command-history=['chromium', 'chromium -p', 'r', 'lowriter', 'gvim']
 overview-corner=['expo:false:false', 'scale:false:false', 'scale:false:false', 'desktop:false:false']
 desktop-effects-on-dialogs=true
 enable-vfade=true
-enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
-next-applet-id=17
 desktop-layout='flipped'
-alttab-switcher-style='coverflow'
+next-applet-id=17
 enabled-desklets=@as []
+alttab-switcher-style='coverflow'
+enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
 panel-launchers=['DEPRECATED']
-panel-edit-mode=false
+enabled-extensions=['cinnamon-maximus@fmete']
 prevent-focus-stealing=true
 workspace-expo-view-as-grid=true
+panel-edit-mode=false
 window-list-applet-alert=false
 workspace-name-overrides=@as []
 
@@ -98,9 +99,13 @@ toggle-maximized=['<Super>f']
 close=['<Super>q']
 switch-to-workspace-left=['<Primary><Alt>j']
 panel-run-dialog=['<Super>r']
+begin-resize=['<Super>period']
 switch-to-workspace-down=['<Super>s']
+move-to-workspace-right=['<Primary><Alt>l']
 switch-to-workspace-right=['<Primary><Alt>k']
 maximize-vertically=['<Super>v']
+move-to-workspace-left=['<Primary><Alt>h']
+begin-move=['<Super>comma']
 maximize-horizontally=['<Super>h']
 switch-to-workspace-up=['<Super>e', '<Alt>F1']
 
@@ -115,7 +120,7 @@ ask-for-away-message=false
 date-format='%A, %e %b %Y'
 lock-delay=uint32 60
 default-message="Pandora's rule: never open a box you did not close."
-time-format='%H:%M:%S'
+time-format='%I:%M:%S'
 
 [org/cinnamon/desktop/applications/terminal]
 exec='roxterm'
@@ -148,6 +153,9 @@ secondary-color='#5789ca'
 
 [org/cinnamon/desktop/background/slideshow]
 image-source='xml:///usr/share/gnome-background-properties/gnome-backgrounds.xml'
+
+[org/cinnamon/sounds]
+login-enabled=false
 
 [org/cinnamon/muffin]
 workspace-cycle=false
@@ -182,9 +190,6 @@ switch-windows=['<Alt>Tab']
 maximize-horizontally=['<Super>h']
 cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
 switch-to-workspace-up=['<Super>e']
-
-[org/cinnamon/sounds]
-login-enabled=false
 
 [org/cinnamon/theme]
 name='Elementary Luna Mod'
