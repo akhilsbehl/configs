@@ -2,8 +2,8 @@
 active-display-scale=1
 number-workspaces=4
 alttab-switcher-delay=0
-command-history=['chromium', 'chromium -p', 'r', 'lowriter', 'gvim']
-overview-corner=['desktop:false:false', 'desktop:false:false', 'scale:true:false', 'expo:true:false']
+command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'r', 'artha']
+overview-corner=['expo:true:false', 'scale:true:false', 'scale:false:false', 'expo:false:false']
 desktop-effects-on-dialogs=true
 enable-vfade=true
 desktop-layout='flipped'
@@ -65,13 +65,14 @@ ask-for-away-message=false
 default-message="Pandora's rule: Never open a box you did not close."
 
 [org/cinnamon/desktop/interface]
-clock-show-date=true
 cursor-size=13
-icon-theme='Faience'
-clock-show-seconds=true
 clock-use-24h=false
+font-name='Ubuntu 9'
 cursor-theme='Vanilla-DMZ'
+clock-show-seconds=true
+icon-theme='Faience'
 gtk-theme='Adwaita'
+clock-show-date=true
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom2]
 binding=['<Super>o']
@@ -149,6 +150,7 @@ action-scroll-titlebar='opacity'
 auto-raise=true
 focus-mode='click'
 min-window-opacity=0
+titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
 picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
@@ -287,6 +289,10 @@ maximized=true
 [org/gnome/desktop/background]
 picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
 
+[org/gnome/desktop/interface]
+document-font-name='Ubuntu 11'
+monospace-font-name='Ubuntu Mono 11'
+
 [org/gnome/libgnomekbd/preview]
 width=1464
 height=605
@@ -312,6 +318,7 @@ sidebar-bookmark-breakpoint=4
 
 [org/nemo/desktop]
 show-desktop-icons=false
+font='Ubuntu 10'
 
 [ca/desrt/dconf-editor]
 window-is-fullscreen=false
