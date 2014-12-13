@@ -1,0 +1,8 @@
+#!/bin/bash
+
+FILE=$(basename "$1" ".Rnw")
+
+R CMD Sweave "$FILE".Rnw && pdflatex "$FILE".tex && bibtex "$FILE".aux && \
+  pdflatex "$FILE".tex && pdflatex "$FILE".tex
+
+exit 0
