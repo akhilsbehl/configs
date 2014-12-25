@@ -2,7 +2,7 @@
 active-display-scale=1
 number-workspaces=4
 alttab-switcher-delay=0
-command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'r', 'artha']
+command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'r']
 overview-corner=['expo:true:false', 'scale:true:false', 'scale:false:false', 'expo:false:false']
 desktop-effects-on-dialogs=true
 enable-vfade=true
@@ -45,6 +45,7 @@ numlock-state='off'
 [org/cinnamon/settings-daemon/peripherals/mouse]
 motion-threshold=4
 motion-acceleration=4.0
+double-click=401
 middle-button-enabled=true
 
 [org/cinnamon/keybindings/custom-keybindings/custom1]
@@ -284,7 +285,17 @@ state=128
 panel-id='world'
 
 [org/gnome/nautilus/window-state]
-maximized=true
+geometry='819x556+50+87'
+maximized=false
+
+[org/gnome/nautilus/desktop]
+home-icon-visible=false
+network-icon-visible=false
+volumes-visible=false
+trash-icon-visible=false
+
+[org/gnome/evince/default]
+window-ratio=(1.612697303435717, 1.251945028447897)
 
 [org/gnome/desktop/background]
 picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
@@ -312,13 +323,18 @@ ignore-ca-cert=false
 
 [org/nemo/window-state]
 start-with-sidebar=true
-geometry='800x550+0+26'
+geometry='800x550+564+26'
 maximized=false
 sidebar-bookmark-breakpoint=4
 
 [org/nemo/desktop]
+network-icon-visible=false
 show-desktop-icons=false
+home-icon-visible=false
+computer-icon-visible=false
+volumes-visible=false
 font='Ubuntu 10'
+trash-icon-visible=false
 
 [ca/desrt/dconf-editor]
 window-is-fullscreen=false
