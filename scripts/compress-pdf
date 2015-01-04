@@ -18,7 +18,14 @@ if [[ -z "$2" ]]; then
 fi
 
 if [[ -f "$OUTF" ]]; then
-  echo "Output file already exists. Will not overwrite."
+  echo "Output file already exists. Will not overwrite. Try another name."
+  echo
+  echo "Usage:    compress-pdf inputfile [outputfile [quality]]"
+  echo "Quality:  0: default"
+  echo "          1: screen view [72 dpi]"
+  echo "          2: low quality [150 dpi]"
+  echo "          3: high quality [300 dpi]"
+  echo "          4: high quality and color preserving [300 dpi]"
   exit 2
 fi
 
@@ -34,12 +41,14 @@ else
   QUAL="default"
 fi
 
-  gs -sDEVICE=pdfwrite \
-    -dCompatibilityLevel=1.4 \
-    -dPDFSETTINGS=/"$QUAL" \
-    -dNOPAUSE \
-    -dQUIET \
-    -dBATCH \
-    -sOutputFile="$OUTF" "$INF"
+gs \
+  -sDEVICE=pdfwrite \
+  -dCompatibilityLevel=1.4 \
+  -dBATCH \
+  -dNOPAUSE \
+  -dQUIET \
+  -dPDFSETTINGS=/"$QUAL" \
+  -sOutputFile="$OUTF" \
+  "$INF"
 
 exit 0
