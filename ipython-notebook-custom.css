@@ -19,6 +19,7 @@
     2. To use a grey instead of dark orange (#cc6633) for the comments.
     3. To use regular background and bold typewriter text rather than a
        different rounded background for inlined code.
+    3. Add a background color and border for markdown code blocks.
 
 */
 
@@ -104,4 +105,12 @@ div.output_stderr pre {color: #f5f4f1;}
   color: #fff;
   background-color: inherit;
   font-weight: bold;
+}
+
+/* Color the background for block code.  */
+.rendered_html pre{
+  color: #fff;
+  background-color: #49483e; /* Use the border color from the input area here */
+  margin-left: 0px;
+  border: 1px solid #000; /* Change this per preference. */
 }
