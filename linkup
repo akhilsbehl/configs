@@ -24,6 +24,10 @@ ln -s "$PWD/scripts" "$HOME/scripts"
 rm -rf "$HOME/.config/roxterm.sourceforge.net"
 ln -s "$PWD/roxterm" "$HOME/.config/roxterm.sourceforge.net"
 
+rm -f "$HOME/.ipython/profile_default/static/custom/custom.css"
+ln -s "$PWD/ipython-notebook-custom.css" \
+  "$HOME/.ipython/profile_default/static/custom/custom.css"
+
 if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
   mkdir -p ~/.vim/bundle
