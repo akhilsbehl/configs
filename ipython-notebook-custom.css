@@ -21,6 +21,10 @@
        different rounded background for inlined code.
     3. Add a background color and border for markdown code blocks.
 
+    TODO: Doesn't work well with markdown code blocks for other languages.
+    Funky colors all over the place. The colorscheme does not extend. So,
+    I am not using any language identifiers for other languages.
+
 */
 
 /* Uncomment to use a custom font
