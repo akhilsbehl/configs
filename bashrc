@@ -107,6 +107,10 @@ alias c='cdl "$HOME"/git/configs'
 
 alias c='cdl "$HOME"/git/configs'
 
+alias pynb='ipython notebook &> /dev/null &'
+
+alias pynb2='ipython2 notebook &> /dev/null &'
+
 if [[ "$OS" == "Ubuntu" ]];
 then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
