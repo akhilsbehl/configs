@@ -107,9 +107,7 @@ alias c='cdl "$HOME"/git/configs'
 
 alias c='cdl "$HOME"/git/configs'
 
-alias pynb='ipython notebook &> /dev/null &'
-
-alias pynb2='ipython2 notebook &> /dev/null &'
+alias netlog='sudo journalctl -f -u NetworkManager'
 
 if [[ "$OS" == "Ubuntu" ]];
 then
