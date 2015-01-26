@@ -71,7 +71,7 @@ clock-use-24h=false
 font-name='Ubuntu 9'
 cursor-theme='Vanilla-DMZ'
 clock-show-seconds=true
-icon-theme='Faience'
+icon-theme='Faience-Azur'
 gtk-theme='Adwaita'
 clock-show-date=true
 
@@ -159,9 +159,6 @@ primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
 
-[org/cinnamon/desktop/background/slideshow]
-image-source='xml:///usr/share/gnome-background-properties/gnome-backgrounds.xml'
-
 [org/cinnamon/sounds]
 login-enabled=false
 
@@ -200,7 +197,7 @@ cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
 switch-to-workspace-up=['<Super>e']
 
 [org/cinnamon/theme]
-name='Elementary Luna Mod'
+name='Faience+'
 
 [org/gnome/brasero/plugins/dvd-rw-format]
 priority=0
@@ -323,7 +320,7 @@ ignore-ca-cert=false
 
 [org/nemo/window-state]
 start-with-sidebar=true
-geometry='800x550+564+26'
+geometry='800x550+215+313'
 maximized=false
 sidebar-bookmark-breakpoint=4
 
