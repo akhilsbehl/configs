@@ -118,3 +118,8 @@ div.output_stderr pre {color: #f5f4f1;}
   margin-left: 0px;
   border: 1px solid #000; /* Change this per preference. */
 }
+
+div.raw_input_container{font-family:monospace;padding-top:5px}
+span.raw_input_prompt{}
+input.raw_input{font-family:inherit;font-size:inherit;color:#000000;width:auto;vertical-align:baseline;padding:0 .25em;margin:0 .25em}
+input.raw_input:focus{box-shadow:none}
