@@ -184,7 +184,7 @@ let vimrplugin_editor_h = 60
 
 let vimrplugin_notmuxconf = 1
 
-let vimrplugin_routmorecolors = 1
+let Rout_more_colors = 1
 
 let vimrplugin_indent_commented = 0
 
