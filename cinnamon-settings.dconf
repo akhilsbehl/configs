@@ -75,11 +75,6 @@ icon-theme='Faience-Azur'
 gtk-theme='Adwaita'
 clock-show-date=true
 
-[org/cinnamon/desktop/keybindings/custom-keybindings/custom2]
-binding=['<Super>o']
-command='/usr/bin/nautilus'
-name='Files'
-
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom1]
 binding=['<Shift><Alt>Return']
 command='/home/akhilsbehl/scripts/firequake'
