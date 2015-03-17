@@ -1,8 +1,9 @@
 #!/bin/bash
 
 gvfs-mime --set application/pdf mupdf.desktop
+gvfs-mime --set application/ps evince.desktop
 
-gvfs-mime --set inode/directory nautilus-classic.desktop
+gvfs-mime --set inode/directory nemo.desktop
 
 gvfs-mime --set text/csv libreoffice-calc.desktop
 gvfs-mime --set text/tab-separated-values libreoffice-calc.desktop
