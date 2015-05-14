@@ -149,7 +149,7 @@ min-window-opacity=0
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
+picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.png'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
@@ -290,7 +290,7 @@ trash-icon-visible=false
 window-ratio=(1.612697303435717, 1.251945028447897)
 
 [org/gnome/desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.jpg'
+picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.png'
 
 [org/gnome/desktop/interface]
 document-font-name='Ubuntu 11'
