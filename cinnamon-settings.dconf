@@ -37,7 +37,7 @@ buttons-have-icons=false
 menus-have-icons=false
 
 [org/cinnamon/settings-daemon/peripherals/touchpad]
-touchpad-enabled=false
+touchpad-enabled=true
 
 [org/cinnamon/settings-daemon/peripherals/keyboard]
 numlock-state='off'
