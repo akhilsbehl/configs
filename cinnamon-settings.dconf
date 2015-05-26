@@ -50,12 +50,12 @@ middle-button-enabled=true
 
 [org/cinnamon/keybindings/custom-keybindings/custom1]
 binding='<Shift><Alt>Return'
-command='/home/akhilsbehl/scripts/firequake'
+command='/home/asb/scripts/firequake'
 name='Firequake'
 
 [org/cinnamon/keybindings/custom-keybindings/custom0]
 binding='<Alt>Return'
-command='/home/akhilsbehl/scripts/quake'
+command='/home/asb/scripts/quake'
 name='Quake'
 
 [org/cinnamon/keybindings]
@@ -77,12 +77,12 @@ clock-show-date=true
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom1]
 binding=['<Shift><Alt>Return']
-command='/home/akhilsbehl/scripts/firequake'
+command='/home/asb/scripts/firequake'
 name='Firequake'
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom0]
 binding=['<Alt>Return']
-command='/home/akhilsbehl/scripts/quake'
+command='/home/asb/scripts/quake'
 name='Quake'
 
 [org/cinnamon/desktop/keybindings]
@@ -149,7 +149,7 @@ min-window-opacity=0
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.png'
+picture-uri='file:///home/asb/git/configs/wallpaper.png'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
@@ -290,7 +290,7 @@ trash-icon-visible=false
 window-ratio=(1.612697303435717, 1.251945028447897)
 
 [org/gnome/desktop/background]
-picture-uri='file:///home/akhilsbehl/git/configs/wallpaper.png'
+picture-uri='file:///home/asb/git/configs/wallpaper.png'
 
 [org/gnome/desktop/interface]
 document-font-name='Ubuntu 11'
