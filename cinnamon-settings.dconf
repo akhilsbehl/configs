@@ -37,7 +37,7 @@ buttons-have-icons=false
 menus-have-icons=false
 
 [org/cinnamon/settings-daemon/peripherals/touchpad]
-natural-scroll=true
+natural-scroll=false
 scroll-method='two-finger-scrolling'
 horiz-scroll-enabled=true
 touchpad-enabled=true

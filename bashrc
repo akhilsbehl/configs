@@ -134,7 +134,7 @@ export LS_COLORS
 
 export TERM='xterm'
 
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/scripts:/opt/logstash/bin/:/usr/share/webapps/kibana/bin:$PATH"
 
 export GREP_COLOR='1;31'
 
