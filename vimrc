@@ -508,9 +508,9 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " Preview markdown in Firefox
 
 function! PreviewMarkdown()
-  let outFile = expand('%:r') . '.html'
+  let outFile = '/tmp/' . expand('%:r') . '.html'
   silent execute '!cd %:p:h'
-  silent execute '!python -m markdown % >' . outFile
+  silent execute '!md2html % >' . outFile
   silent execute 'redraw!'
 endfunction
 
@@ -530,3 +530,10 @@ augroup END
 
 autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
 autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
+
+"-------------------------
+
+" Forward the clipboard over SSH when connected with forwarding.
+
+vmap "sy :!xclip -f -sel clip
+map "sp :r!xclip -o -sel clip
