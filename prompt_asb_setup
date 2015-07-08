@@ -33,8 +33,8 @@ prompt_asb_setup () {
   autoload -Uz prompt_special_chars
   prompt_special_chars
 
-  PS1="%F{$asbbar_cwd}%B%K{$asbbar_cwd}$schars[333]$schars[262]$schars[261]$schars[260]%F{$userhost}%K{$asbbar_cwd}%B%n@%m%b%F{$asbbar_cwd}%K{black}$schars[333]$schars[262]$schars[261]$schars[260]%F{$date}%K{black}%B %D{%a %b %d} %D{%I:%M:%S%P} %F{$asbbar_cwd}%K{black}%B%~/%b%k%f "
-  PS2="%F{$asbbar_cwd}%K{black}$schars[333]$schars[262]$schars[261]$schars[260]%f%k>"
+  PS1="%F{$asbbar_cwd}%B%K{$asbbar_cwd}$schars[333]$schars[262]$schars[261]$schars[260]%F{$userhost}%K{$asbbar_cwd}%B%n@%m%b%F{$asbbar_cwd}%K{black}$schars[333]$schars[262]$schars[261]$schars[260]%F{$date}%K{black}%B %D{%a %b %d} %D{%I:%M:%S%P} %F{$asbbar_cwd}%K{black}%B%~ >>> %b%k%f"
+  PS2="%F{$asbbar_cwd}%K{black}$schars[333]$schars[262]$schars[261]$schars[260]%B +++ %b%k%f"
 
   prompt_opts=(cr subst percent)
 }
