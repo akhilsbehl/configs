@@ -537,3 +537,10 @@ autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
 
 vmap "sy :!xclip -f -sel clip
 map "sp :r!xclip -o -sel clip
+
+
+"-------------------------
+
+" Show powerline
+"
+let $PYTHONPATH='/usr/lib/python3.4/site-packages/'

@@ -7,6 +7,7 @@ update () {
 
 update xinitrc
 update bashrc
+update zshrc
 update bash_profile
 update inputrc
 update gvimrc
@@ -23,6 +24,10 @@ ln -s "$PWD/scripts" "$HOME/scripts"
 
 rm -rf "$HOME/.config/roxterm.sourceforge.net"
 ln -s "$PWD/roxterm" "$HOME/.config/roxterm.sourceforge.net"
+
+sudo rm -f '/usr/share/zsh/functions/Prompts/prompt_asb_setup'
+sudo ln -s $(readlink -m $PWD/prompt_asb_setup) \
+  /usr/share/zsh/functions/Prompts/prompt_asb_setup
 
 if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
