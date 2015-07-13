@@ -251,7 +251,7 @@ autoload -U colors && colors
 
 vim_ins_mode="%B%{$fg[green]%}<<< INS%{$reset_color%}"
 vim_cmd_mode="%B%{$fg[cyan]%}<<< CMD%{$reset_color%}"
-vim_mode=$vim_ins_mode
+vim_mode=$vim_cmd_mode
 
 function zle-keymap-select {
   vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
@@ -260,7 +260,7 @@ function zle-keymap-select {
 zle -N zle-keymap-select
 
 function zle-line-finish {
-  vim_mode=$vim_ins_mode
+  vim_mode=$vim_cmd_mode
 }
 zle -N zle-line-finish
 
