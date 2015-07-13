@@ -266,37 +266,48 @@ setopt pushdignoredups
 # This reverts the +/- operators.
 setopt pushdminus
 
+##############################
+#  Python virtualenvwrapper  #
+##############################
+
+export WORKON_HOME=~/.virtualenvs
+source /usr/bin/virtualenvwrapper_lazy.sh
+
 #############
 #  Modules  #
 #############
 
 source $HOME/git/configs/zshmodules/opp.zsh/opp.zsh
 source $HOME/git/configs/zshmodules/opp.zsh/opp/*
+
 source $HOME/git/configs/zshmodules/zsh-history-substring-search/zsh-history-substring-search.zsh
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
+
+# Source this one last
 source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #############################
 #  Redirect to a temp file  #
 #############################
 
+# Keep this at the end to avoid weird things from happening.
 function redirect-to-tmp() {
-  TMPFILE="./tmp-$(date +%y%m%d-%H%M%S)"
+  __="./tmp-$(date +%y%m%d-%H%M%S)"
   while read line; do
-    echo "$line" >>! $TMPFILE
+    echo "$line" >>! $__
   done
-  echo "Redirected to $TMPFILE"
-  unset $TMPFILE
+  echo "Redirected to $__"
+  unset $__
 }
 
 function redirect-to-tee() {
-  TMPFILE="./tmp-$(date +%y%m%d-%H%M%S)"
+  __="./tmp-$(date +%y%m%d-%H%M%S)"
   while read line; do
-    echo "$line" | tee -a $TMPFILE
+    echo "$line" | tee -a $__
   done
-  echo "Redirected to $TMPFILE"
-  unset $TMPFILE
+  echo "Redirected to $__"
+  unset $__
 }
 
 alias -g t='| redirect-to-tmp'
