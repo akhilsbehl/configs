@@ -227,7 +227,7 @@ setopt pushdminus
 autoload -U colors && colors
 
 vim_ins_mode="%B%{$fg[green]%}[INS]%{$reset_color%}"
-vim_cmd_mode="%B%{$fg[cyan]%}[INS]%{$reset_color%}"
+vim_cmd_mode="%B%{$fg[cyan]%}[CMD]%{$reset_color%}"
 vim_mode=$vim_ins_mode
 
 function zle-keymap-select {
