@@ -163,9 +163,9 @@ alias tpoff='synclient TouchpadOff=1'
 
 alias tpon='synclient TouchpadOff=0'
 
-alias t='cdl "$HOME"/tmp'
+alias tt='cdl "$HOME"/tmp'
 
-alias c='cdl "$HOME"/git/configs'
+alias cc='cdl "$HOME"/git/configs'
 
 alias netlog='sudo journalctl -f -u NetworkManager'
 
@@ -235,7 +235,7 @@ alias -g l='| less'
 
 alias -g v='| vim -'
 
-alias -g n='> /dev/null'
+alias -g n='>! /dev/null'
 
 ####################################
 #  Source stuff local to each box  #
@@ -253,7 +253,7 @@ if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
 chpwd() {
-  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
+  print -l $PWD ${(u)dirstack} >! $DIRSTACKFILE
 }
 DIRSTACKSIZE=9
 setopt autopushd pushdsilent pushdtohome
