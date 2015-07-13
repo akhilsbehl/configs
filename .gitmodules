@@ -1,0 +1,9 @@
+[submodule "zshmodules/opp.zsh"]
+	path = zshmodules/opp.zsh
+	url = https://github.com/hchbaw/opp.zsh
+[submodule "zshmodules/zsh-history-substring-search"]
+	path = zshmodules/zsh-history-substring-search
+	url = https://github.com/zsh-users/zsh-history-substring-search
+[submodule "zshmodules/zsh-syntax-highlighting"]
+	path = zshmodules/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
