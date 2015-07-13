@@ -34,8 +34,11 @@ setopt histignoredups
 # Let hidden files (.*) be matched against globs.
 setopt globdots
 
-# http://unix.stackexchange.com/questions/10825/remember-a-half-typed-command-while-i-check-something
+# Let's you a half-finished command and come back to it.
 bindkey '^o' push-input
+
+# vi-backward-delete-char is just really weird
+bindkey -v '^?' backward-delete-char
 
 ########################
 #  Prompting goodness  #
@@ -44,6 +47,33 @@ bindkey '^o' push-input
 autoload -U promptinit
 promptinit
 prompt asb
+
+# Vi mode indicator
+###################
+
+autoload -U colors && colors
+
+vim_ins_mode="%B%{$fg[green]%}<<< INS%{$reset_color%}"
+vim_cmd_mode="%B%{$fg[cyan]%}<<< CMD%{$reset_color%}"
+vim_mode=$vim_cmd_mode
+
+function zle-keymap-select {
+  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+  zle reset-prompt
+}
+zle -N zle-keymap-select
+
+function zle-line-finish {
+  vim_mode=$vim_cmd_mode
+}
+zle -N zle-line-finish
+
+function TRAPINT() {
+  vim_mode=$vim_ins_mode
+  zle && zle reset-prompt
+  return $(( 128 + $1 ))
+}
+RPROMPT='${vim_mode}'
 
 #############
 # Functions #
@@ -65,17 +95,6 @@ function upsvn () {
       svn update "$d"
     done
   )
-}
-
-shclean() {
-    local tmpdir="$(mktemp -d)"
-    local tmprc="$(mktemp)"
-    cat > "$tmprc" << EOF
-PS1='\$ '
-cd "$tmpdir"
-EOF
-    env - HOME="$HOME" TERM="$TERM" zsh --noprofile --rcfile "$tmprc"
-    rm -r "$tmpdir" "$tmprc"
 }
 
 ###################
@@ -243,34 +262,6 @@ setopt pushdignoredups
 # This reverts the +/- operators.
 setopt pushdminus
 
-#######################
-#  Vi mode indicator  #
-#######################
-
-autoload -U colors && colors
-
-vim_ins_mode="%B%{$fg[green]%}<<< INS%{$reset_color%}"
-vim_cmd_mode="%B%{$fg[cyan]%}<<< CMD%{$reset_color%}"
-vim_mode=$vim_cmd_mode
-
-function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-  zle reset-prompt
-}
-zle -N zle-keymap-select
-
-function zle-line-finish {
-  vim_mode=$vim_cmd_mode
-}
-zle -N zle-line-finish
-
-function TRAPINT() {
-  vim_mode=$vim_ins_mode
-  zle && zle reset-prompt
-  return $(( 128 + $1 ))
-}
-RPROMPT='${vim_mode}'
-
 #############
 #  Modules  #
 #############
@@ -281,3 +272,26 @@ source $HOME/git/configs/zshmodules/zsh-history-substring-search/zsh-history-sub
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+#############################
+#  Redirect to a temp file  #
+#############################
+
+function redirect-to-tmp() {
+  TMPFILE="./tmp-$(date +%y%m%d-%H%M%S)"
+  while read line; do
+    echo "$line" >>! $TMPFILE
+  done
+  echo "Redirected to $TMPFILE"
+}
+
+function redirect-to-tee() {
+  TMPFILE="./tmp-$(date +%y%m%d-%H%M%S)"
+  while read line; do
+    echo "$line" | tee -a $TMPFILE
+  done
+  echo "Redirected to $TMPFILE"
+}
+
+alias -g t='| redirect-to-tmp'
+alias -g T='| redirect-to-tee'
