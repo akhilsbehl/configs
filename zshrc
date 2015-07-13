@@ -13,7 +13,29 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+##################
+#  Misc options  #
+##################
+
 bindkey '^r' history-incremental-search-backward
+
+# Spell correct
+setopt correct
+
+# Do not clobber with >. Use >! for clobbering.
+setopt noclobber
+
+# Allow comments in the shell.
+setopt interactivecomments
+
+# Ignore duplicates in history.
+setopt histignoredups
+
+# Let hidden files (.*) be matched against globs.
+setopt globdots
+
+# http://unix.stackexchange.com/questions/10825/remember-a-half-typed-command-while-i-check-something
+bindkey '^o' push-input
 
 ########################
 #  Prompting goodness  #
@@ -22,19 +44,6 @@ bindkey '^r' history-incremental-search-backward
 autoload -U promptinit
 promptinit
 prompt asb
-
-##################
-#  ViM goodness  #
-##################
-
-source $HOME/git/configs/opp.zsh/opp.zsh
-source $HOME/git/configs/opp.zsh/opp/*
-
-###########################################################################
-#                               From bashrc                               #
-###########################################################################
-
-OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
 #############
 # Functions #
@@ -137,13 +146,13 @@ alias tpon='synclient TouchpadOff=0'
 
 alias t='cdl "$HOME"/tmp'
 
-alias m='cdl "$HOME"/music'
-
-alias c='cdl "$HOME"/git/configs'
-
 alias c='cdl "$HOME"/git/configs'
 
 alias netlog='sudo journalctl -f -u NetworkManager'
+
+alias show='gvfs-open'
+
+OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
 if [[ "$OS" == "Ubuntu" ]];
 then
@@ -195,6 +204,20 @@ alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
 
+####################
+#  Global aliases  #
+####################
+
+alias -g g='| grep'
+
+alias -g G='| grep -i'
+
+alias -g l='| less'
+
+alias -g v='| vim -'
+
+alias -g n='> /dev/null'
+
 ####################################
 #  Source stuff local to each box  #
 ####################################
@@ -213,7 +236,7 @@ fi
 chpwd() {
   print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
 }
-DIRSTACKSIZE=20
+DIRSTACKSIZE=9
 setopt autopushd pushdsilent pushdtohome
 # Remove duplicate entries
 setopt pushdignoredups
@@ -226,8 +249,8 @@ setopt pushdminus
 
 autoload -U colors && colors
 
-vim_ins_mode="%B%{$fg[green]%}[INS]%{$reset_color%}"
-vim_cmd_mode="%B%{$fg[cyan]%}[CMD]%{$reset_color%}"
+vim_ins_mode="%B%{$fg[green]%}<<< INS%{$reset_color%}"
+vim_cmd_mode="%B%{$fg[cyan]%}<<< CMD%{$reset_color%}"
 vim_mode=$vim_ins_mode
 
 function zle-keymap-select {
@@ -247,3 +270,14 @@ function TRAPINT() {
   return $(( 128 + $1 ))
 }
 RPROMPT='${vim_mode}'
+
+#############
+#  Modules  #
+#############
+
+source $HOME/git/configs/zshmodules/opp.zsh/opp.zsh
+source $HOME/git/configs/zshmodules/opp.zsh/opp/*
+source $HOME/git/configs/zshmodules/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
