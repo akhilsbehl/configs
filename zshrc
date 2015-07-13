@@ -53,8 +53,8 @@ prompt asb
 
 autoload -U colors && colors
 
-vim_ins_mode="%B%{$fg[green]%}<<< INS%{$reset_color%}"
-vim_cmd_mode="%B%{$fg[cyan]%}<<< CMD%{$reset_color%}"
+vim_ins_mode="%B%{$fg[red]%}<<< INS%{$reset_color%}"
+vim_cmd_mode="%B%{$fg[blue]%}<<< CMD%{$reset_color%}"
 vim_mode=$vim_cmd_mode
 
 function zle-keymap-select {
@@ -237,6 +237,10 @@ alias -g v='| vim -'
 
 alias -g n='>! /dev/null'
 
+alias -g hd='| head'
+
+alias -g tl='| tail'
+
 ####################################
 #  Source stuff local to each box  #
 ####################################
@@ -283,6 +287,7 @@ function redirect-to-tmp() {
     echo "$line" >>! $TMPFILE
   done
   echo "Redirected to $TMPFILE"
+  unset $TMPFILE
 }
 
 function redirect-to-tee() {
@@ -291,6 +296,7 @@ function redirect-to-tee() {
     echo "$line" | tee -a $TMPFILE
   done
   echo "Redirected to $TMPFILE"
+  unset $TMPFILE
 }
 
 alias -g t='| redirect-to-tmp'

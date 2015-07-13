@@ -25,7 +25,7 @@ EOH
 # emacs shell-script mode gets confused with ' in heredoc above
 
 prompt_asb_setup () {
-  local asbbar_cwd=${1:-'green'}
+  local asbbar_cwd=${1:-'blue'}
   local userhost=${2:-'white'}
   local date=${3:-'white'}
 
