@@ -259,7 +259,7 @@ fi
 chpwd() {
   print -l $PWD ${(u)dirstack} >! $DIRSTACKFILE
 }
-DIRSTACKSIZE=9
+DIRSTACKSIZE=20
 setopt autopushd pushdsilent pushdtohome
 # Remove duplicate entries
 setopt pushdignoredups
