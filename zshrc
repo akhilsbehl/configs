@@ -294,20 +294,14 @@ source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlight
 # Keep this at the end to avoid weird things from happening.
 function redirect-to-tmp() {
   __="./tmp-$(date +%y%m%d-%H%M%S)"
-  while read line; do
-    echo "$line" >>! $__
-  done
+  cat >>! $__
   echo "Redirected to $__"
-  unset $__
 }
 
 function redirect-to-tee() {
   __="./tmp-$(date +%y%m%d-%H%M%S)"
-  while read line; do
-    echo "$line" | tee -a $__
-  done
+  tee -a $__
   echo "Redirected to $__"
-  unset $__
 }
 
 alias -g t='| redirect-to-tmp'
