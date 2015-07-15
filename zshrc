@@ -235,6 +235,8 @@ alias -g l='| less'
 
 alias -g v='| vim -'
 
+alias -g w='| wc -l'
+
 alias -g n='>! /dev/null'
 
 alias -g hd='| head'
