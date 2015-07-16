@@ -151,7 +151,7 @@ alias swap='setxkbmap -option caps:swapescape'
 
 alias unswap='setxkbmap -option'
 
-alias back='cdl -'
+alias b='cdl -'
 
 alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
 
@@ -290,21 +290,21 @@ bindkey -M vicmd 'j' history-substring-search-down
 source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #############################
+#  ... n to go up n folders  #
+#############################
+
+function ...() {
+  n=$1
+  [[ -z "$n" ]] && n=1
+  repeat $n ..
+}
+
+#############################
 #  Redirect to a temp file  #
 #############################
 
-# Keep this at the end to avoid weird things from happening.
-function redirect-to-tmp() {
-  __="./tmp-$(date +%y%m%d-%H%M%S)"
-  cat >>! $__
-  echo "Redirected to $__"
-}
+# Keep this at the end.
+ 
+alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
 
-function redirect-to-tee() {
-  __="./tmp-$(date +%y%m%d-%H%M%S)"
-  tee -a $__
-  echo "Redirected to $__"
-}
-
-alias -g t='| redirect-to-tmp'
-alias -g T='| redirect-to-tee'
+alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
