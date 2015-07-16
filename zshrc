@@ -17,6 +17,8 @@ compinit
 #  Misc options  #
 ##################
 
+KEYTIMEOUT=10
+
 bindkey '^r' history-incremental-search-backward
 
 # Spell correct
