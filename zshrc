@@ -241,6 +241,8 @@ alias -g w='| wc -l'
 
 alias -g n='>! /dev/null'
 
+alias -g B='&>! /dev/null &'
+
 alias -g hd='| head'
 
 alias -g tl='| tail'
