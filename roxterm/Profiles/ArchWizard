@@ -1,5 +1,5 @@
 [roxterm profile]
-colour_scheme=
+colour_scheme=Gruvbox
 win_title=ArchWizard
 full_screen=0
 always_show_tabs=0
