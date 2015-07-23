@@ -33,7 +33,7 @@ if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
   mkdir -p ~/.vim/bundle
   git clone 'https://github.com/gmarik/vundle' ~/.vim/bundle/vundle
-  vim +BundleInstall
+  vim +VundleInstall
   ln -s "$(readlink -m "$PWD"/mysnippets)" ~/.vim
   rm -r \
     ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*
