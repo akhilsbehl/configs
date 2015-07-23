@@ -37,35 +37,11 @@ Bundle 'tpope/vim-repeat'
 " Snippets FTW \m/.
 Bundle 'vim-scripts/UltiSnips'
 
-" R plugin.
-Bundle 'vim-scripts/Vim-R-plugin'
-
-" Latex suite.
-Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
-
 " Graphical UNDO
 Bundle 'sjl/gundo.vim'
 
-" Escape shell color codes in Vim.
-Bundle 'AnsiEsc.vim'
-
-" Use the GUI colorscheme in terminal.
-Bundle 'vim-scripts/CSApprox'
-
 " Use multiple cursors a la Sublime Text.
 Bundle 'terryma/vim-multiple-cursors'
-
-" My modification of the Monokai colorscheme.
-Bundle 'akhilsbehl/vim-monokai'
-
-" GHCi plugin: SHIM for Vim.
-Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
-
-" Flake8 linter.
-Bundle 'nvie/vim-flake8'
-
-" Scala by derekwyatt.
-Bundle 'derekwyatt/vim-scala'
 
 " CtrlP fuzzy finder for vim.
 Bundle 'kien/ctrlp.vim'
@@ -73,11 +49,49 @@ Bundle 'kien/ctrlp.vim'
 " Ag for even more searching.
 Bundle 'rking/ag.vim'
 
+"-------------------------
+
+" Language specific plugins
+ 
+" Latex suite.
+Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
+
+" R plugin.
+Bundle 'vim-scripts/Vim-R-plugin'
+
+" Better indentation for Python
+Bundle 'hynek/vim-python-pep8-indent'
+
+" Flake8 linter.
+Bundle 'nvie/vim-flake8'
+
+" Scala by derekwyatt.
+Bundle 'derekwyatt/vim-scala'
+
 " Javascript indentation for vim.
 Bundle 'pangloss/vim-javascript'
 
 " Julia for Vim.
 Bundle 'JuliaLang/julia-vim'
+
+" GHCi plugin: SHIM for Vim.
+Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
+
+"-------------------------
+
+" I'm fabulous
+ 
+" My modification of the Monokai colorscheme.
+Bundle 'akhilsbehl/vim-monokai'
+
+" Use the GUI colorscheme in terminal.
+Bundle 'vim-scripts/CSApprox'
+
+" Solarized colorschemes
+Bundle 'altercation/vim-colors-solarized'
+
+" Escape shell color codes in Vim.
+Bundle 'AnsiEsc.vim'
 
 "-------------------------
 
