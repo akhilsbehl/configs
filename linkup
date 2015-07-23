@@ -32,8 +32,8 @@ sudo ln -s $(readlink -m $PWD/prompt_asb_setup) \
 if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
   mkdir -p ~/.vim/bundle
-  git clone 'https://github.com/gmarik/vundle' ~/.vim/bundle/vundle
-  vim +VundleInstall
+  git clone 'https://github.com/VundleVim/Vundle.vim' ~/.vim/bundle/Vundle.vim
+  vim +PluginInstall +qall
   ln -s "$(readlink -m "$PWD"/mysnippets)" ~/.vim
   rm -r \
     ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*

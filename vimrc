@@ -3,95 +3,100 @@
 " Vundle it!
 
 filetype off
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
 "-------------------------
 
 " Add my bundles here:
 
 " The bundle manager.
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 " Provides autoclose feature. Repeat with me: Hail Thiago Alves!
-Bundle 'vim-scripts/AutoClose--Alves'
+Plugin 'vim-scripts/AutoClose--Alves'
 
 " The awesome commenter.
-Bundle 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdcommenter'
 
 " The awesome dirtree.
-Bundle 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 
 " The screen / tmux plugin.
-Bundle 'ervandew/screen'
+Plugin 'ervandew/screen'
 
 " Overload the fucking tab!
-Bundle 'ervandew/supertab'
+Plugin 'ervandew/supertab'
 
 " Surround the shit outta 'em.
-Bundle 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 
 " And repeat the surrounds. Hallelujah!
-Bundle 'tpope/vim-repeat'
+Plugin 'tpope/vim-repeat'
 
 " Snippets FTW \m/.
-Bundle 'vim-scripts/UltiSnips'
+Plugin 'vim-scripts/UltiSnips'
 
 " Graphical UNDO
-Bundle 'sjl/gundo.vim'
+Plugin 'sjl/gundo.vim'
 
 " Use multiple cursors a la Sublime Text.
-Bundle 'terryma/vim-multiple-cursors'
+Plugin 'terryma/vim-multiple-cursors'
 
 " CtrlP fuzzy finder for vim.
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 
 " Ag for even more searching.
-Bundle 'rking/ag.vim'
+Plugin 'rking/ag.vim'
+
+" Mofo plugin: Tabluar.vim
+Plugin 'godlygeek/tabluar'
 
 "-------------------------
 
 " Language specific plugins
  
 " Latex suite.
-Bundle 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
+Plugin 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 
 " R plugin.
-Bundle 'vim-scripts/Vim-R-plugin'
+Plugin 'vim-scripts/Vim-R-plugin'
 
 " Better indentation for Python
-Bundle 'hynek/vim-python-pep8-indent'
+Plugin 'hynek/vim-python-pep8-indent'
 
 " Flake8 linter.
-Bundle 'nvie/vim-flake8'
+Plugin 'nvie/vim-flake8'
 
 " Scala by derekwyatt.
-Bundle 'derekwyatt/vim-scala'
+Plugin 'derekwyatt/vim-scala'
 
 " Javascript indentation for vim.
-Bundle 'pangloss/vim-javascript'
+Plugin 'pangloss/vim-javascript'
 
 " Julia for Vim.
-Bundle 'JuliaLang/julia-vim'
+Plugin 'JuliaLang/julia-vim'
 
 " GHCi plugin: SHIM for Vim.
-Bundle 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
+Plugin 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
 
 "-------------------------
 
 " I'm fabulous
  
-" My modification of the Monokai colorscheme.
-Bundle 'akhilsbehl/vim-monokai'
-
 " Use the GUI colorscheme in terminal.
-Bundle 'vim-scripts/CSApprox'
-
-" Solarized colorschemes
-Bundle 'altercation/vim-colors-solarized'
+Plugin 'vim-scripts/CSApprox'
 
 " Escape shell color codes in Vim.
-Bundle 'AnsiEsc.vim'
+Plugin 'AnsiEsc.vim'
+
+" Gruvbox & my edit of Monokai
+Plugin 'morhetz/gruvbox'
+Plugin 'akhilsbehl/vim-monokai'
+
+"-------------------------
+
+call vundle#end()
 
 "-------------------------
 
@@ -105,9 +110,11 @@ syntax enable
 
 " Colorscheme.
 if has('gui_running')
-  colorscheme monokai
+  set background=dark
+  colorscheme gruvbox
 else
-  colorscheme monokai
+  set background=dark
+  colorscheme gruvbox
 endif
 
 "-------------------------
