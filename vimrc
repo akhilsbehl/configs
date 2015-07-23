@@ -19,9 +19,6 @@ Plugin 'vim-scripts/AutoClose--Alves'
 " The awesome commenter.
 Plugin 'scrooloose/nerdcommenter'
 
-" The awesome dirtree.
-Plugin 'scrooloose/nerdtree'
-
 " The screen / tmux plugin.
 Plugin 'ervandew/screen'
 
@@ -43,19 +40,16 @@ Plugin 'sjl/gundo.vim'
 " Use multiple cursors a la Sublime Text.
 Plugin 'terryma/vim-multiple-cursors'
 
-" CtrlP fuzzy finder for vim.
-Plugin 'kien/ctrlp.vim'
+" Mofo plugin: Tabular.vim
+Plugin 'godlygeek/tabular'
 
-" Ag for even more searching.
-Plugin 'rking/ag.vim'
-
-" Mofo plugin: Tabluar.vim
-Plugin 'godlygeek/tabluar'
+" Unite by Shougo
+Plugin 'Shougo/unite.vim'
 
 "-------------------------
 
 " Language specific plugins
- 
+
 " Latex suite.
 Plugin 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 
@@ -83,9 +77,6 @@ Plugin 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
 "-------------------------
 
 " I'm fabulous
- 
-" Use the GUI colorscheme in terminal.
-Plugin 'vim-scripts/CSApprox'
 
 " Escape shell color codes in Vim.
 Plugin 'AnsiEsc.vim'
@@ -289,17 +280,19 @@ let g:gundo_right = 1
 "-------------------------
 
 " Multi-cursor configuration.
- 
-let g:multi_cursor_exit_from_visual_mode = 0
 
 let g:multi_cursor_exit_from_visual_mode = 0
+
+let g:multi_cursor_exit_from_insert_mode = 0
+
+let g_multi_cursor_insert_maps = {',': 1, '\': 1}
 
 "-------------------------
 
 " Turn on PEP8 style guidelines for python files.
 
 autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-autocmd FileType python map <buffer> <F8> :call Flake8()<CR>
+autocmd FileType python map <buffer> <LocalLeader>ff :call Flake8()<CR>
 
 "-------------------------
 
@@ -390,17 +383,6 @@ function ModeChange()
 endfunction
 
 au BufWritePost * call ModeChange()
-
-
-"-------------------------
-
-" Buffer navigation.
-
-" List buffers and let me choose one.
-map <leader><leader>b :ls<CR>:b<Space>
-
-" TODO: Use CtrlP buffer selection:
-" map <leader><leader>B ???
 
 "-------------------------
 
@@ -500,7 +482,7 @@ nnoremap <leader><leader>f gqipj
 nnoremap <leader><leader>y mz"+yip`z
 
 " Copy the whole buffer to the os clipboard.
- 
+
 nnoremap <leader><leader>Y mzgg"+yG`z
 
 "-------------------------
