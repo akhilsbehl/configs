@@ -308,10 +308,10 @@ fi
 source "$HOME/git/configs/fzf/shell/key-bindings.zsh"
 
 export FZF_CTRL_T_COMMAND="ag -l -g ''"
-export FZF_DEFAULT_OPTS='--extended --cycle --multi --no-mouse --prompt="?: "'
+export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
 export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
-export FZF_COMPLETION_OPTS='--extended --cycle --no-mouse --multi --no-mouse'
+export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no-mouse'
 
 function show () {
   local file
