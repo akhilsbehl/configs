@@ -43,8 +43,8 @@ Plugin 'terryma/vim-multiple-cursors'
 " Mofo plugin: Tabular.vim
 Plugin 'godlygeek/tabular'
 
-" Unite by Shougo
-Plugin 'Shougo/unite.vim'
+" FZF for fuzzy searching
+Plugin 'junegunn/fzf'
 
 "-------------------------
 

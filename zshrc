@@ -50,6 +50,7 @@ autoload -U promptinit
 promptinit
 prompt asb
 
+###################
 # Vi mode indicator
 ###################
 
@@ -77,33 +78,9 @@ function TRAPINT() {
 }
 RPROMPT='${vim_mode}'
 
-#############
-# Functions #
-#############
-
-function cdl () {
-  if [[ $# -eq 0 ]]
-  then
-    builtin cd "$HOME" && ls -shHF --group-directories-first --color=auto;
-  else
-    builtin cd "$1" && ls -shHF --group-directories-first --color=auto;
-  fi
-}
-
-function upsvn () {
-  (
-    cdl ~/svn
-    for d in *; do
-      svn update "$d"
-    done
-  )
-}
-
 ###################
 # Command Aliases #
 ###################
-
-alias up='cdl ..'
 
 alias ls='ls --color=auto'
 
@@ -114,8 +91,6 @@ alias lsg='ls -shHF --group-directories-first'
 alias lsm='ls -shHFltr'
 
 alias lsa='lsg -A'
-
-alias cd..='cd ..'
 
 alias tmux='tmux -2'
 
@@ -153,9 +128,7 @@ alias swap='setxkbmap -option caps:swapescape'
 
 alias unswap='setxkbmap -option'
 
-alias b='cdl -'
-
-alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
+alias b='cd -'
 
 alias logout='cinnamon-session-quit'
 
@@ -165,13 +138,9 @@ alias tpoff='synclient TouchpadOff=1'
 
 alias tpon='synclient TouchpadOff=0'
 
-alias tt='cdl "$HOME"/tmp'
-
-alias cc='cdl "$HOME"/git/configs'
-
 alias netlog='sudo journalctl -f -u NetworkManager'
 
-alias show='gvfs-open'
+alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
@@ -201,6 +170,9 @@ export TERM='xterm'
 export PATH="$HOME/scripts:$PATH"
 
 export SVN_EDITOR='vim'
+
+# Less is more!
+export READNULLCMD='less'
 
 if [ -n "$DISPLAY" ]
 then
@@ -298,6 +270,7 @@ source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlight
 #############################
 
 function ...() {
+  local n
   n=$1
   [[ -z "$n" ]] && n=1
   repeat $n ..
@@ -312,3 +285,80 @@ function ...() {
 alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
 
 alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
+
+#########
+#  FZF  #
+#########
+ 
+# Setup fzf
+if [[ ! "$PATH" =~ "$HOME/git/configs/fzf/bin" ]]; then
+  export PATH="$PATH:$HOME/git/configs/fzf/bin"
+fi
+
+# Man path
+if [[ ! "$MANPATH" =~ "$HOME/git/configs/fzf/man" && \
+    -d "$HOME/git/configs/fzf/man" ]]; then
+  export MANPATH="$MANPATH:$HOME/git/configs/fzf/man"
+fi
+
+# Auto-completion
+[[ $- =~ i ]] && source "$HOME/git/configs/fzf/shell/completion.zsh" 2> /dev/null
+
+# Key bindings
+source "$HOME/git/configs/fzf/shell/key-bindings.zsh"
+
+export FZF_CTRL_T_COMMAND="ag -l -g ''"
+export FZF_DEFAULT_OPTS='--extended --cycle --multi --no-mouse --prompt="?: "'
+export FZF_TMUX_HEIGHT='20%'
+export FZF_COMPLETION_TRIGGER=';;'
+export FZF_COMPLETION_OPTS='--extended --cycle --no-mouse --multi --no-mouse'
+
+function show () {
+  local file
+  file=$(find ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && gvfs-open "$file"
+}
+
+function vi () {
+  local out file key
+  out=$(find ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [[ -n "$file" ]]; then
+    [ "$key" = ctrl-g ] && gvim "$file" || vim "$file"
+  fi
+}
+
+function play () {
+  local file
+  file=$(find ~/audio ~/video -type f | \
+    fzf-tmux --query="$1" --select-1 --exit-0)
+  [ -n "$file" ] && mpl "$file"
+}
+
+function cdf() {
+  local file
+  local dir
+  file=$(find ~ -type f | fzf-tmux --query="$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+function fzf-locate-widget() {
+  local selected
+  if selected=$(locate / | fzf-tmux); then
+    LBUFFER="$LBUFFER$selected"
+  fi  
+  zle redisplay
+}
+zle -N fzf-locate-widget
+bindkey '\ei' fzf-locate-widget
+
+###############
+#  Bookmarks  #
+###############
+
+alias aa='cd "$HOME"/audio'
+alias vv='cd "$HOME"/video'
+alias tt='cd "$HOME"/tmp'
+alias cc='cd "$HOME"/git/configs'
+alias gg='cd "$HOME"/git'
+alias ww='cd "$HOME"/warchives'

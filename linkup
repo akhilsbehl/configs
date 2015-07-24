@@ -29,6 +29,12 @@ sudo rm -f '/usr/share/zsh/functions/Prompts/prompt_asb_setup'
 sudo ln -s $(readlink -m $PWD/prompt_asb_setup) \
   /usr/share/zsh/functions/Prompts/prompt_asb_setup
 
+# Assuming the submodule is populated
+fzf/uninstall
+fzf/install
+rm "$HOME"/.fzf.{ba,z}sh
+git checkout .
+
 if [[ "$1" == "--vundle" ]]; then
   rm -rf ~/.vim
   mkdir -p ~/.vim/bundle

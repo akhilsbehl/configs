@@ -177,3 +177,23 @@ alias fstab='sudo $EDITOR /etc/fstab &'
 # For tmux command completion in bash.
 [[ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]] && \
   source /usr/share/doc/tmux/examples/bash_completion_tmux.sh
+
+#########
+#  FZF  #
+#########
+
+# Setup fzf
+if [[ ! "$PATH" =~ "$HOME/git/configs/fzf/bin" ]]; then
+  export PATH="$PATH:$HOME/git/configs/fzf/bin"
+fi
+
+# Man path
+if [[ ! "$MANPATH" =~ "$HOME/git/configs/fzf/man" && -d "$HOME/git/configs/fzf/man" ]]; then
+  export MANPATH="$MANPATH:$HOME/git/configs/fzf/man"
+fi
+
+# Auto-completion
+[[ $- =~ i ]] && source "$HOME/git/configs/fzf/shell/completion.bash" 2> /dev/null
+
+# Key bindings
+source "$HOME/git/configs/fzf/shell/key-bindings.bash"

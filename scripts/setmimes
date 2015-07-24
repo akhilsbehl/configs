@@ -31,27 +31,27 @@ gvfs-mime --set text/x-python gvim.desktop
 gvfs-mime --set text/x-sh gvim.desktop
 gvfs-mime --set text/x-tex gvim.desktop
 
-gvfs-mime --set video/x-msvideo vlc.desktop
-gvfs-mime --set video/quicktime vlc.desktop
-gvfs-mime --set video/mpeg vlc.desktop
-gvfs-mime --set video/3gpp vlc.desktop
-gvfs-mime --set video/mp4 vlc.desktop
-gvfs-mime --set video/webm vlc.desktop
-gvfs-mime --set video/x-flv vlc.desktop
-gvfs-mime --set video/x-ms-wm vlc.desktop
-gvfs-mime --set video/x-ms-wmv vlc.desktop
-gvfs-mime --set video/x-matroska vlc.desktop
-gvfs-mime --set video/x-sgi-movie vlc.desktop
+gvfs-mime --set video/x-msvideo mplayer.desktop
+gvfs-mime --set video/quicktime mplayer.desktop
+gvfs-mime --set video/mpeg mplayer.desktop
+gvfs-mime --set video/3gpp mplayer.desktop
+gvfs-mime --set video/mp4 mplayer.desktop
+gvfs-mime --set video/webm mplayer.desktop
+gvfs-mime --set video/x-flv mplayer.desktop
+gvfs-mime --set video/x-ms-wm mplayer.desktop
+gvfs-mime --set video/x-ms-wmv mplayer.desktop
+gvfs-mime --set video/x-matroska mplayer.desktop
+gvfs-mime --set video/x-sgi-movie mplayer.desktop
 
-gvfs-mime --set audio/amr vlc.desktop
-gvfs-mime --set audio/midi vlc.desktop
-gvfs-mime --set audio/mpeg vlc.desktop
-gvfs-mime --set audio/ogg vlc.desktop
-gvfs-mime --set audio/x-ms-wma vlc.desktop
-gvfs-mime --set audio/x-ms-wax vlc.desktop
-gvfs-mime --set audio/x-pn-realaudio vlc.desktop
-gvfs-mime --set audio/x-realaudio vlc.desktop
-gvfs-mime --set audio/x-wav vlc.desktop
+gvfs-mime --set audio/amr mplayer.desktop
+gvfs-mime --set audio/midi mplayer.desktop
+gvfs-mime --set audio/mpeg mplayer.desktop
+gvfs-mime --set audio/ogg mplayer.desktop
+gvfs-mime --set audio/x-ms-wma mplayer.desktop
+gvfs-mime --set audio/x-ms-wax mplayer.desktop
+gvfs-mime --set audio/x-pn-realaudio mplayer.desktop
+gvfs-mime --set audio/x-realaudio mplayer.desktop
+gvfs-mime --set audio/x-wav mplayer.desktop
 
 gvfs-mime --set image/gif eog.desktop
 gvfs-mime --set image/jpeg eog.desktop
