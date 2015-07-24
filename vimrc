@@ -545,5 +545,58 @@ map "sp :r!xclip -o -sel clip
 "-------------------------
 
 " Show powerline
-"
+
 let $PYTHONPATH='/usr/lib/python3.4/site-packages/'
+
+"-------------------------
+
+" FZF configuration
+
+if has("gui_running")
+  let g:fzf_launcher='roxterm -e zsh -ic %s'
+endif
+
+let g:fzf_action = {
+      \ 'ctrl-e': 'e',
+      \ 'ctrl-t': 'tabedit',
+      \ 'ctrl-v': 'topleft split',
+      \ 'ctrl-b': 'botright split',
+      \ 'ctrl-n': 'vertical topleft split',
+      \ 'ctrl-m': 'vertical botright split'}
+
+" Search in FZF
+nnoremap <silent> <LocalLeader>fz :FZF .<CR>
+nnoremap <silent> <LocalLeader>fh :FZF ~<CR>
+
+" Open files in horizontal split
+nnoremap <silent> <LocalLeader>es :call fzf#run({
+      \ 'down': '40%',
+      \ 'sink': 'botright split' })<CR>
+
+" Open files in vertical horizontal split
+nnoremap <silent> <LocalLeader>ev :call fzf#run({
+      \ 'right': winwidth('.') / 2,
+      \ 'sink':  'vertical botright split' })<CR>
+
+nnoremap <silent> <LocalLeader>ru :call fzf#run({
+      \ 'source': v:oldfiles,
+      \ 'sink' : 'e ',
+      \ 'options' : '-m',
+      \ })<CR>
+
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+nnoremap <silent> <LocalLeader><LocalLeader>b :call fzf#run({
+      \ 'source':  reverse(<sid>buflist()),
+      \ 'sink':    function('<sid>bufopen'),
+      \ 'options': '+m',
+      \ 'down':    len(<sid>buflist()) + 2 })<CR>
