@@ -213,7 +213,7 @@ alias -g w='| wc -l'
 
 alias -g n='>! /dev/null'
 
-alias -g B='&>! /dev/null &'
+alias -g N='&>! /dev/null &'
 
 alias -g hd='| head'
 
