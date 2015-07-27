@@ -33,10 +33,10 @@ if [[ -f /usr/bin/packer ]]; then
   if [[ -f /usr/bin/powerline ]]; then
     echo 'Powerline found.'
   else
-    echo 'No powerline but also no packer. Install manually.'
+    packer -S python-powerline-git
   fi
 else
-  packer -S python-powerline-git
+  echo 'No powerline but also no packer. Install manually.'
 fi
 
 # Assuming the submodule is populated
