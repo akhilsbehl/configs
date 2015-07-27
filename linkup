@@ -29,6 +29,16 @@ sudo rm -f '/usr/share/zsh/functions/Prompts/prompt_asb_setup'
 sudo ln -s $(readlink -m $PWD/prompt_asb_setup) \
   /usr/share/zsh/functions/Prompts/prompt_asb_setup
 
+if [[ -f /usr/bin/packer ]]; then
+  if [[ -f /usr/bin/powerline ]]; then
+    echo 'Powerline found.'
+  else
+    echo 'No powerline but also no packer. Install manually.'
+  fi
+else
+  packer -S python-powerline-git
+fi
+
 # Assuming the submodule is populated
 fzf/uninstall
 fzf/install
