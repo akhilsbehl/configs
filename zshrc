@@ -248,8 +248,10 @@ setopt pushdminus
 #  Python virtualenvwrapper  #
 ##############################
 
-export WORKON_HOME=~/.virtualenvs
-source /usr/bin/virtualenvwrapper_lazy.sh
+if [[ -f /usr/bin/virtualenvwrapper_lazy.sh ]]; then
+  export WORKON_HOME=~/.virtualenvs
+  source /usr/bin/virtualenvwrapper_lazy.sh
+fi
 
 #############
 #  Modules  #
