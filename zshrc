@@ -46,37 +46,41 @@ bindkey -v '^?' backward-delete-char
 #  Prompting goodness  #
 ########################
 
-autoload -U promptinit
-promptinit
-prompt asb
-
-###################
 # Vi mode indicator
 ###################
 
-autoload -U colors && colors
+PLPRMT='/usr/lib/python3.4/site-packages/powerline/bindings/zsh/powerline.zsh'
 
-vim_ins_mode="%B%{$fg[red]%}<<< INS%{$reset_color%}"
-vim_cmd_mode="%B%{$fg[blue]%}<<< CMD%{$reset_color%}"
-vim_mode=$vim_cmd_mode
+if [[ -f $PLPRMT ]]; then
+  source $PLPRMT
+else
+  autoload -U promptinit
+  promptinit
+  autoload -U colors && colors
 
-function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-  zle reset-prompt
-}
-zle -N zle-keymap-select
-
-function zle-line-finish {
+  vim_ins_mode="%B%{$fg[red]%}<<< INS%{$reset_color%}"
+  vim_cmd_mode="%B%{$fg[blue]%}<<< CMD%{$reset_color%}"
   vim_mode=$vim_cmd_mode
-}
-zle -N zle-line-finish
 
-function TRAPINT() {
-  vim_mode=$vim_ins_mode
-  zle && zle reset-prompt
-  return $(( 128 + $1 ))
-}
-RPROMPT='${vim_mode}'
+  function zle-keymap-select {
+    vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+    zle reset-prompt
+  }
+  zle -N zle-keymap-select
+
+  function zle-line-finish {
+    vim_mode=$vim_cmd_mode
+  }
+  zle -N zle-line-finish
+
+  function TRAPINT() {
+    vim_mode=$vim_ins_mode
+    zle && zle reset-prompt
+    return $(( 128 + $1 ))
+  }
+  prompt asb
+  RPROMPT='${vim_mode}'
+fi
 
 ###################
 # Command Aliases #
@@ -197,6 +201,8 @@ alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
 
+alias show='gvfs-open'
+
 ####################
 #  Global aliases  #
 ####################
@@ -313,7 +319,7 @@ export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
 export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no-mouse'
 
-function show () {
+function fshow () {
   local file
   file=$(find ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && gvfs-open "$file"
