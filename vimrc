@@ -564,19 +564,20 @@ let g:fzf_action = {
       \ 'ctrl-n': 'vertical topleft split',
       \ 'ctrl-m': 'vertical botright split'}
 
+function FuzzyFind()
+  " Contains a null-byte that is stripped.
+  let gitparent=system('git rev-parse --show-toplevel')[:-2]
+  if empty(matchstr(gitparent, '^fatal:.*'))
+    silent execute ':FZF ' . gitparent
+  else
+    silent execute ':FZF .'
+  endif
+endfunction
+
 " Search in FZF
-nnoremap <silent> <LocalLeader>fz :FZF .<CR>
+nnoremap <silent> <LocalLeader>fz :call FuzzyFind()<CR>
+
 nnoremap <silent> <LocalLeader>fh :FZF ~<CR>
-
-" Open files in horizontal split
-nnoremap <silent> <LocalLeader>es :call fzf#run({
-      \ 'down': '40%',
-      \ 'sink': 'botright split' })<CR>
-
-" Open files in vertical horizontal split
-nnoremap <silent> <LocalLeader>ev :call fzf#run({
-      \ 'right': winwidth('.') / 2,
-      \ 'sink':  'vertical botright split' })<CR>
 
 nnoremap <silent> <LocalLeader>ru :call fzf#run({
       \ 'source': v:oldfiles,
