@@ -42,6 +42,9 @@ bindkey '^o' push-input
 # vi-backward-delete-char is just really weird
 bindkey -v '^?' backward-delete-char
 
+# do not hang my terminal
+stty -ixon
+
 ########################
 #  Prompting goodness  #
 ########################
@@ -144,7 +147,7 @@ alias tpon='synclient TouchpadOff=0'
 
 alias netlog='sudo journalctl -f -u NetworkManager'
 
-alias record-desktop='ffmpeg -f x11grab -s wxga -r 25 -i :0.0 -sameq /tmp/out.mpg'
+alias record-desktop='ffmpeg -f x11grab -video_size 1920x1080 -framerate 45 -i :0.0 /tmp/out.mpg'
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 

@@ -182,6 +182,67 @@ let maplocalleader=","
 
 "-------------------------
 
+" Show powerline
+
+let $PYTHONPATH='/usr/lib/python3.4/site-packages/'
+
+"-------------------------
+
+" FZF configuration
+
+if has("gui_running")
+  let g:fzf_launcher='roxterm -e zsh -ic %s'
+endif
+
+let g:fzf_action = {
+      \ 'ctrl-e': 'e',
+      \ 'ctrl-t': 'tabedit',
+      \ 'ctrl-v': 'vertical botright split',
+      \ 'ctrl-s': 'botright split',
+      \ 'ctrl-m': 'vertical topleft split',
+      \ 'ctrl-q': 'topleft split'}
+
+function FuzzyFind()
+  " Contains a null-byte that is stripped.
+  let gitparent=system('git rev-parse --show-toplevel')[:-2]
+  if empty(matchstr(gitparent, '^fatal:.*'))
+    silent execute ':cd! ' . gitparent
+    silent execute ':FZF! ' . gitparent
+  else
+    silent execute ':FZF! .'
+  endif
+endfunction
+
+" Search in FZF
+nnoremap <silent> <LocalLeader>fz :call FuzzyFind()<CR>
+
+nnoremap <silent> <LocalLeader>fh :FZF! ~<CR>
+
+nnoremap <silent> <LocalLeader>ru :call fzf#run({
+      \ 'source': v:oldfiles,
+      \ 'sink' : 'e ',
+      \ 'options' : '-m',
+      \ })<CR>
+
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+nnoremap <silent> <LocalLeader><LocalLeader>b :call fzf#run({
+      \ 'source':  reverse(<sid>buflist()),
+      \ 'sink':    function('<sid>bufopen'),
+      \ 'options': '+m',
+      \ 'down':    len(<sid>buflist()) + 2 })<CR>
+
+"-------------------------
+
 " These options are for the vim-R-plugin
 
 let vimrplugin_assign = 0
@@ -271,7 +332,7 @@ let g:SuperTabDefaultCompletionType = 'context'
 
 " Gundo's config.
 
-nnoremap gu :GundoToggle<CR>
+nnoremap <LocalLeader>gu :GundoToggle<CR>
 
 let g:gundo_preview_bottom = 1
 
@@ -363,7 +424,7 @@ function GetDir()
 endfunction
 autocmd FileType python map <LocalLeader>d :call GetDir()<CR>
 
-" Get `dir` help for word under cursor.
+" Get len of the word under cursor.
 function GetLen()
   let w = "len(" . expand("<cword>") . ")"
   :call g:ScreenShellSend(w)
@@ -540,64 +601,3 @@ autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
 
 vmap "sy :!xclip -f -sel clip
 map "sp :r!xclip -o -sel clip
-
-
-"-------------------------
-
-" Show powerline
-
-let $PYTHONPATH='/usr/lib/python3.4/site-packages/'
-
-"-------------------------
-
-" FZF configuration
-
-if has("gui_running")
-  let g:fzf_launcher='roxterm -e zsh -ic %s'
-endif
-
-let g:fzf_action = {
-      \ 'ctrl-e': 'e',
-      \ 'ctrl-t': 'tabedit',
-      \ 'ctrl-v': 'topleft split',
-      \ 'ctrl-b': 'botright split',
-      \ 'ctrl-n': 'vertical topleft split',
-      \ 'ctrl-m': 'vertical botright split'}
-
-function FuzzyFind()
-  " Contains a null-byte that is stripped.
-  let gitparent=system('git rev-parse --show-toplevel')[:-2]
-  if empty(matchstr(gitparent, '^fatal:.*'))
-    silent execute ':FZF ' . gitparent
-  else
-    silent execute ':FZF .'
-  endif
-endfunction
-
-" Search in FZF
-nnoremap <silent> <LocalLeader>fz :call FuzzyFind()<CR>
-
-nnoremap <silent> <LocalLeader>fh :FZF ~<CR>
-
-nnoremap <silent> <LocalLeader>ru :call fzf#run({
-      \ 'source': v:oldfiles,
-      \ 'sink' : 'e ',
-      \ 'options' : '-m',
-      \ })<CR>
-
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-nnoremap <silent> <LocalLeader><LocalLeader>b :call fzf#run({
-      \ 'source':  reverse(<sid>buflist()),
-      \ 'sink':    function('<sid>bufopen'),
-      \ 'options': '+m',
-      \ 'down':    len(<sid>buflist()) + 2 })<CR>

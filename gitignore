@@ -3,3 +3,9 @@
 .Rbuildignore
 .svn
 *.pyc
+*.project
+*.pydevproject
+*~
+*.swp
+__pycache__
+\#*\#
