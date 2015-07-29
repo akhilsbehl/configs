@@ -206,17 +206,16 @@ function FuzzyFind()
   " Contains a null-byte that is stripped.
   let gitparent=system('git rev-parse --show-toplevel')[:-2]
   if empty(matchstr(gitparent, '^fatal:.*'))
-    silent execute ':cd! ' . gitparent
-    silent execute ':FZF! ' . gitparent
+    silent execute ':FZF ' . gitparent
   else
-    silent execute ':FZF! .'
+    silent execute ':FZF .'
   endif
 endfunction
 
 " Search in FZF
 nnoremap <silent> <LocalLeader>fz :call FuzzyFind()<CR>
 
-nnoremap <silent> <LocalLeader>fh :FZF! ~<CR>
+nnoremap <silent> <LocalLeader>fh :FZF ~<CR>
 
 nnoremap <silent> <LocalLeader>ru :call fzf#run({
       \ 'source': v:oldfiles,
