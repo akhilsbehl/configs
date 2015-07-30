@@ -363,6 +363,11 @@ function fzf-locate-widget() {
 zle -N fzf-locate-widget
 bindkey '\ei' fzf-locate-widget
 
+function install () {
+  pkgs=$(pacman -Slq | fzf-tmux --query="$1")
+  [ -n "$pkgs" ] && sudo pacman -S "$pkgs"
+}
+
 ###############
 #  Bookmarks  #
 ###############

@@ -242,6 +242,14 @@ nnoremap <silent> <LocalLeader><LocalLeader>b :call fzf#run({
 
 "-------------------------
 
+" Options for nerdcommenter to use spaces with the commenting char.
+
+let NERDSpaceDelims=1
+
+let NERDRemoveExtraSpaces=1 
+
+"-------------------------
+
 " These options are for the vim-R-plugin
 
 let vimrplugin_assign = 0
