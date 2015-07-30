@@ -368,6 +368,11 @@ function install () {
   [ -n "$pkgs" ] && sudo pacman -S "$pkgs"
 }
 
+function uninstall () {
+  pkgs=$(pacman -Qq | fzf-tmux --query="$1")
+  [ -n "$pkgs" ] && sudo pacman -Rns "$pkgs"
+}
+
 ###############
 #  Bookmarks  #
 ###############
