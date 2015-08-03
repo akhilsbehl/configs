@@ -23,6 +23,6 @@ match_plain_files=1
 new_tabs_adjacent=0
 scrollback_lines=100000
 maximise=1
-cursor_shape=2
+cursor_shape=0
 background_type=0
 saturation=0.000000
