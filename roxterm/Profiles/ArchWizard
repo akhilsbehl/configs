@@ -25,4 +25,4 @@ scrollback_lines=100000
 maximise=1
 cursor_shape=0
 background_type=0
-saturation=0.000000
+saturation=1.000000
