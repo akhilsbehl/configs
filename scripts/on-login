@@ -2,7 +2,7 @@
 
 artha &
 
-devilspie &> /dev/null &
+$HOME/scripts/randomize-wallpaper
 
 sleep 1s && zenity --info \
   --title 'Fortune cookie for the cookie monster!' \
