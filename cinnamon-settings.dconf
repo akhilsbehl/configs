@@ -152,7 +152,7 @@ min-window-opacity=0
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpaper.png'
+picture-uri='file:///home/asb/git/configs/wallpapers/grey-pixel-mesh.png'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
