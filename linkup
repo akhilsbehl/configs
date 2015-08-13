@@ -18,6 +18,8 @@ update gitconfig
 update R
 update Rprofile
 update sbcl_completions
+update emacs
+update emacs.d
 
 rm -rf "$HOME/scripts"
 ln -s "$PWD/scripts" "$HOME/scripts"
