@@ -206,6 +206,14 @@ alias fstab='sudo $EDITOR /etc/fstab &'
 
 alias show='gvfs-open'
 
+alias e='emacsclient -nc'
+
+alias se='emacs --daemon'
+
+alias ke='emacsclient --eval "(kill-emacs)"'
+
+alias re='emacsclient --eval "(kill-emacs)" && emacs --daemon'
+
 ####################
 #  Global aliases  #
 ####################

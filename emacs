@@ -34,17 +34,25 @@
                 evil-nerd-commenter
                 evil-exchange
                 ))
-(el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)  ; Loads theme too
+;; This will also load the theme if standalone. For loading the theme when running as a client, see the appearance section.
+(el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
 (require-package 'main-line)
 
 ;;;; Evil and related packages
-;;; Config based on the Evil wiki
-;; Do not let some of the modes over-ride evil
-(custom-set-variables
- '(evil-overriding-maps nil)
- '(evil-intercept-maps nil))
 
-;; Let everything open up in Evil motion (normal?) mode.
+;;; Do not let some of the modes over-ride evil
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("ca8350a6affc43fc36f84a5271e6d5278857185753cd91a899d1f88be062f77b" default)))
+ '(evil-intercept-maps nil)
+ '(evil-overriding-maps nil))
+
+;;; Let everything open up in Evil motion (normal?) mode.
 (setq evil-motion-state-modes (append evil-emacs-state-modes
 				      evil-motion-state-modes))
 (setq evil-emacs-state-modes nil)
@@ -77,7 +85,6 @@
   "ct" 'evilnc-comment-or-uncomment-lines
   "ci" 'evilnc-toggle-invert-comment-line-by-line
   ",c" 'evilnc-comment-operator)
-;; TODO: Find a way to remove redundant mappings and change the operator mapping for this plugin.
 
 (require 'evil-exchange)
 (evil-exchange-install)
@@ -91,11 +98,22 @@
 ;;; No splash
 (setq inhibit-startup-message t)
 
-;;; Monaco 12 pt.
-(set-face-attribute
-  'default nil
-  :font "Monaco 11")
-
 ;;; Main-line mode bar
 (require 'main-line)
 (setq main-line-separator-style 'curve)
+
+;;; Gruvbox and Monaco font.
+;; http://stackoverflow.com/questions/18904529/after-emacs-deamon-i-can-not-see-new-theme-in-emacsclient-frame-it-works-fr
+(if (daemonp)
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (select-frame frame)
+              (set-face-attribute 'default nil :font "Monaco 11")
+              (load-theme 'gruvbox t))))
+
+(setq evil-normal-state-cursor '("orange" box))
+(setq evil-visual-state-cursor '("grey" box))
+(setq evil-operator-state-cursor '("orange" hollow))
+(setq evil-insert-state-cursor '("orange" bar))
+(setq evil-emacs-state-cursor '("red" box))
+(setq evil-replace-state-cursor '("red" underline))
