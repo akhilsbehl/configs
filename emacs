@@ -27,13 +27,14 @@
 
 ;;; Sync all packages at startup
 (el-get 'sync '(
-                evil
-                evil-surround
-                evil-numbers
-                evil-leader
-                evil-nerd-commenter
-                evil-exchange
-                ))
+		evil
+		evil-surround
+		evil-numbers
+		evil-leader
+		evil-nerd-commenter
+		evil-exchange
+		elscreen
+		))
 ;; This will also load the theme if standalone. For loading the theme when running as a client, see the appearance section.
 (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
 (require-package 'main-line)
@@ -117,3 +118,28 @@
 (setq evil-insert-state-cursor '("orange" bar))
 (setq evil-emacs-state-cursor '("red" box))
 (setq evil-replace-state-cursor '("red" underline))
+
+;;;; Use vim-like tabs
+(load "elscreen" "ElScreen" t)
+(elscreen-start)
+(define-key evil-normal-state-map "gt" 'elscreen-create)
+(define-key evil-normal-state-map "gw" 'elscreen-kill)
+(define-key evil-normal-state-map "gj" 'elscreen-previous)
+(define-key evil-normal-state-map "gk" 'elscreen-next)
+    
+
+;;;; The backups and auto-saves
+(setq backup-directory-alist
+      `((".*" . "~/.emacs-auto-backups")))
+(setq auto-save-file-name-transforms
+      `((".*" . "~/.emacs-auto-saves" t)))
+
+(setq kept-old-versions   1  ; Keep one old copy.
+      kept-new-versions   1  ; Keep one new copy.
+      auto-save-default   t  ; Save every buffer that visits a file.
+      auto-save-timeout  25  ; Number of idle seconds to save at.
+      auto-save-interval 50  ; Number of keystrokes to save at.
+      )
+
+;;;; Version control settings
+(setq vc-follow-symlinks t)

@@ -206,14 +206,6 @@ alias fstab='sudo $EDITOR /etc/fstab &'
 
 alias show='gvfs-open'
 
-alias e='emacsclient -n'
-
-alias se='emacs --daemon'
-
-alias ke='emacsclient --eval "(kill-emacs)"'
-
-alias re='emacsclient --eval "(kill-emacs)" && emacs --daemon'
-
 ####################
 #  Global aliases  #
 ####################
@@ -391,3 +383,22 @@ alias tt='cd "$HOME"/tmp'
 alias cc='cd "$HOME"/git/configs'
 alias gg='cd "$HOME"/git'
 alias ww='cd "$HOME"/warchives'
+
+#####################
+#  Emacs utilities  #
+#####################
+
+alias se='emacs --daemon'
+
+alias ke='emacsclient --eval "(kill-emacs)"'
+
+alias re='emacsclient --eval "(kill-emacs)" && emacs --daemon'
+
+function e () {
+  local tmp=$(emacsclient -n -e "(if (> (length (frame-list)) 1) 't)")
+  if [[ "$tmp" == "nil" ]]; then
+    emacsclient -nc "$@"
+  else
+    emacsclient -n "$@"
+  fi
+}
