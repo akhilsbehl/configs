@@ -206,7 +206,7 @@ alias fstab='sudo $EDITOR /etc/fstab &'
 
 alias show='gvfs-open'
 
-alias e='emacsclient -nc'
+alias e='emacsclient -n'
 
 alias se='emacs --daemon'
 
