@@ -34,6 +34,8 @@
 		evil-nerd-commenter
 		evil-exchange
 		elscreen
+		smooth-scrolling
+        autopair
 		))
 ;; This will also load the theme if standalone. For loading the theme when running as a client, see the appearance section.
 (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
@@ -43,13 +45,6 @@
 
 ;;; Do not let some of the modes over-ride evil
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("ca8350a6affc43fc36f84a5271e6d5278857185753cd91a899d1f88be062f77b" default)))
  '(evil-intercept-maps nil)
  '(evil-overriding-maps nil))
 
@@ -99,9 +94,19 @@
 ;;; No splash
 (setq inhibit-startup-message t)
 
+;;; No tool bar, scroll, or menubar
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
+;;; Vim like smooth scrolling
+(setq scroll-margin 5
+      scroll-conservatively 9999
+      scroll-step 1)
+
 ;;; Main-line mode bar
 (require 'main-line)
-(setq main-line-separator-style 'curve)
+(setq main-line-separator-style 'wave)
 
 ;;; Gruvbox and Monaco font.
 ;; http://stackoverflow.com/questions/18904529/after-emacs-deamon-i-can-not-see-new-theme-in-emacsclient-frame-it-works-fr
@@ -112,6 +117,9 @@
               (set-face-attribute 'default nil :font "Monaco 11")
               (load-theme 'gruvbox t))))
 
+(global-linum-mode 1)
+(setq-default tab-width 4 indent-tabs-mode nil)
+
 (setq evil-normal-state-cursor '("orange" box))
 (setq evil-visual-state-cursor '("grey" box))
 (setq evil-operator-state-cursor '("orange" hollow))
@@ -119,20 +127,45 @@
 (setq evil-emacs-state-cursor '("red" box))
 (setq evil-replace-state-cursor '("red" underline))
 
+(define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+(define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
+;;; Make escape quit in the minibuffer too
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit. In Delete Selection mode, if the mark is
+   active, just deactivate it; then it takes a second \\[keyboard-quit]
+   to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(global-set-key [escape] 'evil-exit-emacs-state)
+
 ;;;; Use vim-like tabs
 (load "elscreen" "ElScreen" t)
 (elscreen-start)
-(define-key evil-normal-state-map "gt" 'elscreen-create)
-(define-key evil-normal-state-map "gw" 'elscreen-kill)
+(define-key evil-normal-state-map "gc" 'elscreen-create)
+(define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
 (define-key evil-normal-state-map "gk" 'elscreen-next)
     
+;;;; Version control settings
+(setq vc-follow-symlinks t)
 
 ;;;; The backups and auto-saves
 (setq backup-directory-alist
       `((".*" . "~/.emacs-auto-backups")))
 (setq auto-save-file-name-transforms
-      `((".*" . "~/.emacs-auto-saves" t)))
+      `((".*" "~/.emacs-auto-saves" t)))
 
 (setq kept-old-versions   1  ; Keep one old copy.
       kept-new-versions   1  ; Keep one new copy.
@@ -141,5 +174,32 @@
       auto-save-interval 50  ; Number of keystrokes to save at.
       )
 
-;;;; Version control settings
-(setq vc-follow-symlinks t)
+;;; Miscellaneous
+
+;; Paren matching and autoclosing.
+(show-paren-mode t)
+(require 'autopair)
+(add-hook 'prog-mode-hook 'autopair-mode)
+
+;;;; TODO: Packages & Functionality to explore
+; 1. Yasnippet
+; 2. Helm
+; 3. Org-mode
+; 4. Auto-completion?
+; 5. Linting especially Flake8
+; 6. Markdown and latex with previews (maybe through org-mode itself)
+; 7. Email
+; 8. Documentation seek for arbit languages
+; 9. Multiple-cursors
+; 10. Autocompletion
+; 11. Alignment
+; 12. Buffer management shortcuts
+; 13. Read undo-tree
+; 14. IPython interaction
+; 15. ESS
+; 16. Mark file executable if starts with a shebang
+; 17. Comment boxes
+; 18. Map ex commands to keybindings
+; 19. Sudo on the fly
+; 20. Copy to system clipboard
+; 21. Magit
