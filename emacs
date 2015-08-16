@@ -110,7 +110,8 @@
 (evil-leader/set-key
   "uv" 'undo-tree-visualize
   "ud" 'undo-tree-visualizer-toggle-diff
-  "ua" 'undo-tree-visualizer-abort)
+  "ua" 'undo-tree-visualizer-abort
+  "uq" 'undo-tree-visualizer-quit)
 
 ;;; Do this last
 (evil-mode 1)
@@ -121,6 +122,9 @@
 
 ;;; No splash
 (setq inhibit-startup-message t)
+
+;;; Keep scratch empty
+(setq initial-scratch-message nil)
 
 ;;; No tool bar, scroll, or menubar
 (tool-bar-mode -1)
@@ -175,7 +179,7 @@
 (define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
 (define-key evil-normal-state-map "gk" 'elscreen-next)
-(define-key evil-normal-state-map "gb" 'list-buffers) ; Here by association.
+(define-key evil-normal-state-map "gb" 'ibuffer-list-buffers) ; By association.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -235,12 +239,29 @@
     (interactive)
     (evil-ex "%s/\s\+$//e<CR>:let @/=''<CR>")))
 
-;;; TODO: Reformat the paragraph.
-;; nnoremap <leader><leader>f gqipj
-;;; TODO: Copy a paragraph to the os clipboard.
-;; nnoremap <leader><leader>y mz"+yip`z
-;;; TODO: Copy the whole buffer to the os clipboard.
-;; nnoremap <leader><leader>Y mzgg"+yG`z
+;;; Reformat a paragraph.
+(evil-leader/set-key "rf"
+  (lambda ()
+    (interactive)
+    (mark-paragraph)
+    (fill-paragraph)))
+
+;;; Copy a paragraph to system clipboard.
+(evil-leader/set-key "y"
+  (lambda ()
+    (interactive)
+    (let* ((p (point)))
+      (mark-paragraph)
+      (clipboard-kill-ring-save (region-beginning) (region-end))
+      (goto-char p)
+      (message "Paragraph copied."))))
+
+;;; Copy the whole buffer to system clipboard.
+(evil-leader/set-key "Y"
+  (lambda ()
+    (interactive)
+    (clipboard-kill-ring-save (point-min) (point-max))
+    (message "Buffer copied.")))
 
 ;;; Move by visual lines and not by actual lines
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
@@ -248,6 +269,9 @@
 
 ;;; Use hide-show minor mode for code folding in all programming languages
 (add-hook 'prog-mode-hook 'hs-minor-mode)
+
+;;; Use y/n for asking instead of yes/no
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;;; Make escape quit in the minibuffer too
 (defun minibuffer-keyboard-quit ()
@@ -299,7 +323,7 @@
 ;; http://www.idryman.org/blog/2013/05/20/emacs-and-pdf/
 ;; Also works with numeric prefix to scroll multiple pages at once
 
-;; NB: Make sure that you are using only two splits so that other-window 1 does
+;; NB: Make sure to be using only two splits so that other-window 1 does
 ;; not get confused.
 
 ;; TODO: Find how to do this using a macro
@@ -358,10 +382,13 @@
 ;;;  1. Helm
 ;;;  2. Org-mode
 ;;;  3. Magit
+;;;  4. Projejctile (with helm)
 ;;;  4. ESS & R-autoyas
-;;;  5. Linting especially Flake8
+;;;  5. Flycheck (especially with Flake8)
 ;;;  6. Markdown and latex with previews
 ;;;  8. Multiple-cursors
 ;;;  9. IPython interaction
 ;;; 10. Comment boxes
 ;;; 11. Read TRAMP documentation and configure
+;;; 12. Read dired documentation and configure (What about dired-plus?)
+;;; 13. What is all the ido, derivatives, & fl(e)x / smex business?
