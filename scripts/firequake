@@ -3,7 +3,7 @@
 ISOPEN=$(wmctrl -l | grep Firefox$)
 if [[ -z $ISOPEN ]]; then
   firefox &&
-    wmctrl -r 'Firefox' -b add,maximixed_vert,maximized_horz &&
+    wmctrl -r 'Firefox' -b add,maximized_vert,maximized_horz &&
     wmctrl -a 'Firefox'
 fi
 

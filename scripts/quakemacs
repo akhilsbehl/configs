@@ -3,7 +3,7 @@
 ISOPEN=$(wmctrl -l | grep emacs@)
 if [[ -z $ISOPEN ]]; then
   emacsclient -nc &&
-    wmctrl -r 'emacs@' -b add,maximixed_vert,maximized_horz &&
+    wmctrl -r 'emacs@' -b add,maximized_vert,maximized_horz &&
     wmctrl -a 'emacs@'
 fi
 
