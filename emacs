@@ -50,6 +50,7 @@
                 company-mode
                 yasnippet
                 fill-column-indicator
+                flycheck
                 ))
 
 ;;; Use this section for el-get packages that need to be bundled.
@@ -187,14 +188,12 @@
 (setq backup-directory-alist
       `((".*" . "~/.emacs-auto-backups")))
 
-(setq auto-save-file-name-transforms
-      `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs-auto-saves/\\2" t)))
+;;; This shit is stupid. I have tried all sorts of things to put it in one dir
+;;; and it just keeps irking me. So fuck this.
+(setq auto-save-default nil)
 
-(setq kept-old-versions   1  ; Keep one old copy.
-      kept-new-versions   1  ; Keep one new copy.
-      auto-save-default   t  ; Save every buffer that visits a file.
-      auto-save-timeout  25  ; Number of idle seconds to save at.
-      auto-save-interval 50  ; Number of keystrokes to save at.
+(setq kept-old-versions   5  ; Keep one old copy.
+      kept-new-versions   5  ; Keep one new copy.
       )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -378,17 +377,22 @@
 (evil-leader/set-key "pG" 'dvscroll-last-page)
 (evil-leader/set-key "pn" 'dvscroll-goto-page)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Linting with Flycheck
+(add-hook 'prog-mode-hook #'flycheck-mode)
+(evil-leader/set-key "fl" 'flycheck-list-errors)
+
 ;;;; TODO: Packages & Functionality to explore
 ;;;  1. Helm
 ;;;  2. Org-mode
 ;;;  3. Magit
 ;;;  4. Projejctile (with helm)
-;;;  4. ESS & R-autoyas
-;;;  5. Flycheck (especially with Flake8)
+;;;  5. ESS & R-autoyas
 ;;;  6. Markdown and latex with previews
-;;;  8. Multiple-cursors
-;;;  9. IPython interaction
-;;; 10. Comment boxes
-;;; 11. Read TRAMP documentation and configure
-;;; 12. Read dired documentation and configure (What about dired-plus?)
-;;; 13. What is all the ido, derivatives, & fl(e)x / smex business?
+;;;  7. Multiple-cursors
+;;;  8. IPython interaction
+;;;  9. Comment boxes
+;;; 10. Read TRAMP documentation and configure
+;;; 11. Read dired documentation and configure (What about dired-plus?)
+;;; 12. What is all the ido, derivatives, & fl(e)x / smex business?
