@@ -51,6 +51,9 @@
                 yasnippet
                 fill-column-indicator
                 flycheck
+                helm
+                magit
+                org-mode
                 ))
 
 ;;; Use this section for el-get packages that need to be bundled.
@@ -99,20 +102,18 @@
 (evil-leader/set-leader ",")
 
 ;;; Nerd commenter. Make sure to use after evil-leader
-(evil-leader/set-key
-  "ct" 'evilnc-comment-or-uncomment-lines
-  "ci" 'evilnc-toggle-invert-comment-line-by-line
-  ",c" 'evilnc-comment-operator)
+(evil-leader/set-key "ct" 'evilnc-comment-or-uncomment-lines)
+(evil-leader/set-key "ci" 'evilnc-toggle-invert-comment-line-by-line)
+(evil-leader/set-key ",c" 'evilnc-comment-operator)
 
 ;;; Swap selections / text-objects
 (evil-exchange-install)
 
 ;;; Some niceties to work with undo-tree
-(evil-leader/set-key
-  "uv" 'undo-tree-visualize
-  "ud" 'undo-tree-visualizer-toggle-diff
-  "ua" 'undo-tree-visualizer-abort
-  "uq" 'undo-tree-visualizer-quit)
+(evil-leader/set-key "uv" 'undo-tree-visualize)
+(evil-leader/set-key "ud" 'undo-tree-visualizer-toggle-diff)
+(evil-leader/set-key "ua" 'undo-tree-visualizer-abort)
+(evil-leader/set-key "uq" 'undo-tree-visualizer-quit)
 
 ;;; Do this last
 (evil-mode 1)
@@ -180,7 +181,6 @@
 (define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
 (define-key evil-normal-state-map "gk" 'elscreen-next)
-(define-key evil-normal-state-map "gb" 'ibuffer-list-buffers) ; By association.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -227,26 +227,29 @@
 (evil-leader/set-key "o" #'open-between-empty-lines)
 
 ;;; Delete all blank lines (or containing only whitespace)
-(evil-leader/set-key "db"
+(evil-leader/set-key "db" ; Delete all blank lines
   (lambda ()
     (interactive)
     (evil-ex "g:^\s*$:d<CR>")))
 
 ;;; Delete all trailing whitespace.
-(evil-leader/set-key "dw"
+(evil-leader/set-key "dw" ; Delete all trailing whitespace
   (lambda ()
     (interactive)
     (evil-ex "%s/\s\+$//e<CR>:let @/=''<CR>")))
 
+(evil-leader/set-key "df" 'delete-frame)
+(evil-leader/set-key "kb" 'kill-buffer)
+
 ;;; Reformat a paragraph.
-(evil-leader/set-key "rf"
+(evil-leader/set-key "rf" ; Reformat a paragraph
   (lambda ()
     (interactive)
     (mark-paragraph)
     (fill-paragraph)))
 
 ;;; Copy a paragraph to system clipboard.
-(evil-leader/set-key "y"
+(evil-leader/set-key "y" ; Copy a paragraph to system clipboard
   (lambda ()
     (interactive)
     (let* ((p (point)))
@@ -256,7 +259,7 @@
       (message "Paragraph copied."))))
 
 ;;; Copy the whole buffer to system clipboard.
-(evil-leader/set-key "Y"
+(evil-leader/set-key "Y" ; Copy the whole buffer to system clipboard
   (lambda ()
     (interactive)
     (clipboard-kill-ring-save (point-min) (point-max))
@@ -383,16 +386,59 @@
 (add-hook 'prog-mode-hook #'flycheck-mode)
 (evil-leader/set-key "fl" 'flycheck-list-errors)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Helm
+(require 'helm-config)
+(helm-mode 1)
+
+(evil-leader/set-key ",h" 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-s") 'helm-select-action)
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-move-to-line-cycle-in-source t
+      helm-ff-file-name-history-use-recentf t)
+
+(evil-leader/set-key "hx" 'helm-M-x)
+(setq helm-M-x-fuzzy-match t)
+
+(evil-leader/set-key "hm" 'helm-mini)
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match t)
+
+(evil-leader/set-key "hf" 'helm-find-files)
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Magit
+(evil-leader/set-key "gs" 'magit-status)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Org-mode
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; ESS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;; TODO: Packages & Functionality to explore
-;;;  1. Helm
-;;;  2. Org-mode
-;;;  3. Magit
-;;;  4. Projejctile (with helm)
-;;;  5. ESS & R-autoyas
-;;;  6. Markdown and latex with previews
-;;;  7. Multiple-cursors
-;;;  8. IPython interaction
-;;;  9. Comment boxes
-;;; 10. Read TRAMP documentation and configure
-;;; 11. Read dired documentation and configure (What about dired-plus?)
-;;; 12. What is all the ido, derivatives, & fl(e)x / smex business?
+
+;;;  1. Helm (Too much configuration and too much reading)
+;;;  2. Org-mode (Too much too much!)
+;;;  3. Magit (Too much reading to do)
+;;;  4. ESS & R-autoyas
+;;;  5. Markdown and latex with previews
+;;;  6. Multiple-cursors
+;;;  7. IPython interaction
+;;;  8. Comment boxes
+;;;  9. Read TRAMP documentation and configure
+;;; 10. Read dired documentation and configure
