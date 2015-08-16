@@ -8,8 +8,8 @@
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
-       (concatenate "https://raw.githubusercontent.com/"
-                    "dimitri/el-get/master/el-get-install.el"))
+       (concat "https://raw.githubusercontent.com/"
+               "dimitri/el-get/master/el-get-install.el"))
     (goto-char (point-max))
     (eval-print-last-sexp)))
 
@@ -26,11 +26,11 @@
                           "http://melpa-stable.milkbox.net/packages/")))
 (package-initialize)
 
-(defun require-package (package)
-  (unless (package-installed-p package)
-    (unless (assoc package package-archive-contents)
+(defun require-package (pkg)
+  (unless (package-installed-p pkg)
+    (unless (assoc pkg package-archive-contents)
       (package-refresh-contents))
-    (package-install package)))
+    (package-install pkg)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -85,30 +85,25 @@
 (transfer-key evil-motion-state-map evil-normal-state-map " ")
 
 ;;; Surround
-(require 'evil-surround)
 (global-evil-surround-mode 1)
 
 ;;; Incrementing and decrementing
-(require 'evil-numbers)
 (define-key evil-normal-state-map (kbd "+") 'evil-numbers/inc-at-pt)
 (define-key evil-normal-state-map (kbd "-") 'evil-numbers/dec-at-pt)
 
 ;;; Get me a leader key
-(require 'evil-leader)
 (global-evil-leader-mode)
 ;; This should always be a comma because a) that is what I have always used, and
 ;; b) I've hard-coded commas in other commands on that assumption.
 (evil-leader/set-leader ",")
 
 ;;; Nerd commenter. Make sure to use after evil-leader
-(require 'evil-nerd-commenter)
 (evil-leader/set-key
   "ct" 'evilnc-comment-or-uncomment-lines
   "ci" 'evilnc-toggle-invert-comment-line-by-line
   ",c" 'evilnc-comment-operator)
 
 ;;; Swap selections / text-objects
-(require 'evil-exchange)
 (evil-exchange-install)
 
 ;;; Some niceties to work with undo-tree
@@ -118,7 +113,6 @@
   "ua" 'undo-tree-visualizer-abort)
 
 ;;; Do this last
-(require 'evil)
 (evil-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -204,7 +198,6 @@
 ;;;; Paren matching and autoclosing.
 
 (show-paren-mode t)
-(require 'autopair)
 (add-hook 'prog-mode-hook 'autopair-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -290,7 +283,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Snippets
-(require 'yasnippet)
+(require 'yasnippet) ; Not sure why this guy needs to be required explicitly. 
 (yas-reload-all)
 (add-hook 'prog-mode-hook #'yas-minor-mode)
 (define-key yas-minor-mode-map [(tab)] nil)
