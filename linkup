@@ -5,6 +5,11 @@ update () {
   ln -s "$PWD/$1" "$HOME/.$1"
 }
 
+mk-dir-if-not-found () {
+  [[ ! -d "$1" ]] &&
+    mkdir -p "$1"
+}
+
 update xinitrc
 update bashrc
 update zshrc
@@ -46,23 +51,31 @@ fzf/install
 rm "$HOME"/.fzf.{ba,z}sh
 git checkout .
 
+mk-dir-if-not-found "$HOME"/.emacs-auto-backups 
+mk-dir-if-not-found "$HOME"/.emacs-auto-saves
+
+mk-dir-if-not-found "$HOME"/.fonts
+cp "$PWD"/Monaco_Linux.ttf "$HOME"/.fonts
+
+mk-dir-if-not-found "$HOME"/.icons/default
+cp "$PWD"/index.theme "$HOME"/.icons/default/index.theme
+
 if [[ "$1" == "--vundle" ]]; then
-  rm -rf ~/.vim
-  mkdir -p ~/.vim/bundle
-  git clone 'https://github.com/VundleVim/Vundle.vim' ~/.vim/bundle/Vundle.vim
+  rm -rf "$HOME"/.vim
+  mkdir -p "$HOME"/.vim/bundle
+  git clone 'https://github.com/VundleVim/Vundle.vim' "$HOME"/.vim/bundle/Vundle.vim
   vim +PluginInstall +qall
-  ln -s "$(readlink -m "$PWD"/mysnippets)" ~/.vim
+  ln -s "$(readlink -m "$PWD"/mysnippets)" "$HOME"/.vim
   rm -r \
-    ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*
+    "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*
   ln -s "$PWD"/latex-templates/article.tex \
-    ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
+    "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
   ln -s "$PWD"/latex-templates/beamer.tex \
-    ~/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
+    "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 fi
 
-[[ ! -d ~/.fonts ]] && mkdir -p ~/.fonts
-[[ ! -f ~/.fonts/Monaco_Linux.ttf ]] && cp "$PWD"/Monaco_Linux.ttf ~/.fonts
-[[ ! -d ~/.icons/default/ ]] && mkdir -p ~/.icons/default && \
-  cp "$PWD"/index.theme ~/.icons/default/index.theme
+if [[ "$1" == "nukemacs" || "$2" == "nukemacs" ]]; then
+  rm -rf "$HOME"/.emacs.d
+fi
 
 exit 0

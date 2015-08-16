@@ -8,7 +8,8 @@
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+       (concatenate "https://raw.githubusercontent.com/"
+                    "dimitri/el-get/master/el-get-install.el"))
     (goto-char (point-max))
     (eval-print-last-sexp)))
 
@@ -180,6 +181,7 @@
 (define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
 (define-key evil-normal-state-map "gk" 'elscreen-next)
+(define-key evil-normal-state-map "gb" 'list-buffers) ; Here by association.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -188,7 +190,7 @@
       `((".*" . "~/.emacs-auto-backups")))
 
 (setq auto-save-file-name-transforms
-      `((".*" "~/.emacs-auto-saves" t)))
+      `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs-auto-saves/\\2" t)))
 
 (setq kept-old-versions   1  ; Keep one old copy.
       kept-new-versions   1  ; Keep one new copy.
@@ -298,18 +300,75 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;; PDF and other documents (ps, dvi, doc and shit)
+
+;;; These keys allow you to scroll the pdf without leaving current buffer
+;; http://www.idryman.org/blog/2013/05/20/emacs-and-pdf/
+;; Also works with numeric prefix to scroll multiple pages at once
+
+;; NB: Make sure that you are using only two splits so that other-window 1 does
+;; not get confused.
+
+;; TODO: Find how to do this using a macro
+
+(defun dvscroll-forward ()
+  (interactive)
+  (other-window 1)
+  (image-next-line 1)
+  (other-window 1))
+
+(defun dvscroll-backward ()
+  (interactive)
+  (other-window 1)
+  (image-previous-line 1)
+  (other-window 1))
+
+(defun dvscroll-previous-page ()
+  (interactive)
+  (other-window 1)
+  (doc-view-previous-page)
+  (other-window 1))
+
+(defun dvscroll-next-page ()
+  (interactive)
+  (other-window 1)
+  (doc-view-next-page)
+  (other-window 1))
+
+(defun dvscroll-first-page ()
+  (interactive)
+  (other-window 1)
+  (doc-view-first-page)
+  (other-window 1))
+
+(defun dvscroll-last-page ()
+  (interactive)
+  (other-window 1)
+  (doc-view-last-page)
+  (other-window 1))
+
+(defun dvscroll-goto-page (page)
+  (interactive "nPage: ")
+  (other-window 1)
+  (doc-view-goto-page page)
+  (other-window 1))
+
+(evil-leader/set-key "ph" 'dvscroll-forward)
+(evil-leader/set-key "pj" 'dvscroll-next-page)
+(evil-leader/set-key "pk" 'dvscroll-previous-page)
+(evil-leader/set-key "pl" 'dvscroll-backward)
+(evil-leader/set-key "pg" 'dvscroll-first-page)
+(evil-leader/set-key "pG" 'dvscroll-last-page)
+(evil-leader/set-key "pn" 'dvscroll-goto-page)
+
 ;;;; TODO: Packages & Functionality to explore
 ;;;  1. Helm
 ;;;  2. Org-mode
-;;;  3. Linting especially Flake8
-;;;  4. Markdown and latex with previews
-;;;  5. Email
-;;;  7. Multiple-cursors
-;;;  8. Buffer management shortcuts
+;;;  3. Magit
+;;;  4. ESS & R-autoyas
+;;;  5. Linting especially Flake8
+;;;  6. Markdown and latex with previews
+;;;  8. Multiple-cursors
 ;;;  9. IPython interaction
-;;; 10. ESS & R-autoyas
-;;; 11. Comment boxes
-;;; 14. Magit
-;;; 15. PDFs
-;;; 16. Web browsing
-;;; 17. Tramp for editing over SSH
+;;; 10. Comment boxes
+;;; 11. Read TRAMP documentation and configure
