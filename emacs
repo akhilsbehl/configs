@@ -304,14 +304,11 @@
 ;;;  3. Linting especially Flake8
 ;;;  4. Markdown and latex with previews
 ;;;  5. Email
-;;;  6. Documentation seek for arbitrary languages
 ;;;  7. Multiple-cursors
 ;;;  8. Buffer management shortcuts
 ;;;  9. IPython interaction
 ;;; 10. ESS & R-autoyas
 ;;; 11. Comment boxes
-;;; 12. Map ex commands to keybindings
-;;; 13. Sudo on the fly
 ;;; 14. Magit
 ;;; 15. PDFs
 ;;; 16. Web browsing

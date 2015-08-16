@@ -1,23 +1,23 @@
 [org/cinnamon]
 active-display-scale=1
 number-workspaces=4
+workspace-name-overrides=@as []
 alttab-switcher-delay=0
-command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'r']
+command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'r', 'emacsclient']
 overview-corner=['expo:false:false', 'scale:false:false', 'expo:true:false', 'scale:true:false']
 desktop-effects-on-dialogs=true
 enable-vfade=true
-desktop-layout='flipped'
+enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
 next-applet-id=17
 enabled-desklets=@as []
 alttab-switcher-style='coverflow'
-enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
 panel-launchers=['DEPRECATED']
 enabled-extensions=['cinnamon-maximus@fmete']
 prevent-focus-stealing=true
 workspace-expo-view-as-grid=true
 panel-edit-mode=false
+panels-enabled=['1:0:top']
 window-list-applet-alert=false
-workspace-name-overrides=@as []
 
 [org/cinnamon/settings-daemon/plugins/power]
 lock-on-suspend=true
@@ -33,8 +33,10 @@ screensaver='<Super>l'
 shutdown='<Super>Delete'
 
 [org/cinnamon/settings-daemon/plugins/xsettings]
+antialiasing='rgba'
 buttons-have-icons=false
 menus-have-icons=false
+hinting='none'
 
 [org/cinnamon/settings-daemon/peripherals/touchpad]
 natural-scroll=false
@@ -43,7 +45,7 @@ horiz-scroll-enabled=true
 touchpad-enabled=true
 
 [org/cinnamon/settings-daemon/peripherals/keyboard]
-numlock-state='off'
+numlock-state='on'
 
 [org/cinnamon/settings-daemon/peripherals/mouse]
 motion-threshold=4
@@ -69,7 +71,9 @@ ask-for-away-message=false
 default-message="Pandora's rule: Never open a box you did not close."
 
 [org/cinnamon/desktop/interface]
+text-scaling-factor=1.0
 cursor-size=13
+first-day-of-week=7
 clock-use-24h=false
 font-name='Ubuntu 9'
 cursor-theme='Vanilla-DMZ'
@@ -88,9 +92,14 @@ binding=['<Alt>Return']
 command='/home/asb/scripts/quake'
 name='Quake'
 
+[org/cinnamon/desktop/keybindings/custom-keybindings/custom3]
+binding=['<Primary><Alt>Return']
+command='/home/asb/scripts/quakemacs'
+name='Quakemacs'
+
 [org/cinnamon/desktop/keybindings]
 looking-glass-keybinding=@as []
-custom-list=['custom0', 'custom1', 'custom2']
+custom-list=['custom0', 'custom1', 'custom3']
 
 [org/cinnamon/desktop/keybindings/media-keys]
 terminal=['<Super>t']
@@ -149,6 +158,7 @@ action-scroll-titlebar='opacity'
 auto-raise=true
 focus-mode='click'
 min-window-opacity=0
+workspace-names=@as []
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
@@ -156,9 +166,6 @@ picture-uri='file:///home/asb/git/configs/wallpapers/grey-pixel-mesh.png'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
-
-[org/cinnamon/sounds]
-login-enabled=false
 
 [org/cinnamon/muffin]
 workspace-cycle=false
@@ -193,6 +200,9 @@ switch-windows=['<Alt>Tab']
 maximize-horizontally=['<Super>h']
 cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
 switch-to-workspace-up=['<Super>e']
+
+[org/cinnamon/sounds]
+login-enabled=false
 
 [org/cinnamon/theme]
 name='Faience+'
@@ -293,11 +303,11 @@ trash-icon-visible=false
 window-ratio=(1.612697303435717, 1.251945028447897)
 
 [org/gnome/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpaper.png'
+picture-uri='file:///home/asb/git/configs/wallpapers/grey-pixel-mesh.png'
 
 [org/gnome/desktop/interface]
-document-font-name='Ubuntu 11'
-monospace-font-name='Ubuntu Mono 11'
+document-font-name='Monaco 11'
+monospace-font-name='Monaco 11'
 
 [org/gnome/libgnomekbd/preview]
 width=1464
@@ -314,7 +324,7 @@ use-background-color=true
 
 [org/nemo/window-state]
 start-with-sidebar=true
-geometry='800x550+215+313'
+geometry='800x550+784+177'
 maximized=false
 sidebar-bookmark-breakpoint=4
 

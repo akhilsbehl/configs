@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ISOPEN=$(wmctrl -l | grep emacs@)
+if [[ -z $ISOPEN ]]; then
+  emacsclient -nc &&
+    wmctrl -r 'emacs@' -b add,maximixed_vert,maximized_horz &&
+    wmctrl -a 'emacs@'
+fi
+
+ISFOCUSED=$(xdotool getwindowname $(xdotool getwindowfocus) | awk '{print $NF}')
+if [[ $ISFOCUSED != "emacs" ]]; then
+  wmctrl -r 'emacs@' -b remove,below
+  wmctrl -R 'emacs@'
+else
+  wmctrl -r 'emacs@' -b add,below
+fi
+
+exit 0
