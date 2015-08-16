@@ -62,15 +62,13 @@ cp "$PWD"/index.theme "$HOME"/.icons/default/index.theme
 if [[ "$1" == "--vundle" ]]; then
   rm -rf "$HOME"/.vim
   mkdir -p "$HOME"/.vim/bundle
-  git clone 'https://github.com/VundleVim/Vundle.vim' "$HOME"/.vim/bundle/Vundle.vim
+  git clone 'https://github.com/VundleVim/Vundle.vim' \
+      "$HOME"/.vim/bundle/Vundle.vim
   vim +PluginInstall +qall
   ln -s "$(readlink -m "$PWD"/mysnippets)" "$HOME"/.vim
-  rm -r \
-    "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*
-  ln -s "$PWD"/latex-templates/article.tex \
-    "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
-  ln -s "$PWD"/latex-templates/beamer.tex \
-    "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
+  rm -r "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*
+  ln -s "$PWD"/latex-templates/article.tex "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
+  ln -s "$PWD"/latex-templates/beamer.tex "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 fi
 
 if [[ "$1" == "nukemacs" || "$2" == "nukemacs" ]]; then
