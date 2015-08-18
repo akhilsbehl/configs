@@ -46,14 +46,14 @@
                 evil-exchange
                 elscreen
                 smooth-scrolling
-                autopair
-                company-mode
                 yasnippet
                 fill-column-indicator
                 flycheck
                 helm
                 magit
                 org-mode
+                auto-complete
+                jedi ; jedi:install-server manually!
                 ))
 
 ;;; Use this section for el-get packages that need to be bundled.
@@ -81,8 +81,8 @@
 
 ;;; http://www.emacswiki.org/emacs/Evil
 (defun transfer-key (from-keymap to-keymap key)
-  "Moves key binding from one keymap to another, deleting from the
-      old location."
+  "Moves key binding from one keymap to another, deleting from the old
+   location."
   (define-key to-keymap key (lookup-key from-keymap key))
   (define-key from-keymap key nil))
 (transfer-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
@@ -143,7 +143,8 @@
 (setq main-line-separator-style 'wave)
 
 ;;; Gruvbox and Monaco font.
-;; http://stackoverflow.com/questions/18904529/after-emacs-deamon-i-can-not-see-new-theme-in-emacsclient-frame-it-works-fr
+;; http://stackoverflow.com/questions/18904529/
+;; after-emacs-deamon-i-can-not-see-new-theme-in-emacsclient-frame-it-works-fr
 (if (daemonp)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
@@ -169,8 +170,11 @@
 (add-hook 'prog-mode-hook
           (lambda ()
             (turn-on-auto-fill)
-            (fci-mode)
+            ;; (fci-mode)
             (set-fill-column 80)))
+
+;;; Always show matching parens
+(show-paren-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -195,13 +199,6 @@
 (setq kept-old-versions   5  ; Keep one old copy.
       kept-new-versions   5  ; Keep one new copy.
       )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;; Paren matching and autoclosing.
-
-(show-paren-mode t)
-(add-hook 'prog-mode-hook 'autopair-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -240,12 +237,12 @@
 
 (evil-leader/set-key "df" 'delete-frame)
 (evil-leader/set-key "kb" 'kill-buffer)
+(evil-leader/set-key "kw" 'kill-buffer-and-window)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
   (lambda ()
     (interactive)
-    (mark-paragraph)
     (fill-paragraph)))
 
 ;;; Copy a paragraph to system clipboard.
@@ -286,6 +283,8 @@
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
 
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
@@ -295,16 +294,28 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; Completion framework: Company
-
-(add-hook 'after-init-hook 'global-company-mode)
-(setq company-idle-delay nil) ; Do not complete unless I ask.
-(setq company-selection-wrap-around t)
-(define-key evil-insert-state-map (kbd "TAB") 'company-complete)
-(eval-after-load 'company
-  '(progn
-     (define-key company-active-map [tab] 'company-select-next)
-     (define-key company-active-map [backtab] 'company-select-previous)))
+;;;; Completion framework: Auto-complete
+(ac-config-default)
+(setq ac-use-quick-help t)
+(setq ac-quick-help-delay 0)
+(setq ac-set-trigger-key "TAB")
+(define-key ac-mode-map (kbd "TAB") 'auto-complete)
+(setq ac-auto-start 4)
+(setq ac-ignore-case 'smart)
+(setq ac-auto-show-menu 0)
+(setq ac-menu-height 20)
+(define-key ac-completing-map (kbd "C-j") 'ac-next)
+(define-key ac-completing-map (kbd "C-k") 'ac-previous)
+(define-key ac-completing-map (kbd "C-h") 'ac-help)
+(define-key ac-completing-map (kbd "C-H") 'ac-persist-help)
+(define-key ac-completing-map (kbd "C-n") 'ac-quick-help-scroll-up)
+(define-key ac-completing-map (kbd "C-p") 'ac-quick-help-scroll-down)
+(setq-default ac-sources '(ac-source-words-in-buffer
+                           ac-source-words-in-same-mode-buffers
+                           ac-source-filename
+                           ac-source-yasnippet
+                           ac-source-abbrev))
+(ac-linum-workaround)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -427,6 +438,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; ESS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Python set-up
+
+(add-hook 'python-mode-hook (lambda ()
+                              (jedi:setup)
+                              (setq jedi:complete-on-dot t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
