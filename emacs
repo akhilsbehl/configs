@@ -46,7 +46,6 @@
                 evil-exchange
                 elscreen
                 smooth-scrolling
-                yasnippet
                 flycheck
                 helm
                 magit
@@ -248,6 +247,15 @@
     (interactive)
     (fill-paragraph)))
 
+;;; Reformat a paragraph.
+(evil-leader/set-key "cb" ; Reformat a paragraph
+  (lambda ()
+    (interactive)
+    (let* ((p (point)))
+      (mark-paragraph)
+      (comment-box (region-beginning) (region-end))
+      (goto-char p))))
+
 ;;; Copy a paragraph to system clipboard.
 (evil-leader/set-key "y" ; Copy a paragraph to system clipboard
   (lambda ()
@@ -316,20 +324,8 @@
 (setq-default ac-sources '(ac-source-words-in-buffer
                            ac-source-words-in-same-mode-buffers
                            ac-source-filename
-                           ac-source-yasnippet
                            ac-source-abbrev))
 (ac-linum-workaround)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;; Snippets
-(require 'yasnippet) ; Not sure why this guy needs to be required explicitly. 
-(yas-reload-all)
-(add-hook 'prog-mode-hook #'yas-minor-mode)
-(define-key yas-minor-mode-map [(tab)] nil)
-(define-key yas-minor-mode-map (kbd "TAB") nil)
-(define-key yas-minor-mode-map (kbd "<tab>") nil)
-(define-key yas-minor-mode-map [backtab] 'yas-expand)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -454,13 +450,12 @@
 
 ;;;; TODO: Packages & Functionality to explore
 
-;;;  1. Helm (Too much configuration and too much reading)
-;;;  2. Org-mode (Too much too much!)
-;;;  3. Magit (Too much reading to do)
-;;;  4. ESS & R-autoyas
-;;;  5. Markdown and latex with previews
-;;;  6. Multiple-cursors
-;;;  7. IPython interaction
-;;;  8. Comment boxes
-;;;  9. Read TRAMP documentation and configure
-;;; 10. Read dired documentation and configure
+;;; 1. Helm (Too much configuration and too much reading)
+;;; 2. Org-mode (Too much too much!)
+;;; 3. Magit (Too much reading to do)
+;;; 4. ESS
+;;; 5. Markdown and latex with previews
+;;; 6. Multiple-cursors
+;;; 7. IPython interaction
+;;; 8. Read TRAMP documentation and configure
+;;; 9. Read dired documentation and configure
