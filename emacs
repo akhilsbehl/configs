@@ -47,7 +47,6 @@
                 elscreen
                 smooth-scrolling
                 yasnippet
-                fill-column-indicator
                 flycheck
                 helm
                 magit
@@ -166,12 +165,11 @@
 (setq evil-emacs-state-cursor '("red" box))
 (setq evil-replace-state-cursor '("red" underline))
 
-;;; Visually specify the right limit for programming and auto-break
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (turn-on-auto-fill)
-            ;; (fci-mode)
-            (set-fill-column 80)))
+;;; Visually indicate the right limit for programming modes
+(require 'whitespace)
+(setq whitespace-line-column 80)
+(setq whitespace-style '(face trailing lines-tail tab-mark))
+(add-hook 'prog-mode-hook 'whitespace-mode)
 
 ;;; Always show matching parens
 (show-paren-mode t)
