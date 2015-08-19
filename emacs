@@ -104,6 +104,7 @@
 (evil-leader/set-key "ct" 'evilnc-comment-or-uncomment-lines)
 (evil-leader/set-key "ci" 'evilnc-toggle-invert-comment-line-by-line)
 (evil-leader/set-key ",c" 'evilnc-comment-operator)
+(evil-leader/set-key "cb" #'comment-box) ; Here by association
 
 ;;; Swap selections / text-objects
 (evil-exchange-install)
@@ -247,15 +248,6 @@
     (interactive)
     (fill-paragraph)))
 
-;;; Reformat a paragraph.
-(evil-leader/set-key "cb" ; Reformat a paragraph
-  (lambda ()
-    (interactive)
-    (let* ((p (point)))
-      (mark-paragraph)
-      (comment-box (region-beginning) (region-end))
-      (goto-char p))))
-
 ;;; Copy a paragraph to system clipboard.
 (evil-leader/set-key "y" ; Copy a paragraph to system clipboard
   (lambda ()
@@ -337,8 +329,6 @@
 
 ;; NB: Make sure to be using only two splits so that other-window 1 does
 ;; not get confused.
-
-;; TODO: Find how to do this using a macro
 
 (defun dvscroll-forward ()
   (interactive)
