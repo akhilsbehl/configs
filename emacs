@@ -60,6 +60,7 @@
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
+(el-get-bundle krisajenkins/evil-tabs)
 
 ;;; Use this section for packages that need to be installed using `package`
 (require-package 'main-line)
@@ -176,13 +177,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; Use vim-like tabs
+;;;; Use vim-like tabs (also using krisajenkins' evil-tabs)
 (load "elscreen" "ElScreen" t)
-(elscreen-start)
+(add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
 (define-key evil-normal-state-map "gc" 'elscreen-create)
 (define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
 (define-key evil-normal-state-map "gk" 'elscreen-next)
+(evil-define-key 'normal evil-tabs-mode-map "gt"
+  'evil-tabs-current-buffer-to-tab)
+(evil-define-key 'normal evil-tabs-mode-map "gT"
+  'elscreen-find-and-goto-by-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
