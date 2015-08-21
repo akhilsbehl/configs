@@ -149,6 +149,8 @@ alias netlog='sudo journalctl -f -u NetworkManager'
 
 alias record-desktop='ffmpeg -f x11grab -video_size 1920x1080 -framerate 45 -i :0.0 /tmp/out.mpg'
 
+alias resolv='echo "8.8.4.4\n8.8.8.8" | sudo tee /etc/resolv.conf'
+
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
 if [[ "$OS" == "Ubuntu" ]];

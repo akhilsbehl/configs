@@ -13,8 +13,6 @@
     (goto-char (point-max))
     (eval-print-last-sexp)))
 
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; The standard package manager for other stuff
@@ -479,8 +477,7 @@
 ;;; 2. Org-mode (Too much too much!)
 ;;; 3. Magit (Too much reading to do)
 ;;; 4. ESS
-;;; 5. Latex with previews
-;;; 6. Multiple-cursors
-;;; 7. IPython interaction
-;;; 8. Read TRAMP documentation and configure
-;;; 9. Read dired documentation and configure
+;;; 5. Multiple cursors
+;;; 6. IPython interaction
+;;; 7. Read TRAMP documentation and configure
+;;; 8. Read dired documentation and configure
