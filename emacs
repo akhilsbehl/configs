@@ -52,6 +52,7 @@
                 org-mode
                 auto-complete
                 jedi ; jedi:install-server manually!
+                markdown-mode
                 ))
 
 ;;; Use this section for el-get packages that need to be bundled.
@@ -295,6 +296,13 @@
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 (global-set-key [escape] 'evil-exit-emacs-state)
 
+;;; Open ibuffer when I want it
+(evil-leader/set-key "b" 'ibuffer)
+
+;;; Browse in firefox
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "firefox")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Completion framework: Auto-complete
@@ -323,23 +331,26 @@
 
 ;;;; PDF and other documents (ps, dvi, doc and shit)
 
+;;; Automatically update my docs without confirmation when they change on disk
+(add-hook 'doc-view-mode 'auto-revert-mode)
+
 ;;; These keys allow you to scroll the pdf without leaving current buffer
 ;; http://www.idryman.org/blog/2013/05/20/emacs-and-pdf/
 ;; Also works with numeric prefix to scroll multiple pages at once
 
-;; NB: Make sure to be using only two splits so that other-window 1 does
+;; NB: Make sure to be using only two splits so that `(other-window 1)' does
 ;; not get confused.
 
 (defun dvscroll-forward ()
   (interactive)
   (other-window 1)
-  (image-next-line 1)
+  (image-next-line 3)
   (other-window 1))
 
 (defun dvscroll-backward ()
   (interactive)
   (other-window 1)
-  (image-previous-line 1)
+  (image-previous-line 3)
   (other-window 1))
 
 (defun dvscroll-previous-page ()
@@ -438,13 +449,37 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;; Markdown mode
+
+;;; http://jblevins.org/projects/markdown-mode/
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;;; Using Firefox auto-reload extension, this will automatically regenerate the
+;;; markdown to html and refresh it in the browser on each buffer write.
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (setq markdown-command "md2html")
+            ; Only work on the one markdown buffer
+            (add-hook 'after-save-hook 'markdown-export nil 'local)
+            ; Use this for opening the preview
+            (evil-leader/set-key-for-mode
+              'markdown-mode "p" 'markdown-export-and-preview)
+            ; Use this for manual refreshes
+            (evil-leader/set-key-for-mode
+              'markdown-mode "r" 'markdown-export)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;; TODO: Packages & Functionality to explore
 
 ;;; 1. Helm (Too much configuration and too much reading)
 ;;; 2. Org-mode (Too much too much!)
 ;;; 3. Magit (Too much reading to do)
 ;;; 4. ESS
-;;; 5. Markdown and latex with previews
+;;; 5. Latex with previews
 ;;; 6. Multiple-cursors
 ;;; 7. IPython interaction
 ;;; 8. Read TRAMP documentation and configure

@@ -8,20 +8,15 @@
 ###############################################################################
 
 
+###############################################################################
+# Usage: md2html mdfile [theme]                                               #
+# Valid values for the theme are 'github', 'solarlight', and 'solardark' with #
+# github being the default.                                                   #
+###############################################################################
+
+
 import gfm
 import sys
-
-
-helpString = \
-'''
-Usage: md2html mdfile [theme]
-Valid values for the theme are 'github', 'solarlight', and 'solardark' with
-github being the default.
-'''
-
-if len(sys.argv) < 2:
-    print(helpString)
-    sys.exit(0)
 
 
 try:
@@ -30,8 +25,7 @@ except IndexError:
     buf = sys.stdin
 
 
-cssGH = \
-'''
+cssGH = '''
 body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
@@ -311,8 +305,7 @@ pre {
     border: none; }
 '''
 
-cssSolLight = \
-'''
+cssSolLight = '''
 @import url(http://fonts.googleapis.com/css?family=Inconsolata);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700);
@@ -618,8 +611,7 @@ h6 {
 }
 '''
 
-cssSolDark = \
-'''
+cssSolDark = '''
 @import url(http://fonts.googleapis.com/css?family=Inconsolata);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans);
 @import url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700);
@@ -925,11 +917,12 @@ h6 {
 }
 '''
 
+
 # For multiline code blocks, use the pre tag.
 def code2Pre(line):
-    if ('<code>' in line) and (not '</code>' in line):
+    if ('<code>' in line) and ('</code>' not in line):
         return line.replace('<code>', '<pre>')
-    if ('</code>' in line) and (not '<code>' in line):
+    if ('</code>' in line) and ('<code>' not in line):
         return line.replace('</code>', '</pre>')
     return line
 
@@ -949,18 +942,6 @@ else:
     else:
         css = cssGH
 
-
-print(
-'''
-<html>
-<head>
-<style>
-{css}
-</style>
-</head>
-<body>
-{html}
-</body>
-</html>
-'''.format(css=css, html=html)
-)
+template = '''<html>\n<head>\n<style>\n{css}\n</style>\n</head>\n<body>\n''' + \
+           '''{html}\n</body>\n</html>\n'''
+print(template.format(css=css, html=html))
