@@ -301,6 +301,14 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
 
+;;; `:q` ends up quitting more than I intended. So rebind that.
+(add-hook 'evil-local-mode-hook
+          (lambda ()
+            (evil-ex-define-cmd "q" 'delete-window)))
+
+;;; `:t` to open in tab
+(evil-ex-define-cmd "t[abedit]" 'evil-tabs-tabedit)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Completion framework: Auto-complete
@@ -416,13 +424,7 @@
 (evil-leader/set-key "hx" 'helm-M-x)
 (setq helm-M-x-fuzzy-match t)
 
-(evil-leader/set-key "hm" 'helm-mini)
-(setq helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match t)
-
 (evil-leader/set-key "hf" 'helm-find-files)
-(setq helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -479,5 +481,4 @@
 ;;; 4. ESS
 ;;; 5. Multiple cursors
 ;;; 6. IPython interaction
-;;; 7. Read TRAMP documentation and configure
 ;;; 8. Read dired documentation and configure
