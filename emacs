@@ -466,7 +466,7 @@
             (add-hook 'after-save-hook 'markdown-export nil 'local)
             ; Use this for opening the preview
             (evil-leader/set-key-for-mode
-              'markdown-mode "p" 'markdown-export-and-preview)
+              'markdown-mode "pr" 'markdown-export-and-preview)
             ; Use this for manual refreshes
             (evil-leader/set-key-for-mode
               'markdown-mode "r" 'markdown-export)))
