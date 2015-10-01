@@ -1,30 +1,42 @@
 [org/cinnamon]
-active-display-scale=1
-number-workspaces=4
-workspace-name-overrides=@as []
-alttab-switcher-delay=0
-command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'r', 'emacsclient']
-overview-corner=['expo:false:false', 'scale:false:false', 'expo:true:false', 'scale:true:false']
 desktop-effects-on-dialogs=true
-enable-vfade=true
-enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
-next-applet-id=17
+active-display-scale=1
+command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'emacsclient', 'r']
+desktop-effects-style='cinnamon'
 enabled-desklets=@as []
-alttab-switcher-style='coverflow'
-panel-launchers=['DEPRECATED']
-enabled-extensions=['cinnamon-maximus@fmete']
-prevent-focus-stealing=true
-workspace-expo-view-as-grid=true
-panel-edit-mode=false
-panels-enabled=['1:0:top']
+workspace-name-overrides=@as []
 window-list-applet-alert=false
+alttab-switcher-style='coverflow'
+prevent-focus-stealing=true
+panels-height=['1:25']
+enable-vfade=true
+next-applet-id=17
+panel-launchers=['DEPRECATED']
+desklet-decorations=1
+panels-enabled=['1:0:top']
+overview-corner=['expo:false:false', 'scale:false:false', 'expo:true:false', 'scale:true:false']
+enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
+alttab-switcher-delay=0
+enabled-extensions=['cinnamon-maximus@fmete']
+panel-edit-mode=false
+workspace-expo-view-as-grid=true
+show-media-keys-osd='medium'
+number-workspaces=4
+panels-autohide=['1:false']
+
+[org/cinnamon/screensaver]
+ask-for-away-message=false
+default-message="Pandora's rule: Never open a box you did not close."
 
 [org/cinnamon/settings-daemon/plugins/power]
+button-power='suspend'
+sleep-inactive-battery-timeout=300
 lock-on-suspend=true
+lid-close-ac-action='suspend'
+lid-close-battery-action='suspend'
 sleep-display-battery=300
 sleep-display-ac=0
-lid-close-ac-action='suspend'
-sleep-inactive-battery-timeout=300
+sleep-inactive-ac-timeout=0
 
 [org/cinnamon/settings-daemon/plugins/media-keys]
 terminal='<Super>t'
@@ -42,6 +54,8 @@ hinting='none'
 natural-scroll=false
 scroll-method='two-finger-scrolling'
 horiz-scroll-enabled=true
+two-finger-click=3
+three-finger-click=2
 touchpad-enabled=true
 
 [org/cinnamon/settings-daemon/peripherals/keyboard]
@@ -66,9 +80,40 @@ name='Quake'
 [org/cinnamon/keybindings]
 custom-list=['custom0', 'custom1']
 
-[org/cinnamon/screensaver]
-ask-for-away-message=false
-default-message="Pandora's rule: Never open a box you did not close."
+[org/cinnamon/muffin]
+attach-modal-dialogs=true
+workspace-cycle=false
+overlay-key='Super_L'
+edge-tiling=true
+tile-maximize=true
+snap-modifier=''
+workspaces-only-on-primary=true
+placement-mode='center'
+button-layout='maximize:close'
+
+[org/cinnamon/muffin/keybindings]
+maximize=@as []
+toggle-recording=['<Shift><Super>r']
+toggle-maximized=['<Super>f']
+switch-windows-backward=['<Shift><Alt>ISO_Left_Tab']
+unmaximize=@as []
+close=['<Super>q']
+switch-to-workspace-left=['<Primary><Alt>j']
+panel-run-dialog=['<Super>r']
+begin-resize=['<Super>period']
+switch-to-workspace-down=['<Super>s']
+move-to-workspace-right=['<Primary><Alt>l']
+cycle-windows=['<Control><Alt>Tab']
+maximize-vertically=['<Super>v']
+switch-to-workspace-right=['<Primary><Alt>k']
+cycle-panels=['<Alt>Tab']
+move-to-center=['<Super>c']
+move-to-workspace-left=['<Primary><Alt>h']
+begin-move=['<Super>comma']
+switch-windows=['<Alt>Tab']
+maximize-horizontally=['<Super>h']
+cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
+switch-to-workspace-up=['<Super>e']
 
 [org/cinnamon/desktop/interface]
 text-scaling-factor=1.0
@@ -77,6 +122,7 @@ first-day-of-week=7
 clock-use-24h=false
 font-name='Ubuntu 9'
 cursor-theme='Vanilla-DMZ'
+scaling-factor=uint32 0
 clock-show-seconds=true
 icon-theme='Faience-Azur'
 gtk-theme='Adwaita'
@@ -125,11 +171,13 @@ switch-to-workspace-up=['<Super>e', '<Alt>F1']
 
 [org/cinnamon/desktop/media-handling]
 autorun-x-content-start-app=['x-content/audio-cdda', 'x-content/video-dvd']
+autorun-never=false
 autorun-x-content-ignore=@as []
 autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf', 'x-content/unix-software']
 
 [org/cinnamon/desktop/screensaver]
 use-custom-format=true
+screensaver-name=''
 ask-for-away-message=false
 date-format='%A, %e %b %Y'
 lock-delay=uint32 60
@@ -147,9 +195,11 @@ remove-old=true
 idle-delay=uint32 0
 
 [org/cinnamon/desktop/privacy]
+recent-files-max-age=-1
 remember-recent-files=false
 
 [org/cinnamon/desktop/wm/preferences]
+action-right-click-titlebar='menu'
 mouse-button-modifier=''
 action-middle-click-titlebar='toggle-shade'
 theme='Adwaita'
@@ -157,49 +207,16 @@ num-workspaces=4
 action-scroll-titlebar='opacity'
 auto-raise=true
 focus-mode='click'
+action-double-click-titlebar='toggle-maximize'
 min-window-opacity=0
 workspace-names=@as []
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpapers/grey-pixel-mesh.png'
+picture-uri='file:///home/asb/git/configs/wallpapers/f4gJ0cm.jpg'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
-
-[org/cinnamon/muffin]
-workspace-cycle=false
-attach-modal-dialogs=true
-overlay-key='Super_L'
-edge-tiling=true
-tile-maximize=true
-snap-modifier=''
-workspaces-only-on-primary=true
-button-layout='maximize:close'
-
-[org/cinnamon/muffin/keybindings]
-maximize=@as []
-toggle-recording=['<Shift><Super>r']
-toggle-maximized=['<Super>f']
-switch-windows-backward=['<Shift><Alt>ISO_Left_Tab']
-unmaximize=@as []
-close=['<Super>q']
-switch-to-workspace-left=['<Primary><Alt>j']
-panel-run-dialog=['<Super>r']
-begin-resize=['<Super>period']
-switch-to-workspace-down=['<Super>s']
-move-to-workspace-right=['<Primary><Alt>l']
-cycle-windows=['<Control><Alt>Tab']
-maximize-vertically=['<Super>v']
-switch-to-workspace-right=['<Primary><Alt>k']
-cycle-panels=['<Alt>Tab']
-move-to-center=['<Super>c']
-move-to-workspace-left=['<Primary><Alt>h']
-begin-move=['<Super>comma']
-switch-windows=['<Alt>Tab']
-maximize-horizontally=['<Super>h']
-cycle-group=['<Control><Shift><Alt>ISO_Left_Tab']
-switch-to-workspace-up=['<Super>e']
 
 [org/cinnamon/sounds]
 login-enabled=false
@@ -302,10 +319,23 @@ trash-icon-visible=false
 [org/gnome/evince/default]
 window-ratio=(1.612697303435717, 1.251945028447897)
 
+[org/gnome/file-roller/listing]
+sort-method='name'
+name-column-width=250
+sort-type='ascending'
+list-mode='as-folder'
+show-path=false
+
+[org/gnome/file-roller/ui]
+sidebar-width=200
+window-height=480
+window-width=600
+
 [org/gnome/desktop/background]
 picture-uri='file:///home/asb/git/configs/wallpapers/grey-pixel-mesh.png'
 
 [org/gnome/desktop/interface]
+scaling-factor=uint32 0
 document-font-name='Monaco 11'
 monospace-font-name='Monaco 11'
 
@@ -321,6 +351,17 @@ options=['caps\tcaps:escape']
 [org/gnome/eog/view]
 background-color='rgb(0,0,0)'
 use-background-color=true
+
+[org/gtk/settings/file-chooser]
+sort-column='name'
+sidebar-width=148
+window-position=(25, 204)
+show-size-column=true
+show-hidden=false
+window-size=(750, 562)
+sort-directories-first=false
+sort-order='ascending'
+location-mode='path-bar'
 
 [org/nemo/window-state]
 start-with-sidebar=true
