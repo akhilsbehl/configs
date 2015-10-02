@@ -1,7 +1,7 @@
 [org/cinnamon]
 desktop-effects-on-dialogs=true
 active-display-scale=1
-command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'emacsclient', 'r']
+command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'emacsclient', 'chromium -incognito', 'r']
 desktop-effects-style='cinnamon'
 enabled-desklets=@as []
 workspace-name-overrides=@as []
@@ -51,9 +51,10 @@ menus-have-icons=false
 hinting='none'
 
 [org/cinnamon/settings-daemon/peripherals/touchpad]
-natural-scroll=false
+natural-scroll=true
 scroll-method='two-finger-scrolling'
 horiz-scroll-enabled=true
+disable-while-typing=true
 two-finger-click=3
 three-finger-click=2
 touchpad-enabled=true
@@ -121,7 +122,7 @@ cursor-size=13
 first-day-of-week=7
 clock-use-24h=false
 font-name='Ubuntu 9'
-cursor-theme='Vanilla-DMZ'
+cursor-theme='Vanilla-DMZ-AA'
 scaling-factor=uint32 0
 clock-show-seconds=true
 icon-theme='Faience-Azur'
@@ -213,7 +214,7 @@ workspace-names=@as []
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpapers/f4gJ0cm.jpg'
+picture-uri='file:///home/asb/git/configs/wallpapers/kNNOIAt.jpg'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
@@ -352,6 +353,10 @@ options=['caps\tcaps:escape']
 background-color='rgb(0,0,0)'
 use-background-color=true
 
+[org/gnome/nm-applet/eap/a889da61-79d1-408a-a314-4c9d75f93213]
+ignore-phase2-ca-cert=false
+ignore-ca-cert=false
+
 [org/gtk/settings/file-chooser]
 sort-column='name'
 sidebar-width=148
@@ -365,7 +370,7 @@ location-mode='path-bar'
 
 [org/nemo/window-state]
 start-with-sidebar=true
-geometry='800x550+784+177'
+geometry='800x550+564+177'
 maximized=false
 sidebar-bookmark-breakpoint=4
 
