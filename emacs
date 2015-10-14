@@ -301,11 +301,6 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
 
-;;; `:q` ends up quitting more than I intended. So rebind that.
-(add-hook 'evil-local-mode-hook
-          (lambda ()
-            (evil-ex-define-cmd "q" 'delete-window)))
-
 ;;; `:t` to open in tab
 (evil-ex-define-cmd "t[abedit]" 'evil-tabs-tabedit)
 
