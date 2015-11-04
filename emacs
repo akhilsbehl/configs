@@ -148,7 +148,7 @@
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (select-frame frame)
-                (set-face-attribute 'default nil :font "Monaco 8")
+                (set-face-attribute 'default nil :font "Monaco 10")
                 (load-theme 'gruvbox t))))
 
 ;;; Show line numbers

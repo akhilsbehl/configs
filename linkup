@@ -34,6 +34,7 @@ ln -s "$PWD/roxterm" "$HOME/.config/roxterm.sourceforge.net"
 sudo rm -f '/usr/share/zsh/functions/Prompts/prompt_asb_setup'
 sudo ln -s $(readlink -m $PWD/prompt_asb_setup) \
   /usr/share/zsh/functions/Prompts/prompt_asb_setup
+mk-dir-if-not-found "$HOME"/.cache/zsh
 
 if [[ -f /usr/bin/packer ]]; then
   if [[ -f /usr/bin/powerline ]]; then
