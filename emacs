@@ -35,23 +35,23 @@
 ;;;; Sync all packages at startup
 
 ;;; Use this section for standard edition el-get packages
-(el-get 'sync '(
-                evil
-                evil-surround
-                evil-numbers
-                evil-leader
-                evil-nerd-commenter
-                evil-exchange
-                elscreen
-                smooth-scrolling
-                flycheck
-                helm
-                magit
-                org-mode
-                auto-complete
-                jedi ; jedi:install-server manually!
-                markdown-mode
-                ))
+(el-get
+ 'sync
+ '(evil
+   evil-surround
+   evil-numbers
+   evil-leader
+   evil-nerd-commenter
+   evil-exchange
+   elscreen
+   smooth-scrolling
+   flycheck
+   helm
+   magit
+   org-mode
+   auto-complete
+   jedi ; jedi:install-server manually!
+   markdown-mode))
 
 ;;; Use this section for el-get packages that need to be bundled.
 
@@ -163,7 +163,7 @@
 (setq evil-operator-state-cursor '("orange" hollow))
 (setq evil-insert-state-cursor '("orange" bar))
 (setq evil-emacs-state-cursor '("red" box))
-(setq evil-replace-state-cursor '("red" underline))
+(setq evil-replace-state-cursor '("pink" underline))
 
 ;;; Visually indicate the right limit for programming modes
 (require 'whitespace)
@@ -198,9 +198,9 @@
 ;;; and it just keeps irking me. So fuck this.
 (setq auto-save-default nil)
 
-(setq kept-old-versions   5  ; Keep one old copy.
-      kept-new-versions   5  ; Keep one new copy.
-      )
+(setq
+ kept-old-versions 5
+ kept-new-versions 5)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -301,13 +301,34 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
 
-;;; `:q` ends up quitting more than I intended. So rebind that.
-(add-hook 'evil-local-mode-hook
-          (lambda ()
-            (evil-ex-define-cmd "q" 'delete-window)))
+;;; Revert buffers easily
+(evil-leader/set-key "rb" 'revert-buffer)
 
-;;; `:t` to open in tab
-(evil-ex-define-cmd "t[abedit]" 'evil-tabs-tabedit)
+(evil-leader/set-key "els" 'eval-last-sexp)
+
+(defun kill-other-window ()
+  (interactive)
+  (other-window 1)
+  (kill-buffer-and-window))
+(evil-leader/set-key "ko" 'kill-other-window)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; HideShow mode bindings.
+
+;;; Unset what evil comes with.
+(define-key evil-normal-state-map (kbd "z a") nil)
+(define-key evil-normal-state-map (kbd "z o") nil)
+(define-key evil-normal-state-map (kbd "z O") nil)
+(define-key evil-normal-state-map (kbd "z c") nil)
+(define-key evil-normal-state-map (kbd "z r") nil)
+(define-key evil-normal-state-map (kbd "z m") nil)
+
+;;; Now set up my own.
+(define-key evil-normal-state-map (kbd "z a") 'hs-toggle-hiding)
+(define-key evil-normal-state-map (kbd "z h") 'hs-hide-all)
+(define-key evil-normal-state-map (kbd "z s") 'hs-show-all)
+(define-key evil-normal-state-map (kbd "z l") 'hs-hide-level)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -402,6 +423,8 @@
 ;;;; Linting with Flycheck
 (add-hook 'prog-mode-hook #'flycheck-mode)
 (evil-leader/set-key "fl" 'flycheck-list-errors)
+(evil-leader/set-key "fn" 'flycheck-next-error)
+(evil-leader/set-key "fp" 'flycheck-previous-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -480,5 +503,6 @@
 ;;; 3. Magit (Too much reading to do)
 ;;; 4. ESS
 ;;; 5. Multiple cursors
-;;; 6. IPython interaction
-;;; 8. Read dired documentation and configure
+;;; 6. IPython interaction: anything better than jedi? Send commands?
+;;; 7. Read dired documentation and configure
+;;; 8. Helm: Find files from the git root
