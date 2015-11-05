@@ -36,7 +36,7 @@ setopt histignoredups
 # Let hidden files (.*) be matched against globs.
 setopt globdots
 
-# Let's you a half-finished command and come back to it.
+# Let's you suspend a half-finished command and come back to it.
 bindkey '^o' push-input
 
 # vi-backward-delete-char is just really weird
@@ -52,7 +52,7 @@ stty -ixon
 # Vi mode indicator
 ###################
 
-PLPRMT='/usr/lib/python3.4/site-packages/powerline/bindings/zsh/powerline.zsh'
+PLPRMT='/usr/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh'
 
 if [[ -f $PLPRMT ]]; then
   source $PLPRMT
@@ -84,6 +84,25 @@ else
   prompt asb
   RPROMPT='${vim_mode}'
 fi
+
+#####################
+#  Emacs utilities  #
+#####################
+
+alias se='emacs --daemon'
+
+alias ke='emacsclient --eval "(kill-emacs)"'
+
+alias re='emacsclient --eval "(kill-emacs)" && emacs --daemon'
+
+function e () {
+  local tmp=$(emacsclient -n -e "(if (> (length (frame-list)) 1) 't)")
+  if [[ "$tmp" == "nil" ]]; then
+    emacsclient -nc "$@"
+  else
+    emacsclient -n "$@"
+  fi
+}
 
 ###################
 # Command Aliases #
@@ -178,7 +197,7 @@ export TERM='xterm'
 
 export PATH="$HOME/scripts:$PATH"
 
-export SVN_EDITOR='vim'
+export SVN_EDITOR='e'
 
 # Less is more!
 export READNULLCMD='less'
@@ -186,10 +205,10 @@ export READNULLCMD='less'
 if [ -n "$DISPLAY" ]
 then
   BROWSER=firefox
-  EDITOR=gvim
+  EDITOR=e
 else
   BROWSER=elinks
-  EDITOR=vim
+  EDITOR=e
 fi
 
 ################
@@ -241,28 +260,22 @@ alias -g tl='| tail'
 ##############
 
 DIRSTACKFILE="$HOME/.cache/zsh/dirs"
+
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
+
 chpwd() {
   print -l $PWD ${(u)dirstack} >! $DIRSTACKFILE
 }
+
 DIRSTACKSIZE=20
 setopt autopushd pushdsilent pushdtohome
 # Remove duplicate entries
 setopt pushdignoredups
 # This reverts the +/- operators.
 setopt pushdminus
-
-##############################
-#  Python virtualenvwrapper  #
-##############################
-
-if [[ -f /usr/bin/virtualenvwrapper_lazy.sh ]]; then
-  export WORKON_HOME=~/.virtualenvs
-  source /usr/bin/virtualenvwrapper_lazy.sh
-fi
 
 #############
 #  Modules  #
@@ -279,10 +292,10 @@ bindkey -M vicmd 'j' history-substring-search-down
 source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #############################
-#  ... n to go up n folders  #
+#  up n to go up n folders  #
 #############################
 
-function ...() {
+function up() {
   local n
   n=$1
   [[ -z "$n" ]] && n=1
@@ -298,6 +311,17 @@ function ...() {
 alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
 
 alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
+
+###############
+#  Bookmarks  #
+###############
+
+alias aa='cd "$HOME"/audio'
+alias vv='cd "$HOME"/video'
+alias tt='cd "$HOME"/tmp'
+alias cc='cd "$HOME"/git/configs'
+alias gg='cd "$HOME"/git'
+alias ww='cd "$HOME"/warchives'
 
 #########
 #  FZF  #
@@ -326,7 +350,7 @@ export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
 export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no-mouse'
 
-function fshow () {
+function fzshow () {
   local file
   file=$(find ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && gvfs-open "$file"
@@ -339,6 +363,16 @@ function vi () {
   file=$(head -2 <<< "$out" | tail -1)
   if [[ -n "$file" ]]; then
     [ "$key" = ctrl-g ] && gvim "$file" || vim "$file"
+  fi
+}
+
+function ez () {
+  local out file key
+  out=$(find ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [[ -n "$file" ]]; then
+    [ "$key" = ctrl-g ] && e "$file" || e "$file"
   fi
 }
 
@@ -375,32 +409,26 @@ function uninstall () {
   [ -n "$pkgs" ] && sudo pacman -Rns "$pkgs"
 }
 
-###############
-#  Bookmarks  #
-###############
+#############
+# SSH Agent #
+#############
 
-alias aa='cd "$HOME"/audio'
-alias vv='cd "$HOME"/video'
-alias tt='cd "$HOME"/tmp'
-alias cc='cd "$HOME"/git/configs'
-alias gg='cd "$HOME"/git'
-alias ww='cd "$HOME"/warchives'
+eval $(ssh-agent) &> /dev/null
+ssh-add -k ~/.ssh/*.pem &> /dev/null
 
-#####################
-#  Emacs utilities  #
-#####################
+####################################
+# Find the virtualenv and activate #
+####################################
 
-alias se='emacs --daemon'
-
-alias ke='emacsclient --eval "(kill-emacs)"'
-
-alias re='emacsclient --eval "(kill-emacs)" && emacs --daemon'
-
-function e () {
-  local tmp=$(emacsclient -n -e "(if (> (length (frame-list)) 1) 't)")
-  if [[ "$tmp" == "nil" ]]; then
-    emacsclient -nc "$@"
-  else
-    emacsclient -n "$@"
-  fi
+function penv () {
+  local gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
+  [[ -n "$gitroot" ]] && gitroot=$(find $gitroot -type d -name '.virtualenv')
+  [[ -n "$gitroot" ]] && gitroot=$(find $gitroot -type f -name 'activate')
+  [[ -n "$gitroot" ]] && source $gitroot
 }
+
+###################
+# Fortune cookies #
+###################
+
+fortune -s
