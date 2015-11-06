@@ -211,6 +211,8 @@ else
   EDITOR=e
 fi
 
+eval $(dircolors ~/.dircolors)
+
 ################
 # File Aliases #
 ################
@@ -378,7 +380,7 @@ function ez () {
 
 function play () {
   local file
-  file=$(find ~/audio ~/video -type f | \
+  file=$(find -L ~/audio ~/video -type f | \
     fzf-tmux --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && mpl "$file"
 }
