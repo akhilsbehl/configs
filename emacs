@@ -237,7 +237,9 @@
     (interactive)
     (evil-ex "%s/\s\+$//e<CR>:let @/=''<CR>")))
 
-(evil-leader/set-key "kw" 'kill-buffer-and-window)
+;;; Dealing with splits
+(evil-leader/set-key "kb" 'kill-buffer-and-window)
+(evil-leader/set-key "kw" 'delete-window)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
@@ -510,11 +512,9 @@
 
 ;;;; TODO: Packages & Functionality to explore
 
-;;; 1. Helm (Too much configuration and too much reading)
-;;; 2. Org-mode (Too much too much!)
-;;; 3. Magit (Too much reading to do)
-;;; 4. ESS
-;;; 5. Multiple cursors
-;;; 6. IPython interaction: anything better than jedi? Send commands?
-;;; 7. Read dired documentation and configure
-;;; 8. Helm: Find files from the git root
+;;; 1. Org-mode (Too much too much!)
+;;; 2. ESS
+;;; 3. Multiple cursors
+;;; 4. IPython interaction: anything better than jedi? Send commands?
+;;; 5. Helm: Find files from the git root
+;;; 6. ETags bitch! Seriously.
