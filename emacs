@@ -468,14 +468,6 @@
 ;;;; Magit
 (evil-leader/set-key "gs" 'magit-status)
 
-(evil-set-initial-state 'magit-mode 'emacs)
-(evil-set-initial-state 'magit-status-mode 'emacs)
-(evil-set-initial-state 'magit-log-mode 'emacs)
-(evil-set-initial-state 'magit-commit-mode 'emacs)
-(evil-set-initial-state 'magit-diff-mode 'emacs)
-(evil-set-initial-state 'magit-popup-mode 'emacs)
-(evil-set-initial-state 'git-commit-mode 'insert)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Org-mode
