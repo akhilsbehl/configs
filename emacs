@@ -237,8 +237,6 @@
     (interactive)
     (evil-ex "%s/\s\+$//e<CR>:let @/=''<CR>")))
 
-(evil-leader/set-key "df" 'delete-frame)
-(evil-leader/set-key "kb" 'kill-buffer)
 (evil-leader/set-key "kw" 'kill-buffer-and-window)
 
 ;;; Reformat a paragraph.
