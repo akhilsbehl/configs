@@ -312,6 +312,20 @@
   (kill-buffer-and-window))
 (evil-leader/set-key "ko" 'kill-other-window)
 
+;;; Github/Chalmagean/emacs.d/my-evil.el
+(defun split-horizontal ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1))
+
+(defun split-vertical ()
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1))
+
+(evil-leader/set-key (kbd "-") 'split-horizontal)
+(evil-leader/set-key (kbd "|") 'split-vertical)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; HideShow mode bindings.
@@ -453,6 +467,14 @@
 
 ;;;; Magit
 (evil-leader/set-key "gs" 'magit-status)
+
+(evil-set-initial-state 'magit-mode 'emacs)
+(evil-set-initial-state 'magit-status-mode 'emacs)
+(evil-set-initial-state 'magit-log-mode 'emacs)
+(evil-set-initial-state 'magit-commit-mode 'emacs)
+(evil-set-initial-state 'magit-diff-mode 'emacs)
+(evil-set-initial-state 'magit-popup-mode 'emacs)
+(evil-set-initial-state 'git-commit-mode 'insert)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

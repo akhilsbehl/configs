@@ -354,13 +354,13 @@ export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no
 
 function fzshow () {
   local file
-  file=$(find ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
+  file=$(find -L ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
   [ -n "$file" ] && gvfs-open "$file"
 }
 
 function vi () {
   local out file key
-  out=$(find ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
+  out=$(find -L ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
   if [[ -n "$file" ]]; then
@@ -370,7 +370,7 @@ function vi () {
 
 function ez () {
   local out file key
-  out=$(find ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
+  out=$(find -L ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
   key=$(head -1 <<< "$out")
   file=$(head -2 <<< "$out" | tail -1)
   if [[ -n "$file" ]]; then
@@ -388,7 +388,7 @@ function play () {
 function cdf() {
   local file
   local dir
-  file=$(find ~ -type f | fzf-tmux --query="$1") && dir=$(dirname "$file") && cd "$dir"
+  file=$(find -L ~ -type f | fzf-tmux --query="$1") && dir=$(dirname "$file") && cd "$dir"
 }
 
 function fzf-locate-widget() {
