@@ -34,23 +34,23 @@
 ;;; Use this section for standard edition el-get packages
 (el-get
  'sync
- '(evil
-   evil-surround
-   evil-numbers
+ '(auto-complete
+   elscreen
+   evil
+   evil-exchange
    evil-leader
    evil-nerd-commenter
-   evil-exchange
-   elscreen
-   smooth-scrolling
+   evil-numbers
+   evil-surround
    flycheck
    helm
-   magit
-   org-mode
-   auto-complete
    jedi ; jedi:install-server manually!
+   magit
    markdown-mode
+   org-mode
    projectile
-   helm-projectile))
+   seq
+   smooth-scrolling))
 
 ;;; Use this section for el-get packages that need to be bundled.
 
@@ -59,8 +59,6 @@
 ;; (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
 (el-get-bundle
   birds-of-paradise-plus-theme in jimeh/birds-of-paradise-plus-theme.el)
-;; seq is required for evil-tabs to work.
-(el-get-bundle seq in NicolasPetton/seq.el)
 (el-get-bundle krisajenkins/evil-tabs)
 
 ;;; Use this section for packages that need to be installed using `package`
@@ -181,7 +179,7 @@
 
 ;;;; Use vim-like tabs (also using krisajenkins' evil-tabs)
 (load "elscreen" "ElScreen" t)
-(add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
+; (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
 (define-key evil-normal-state-map "gc" 'elscreen-create)
 (define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
@@ -467,8 +465,18 @@
 
 ;;;; Projectile mode
 
+(require 'helm-porjectile)
+(projectile-global-mode)
 (setq projectile-completion-system 'helm)
-(helm-projectile-on)
+(setq projectile-switch-project-action 'helm-projectile)
+(setq projectile-enable-caching t)
+(evil-leader/set-key "hp" 'helm-projectile)
+(evil-leader/set-key "hpf" 'helm-projectile-find-file)
+(evil-leader/set-key "hpF" 'helm-projectile-find-file-in-known-projects)
+(evil-leader/set-key "hpd" 'helm-projectile-find-dir)
+(evil-leader/set-key "hpr" 'helm-projectile-find-recentf)
+(evil-leader/set-key "hpb" 'helm-projectile-switch-to-buffer)
+(evil-leader/set-key "hpg" 'helm-projectile-ag)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
