@@ -48,7 +48,9 @@
    org-mode
    auto-complete
    jedi ; jedi:install-server manually!
-   markdown-mode))
+   markdown-mode
+   projectile
+   helm-projectile))
 
 ;;; Use this section for el-get packages that need to be bundled.
 
@@ -57,6 +59,8 @@
 ;; (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
 (el-get-bundle
   birds-of-paradise-plus-theme in jimeh/birds-of-paradise-plus-theme.el)
+;; seq is required for evil-tabs to work.
+(el-get-bundle seq in NicolasPetton/seq.el)
 (el-get-bundle krisajenkins/evil-tabs)
 
 ;;; Use this section for packages that need to be installed using `package`
@@ -442,25 +446,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Helm
+
 (require 'helm-config)
 (helm-mode 1)
 
-(evil-leader/set-key ",h" 'helm-command-prefix)
 (global-unset-key (kbd "C-x c"))
+(evil-leader/set-key "hx" 'helm-M-x)
+(setq helm-M-x-fuzzy-match t)
+(evil-leader/set-key "hf" 'helm-find-files)
 
+(evil-leader/set-key ",h" 'helm-command-prefix)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-s") 'helm-select-action)
-
 (when (executable-find "curl")
   (setq helm-google-suggest-use-curl-p t))
-
 (setq helm-move-to-line-cycle-in-source t
       helm-ff-file-name-history-use-recentf t)
 
-(evil-leader/set-key "hx" 'helm-M-x)
-(setq helm-M-x-fuzzy-match t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(evil-leader/set-key "hf" 'helm-find-files)
+;;;; Projectile mode
+
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -515,5 +523,4 @@
 ;;; 2. ESS
 ;;; 3. Multiple cursors
 ;;; 4. IPython interaction: anything better than jedi? Send commands?
-;;; 5. Helm: Find files from the git root
-;;; 6. ETags bitch! Seriously.
+;;; 5. ETags bitch! Seriously.
