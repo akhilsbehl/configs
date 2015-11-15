@@ -73,7 +73,7 @@ if [[ "$1" == "--vundle" ]]; then
   ln -s "$PWD"/latex-templates/beamer.tex "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 fi
 
-if [[ "$1" == "nukemacs" || "$2" == "nukemacs" ]]; then
+if [[ "$1" == "--nukemacs" || "$2" == "--nukemacs" ]]; then
   rm -rf "$HOME"/.emacs.d
 fi
 
