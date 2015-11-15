@@ -18,10 +18,7 @@
 ;;;; The standard package manager for other stuff
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa-stable" .
-                          "http://melpa-stable.milkbox.net/packages/")))
+                         ("melpa . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
 (defun require-package (pkg)
@@ -57,7 +54,7 @@
 
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
-(el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
+;; (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
 (el-get-bundle
   birds-of-paradise-plus-theme in jimeh/birds-of-paradise-plus-theme.el)
 (el-get-bundle krisajenkins/evil-tabs)
