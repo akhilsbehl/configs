@@ -34,7 +34,8 @@
 ;;; Use this section for standard edition el-get packages
 (el-get
  'sync
- '(auto-complete
+ '(seq ; This mother-fucker breaks everything
+   auto-complete
    elscreen
    evil
    evil-exchange
@@ -49,7 +50,6 @@
    markdown-mode
    org-mode
    projectile
-   seq
    smooth-scrolling))
 
 ;;; Use this section for el-get packages that need to be bundled.
@@ -60,9 +60,9 @@
 (el-get-bundle
   birds-of-paradise-plus-theme in jimeh/birds-of-paradise-plus-theme.el)
 (el-get-bundle krisajenkins/evil-tabs)
+(el-get-bundle emacsfodder/emacs-mainline)
 
 ;;; Use this section for packages that need to be installed using `package`
-(require-package 'main-line)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -465,18 +465,18 @@
 
 ;;;; Projectile mode
 
-(require 'helm-porjectile)
+(require 'helm-projectile)
 (projectile-global-mode)
 (setq projectile-completion-system 'helm)
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-enable-caching t)
-(evil-leader/set-key "hp" 'helm-projectile)
-(evil-leader/set-key "hpf" 'helm-projectile-find-file)
-(evil-leader/set-key "hpF" 'helm-projectile-find-file-in-known-projects)
-(evil-leader/set-key "hpd" 'helm-projectile-find-dir)
-(evil-leader/set-key "hpr" 'helm-projectile-find-recentf)
-(evil-leader/set-key "hpb" 'helm-projectile-switch-to-buffer)
-(evil-leader/set-key "hpg" 'helm-projectile-ag)
+(evil-leader/set-key "hP" 'helm-projectile)
+(evil-leader/set-key "Pf" 'helm-projectile-find-file)
+(evil-leader/set-key "PF" 'helm-projectile-find-file-in-known-projects)
+(evil-leader/set-key "Pd" 'helm-projectile-find-dir)
+(evil-leader/set-key "Pr" 'helm-projectile-find-recentf)
+(evil-leader/set-key "Pb" 'helm-projectile-switch-to-buffer)
+(evil-leader/set-key "Pg" 'helm-projectile-ag)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
