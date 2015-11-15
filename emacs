@@ -18,7 +18,7 @@
 ;;;; The standard package manager for other stuff
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa . "http://melpa.milkbox.net/packages/")))
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
 (defun require-package (pkg)
