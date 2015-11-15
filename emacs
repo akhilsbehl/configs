@@ -58,6 +58,8 @@
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
+(el-get-bundle
+  birds-of-paradise-plus-theme in jimeh/birds-of-paradise-plus-theme.el)
 (el-get-bundle krisajenkins/evil-tabs)
 
 ;;; Use this section for packages that need to be installed using `package`
@@ -141,7 +143,7 @@
 (require 'main-line)
 (setq main-line-separator-style 'wave)
 
-;;; Gruvbox and Monaco font.
+;;; Colortheme and font in daemon mode.
 ;; http://stackoverflow.com/questions/18904529/
 ;; after-emacs-deamon-i-can-not-see-new-theme-in-emacsclient-frame-it-works-fr
 (if (daemonp)
@@ -149,7 +151,7 @@
               (lambda (frame)
                 (select-frame frame)
                 (set-face-attribute 'default nil :font "Monaco 10")
-                (load-theme 'gruvbox t))))
+                (load-theme 'birds-of-paradise-plus t))))
 
 ;;; Show line numbers
 (global-linum-mode 1)
