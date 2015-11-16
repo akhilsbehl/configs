@@ -45,6 +45,7 @@
    evil-surround
    flycheck
    helm
+   helm-ag
    jedi ; jedi:install-server manually!
    magit
    markdown-mode
@@ -179,7 +180,7 @@
 
 ;;;; Use vim-like tabs (also using krisajenkins' evil-tabs)
 (load "elscreen" "ElScreen" t)
-; (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
+(add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
 (define-key evil-normal-state-map "gc" 'elscreen-create)
 (define-key evil-normal-state-map "gd" 'elscreen-kill)
 (define-key evil-normal-state-map "gj" 'elscreen-previous)
