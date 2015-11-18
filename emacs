@@ -37,6 +37,7 @@
  '(seq ; This mother-fucker breaks everything
    auto-complete
    elscreen
+   ess
    evil
    evil-exchange
    evil-leader
@@ -242,6 +243,9 @@
 ;;; Dealing with splits
 (evil-leader/set-key "kb" 'kill-buffer-and-window)
 (evil-leader/set-key "kw" 'delete-window)
+
+;;; Close a window (frame)
+(evil-leader/set-key "df" 'delete-frame)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
@@ -491,6 +495,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; ESS
+
+(require 'ess-site)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
