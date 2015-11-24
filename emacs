@@ -176,13 +176,13 @@
 ;;;; Use vim-like tabs (also using krisajenkins' evil-tabs)
 (load "elscreen" "ElScreen" t)
 (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
-(define-key evil-normal-state-map "gc" 'elscreen-create)
-(define-key evil-normal-state-map "gd" 'elscreen-kill)
-(define-key evil-normal-state-map "gj" 'elscreen-previous)
-(define-key evil-normal-state-map "gk" 'elscreen-next)
-(evil-define-key 'normal evil-tabs-mode-map "gt"
+(define-key evil-normal-state-map "tc" 'elscreen-create)
+(define-key evil-normal-state-map "td" 'elscreen-kill)
+(define-key evil-normal-state-map "tj" 'elscreen-previous)
+(define-key evil-normal-state-map "tk" 'elscreen-next)
+(evil-define-key 'normal evil-tabs-mode-map "tt"
   'evil-tabs-current-buffer-to-tab)
-(evil-define-key 'normal evil-tabs-mode-map "gT"
+(evil-define-key 'normal evil-tabs-mode-map "tT"
   'elscreen-find-and-goto-by-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -234,12 +234,16 @@
     (interactive)
     (evil-ex "%s/\s\+$//e<CR>:let @/=''<CR>")))
 
-;;; Dealing with splits
+;;; Killing stuff
+(defun kill-other-window ()
+  (interactive)
+  (other-window 1)
+  (kill-buffer-and-window))
+
 (evil-leader/set-key "kb" 'kill-buffer-and-window)
 (evil-leader/set-key "kw" 'delete-window)
-
-;;; Close a window (frame)
-(evil-leader/set-key "df" 'delete-frame)
+(evil-leader/set-key "ko" 'kill-other-window)
+(evil-leader/set-key "kf" 'delete-frame)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
@@ -305,12 +309,6 @@
 (evil-leader/set-key "rb" 'revert-buffer)
 
 (evil-leader/set-key "els" 'eval-last-sexp)
-
-(defun kill-other-window ()
-  (interactive)
-  (other-window 1)
-  (kill-buffer-and-window))
-(evil-leader/set-key "ko" 'kill-other-window)
 
 ;;; Github/Chalmagean/emacs.d/my-evil.el
 (defun split-horizontal ()
