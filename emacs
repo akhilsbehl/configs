@@ -532,6 +532,24 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;; Insert date & time
+
+;;; http://stackoverflow.com/questions/251908/how-can-i-insert-current-date-and
+;;; -time-into-a-file-using-emacs
+
+(defun now ()
+  (interactive)
+  (insert (format-time-string "%A, %B %d, %Y %H:%M:%S")))
+
+(defun today ()
+  (interactive)
+  (insert (format-time-string "%A, %B %d, %Y")))
+
+(evil-leader/set-key "in" 'now)
+(evil-leader/set-key "it" 'today)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;; TODO: Packages & Functionality to explore
 
 ;;; 1. Org-mode (Too much too much!)
