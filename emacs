@@ -509,10 +509,10 @@
             (setq jedi:get-in-function-call-delay 500)
             (setq jedi:goto-definition-marker-ring-length 32)))
 
-(evil-leader/set-key-for-mode 'python-mode "jd" 'jedi:show-doc)
+(evil-leader/set-key-for-mode 'python-mode "jh" 'jedi:show-doc)
 (evil-leader/set-key-for-mode 'python-mode "jg" 'jedi:goto-definition)
 (evil-leader/set-key-for-mode 'python-mode
-  "jG" 'jedi:goto-definition-popup-marker)
+  "jG" 'jedi:goto-definition-pop-marker)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
