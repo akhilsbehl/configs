@@ -422,13 +422,13 @@
   (doc-view-goto-page page)
   (other-window 1))
 
-(evil-leader/set-key "ph" 'dvscroll-forward)
-(evil-leader/set-key "pj" 'dvscroll-next-page)
-(evil-leader/set-key "pk" 'dvscroll-previous-page)
-(evil-leader/set-key "pl" 'dvscroll-backward)
-(evil-leader/set-key "pg" 'dvscroll-first-page)
-(evil-leader/set-key "pG" 'dvscroll-last-page)
-(evil-leader/set-key "pn" 'dvscroll-goto-page)
+(evil-leader/set-key "Ph" 'dvscroll-forward)
+(evil-leader/set-key "Pj" 'dvscroll-next-page)
+(evil-leader/set-key "Pk" 'dvscroll-previous-page)
+(evil-leader/set-key "Pl" 'dvscroll-backward)
+(evil-leader/set-key "Pg" 'dvscroll-first-page)
+(evil-leader/set-key "PG" 'dvscroll-last-page)
+(evil-leader/set-key "Pn" 'dvscroll-goto-page)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -473,13 +473,13 @@
 (setq projectile-completion-system 'helm)
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-enable-caching t)
-(evil-leader/set-key "Pp" 'helm-projectile)
-(evil-leader/set-key "Pf" 'helm-projectile-find-file)
-(evil-leader/set-key "PF" 'helm-projectile-find-file-in-known-projects)
-(evil-leader/set-key "Pd" 'helm-projectile-find-dir)
-(evil-leader/set-key "Pr" 'helm-projectile-find-recentf)
-(evil-leader/set-key "Pb" 'helm-projectile-switch-to-buffer)
-(evil-leader/set-key "Pg" 'helm-projectile-ag)
+(evil-leader/set-key "pp" 'helm-projectile)
+(evil-leader/set-key "pf" 'helm-projectile-find-file)
+(evil-leader/set-key "pF" 'helm-projectile-find-file-in-known-projects)
+(evil-leader/set-key "pd" 'helm-projectile-find-dir)
+(evil-leader/set-key "pr" 'helm-projectile-find-recentf)
+(evil-leader/set-key "pb" 'helm-projectile-switch-to-buffer)
+(evil-leader/set-key "pg" 'helm-projectile-ag)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
