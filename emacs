@@ -422,13 +422,13 @@
   (doc-view-goto-page page)
   (other-window 1))
 
-(evil-leader/set-key "Ph" 'dvscroll-forward)
-(evil-leader/set-key "Pj" 'dvscroll-next-page)
-(evil-leader/set-key "Pk" 'dvscroll-previous-page)
-(evil-leader/set-key "Pl" 'dvscroll-backward)
-(evil-leader/set-key "Pg" 'dvscroll-first-page)
-(evil-leader/set-key "PG" 'dvscroll-last-page)
-(evil-leader/set-key "Pn" 'dvscroll-goto-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Ph" 'dvscroll-forward)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pj" 'dvscroll-next-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pk" 'dvscroll-previous-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pl" 'dvscroll-backward)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pg" 'dvscroll-first-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "PG" 'dvscroll-last-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pn" 'dvscroll-goto-page)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
