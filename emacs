@@ -482,7 +482,6 @@
 (evil-leader/set-key "Pr" 'helm-projectile-find-recentf)
 (evil-leader/set-key "Pb" 'helm-projectile-switch-to-buffer)
 (evil-leader/set-key "Pg" 'helm-projectile-ag)
-(evil-leader/set-key "Ps" 'helm-ff-run-switch-other-window)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
