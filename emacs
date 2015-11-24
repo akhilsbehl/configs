@@ -482,6 +482,7 @@
 (evil-leader/set-key "Pr" 'helm-projectile-find-recentf)
 (evil-leader/set-key "Pb" 'helm-projectile-switch-to-buffer)
 (evil-leader/set-key "Pg" 'helm-projectile-ag)
+(evil-leader/set-key "Ps" 'helm-ff-run-switch-other-window)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -502,9 +503,17 @@
 
 ;;;; Python set-up
 
-(add-hook 'python-mode-hook (lambda ()
-                              (jedi:setup)
-                              (setq jedi:complete-on-dot t)))
+(add-hook 'python-mode-hook
+          (lambda ()
+            (jedi:setup)
+            (setq jedi:complete-on-dot t)
+            (setq jedi:get-in-function-call-delay 500)
+            (setq jedi:goto-definition-marker-ring-length 32)))
+
+(evil-leader/set-key-for-mode 'python-mode "jd" 'jedi:show-doc)
+(evil-leader/set-key-for-mode 'python-mode "jg" 'jedi:goto-definition)
+(evil-leader/set-key-for-mode 'python-mode
+  "jG" 'jedi:goto-definition-popup-marker)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
