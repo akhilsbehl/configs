@@ -543,16 +543,16 @@
 ;;; http://stackoverflow.com/questions/251908/how-can-i-insert-current-date-and
 ;;; -time-into-a-file-using-emacs
 
-(defun now ()
+(defun time-now ()
   (interactive)
   (insert (format-time-string "%A, %B %d, %Y %H:%M:%S")))
 
-(defun today ()
+(defun date-today ()
   (interactive)
   (insert (format-time-string "%A, %B %d, %Y")))
 
-(evil-leader/set-key "in" 'now)
-(evil-leader/set-key "it" 'today)
+(evil-leader/set-key "it" 'time-now)
+(evil-leader/set-key "id" 'date-today)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
