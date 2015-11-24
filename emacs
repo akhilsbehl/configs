@@ -436,7 +436,13 @@
 
 ;;;; Linting with Flycheck
 (add-hook 'prog-mode-hook #'flycheck-mode)
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
+(setq flycheck-display-errors-delay 0.5)
+
+(evil-leader/set-key "fv" 'flycheck-verify-setup)
+(evil-leader/set-key "fc" 'flycheck-buffer)
 (evil-leader/set-key "fl" 'flycheck-list-errors)
+(evil-leader/set-key "ff" 'flycheck-first-error)
 (evil-leader/set-key "fn" 'flycheck-next-error)
 (evil-leader/set-key "fp" 'flycheck-previous-error)
 
