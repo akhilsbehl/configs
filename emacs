@@ -51,8 +51,7 @@
    magit
    markdown-mode
    org-mode
-   projectile
-   smooth-scrolling))
+   projectile))
 
 ;;; Use this section for el-get packages that need to be bundled.
 
@@ -134,11 +133,6 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-
-;;; Vim like smooth scrolling
-(setq scroll-margin 5
-      scroll-conservatively 9999
-      scroll-step 1)
 
 ;;; Main-line mode bar
 (require 'main-line)
