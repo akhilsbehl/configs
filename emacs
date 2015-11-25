@@ -177,6 +177,8 @@
 (load "elscreen" "ElScreen" t)
 (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
 (define-key evil-normal-state-map "tc" 'elscreen-create)
+;; Stay consistent with the kill idiom and this.
+(define-key evil-normal-state-map "kt" 'elscreen-kill)
 (define-key evil-normal-state-map "td" 'elscreen-kill)
 (define-key evil-normal-state-map "tj" 'elscreen-previous)
 (define-key evil-normal-state-map "tk" 'elscreen-next)
