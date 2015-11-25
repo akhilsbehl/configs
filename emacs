@@ -34,10 +34,10 @@
 ;;; Use this section for standard edition el-get packages
 (el-get
  'sync
- '(seq ; This mother-fucker breaks everything
+ '(seq  ; This mother-fucker breaks everything
    auto-complete
    elscreen
-   ess
+   ;; ess  ; Now this won't compile.
    evil
    evil-exchange
    evil-leader
@@ -47,7 +47,7 @@
    flycheck
    helm
    helm-ag
-   jedi ; jedi:install-server manually!
+   jedi  ; jedi:install-server manually!
    magit
    markdown-mode
    org-mode
@@ -496,7 +496,7 @@
 
 ;;;; ESS
 
-(require 'ess-site)
+;; (require 'ess-site)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
