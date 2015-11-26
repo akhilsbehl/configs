@@ -77,4 +77,6 @@ if [[ "$1" == "--nukemacs" || "$2" == "--nukemacs" ]]; then
   rm -rf "$HOME"/.emacs.d
 fi
 
+R CMD INSTALL setwidth*.tar.gz colorout*.tar.gz VimCom
+
 exit 0
