@@ -1,27 +1,47 @@
+[org/blueberry]
+tray-enabled=true
+
 [org/cinnamon]
+desktop-effects-unmaximize-transition='easeNone'
 desktop-effects-on-dialogs=true
+desktop-effects-maximize-transition='easeInExpo'
 active-display-scale=1
+desktop-effects-map-effect='traditional'
 command-history=['chromium', 'chromium -p', 'lowriter', 'gvim', '', 'chromedriver', 'spyder3', 'artha', 'emacsclient', 'chromium -incognito', 'r']
 desktop-effects-style='cinnamon'
+desktop-effects-unmaximize-time=100
 enabled-desklets=@as []
 workspace-name-overrides=@as []
 window-list-applet-alert=false
 alttab-switcher-style='coverflow'
+window-list-applet-alert=false
 prevent-focus-stealing=true
 panels-height=['1:25']
 enable-vfade=true
-next-applet-id=17
+next-applet-id=18
 panel-launchers=['DEPRECATED']
+desktop-effects-map-transition='easeOutQuad'
 desklet-decorations=1
+desktop-effects-unmaximize-effect='none'
 panels-enabled=['1:0:top']
+desktop-effects-maximize-time=100
 overview-corner=['expo:false:false', 'scale:false:false', 'expo:true:false', 'scale:true:false']
-enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13']
+desktop-effects-tile-transition='easeInQuad'
+desktop-effects-maximize-effect='none'
+workspace-name-overrides=@as []
+enabled-applets=['panel1:left:0:menu@cinnamon.org:16', 'panel1:right:1:removable-drives@cinnamon.org:6', 'panel1:right:2:network@cinnamon.org:9', 'panel1:right:3:sound@cinnamon.org:10', 'panel1:right:4:power@cinnamon.org:11', 'panel1:right:5:separator@cinnamon.org:15', 'panel1:right:6:calendar@cinnamon.org:13', 'panel1:right:0:systray@cinnamon.org:17']
+desktop-effects-minimize-time=200
 alttab-switcher-delay=0
+desktop-effects-tile-effect='none'
+desktop-effects-close-transition='easeOutQuad'
 enabled-extensions=['cinnamon-maximus@fmete']
+desktop-effects-minimize-transition='easeInQuad'
 panel-edit-mode=false
-workspace-expo-view-as-grid=true
 show-media-keys-osd='medium'
+desktop-effects-close-time=175
+workspace-expo-view-as-grid=true
 number-workspaces=4
+desktop-effects-tile-time=100
 panels-autohide=['1:false']
 
 [org/cinnamon/screensaver]
@@ -51,6 +71,7 @@ menus-have-icons=false
 hinting='none'
 
 [org/cinnamon/settings-daemon/peripherals/touchpad]
+tap-to-click=true
 natural-scroll=true
 scroll-method='two-finger-scrolling'
 horiz-scroll-enabled=true
@@ -65,7 +86,7 @@ numlock-state='on'
 [org/cinnamon/settings-daemon/peripherals/mouse]
 motion-threshold=4
 motion-acceleration=4.0
-double-click=401
+double-click=400
 middle-button-enabled=true
 
 [org/cinnamon/keybindings/custom-keybindings/custom1]
@@ -214,7 +235,8 @@ workspace-names=@as []
 titlebar-font='Ubuntu Bold 10'
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpapers/kNNOIAt.jpg'
+picture-uri='file:///home/asb/git/configs/wallpapers/68747470733a2f2f6c68352e676f6f676c6575736572636f6e74656e742e636f6d2f2d71626c7151524b2d5157342f554d4655434551337a65492f4141414141414141794f492f536e53566f4a714d75496b2f73313238302d77313238302d632d683732302d6b2d6e6f2f323031322532422d25324231.jpe'
+color-shading-type='solid'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
@@ -307,6 +329,9 @@ size=(877, 690)
 state=128
 panel-id='world'
 
+[org/gnome/gnome-screenshot]
+auto-save-directory='file:///home/asb/tmp'
+
 [org/gnome/nautilus/window-state]
 geometry='819x556+50+87'
 maximized=false
@@ -353,6 +378,9 @@ options=['caps\tcaps:escape']
 background-color='rgb(0,0,0)'
 use-background-color=true
 
+[org/gnome/eog/ui]
+sidebar=false
+
 [org/gnome/nm-applet/eap/a889da61-79d1-408a-a314-4c9d75f93213]
 ignore-phase2-ca-cert=false
 ignore-ca-cert=false
@@ -365,6 +393,7 @@ show-size-column=true
 show-hidden=false
 window-size=(750, 562)
 sort-directories-first=false
+date-format='regular'
 sort-order='ascending'
 location-mode='path-bar'
 
@@ -382,6 +411,31 @@ computer-icon-visible=false
 volumes-visible=false
 font='Ubuntu 10'
 trash-icon-visible=false
+
+[apps/gMTP]
+viewyear=false
+promptdownloadpath=true
+toolbarstyle='both'
+autoaddtrackplaylist=false
+viewfilesize=true
+autoconnectdevice=false
+confirmfiledelete=false
+allmediaasfiles=false
+suppressalbumerrors=false
+viewtracknumber=false
+viewalbum=false
+viewtoolbar=true
+downloadpath='/'
+viewgenre=false
+viewduration=false
+alternateaccessmethod=false
+viewtitle=false
+viewfiletype=false
+promptoverwritefile=true
+uploadpath='/home/asb/video/poker/million-dollar-cash-season-2'
+viewfolders=false
+viewartist=false
+ignorepathinplaylist=false
 
 [ca/desrt/dconf-editor]
 window-is-fullscreen=false
