@@ -79,4 +79,6 @@ fi
 
 R CMD INSTALL setwidth*.tar.gz colorout*.tar.gz VimCom
 
+"$HOME"/scripts/load-cinnamon-settings
+
 exit 0
