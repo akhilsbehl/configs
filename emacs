@@ -458,13 +458,20 @@
 (setq helm-M-x-fuzzy-match t)
 (evil-leader/set-key "hx" 'helm-M-x)
 (evil-leader/set-key "hf" 'helm-find-files)
-(evil-leader/set-key "hm" 'helm-mini)
+(evil-leader/set-key "hb" 'helm-mini)
+(evil-leader/set-key "hm" 'helm-all-mark-rings)
 (evil-leader/set-key "hk" 'helm-show-kill-ring)
+(evil-leader/set-key "hg" 'helm-do-grep-ag)
 
 ;;; For when in completion mode
 (setq helm-move-to-line-cycle-in-source t
       helm-ff-file-name-history-use-recentf t)
-(when (executable-find "curl") (setq helm-google-suggest-use-curl-p t))
+(when (executable-find "ack")
+  (setq helm-grep-default-command
+        "ack -Hn --no-group --no-color %e %p %f"
+        helm-grep-default-recurse-command
+        "ack -H --no-group --no-color %e %p %f"))
+
 
 (define-key helm-map (kbd "C-j") 'helm-next-line)
 (define-key helm-map (kbd "C-k") 'helm-previous-line)
@@ -475,8 +482,6 @@
 (define-key helm-map (kbd "C-i") 'helm-copy-to-buffer)
 (define-key helm-map (kbd "C-h") 'helm-help)
 (define-key helm-map (kbd "C-y") 'helm-yank-text-at-point)
-;; TODO: Find way to yank symbol at point
-;; (define-key helm-map (kbd "C-Y") 'helm-yank-text-at-point)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
