@@ -145,7 +145,7 @@
               (lambda (frame)
                 (select-frame frame)
                 (set-face-attribute 'default nil :font "Monaco 10")
-                (load-theme 'darktooth-theme t))))
+                (load-theme 'darktooth t))))
 
 ;;; Show line numbers
 (global-linum-mode 1)
