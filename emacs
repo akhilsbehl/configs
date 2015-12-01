@@ -58,8 +58,7 @@
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 ;; (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
-(el-get-bundle
-  birds-of-paradise-plus-theme in jimeh/birds-of-paradise-plus-theme.el)
+(el-get-bundle darktooth-theme in emacsfodder/emacs-theme-darktooth)
 (el-get-bundle krisajenkins/evil-tabs)
 (el-get-bundle emacsfodder/emacs-mainline)
 
@@ -146,7 +145,7 @@
               (lambda (frame)
                 (select-frame frame)
                 (set-face-attribute 'default nil :font "Monaco 10")
-                (load-theme 'birds-of-paradise-plus t))))
+                (load-theme 'darktooth-theme t))))
 
 ;;; Show line numbers
 (global-linum-mode 1)
