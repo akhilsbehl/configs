@@ -31,12 +31,15 @@
 
 ;;;; Sync all packages at startup
 
+;;; This section is to deal with some deps that cause breakage from time to
+;;; time. Ideally this should be empty.
+;; (require-package 'let-alist)
+
 ;;; Use this section for standard edition el-get packages
 (el-get
  'sync
  '(auto-complete
    elscreen
-   ess
    evil
    evil-exchange
    evil-leader
@@ -53,6 +56,7 @@
    projectile))
 
 ;;; Use this section for el-get packages that need to be bundled.
+(require-package 'ess)  ;; Till it starts working with el-get
 
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
@@ -167,10 +171,14 @@
 ;;;; Use vim-like tabs (also using krisajenkins' evil-tabs)
 (load "elscreen" "ElScreen" t)
 (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
+
 (define-key evil-normal-state-map "tc" 'elscreen-create)
 (define-key evil-normal-state-map "td" 'elscreen-kill)
 (define-key evil-normal-state-map "tj" 'elscreen-previous)
 (define-key evil-normal-state-map "tk" 'elscreen-next)
+;; Here by association
+(define-key evil-normal-state-map (kbd "C-w =") 'balance-windows)
+
 (evil-define-key 'normal evil-tabs-mode-map "tt"
   'evil-tabs-current-buffer-to-tab)
 (evil-define-key 'normal evil-tabs-mode-map "tT"
@@ -526,7 +534,7 @@
 
 ;;;; ESS
 
-;; (require 'ess-site)
+(require 'ess-site)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
