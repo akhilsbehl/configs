@@ -33,7 +33,8 @@
 
 ;;; This section is to deal with some deps that cause breakage from time to
 ;;; time. Ideally this should be empty.
-;; (require-package 'let-alist)
+;; (el-get 'sync 'foo)
+;; (require-package 'bar)
 
 ;;; Use this section for standard edition el-get packages
 (el-get
@@ -55,8 +56,11 @@
    org-mode
    projectile))
 
-;;; Use this section for el-get packages that need to be bundled.
+;;; Use this section for packages that need to be installed from ELPA/MELPA.
 (require-package 'ess)  ;; Till it starts working with el-get
+
+;;; Use this section for el-get packages that need to be bundled.
+;; (require-package 'baz)
 
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
