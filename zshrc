@@ -178,13 +178,13 @@ then
   alias sleep='sudo pm-suspend && lock'
   alias freeze='sudo pm-hibernate && lock'
   alias die='sudo shutdown -h 0'
-  alias reboot='sudo shutdown -r 0'
+  alias respawn='sudo shutdown -r 0'
 else
   alias upgrade='packer -Syu --noconfirm --noedit'
   alias sleep='sudo systemctl suspend && lock'
   alias freeze='sudo systemctl hibernate && lock'
   alias die='sudo systemctl poweroff'
-  alias reboot='sudo systemctl reboot'
+  alias respawn='sudo systemctl reboot'
 fi
 
 #########################
