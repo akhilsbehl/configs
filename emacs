@@ -60,14 +60,12 @@
 (require-package 'ess)  ;; Till it starts working with el-get
 
 ;;; Use this section for el-get packages that need to be bundled.
-;; (require-package 'baz)
 
-;; This will also load the theme if standalone. For loading the theme when
-;; running as a client, see the appearance section.
-;; (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
-(el-get-bundle darktooth-theme in emacsfodder/emacs-theme-darktooth)
 (el-get-bundle krisajenkins/evil-tabs)
 (el-get-bundle emacsfodder/emacs-mainline)
+;; This will also load the theme if standalone. For loading the theme when
+;; running as a client, see the appearance section.
+(el-get-bundle darktooth-theme in emacsfodder/emacs-theme-darktooth)
 
 ;;; Use this section for packages that need to be installed using `package`
 
