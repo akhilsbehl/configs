@@ -247,12 +247,12 @@
 (evil-leader/set-key "kw" 'delete-window)
 ;; Kill the other window
 (evil-leader/set-key "ko" 'kill-other-window)
+;; Kill all windows except current
+(evil-leader/set-key "kO" 'delete-other-windows)
 ;; Kill the current frame
 (evil-leader/set-key "kf" 'delete-frame)
 ;; Kill the current tab
 (define-key evil-normal-state-map "kt" 'elscreen-kill)
-;; Kill all windows except current
-(evil-leader/set-key "kao" 'delete-other-windows)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
