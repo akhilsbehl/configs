@@ -31,13 +31,16 @@
 
 ;;;; Sync all packages at startup
 
+;;; This section is to deal with some deps that cause breakage from time to
+;;; time. Ideally this should be empty.
+;; (el-get 'sync 'foo)
+;; (require-package 'bar)
+
 ;;; Use this section for standard edition el-get packages
 (el-get
  'sync
- '(seq  ; This mother-fucker breaks everything
-   auto-complete
+ '(auto-complete
    elscreen
-   ;; ess
    evil
    evil-exchange
    evil-leader
@@ -53,7 +56,11 @@
    org-mode
    projectile))
 
+;;; Use this section for packages that need to be installed from ELPA/MELPA.
+(require-package 'ess)  ;; Till it starts working with el-get
+
 ;;; Use this section for el-get packages that need to be bundled.
+;; (require-package 'baz)
 
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
@@ -103,17 +110,10 @@
 ;;; Nerd commenter. Make sure to use after evil-leader
 (evil-leader/set-key "ct" 'evilnc-comment-or-uncomment-lines)
 (evil-leader/set-key "ci" 'evilnc-toggle-invert-comment-line-by-line)
-(evil-leader/set-key ",c" 'evilnc-comment-operator)
 (evil-leader/set-key "cb" #'comment-box) ; Here by association
 
 ;;; Swap selections / text-objects
 (evil-exchange-install)
-
-;;; Some niceties to work with undo-tree
-(evil-leader/set-key "uv" 'undo-tree-visualize)
-(evil-leader/set-key "ud" 'undo-tree-visualizer-toggle-diff)
-(evil-leader/set-key "ua" 'undo-tree-visualizer-abort)
-(evil-leader/set-key "uq" 'undo-tree-visualizer-quit)
 
 ;;; Do this last
 (evil-mode 1)
@@ -159,7 +159,7 @@
 (setq evil-operator-state-cursor '("orange" hollow))
 (setq evil-insert-state-cursor '("orange" bar))
 (setq evil-emacs-state-cursor '("red" box))
-(setq evil-replace-state-cursor '("pink" underline))
+(setq evil-replace-state-cursor '("red" hollow))
 
 ;;; Visually indicate the right limit for programming modes
 (require 'whitespace)
@@ -175,12 +175,14 @@
 ;;;; Use vim-like tabs (also using krisajenkins' evil-tabs)
 (load "elscreen" "ElScreen" t)
 (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
+
 (define-key evil-normal-state-map "tc" 'elscreen-create)
-;; Stay consistent with the kill idiom and this.
-(define-key evil-normal-state-map "kt" 'elscreen-kill)
 (define-key evil-normal-state-map "td" 'elscreen-kill)
 (define-key evil-normal-state-map "tj" 'elscreen-previous)
 (define-key evil-normal-state-map "tk" 'elscreen-next)
+;; Here by association
+(define-key evil-normal-state-map (kbd "C-w =") 'balance-windows)
+
 (evil-define-key 'normal evil-tabs-mode-map "tt"
   'evil-tabs-current-buffer-to-tab)
 (evil-define-key 'normal evil-tabs-mode-map "tT"
@@ -204,7 +206,7 @@
 
 ;;;; Miscellaneous
 
-;;; Follow the files symlinks link to by default
+;;; Follow symlinks by default
 (setq vc-follow-symlinks t)
 
 ;;; Use a key for alignments
@@ -241,10 +243,18 @@
   (other-window 1)
   (kill-buffer-and-window))
 
+;; Kill the current buffer and window
 (evil-leader/set-key "kb" 'kill-buffer-and-window)
+;; Kill the current window
 (evil-leader/set-key "kw" 'delete-window)
+;; Kill the other window
 (evil-leader/set-key "ko" 'kill-other-window)
+;; Kill the current frame
 (evil-leader/set-key "kf" 'delete-frame)
+;; Kill the current tab
+(define-key evil-normal-state-map "kt" 'elscreen-kill)
+;; Kill all windows except current
+(evil-leader/set-key "kao" 'delete-other-windows)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
@@ -272,9 +282,6 @@
 ;;; Move by visual lines and not by actual lines
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-
-;;; Use hide-show minor mode for code folding in all programming languages
-(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 ;;; Use y/n for asking instead of yes/no
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -309,6 +316,7 @@
 ;;; Revert buffers easily
 (evil-leader/set-key "rb" 'revert-buffer)
 
+;;; Evaluate an sexp.
 (evil-leader/set-key "els" 'eval-last-sexp)
 
 ;;; Github/Chalmagean/emacs.d/my-evil.el
@@ -327,7 +335,19 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;; Some niceties to work with undo-tree
+
+(evil-leader/set-key "uv" 'undo-tree-visualize)
+(evil-leader/set-key "ud" 'undo-tree-visualizer-toggle-diff)
+(evil-leader/set-key "ua" 'undo-tree-visualizer-abort)
+(evil-leader/set-key "uq" 'undo-tree-visualizer-quit)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;; HideShow mode bindings.
+
+;;; Use hide-show minor mode for code folding in all programming languages
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 ;;; Unset what evil comes with.
 (define-key evil-normal-state-map (kbd "z a") nil)
@@ -346,25 +366,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Completion framework: Auto-complete
+
 (ac-config-default)
+
+(setq-default ac-sources '(ac-source-words-in-buffer
+                           ac-source-words-in-same-mode-buffers
+                           ac-source-filename
+                           ac-source-abbrev))
+
 (setq ac-use-quick-help t)
 (setq ac-quick-help-delay 0)
 (setq ac-set-trigger-key "TAB")
-(define-key ac-mode-map (kbd "TAB") 'auto-complete)
-(setq ac-auto-start 4)
+(setq ac-auto-start 2)
 (setq ac-ignore-case 'smart)
 (setq ac-auto-show-menu 0)
 (setq ac-menu-height 20)
+
+(define-key ac-mode-map (kbd "TAB") 'auto-complete)
 (define-key ac-completing-map (kbd "C-j") 'ac-next)
 (define-key ac-completing-map (kbd "C-k") 'ac-previous)
 (define-key ac-completing-map (kbd "C-h") 'ac-help)
 (define-key ac-completing-map (kbd "C-H") 'ac-persist-help)
 (define-key ac-completing-map (kbd "C-n") 'ac-quick-help-scroll-up)
 (define-key ac-completing-map (kbd "C-p") 'ac-quick-help-scroll-down)
-(setq-default ac-sources '(ac-source-words-in-buffer
-                           ac-source-words-in-same-mode-buffers
-                           ac-source-filename
-                           ac-source-abbrev))
+
+;; Deal with the linum display bug
 (ac-linum-workaround)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -435,7 +461,6 @@
 
 ;;;; Linting with Flycheck
 (add-hook 'prog-mode-hook #'flycheck-mode)
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
 (setq flycheck-display-errors-delay 0.5)
 
 (evil-leader/set-key "fv" 'flycheck-verify-setup)
@@ -451,10 +476,10 @@
 
 (require 'helm-config)
 (helm-mode 1)
+(setq helm-M-x-fuzzy-match t)
 
 ;;; Invoke various kind of completions
 (global-unset-key (kbd "C-x c"))
-(setq helm-M-x-fuzzy-match t)
 (evil-leader/set-key "hx" 'helm-M-x)
 (evil-leader/set-key "hf" 'helm-find-files)
 (evil-leader/set-key "hb" 'helm-mini)
@@ -471,7 +496,6 @@
         helm-grep-default-recurse-command
         "ack -H --no-group --no-color %e %p %f"))
 
-
 (define-key helm-map (kbd "C-j") 'helm-next-line)
 (define-key helm-map (kbd "C-k") 'helm-previous-line)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
@@ -480,7 +504,8 @@
 (define-key helm-map (kbd "C-a") 'helm-toggle-all-marks)
 (define-key helm-map (kbd "C-i") 'helm-copy-to-buffer)
 (define-key helm-map (kbd "C-h") 'helm-help)
-(define-key helm-map (kbd "C-y") 'helm-yank-text-at-point)
+(define-key helm-map (kbd "C-y") 'next-history-element)
+(define-key helm-map (kbd "C-Y") 'helm-yank-text-at-point)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -502,6 +527,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Magit
+
 (evil-leader/set-key "gs" 'magit-status)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -512,7 +538,7 @@
 
 ;;;; ESS
 
-;; (require 'ess-site)
+(require 'ess-site)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -549,10 +575,10 @@
             (add-hook 'after-save-hook 'markdown-export nil 'local)
             ; Use this for opening the preview
             (evil-leader/set-key-for-mode
-              'markdown-mode "pr" 'markdown-export-and-preview)
+              'markdown-mode "mp" 'markdown-export-and-preview)
             ; Use this for manual refreshes
             (evil-leader/set-key-for-mode
-              'markdown-mode "r" 'markdown-export)))
+              'markdown-mode "me" 'markdown-export)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -579,5 +605,5 @@
 ;;; 1. Org-mode (Too much too much!)
 ;;; 2. ESS
 ;;; 3. Multiple cursors
-;;; 4. IPython interaction: anything better than jedi? Send commands?
+;;; 4. IPython interaction: anything better than Elpy to send commands?
 ;;; 5. ETags bitch! Seriously.
