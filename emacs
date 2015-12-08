@@ -475,7 +475,12 @@
 ;;;; Helm
 
 (require 'helm-config)
+
+;; Tramp breaks helm. See: https://github.com/emacs-helm/helm/issues/1000
+(setq tramp-ssh-controlmaster-options
+      "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 (helm-mode 1)
+
 (setq helm-M-x-fuzzy-match t)
 
 ;;; Invoke various kind of completions
