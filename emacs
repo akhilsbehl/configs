@@ -60,14 +60,12 @@
 (require-package 'ess)  ;; Till it starts working with el-get
 
 ;;; Use this section for el-get packages that need to be bundled.
-;; (require-package 'baz)
 
-;; This will also load the theme if standalone. For loading the theme when
-;; running as a client, see the appearance section.
-;; (el-get-bundle gruvbox-theme in greduan/emacs-theme-gruvbox)
-(el-get-bundle darktooth-theme in emacsfodder/emacs-theme-darktooth)
 (el-get-bundle krisajenkins/evil-tabs)
 (el-get-bundle emacsfodder/emacs-mainline)
+;; This will also load the theme if standalone. For loading the theme when
+;; running as a client, see the appearance section.
+(el-get-bundle darktooth-theme in emacsfodder/emacs-theme-darktooth)
 
 ;;; Use this section for packages that need to be installed using `package`
 
@@ -249,12 +247,12 @@
 (evil-leader/set-key "kw" 'delete-window)
 ;; Kill the other window
 (evil-leader/set-key "ko" 'kill-other-window)
+;; Kill all windows except current
+(evil-leader/set-key "kO" 'delete-other-windows)
 ;; Kill the current frame
 (evil-leader/set-key "kf" 'delete-frame)
 ;; Kill the current tab
 (define-key evil-normal-state-map "kt" 'elscreen-kill)
-;; Kill all windows except current
-(evil-leader/set-key "kao" 'delete-other-windows)
 
 ;;; Reformat a paragraph.
 (evil-leader/set-key "rf" ; Reformat a paragraph
@@ -475,7 +473,12 @@
 ;;;; Helm
 
 (require 'helm-config)
+
+;; Tramp breaks helm. See: https://github.com/emacs-helm/helm/issues/1000
+(setq tramp-ssh-controlmaster-options
+      "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 (helm-mode 1)
+
 (setq helm-M-x-fuzzy-match t)
 
 ;;; Invoke various kind of completions
