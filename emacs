@@ -375,11 +375,11 @@
                            ac-source-abbrev))
 
 (setq ac-use-quick-help t)
-(setq ac-quick-help-delay 0)
+(setq ac-quick-help-delay 1)
 (setq ac-set-trigger-key "TAB")
-(setq ac-auto-start 2)
+(setq ac-auto-start 3)
 (setq ac-ignore-case 'smart)
-(setq ac-auto-show-menu 0)
+(setq ac-auto-show-menu 0.8)
 (setq ac-menu-height 20)
 
 (define-key ac-mode-map (kbd "TAB") 'auto-complete)
@@ -461,7 +461,7 @@
 
 ;;;; Linting with Flycheck
 (add-hook 'prog-mode-hook #'flycheck-mode)
-(setq flycheck-display-errors-delay 0.5)
+(setq flycheck-display-errors-delay 1)
 
 (evil-leader/set-key "fv" 'flycheck-verify-setup)
 (evil-leader/set-key "fc" 'flycheck-buffer)
@@ -548,7 +548,7 @@
           (lambda ()
             (jedi:setup)
             (setq jedi:complete-on-dot t)
-            (setq jedi:get-in-function-call-delay 500)
+            (setq jedi:get-in-function-call-delay 1000)
             (setq jedi:goto-definition-marker-ring-length 32)))
 
 (evil-leader/set-key-for-mode 'python-mode "jh" 'jedi:show-doc)
