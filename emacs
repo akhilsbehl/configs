@@ -239,7 +239,7 @@
 (defun kill-other-window ()
   (interactive)
   (other-window 1)
-  (kill-buffer-and-window))
+  (kill-window))
 
 ;; Kill the current buffer and window
 (evil-leader/set-key "kb" 'kill-buffer-and-window)
