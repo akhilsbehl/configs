@@ -174,17 +174,14 @@
 (load "elscreen" "ElScreen" t)
 (add-hook 'evil-local-mode-hook (lambda () (evil-tabs-mode 1)))
 
-(define-key evil-normal-state-map "tc" 'elscreen-create)
-(define-key evil-normal-state-map "td" 'elscreen-kill)
-(define-key evil-normal-state-map "tj" 'elscreen-previous)
-(define-key evil-normal-state-map "tk" 'elscreen-next)
-;; Here by association
-(define-key evil-normal-state-map (kbd "C-w =") 'balance-windows)
-
-(evil-define-key 'normal evil-tabs-mode-map "tt"
-  'evil-tabs-current-buffer-to-tab)
-(evil-define-key 'normal evil-tabs-mode-map "tT"
-  'elscreen-find-and-goto-by-buffer)
+;;; Do the same for the hybrid state map
+(evil-leader/set-key (kbd "tc") 'elscreen-create)
+(evil-leader/set-key (kbd "td") 'elscreen-kill)
+(evil-leader/set-key (kbd "tj") 'elscreen-previous)
+(evil-leader/set-key (kbd "tk") 'elscreen-next)
+(evil-leader/set-key (kbd "tt") 'evil-tabs-current-buffer-to-tab)
+(evil-leader/set-key (kbd "tT") 'elscreen-find-and-goto-by-buffer)
+(evil-leader/set-key (kbd "t=") 'balance-windows)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
