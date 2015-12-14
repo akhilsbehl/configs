@@ -65,7 +65,7 @@
 (el-get-bundle emacsfodder/emacs-mainline)
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
-(el-get-bundle darktooth-theme in emacsfodder/emacs-theme-darktooth)
+(el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
 
 ;;; Use this section for packages that need to be installed using `package`
 
@@ -232,20 +232,14 @@
     (interactive)
     (evil-ex "%s/\s\+$//e<CR>:let @/=''<CR>")))
 
-;;; Killing stuff
-(defun kill-other-window ()
-  (interactive)
-  (other-window 1)
-  (delete-window))
-
+;; Kill the current buffer only
+(evil-leader/set-key "kb" 'kill-buffer)
 ;; Kill the current buffer and window
-(evil-leader/set-key "kb" 'kill-buffer-and-window)
+(evil-leader/set-key "kB" 'kill-buffer-and-window)
 ;; Kill the current window
 (evil-leader/set-key "kw" 'delete-window)
-;; Kill the other window
-(evil-leader/set-key "ko" 'kill-other-window)
 ;; Kill all windows except current
-(evil-leader/set-key "kO" 'delete-other-windows)
+(evil-leader/set-key "kW" 'delete-other-windows)
 ;; Kill the current frame
 (evil-leader/set-key "kf" 'delete-frame)
 ;; Kill the current tab
