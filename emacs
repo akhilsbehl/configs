@@ -542,6 +542,52 @@
 
 (require 'ess-site)
 
+;;; ESS editing mode
+(evil-leader/set-key-for-mode 'ess-mode "eq" 'ess-quit)
+(evil-leader/set-key-for-mode 'ess-mode "ef" 'ess-load-file)
+(evil-leader/set-key-for-mode 'ess-mode "ed" 'ess-use-this-dir)
+(evil-leader/set-key-for-mode 'ess-mode "eD" 'ess-set-working-directory)
+(evil-leader/set-key-for-mode 'ess-mode "ep" 'ess-install-library)
+(evil-leader/set-key-for-mode 'ess-mode "eP" 'ess-display-package-index)
+(evil-leader/set-key-for-mode 'ess-mode "eb" 'ess-eval-buffer)
+(evil-leader/set-key-for-mode 'ess-mode "el" 'ess-eval-line-and-step)
+(evil-leader/set-key-for-mode 'ess-mode "eg" 'ess-eval-buffer-from-beg-to-here)
+(evil-leader/set-key-for-mode 'ess-mode "eG" 'ess-eval-buffer-from-here-to-end)
+(evil-leader/set-key-for-mode 'ess-mode "ex"
+  'ess-eval-region-or-function-or-paragraph-and-step)
+(evil-leader/set-key-for-mode 'ess-mode "eB" 'ess-force-buffer-current)
+(evil-leader/set-key-for-mode 'ess-mode "eh" 'ess-display-help-on-object)
+(evil-leader/set-key-for-mode 'ess-mode "eH" 'ess-describe-object-at-point)
+(evil-leader/set-key-for-mode 'ess-mode "et" 'ess-show-traceback)
+(evil-leader/set-key-for-mode 'ess-mode "eT" 'ess-show-call-stack)
+
+;;; inferior ESS execution mode
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eq" 'ess-quit)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "ef" 'ess-load-file)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eD" 'ess-set-working-directory)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "ep" 'ess-install-library)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eP" 'ess-display-package-index)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "e<tab>" 'ess-list-object-completions)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eh" 'ess-display-help-on-object)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eH" 'ess-describe-object-at-point)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "et" 'ess-show-traceback)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eT" 'ess-show-call-stack)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "el"
+  'ess-msg-and-comint-dynamic-list-input-ring)
+
+;; Comint related stuff
+(evil-leader/set-key-for-mode 'inferior-ess-mode "ej" 'comint-next-input)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "ek" 'comint-previous-input)
+(setq comint-prompt-regexp t)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eh" 'comint-next-prompt)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "el" 'comint-previous-prompt)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "es"
+  'comint-history-isearch-backward-regexp)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eJ"
+  'comint-next-matching-input-from-input)
+(evil-leader/set-key-for-mode 'inferior-ess-mode "eK"
+  'comint-previous-matching-input-from-input)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Python set-up
