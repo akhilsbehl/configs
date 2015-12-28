@@ -1,16 +1,6 @@
 # Set your lib path.
 .libPaths("~/rstat/lib/")
 
-# Load libraries for vim-r-plugin.
-if(interactive()){
-  library(colorout)
-  library(setwidth)
-  library(vimcom)
-}
-
-# Workaround for the Arch Cairo bug.
-grDevices::X11.options(type="dbcairo")
-
 options(prompt="R> ")
 options("pdfviewer"="mupdf")
 options(showWarnCalls=TRUE, showErrorCalls=TRUE)
@@ -18,7 +8,6 @@ options(max.print=1000)
 options(repos=c("http://cran.stat.nus.edu.sg/",
                 "http://cran.cnr.berkeley.edu/",
                 "http://stat.ethz.ch/CRAN/"))
-options(pager="/usr/bin/less")
 
 .ls.objects <- function (pos = 1, pattern, order.by,
                          decreasing=FALSE, head=FALSE, n=5) {
