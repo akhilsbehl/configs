@@ -540,16 +540,17 @@
 ;;;; ESS
 
 ;;; TODO:
-; 1. Don't insert spaces around '=' in completion of function arguments.
-; 2. Find a way to send arbitrary commands on object at point.
+; 1. Find a way to send arbitrary commands on object at point.
 
 (require 'ess-site)
 
-(setq ess-use-auto-complete t)
-
-;;; KISS. Don't try to be smart with me. :P
-(ess-disable-smart-S-assign nil)
-(ess-disable-smart-underscore nil)
+(add-hook 'ess-mode-hook
+          (lambda ()
+            (setq ess-use-auto-complete t)
+            (setq ess-style 'RRR+)
+            (setq ess-R-argument-suffix "=")
+            (ess-disable-smart-S-assign nil)
+            (ess-disable-smart-underscore nil)))
 
 ;;; Drop this weird keymap since it interferes with evil.
 (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
@@ -667,7 +668,6 @@
 ;;;; TODO: Packages & Functionality to explore
 
 ;;; 1. Org-mode (Too much too much!)
-;;; 2. ESS
-;;; 3. Multiple cursors
-;;; 4. IPython interaction: anything better than Elpy to send commands?
-;;; 5. ETags bitch! Seriously.
+;;; 2. Multiple cursors
+;;; 3. IPython interaction: anything better than Elpy to send commands?
+;;; 4. ETags bitch! Seriously.
