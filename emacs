@@ -382,10 +382,9 @@
 (define-key ac-mode-map (kbd "TAB") 'auto-complete)
 (define-key ac-completing-map (kbd "C-j") 'ac-next)
 (define-key ac-completing-map (kbd "C-k") 'ac-previous)
-(define-key ac-completing-map (kbd "C-h") 'ac-help)
-(define-key ac-completing-map (kbd "C-H") 'ac-persist-help)
-(define-key ac-completing-map (kbd "C-n") 'ac-quick-help-scroll-up)
-(define-key ac-completing-map (kbd "C-p") 'ac-quick-help-scroll-down)
+(define-key ac-completing-map (kbd "C-h") 'ac-persist-help)
+(define-key ac-completing-map (kbd "C-n") 'ac-quick-help-scroll-down)
+(define-key ac-completing-map (kbd "C-p") 'ac-quick-help-scroll-up)
 
 ;; Deal with the linum display bug
 (ac-linum-workaround)
@@ -540,7 +539,20 @@
 
 ;;;; ESS
 
+;;; TODO:
+; 1. Don't insert spaces around '=' in completion of function arguments.
+; 2. Find a way to send arbitrary commands on object at point.
+
 (require 'ess-site)
+
+(setq ess-use-auto-complete t)
+
+;;; KISS. Don't try to be smart with me. :P
+(ess-disable-smart-S-assign nil)
+(ess-disable-smart-underscore nil)
+
+;;; Drop this weird keymap since it interferes with evil.
+(define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
 
 ;;; ESS editing mode
 (evil-leader/set-key-for-mode 'ess-mode "eq" 'ess-quit)
@@ -562,30 +574,34 @@
 (evil-leader/set-key-for-mode 'ess-mode "eT" 'ess-show-call-stack)
 
 ;;; inferior ESS execution mode
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eq" 'ess-quit)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "ef" 'ess-load-file)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eD" 'ess-set-working-directory)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "ep" 'ess-install-library)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eP" 'ess-display-package-index)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "e<tab>" 'ess-list-object-completions)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eh" 'ess-display-help-on-object)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eH" 'ess-describe-object-at-point)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "et" 'ess-show-traceback)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eT" 'ess-show-call-stack)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "el"
+(define-key evil-insert-state-map (kbd "C-e") nil)
+(define-key inferior-ess-mode-map "," nil)
+
+(define-key inferior-ess-mode-map (kbd "C-e ,") 'ess-smart-comma)
+(define-key inferior-ess-mode-map (kbd "C-e q") 'ess-quit)
+(define-key inferior-ess-mode-map (kbd "C-e f") 'ess-load-file)
+(define-key inferior-ess-mode-map (kbd "C-e d") 'ess-use-this-dir)
+(define-key inferior-ess-mode-map (kbd "C-e D") 'ess-set-working-directory)
+(define-key inferior-ess-mode-map (kbd "C-e p") 'ess-install-library)
+(define-key inferior-ess-mode-map (kbd "C-e P") 'ess-display-package-index)
+(define-key inferior-ess-mode-map (kbd "C-e h") 'ess-display-help-on-object)
+(define-key inferior-ess-mode-map (kbd "C-e H") 'ess-describe-object-at-point)
+(define-key inferior-ess-mode-map (kbd "C-e t") 'ess-show-traceback)
+(define-key inferior-ess-mode-map (kbd "C-e T") 'ess-show-call-stack)
+(define-key inferior-ess-mode-map (kbd "C-e l")
   'ess-msg-and-comint-dynamic-list-input-ring)
 
 ;; Comint related stuff
-(evil-leader/set-key-for-mode 'inferior-ess-mode "ej" 'comint-next-input)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "ek" 'comint-previous-input)
-(setq comint-prompt-regexp t)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eh" 'comint-next-prompt)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "el" 'comint-previous-prompt)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "es"
+(define-key inferior-ess-mode-map (kbd "C-e 0") 'comint-bol)
+(define-key inferior-ess-mode-map (kbd "C-e j") 'comint-next-input)
+(define-key inferior-ess-mode-map (kbd "C-e k") 'comint-previous-input)
+(define-key inferior-ess-mode-map (kbd "C-e J") 'comint-next-prompt)
+(define-key inferior-ess-mode-map (kbd "C-e K") 'comint-previous-prompt)
+(define-key inferior-ess-mode-map (kbd "C-e ?")
   'comint-history-isearch-backward-regexp)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eJ"
+(define-key inferior-ess-mode-map (kbd "<up>")
   'comint-next-matching-input-from-input)
-(evil-leader/set-key-for-mode 'inferior-ess-mode "eK"
+(define-key inferior-ess-mode-map (kbd "<down>")
   'comint-previous-matching-input-from-input)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
