@@ -78,6 +78,9 @@
  '(evil-intercept-maps nil)
  '(evil-overriding-maps nil))
 
+;;; Search symbols and not words
+(setq-default evil-symbol-word-search t)
+
 ;;; Let everything open up in Evil motion (normal?) mode.
 (setq evil-motion-state-modes (append evil-emacs-state-modes
                                       evil-motion-state-modes))
@@ -167,6 +170,10 @@
 
 ;;; Always show matching parens
 (show-paren-mode t)
+
+;;; Scroll by lines and not by half a page.
+(setq scroll-step 1)
+(setq scroll-conservatively 101)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -370,6 +377,7 @@
 (setq ac-ignore-case 'smart)
 (setq ac-auto-show-menu 0.8)
 (setq ac-menu-height 20)
+(setq ac-ignore-case nil)
 
 (define-key ac-mode-map (kbd "TAB") 'auto-complete)
 (define-key ac-completing-map (kbd "C-j") 'ac-next)
