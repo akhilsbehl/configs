@@ -416,7 +416,8 @@ function uninstall () {
 #############
 
 eval $(ssh-agent) &> /dev/null
-find "$HOME"/.ssh -type f -name '*.ssh' -exec ssh-add -k {} \; &> /dev/null
+ssh-add &> /dev/null
+find "$HOME"/.ssh -type f -name '*.pem' -exec ssh-add -k {} \; &> /dev/null
 
 ####################################
 # Find the virtualenv and activate #
