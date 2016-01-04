@@ -667,6 +667,7 @@
 
 ;;;; TODO: Packages & Functionality to explore
 
+;;; 0. A good snippet system. Please.
 ;;; 1. Org-mode (Too much too much!)
 ;;; 2. Multiple cursors
 ;;; 3. IPython interaction: anything better than Elpy to send commands?
