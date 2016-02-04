@@ -259,16 +259,6 @@
     (interactive)
     (fill-paragraph)))
 
-;;; Copy a 'p'aragraph to system clipboard.
-(evil-leader/set-key "yp"
-  (lambda ()
-    (interactive)
-    (let* ((p (point)))
-      (mark-paragraph)
-      (clipboard-kill-ring-save (region-beginning) (region-end))
-      (goto-char p)
-      (message "Paragraph copied."))))
-
 ;;; Copy the whole 'b'uffer to system clipboard.
 (evil-leader/set-key "yb"
   (lambda ()
