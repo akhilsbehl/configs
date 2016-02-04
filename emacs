@@ -63,6 +63,7 @@
 
 (el-get-bundle krisajenkins/evil-tabs)
 (el-get-bundle emacsfodder/emacs-mainline)
+(el-get-bundle django-html-mode in myfreeweb/django-mode)
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 (el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
@@ -258,8 +259,8 @@
     (interactive)
     (fill-paragraph)))
 
-;;; Copy a paragraph to system clipboard.
-(evil-leader/set-key "y" ; Copy a paragraph to system clipboard
+;;; Copy a 'p'aragraph to system clipboard.
+(evil-leader/set-key "yp"
   (lambda ()
     (interactive)
     (let* ((p (point)))
@@ -268,12 +269,26 @@
       (goto-char p)
       (message "Paragraph copied."))))
 
-;;; Copy the whole buffer to system clipboard.
-(evil-leader/set-key "Y" ; Copy the whole buffer to system clipboard
+;;; Copy the whole 'b'uffer to system clipboard.
+(evil-leader/set-key "yb"
   (lambda ()
     (interactive)
     (clipboard-kill-ring-save (point-min) (point-max))
     (message "Buffer copied.")))
+
+;;; Copy from beginning of the buffer 'u'pto point.
+(evil-leader/set-key "yu"
+  (lambda ()
+    (interactive)
+    (clipboard-kill-ring-save (point-min) (point))
+    (message "Buffer copied upto point.")))
+
+;;; Copy 'f'rom point to the end of buffer.
+(evil-leader/set-key "yf" ; Copy the whole buffer to system clipboard
+  (lambda ()
+    (interactive)
+    (clipboard-kill-ring-save (point) (point-max))
+    (message "Buffer copied from point onwards.")))
 
 ;;; Move by visual lines and not by actual lines
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
