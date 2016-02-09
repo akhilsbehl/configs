@@ -54,7 +54,8 @@
    magit
    markdown-mode
    org-mode
-   projectile))
+   projectile
+   helm-projectile))
 
 ;;; Use this section for packages that need to be installed from ELPA/MELPA.
 (require-package 'ess)  ;; Till it starts working with el-get
