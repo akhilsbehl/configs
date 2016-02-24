@@ -491,6 +491,7 @@
 (evil-leader/set-key "hf" 'helm-find-files)
 (evil-leader/set-key "hb" 'helm-mini)
 (evil-leader/set-key "hm" 'helm-all-mark-rings)
+(evil-leader/set-key "hM" 'helm-man-woman)
 (evil-leader/set-key "hk" 'helm-show-kill-ring)
 (evil-leader/set-key "hg" 'helm-do-grep-ag)
 
