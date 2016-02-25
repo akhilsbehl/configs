@@ -21,6 +21,9 @@ KEYTIMEOUT=10
 
 bindkey '^r' history-incremental-search-backward
 
+# Share history between terminals. Seriously, already.
+setopt share_history
+
 # Spell correct
 setopt correct
 
