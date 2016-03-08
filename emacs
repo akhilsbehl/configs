@@ -628,12 +628,13 @@
 (evil-leader/set-key-for-mode 'python-mode
   "jG" 'jedi:goto-definition-pop-marker)
 
-(defun set-python-debugger-trace ()
+(cl-defun set-python-debugger-trace
+    (&optional (statement "import pdb; pdb.set_trace()"))
   (interactive)
   (move-beginning-of-line 1)
   (next-line 1)
   (open-line 1)
-  (insert "import pdb; pdb.set_trace()")
+  (insert statement)
   (python-indent-line))
 (evil-leader/set-key-for-mode 'python-mode "da" 'set-python-debugger-trace)
 
