@@ -21,7 +21,7 @@
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
-(defun require-package (pkg)
+(defun asb-require-package (pkg)
   (unless (package-installed-p pkg)
     (unless (assoc pkg package-archive-contents)
       (package-refresh-contents))
@@ -34,7 +34,7 @@
 ;;; This section is to deal with some deps that cause breakage from time to
 ;;; time. Ideally this should be empty.
 ;; (el-get 'sync 'foo)
-;; (require-package 'bar)
+;; (asb-require-package 'bar)
 
 ;;; Use this section for standard edition el-get packages
 (el-get
@@ -58,7 +58,7 @@
    helm-projectile))
 
 ;;; Use this section for packages that need to be installed from ELPA/MELPA.
-(require-package 'ess)  ;; Till it starts working with el-get
+(asb-require-package 'ess)  ;; Till it starts working with el-get
 
 ;;; Use this section for el-get packages that need to be bundled.
 
@@ -89,13 +89,13 @@
 (setq evil-emacs-state-modes nil)
 
 ;;; http://www.emacswiki.org/emacs/Evil
-(defun transfer-key (from-keymap to-keymap key)
+(defun asb-transfer-key (from-keymap to-keymap key)
   "Moves key binding from one keymap to another, deleting from the old
    location."
   (define-key to-keymap key (lookup-key from-keymap key))
   (define-key from-keymap key nil))
-(transfer-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
-(transfer-key evil-motion-state-map evil-normal-state-map " ")
+(asb-transfer-key evil-motion-state-map evil-normal-state-map (kbd "RET"))
+(asb-transfer-key evil-motion-state-map evil-normal-state-map " ")
 
 ;;; Surround
 (global-evil-surround-mode 1)
@@ -117,6 +117,21 @@
 
 ;;; Swap selections / text-objects
 (evil-exchange-install)
+
+;;; Window management
+
+;; Drop this weird keymap since it interferes with evil.
+(define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
+
+;; ;; Evil already maps C-w hjkl to windmove. But let's make:
+;; ; 1. C-w o to go the last window; and
+(defun asb-previous-window ()
+  (interactive)
+  (other-window -1))
+(define-key evil-window-map (kbd "o") 'asb-previous-window)
+
+; 2. Make windomove cycle windows
+(setq windmove-wrap-around t)
 
 ;;; Do this last
 (evil-mode 1)
@@ -220,14 +235,14 @@
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 ;;; Add a newline above and below the cursor and enter insert mode.
-(defun open-between-empty-lines ()
+(defun asb-open-between-empty-lines ()
   "Create an empty line above and below the cursor and enter evil-insert-mode at
   cursor position."
   (interactive)
   (open-line 2)
   (next-line)
   (evil-insert-line 1))
-(evil-leader/set-key "o" #'open-between-empty-lines)
+(evil-leader/set-key "o" #'asb-open-between-empty-lines)
 
 ;;; Delete all blank lines (or containing only whitespace)
 (evil-leader/set-key "db" ; Delete all blank lines
@@ -289,7 +304,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;;; Make escape quit in the minibuffer too
-(defun minibuffer-keyboard-quit ()
+(defun asb-minibuffer-keyboard-quit ()
   "Abort recursive edit. In Delete Selection mode, if the mark is
    active, just deactivate it; then it takes a second \\[keyboard-quit]
    to abort the minibuffer."
@@ -301,11 +316,11 @@
 
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-map [escape] 'asb-minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'asb-minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'asb-minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'asb-minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'asb-minibuffer-keyboard-quit)
 (global-set-key [escape] 'evil-exit-emacs-state)
 
 ;;; Open ibuffer when I want it
@@ -322,18 +337,18 @@
 (evil-leader/set-key "els" 'eval-last-sexp)
 
 ;;; Github/Chalmagean/emacs.d/my-evil.el
-(defun split-horizontal ()
+(defun asb-split-horizontal ()
   (interactive)
   (split-window-vertically)
   (other-window 1))
 
-(defun split-vertical ()
+(defun asb-split-vertical ()
   (interactive)
   (split-window-horizontally)
   (other-window 1))
 
-(evil-leader/set-key (kbd "-") 'split-horizontal)
-(evil-leader/set-key (kbd "|") 'split-vertical)
+(evil-leader/set-key (kbd "-") 'asb-split-horizontal)
+(evil-leader/set-key (kbd "|") 'asb-split-vertical)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -406,58 +421,55 @@
 ;; http://www.idryman.org/blog/2013/05/20/emacs-and-pdf/
 ;; Also works with numeric prefix to scroll multiple pages at once
 
-;; NB: Make sure to be using only two splits so that `(other-window 1)' does
-;; not get confused.
-
-(defun dvscroll-forward ()
+(defun asb-dvscroll-forward ()
   (interactive)
   (other-window 1)
   (image-next-line 3)
-  (other-window 1))
+  (other-window -1))
 
-(defun dvscroll-backward ()
+(defun asb-dvscroll-backward ()
   (interactive)
   (other-window 1)
   (image-previous-line 3)
-  (other-window 1))
+  (other-window -1))
 
-(defun dvscroll-previous-page ()
+(defun asb-dvscroll-previous-page ()
   (interactive)
   (other-window 1)
   (doc-view-previous-page)
-  (other-window 1))
+  (other-window -1))
 
-(defun dvscroll-next-page ()
+(defun asb-dvscroll-next-page ()
   (interactive)
   (other-window 1)
   (doc-view-next-page)
-  (other-window 1))
+  (other-window -1))
 
-(defun dvscroll-first-page ()
+(defun asb-dvscroll-first-page ()
   (interactive)
   (other-window 1)
   (doc-view-first-page)
-  (other-window 1))
+  (other-window -1))
 
-(defun dvscroll-last-page ()
+(defun asb-dvscroll-last-page ()
   (interactive)
   (other-window 1)
   (doc-view-last-page)
-  (other-window 1))
+  (other-window -1))
 
-(defun dvscroll-goto-page (page)
+(defun asb-dvscroll-goto-page (page)
   (interactive "nPage: ")
   (other-window 1)
   (doc-view-goto-page page)
-  (other-window 1))
+  (other-window -1))
 
-(evil-leader/set-key-for-mode 'doc-view-mode "Ph" 'dvscroll-forward)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pj" 'dvscroll-next-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pk" 'dvscroll-previous-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pl" 'dvscroll-backward)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pg" 'dvscroll-first-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "PG" 'dvscroll-last-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pn" 'dvscroll-goto-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Ph" 'asb-dvscroll-forward)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pj" 'asb-dvscroll-next-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pk" 'asb-dvscroll-previous-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pl" 'asb-dvscroll-backward)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pg" 'asb-dvscroll-first-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "PG" 'asb-dvscroll-last-page)
+(evil-leader/set-key-for-mode 'doc-view-mode "Pn" 'asb-dvscroll-goto-page)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -559,9 +571,6 @@
             (ess-disable-smart-S-assign nil)
             (ess-disable-smart-underscore nil)))
 
-;;; Drop this weird keymap since it interferes with evil.
-(define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
-
 ;;; ESS editing mode
 (evil-leader/set-key-for-mode 'ess-mode "eq" 'ess-quit)
 (evil-leader/set-key-for-mode 'ess-mode "ef" 'ess-load-file)
@@ -628,7 +637,7 @@
 (evil-leader/set-key-for-mode 'python-mode
   "jG" 'jedi:goto-definition-pop-marker)
 
-(cl-defun set-python-debugger-trace
+(cl-defun asb-set-python-debugger-trace
     (&optional (statement "import pdb; pdb.set_trace()"))
   (interactive)
   (move-beginning-of-line 1)
@@ -636,7 +645,7 @@
   (open-line 1)
   (insert statement)
   (python-indent-line))
-(evil-leader/set-key-for-mode 'python-mode "da" 'set-python-debugger-trace)
+(evil-leader/set-key-for-mode 'python-mode "da" 'asb-set-python-debugger-trace)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -669,16 +678,16 @@
 ;;; http://stackoverflow.com/questions/251908/how-can-i-insert-current-date-and
 ;;; -time-into-a-file-using-emacs
 
-(defun time-now ()
+(defun asb-time-now ()
   (interactive)
   (insert (format-time-string "%A, %B %d, %Y %H:%M:%S")))
 
-(defun date-today ()
+(defun asb-date-today ()
   (interactive)
   (insert (format-time-string "%A, %B %d, %Y")))
 
-(evil-leader/set-key "it" 'time-now)
-(evil-leader/set-key "id" 'date-today)
+(evil-leader/set-key "it" 'asb-time-now)
+(evil-leader/set-key "id" 'asb-date-today)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
