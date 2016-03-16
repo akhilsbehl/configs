@@ -9,7 +9,7 @@ unset OIFS
 exit 0
 }
 
-OUTDIR="$HOME"/videos/phonevids
+OUTDIR="$HOME"/video/phonevids
 LOGDIR="$HOME"/.log
 LOGFILE="$LOGDIR"/phonevid_$(date +%d%B%y_%H%M%S)
 
