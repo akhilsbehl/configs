@@ -15,26 +15,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; The standard package manager for other stuff
-
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
-(package-initialize)
-
-(defun asb-require-package (pkg)
-  (unless (package-installed-p pkg)
-    (unless (assoc pkg package-archive-contents)
-      (package-refresh-contents))
-    (package-install pkg)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;;;; Sync all packages at startup
-
-;;; This section is to deal with some deps that cause breakage from time to
-;;; time. Ideally this should be empty.
-;; (el-get 'sync 'foo)
-;; (asb-require-package 'bar)
 
 ;;; Use this section for standard edition el-get packages
 (el-get
@@ -56,19 +37,32 @@
    projectile
    helm-projectile))
 
-;;; Use this section for packages that need to be installed from ELPA/MELPA.
-(asb-require-package 'ess)
-(asb-require-package 'flycheck)
-
 ;;; Use this section for el-get packages that need to be bundled.
-
 (el-get-bundle krisajenkins/evil-tabs)
 (el-get-bundle emacsfodder/emacs-mainline)
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 (el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
 
-;;; Use this section for packages that need to be installed using `package`
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; The standard package manager for other stuff
+
+;;; Packages not available through el-get or that break with el-get
+
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+
+(defun asb-require-package (pkg)
+  (unless (package-installed-p pkg)
+    (unless (assoc pkg package-archive-contents)
+      (package-refresh-contents))
+    (package-install pkg)))
+
+;;; Use this section for packages that need to be installed from ELPA/MELPA.
+(asb-require-package 'ess)
+(asb-require-package 'flycheck)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
