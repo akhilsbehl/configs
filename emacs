@@ -64,7 +64,6 @@
 
 (el-get-bundle krisajenkins/evil-tabs)
 (el-get-bundle emacsfodder/emacs-mainline)
-(el-get-bundle django-html-mode in myfreeweb/django-mode)
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 (el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
