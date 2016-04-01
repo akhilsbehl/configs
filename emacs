@@ -47,7 +47,6 @@
    evil-nerd-commenter
    evil-numbers
    evil-surround
-   flycheck
    helm
    helm-ag
    jedi  ; jedi:install-server manually!
@@ -58,7 +57,8 @@
    helm-projectile))
 
 ;;; Use this section for packages that need to be installed from ELPA/MELPA.
-(asb-require-package 'ess)  ;; Till it starts working with el-get
+(asb-require-package 'ess)
+(asb-require-package 'flycheck)
 
 ;;; Use this section for el-get packages that need to be bundled.
 
