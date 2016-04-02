@@ -1,5 +1,5 @@
 # Set your lib path.
-.libPaths("~/rstat/lib/")
+.libPaths("~/.rstat/lib/")
 
 options(prompt="R> ")
 options("pdfviewer"="mupdf")
