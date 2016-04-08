@@ -684,6 +684,20 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;; Smerge mode
+
+;;; http://emacs.stackexchange.com/questions/16469/how-to-merge-
+;;; git-conflicts-in-emacs
+
+(evil-leader/set-key "sn" 'smerge-next)
+(evil-leader/set-key "sp" 'smerge-previous)
+(evil-leader/set-key "skc" 'smerge-keep-current)
+(evil-leader/set-key "skb" 'smerge-keep-base)
+(evil-leader/set-key "skm" 'smerge-keep-mine)
+(evil-leader/set-key "sko" 'smerge-keep-other)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;; TODO: Packages & Functionality to explore
 
 ;;; 0. A good snippet system. Please.
