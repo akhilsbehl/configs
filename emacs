@@ -43,6 +43,7 @@
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
 (el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
+(el-get-bundle gromnitsky/wordnut)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -695,6 +696,22 @@
 (evil-leader/set-key "skb" 'smerge-keep-base)
 (evil-leader/set-key "skm" 'smerge-keep-mine)
 (evil-leader/set-key "sko" 'smerge-keep-other)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; WordNut: Searching the WordNet DB
+
+(evil-leader/set-key "wl" 'wordnut-lookup-current-word)
+(evil-leader/set-key "ws" 'wordnut-search)
+
+(define-key wordnut-mode-map (kbd "/") 'wordnut-search)
+(define-key wordnut-mode-map (kbd "RET") 'wordnut-lookup-current-word)
+(define-key wordnut-mode-map (kbd "o") 'wordnut-show-overview)
+(define-key wordnut-mode-map (kbd "h") 'wordnut-history-backward)
+(define-key wordnut-mode-map (kbd "l") 'wordnut-history-forward)
+(define-key wordnut-mode-map (kbd "H") 'wordnut-history-lookup)
+(define-key wordnut-mode-map (kbd "k") 'outline-previous-visible-heading)
+(define-key wordnut-mode-map (kbd "j") 'outline-next-visible-heading)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
