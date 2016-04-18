@@ -109,7 +109,7 @@ overlay-key='Super_L'
 edge-tiling=true
 tile-maximize=true
 snap-modifier=''
-workspaces-only-on-primary=true
+workspaces-only-on-primary=false
 placement-mode='center'
 button-layout='maximize:close'
 
