@@ -406,67 +406,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;; PDF and other documents (ps, dvi, doc and shit)
-
-;;; Automatically update my docs without confirmation when they change on disk
-(add-hook 'doc-view-mode 'auto-revert-mode)
-
-;;; These keys allow you to scroll the pdf without leaving current buffer
-;; http://www.idryman.org/blog/2013/05/20/emacs-and-pdf/
-;; Also works with numeric prefix to scroll multiple pages at once
-
-(defun asb-dvscroll-forward ()
-  (interactive)
-  (other-window 1)
-  (image-next-line 3)
-  (other-window -1))
-
-(defun asb-dvscroll-backward ()
-  (interactive)
-  (other-window 1)
-  (image-previous-line 3)
-  (other-window -1))
-
-(defun asb-dvscroll-previous-page ()
-  (interactive)
-  (other-window 1)
-  (doc-view-previous-page)
-  (other-window -1))
-
-(defun asb-dvscroll-next-page ()
-  (interactive)
-  (other-window 1)
-  (doc-view-next-page)
-  (other-window -1))
-
-(defun asb-dvscroll-first-page ()
-  (interactive)
-  (other-window 1)
-  (doc-view-first-page)
-  (other-window -1))
-
-(defun asb-dvscroll-last-page ()
-  (interactive)
-  (other-window 1)
-  (doc-view-last-page)
-  (other-window -1))
-
-(defun asb-dvscroll-goto-page (page)
-  (interactive "nPage: ")
-  (other-window 1)
-  (doc-view-goto-page page)
-  (other-window -1))
-
-(evil-leader/set-key-for-mode 'doc-view-mode "Ph" 'asb-dvscroll-forward)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pj" 'asb-dvscroll-next-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pk" 'asb-dvscroll-previous-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pl" 'asb-dvscroll-backward)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pg" 'asb-dvscroll-first-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "PG" 'asb-dvscroll-last-page)
-(evil-leader/set-key-for-mode 'doc-view-mode "Pn" 'asb-dvscroll-goto-page)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;;;; Linting with Flycheck
 (add-hook 'prog-mode-hook #'flycheck-mode)
 (setq flycheck-display-errors-delay 1)
