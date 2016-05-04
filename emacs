@@ -594,6 +594,7 @@
 ;;; markdown to html and refresh it in the browser on each buffer write.
 (add-hook 'markdown-mode-hook
           (lambda ()
+            (auto-complete-mode)
             (setq markdown-command "md2html")
             ; Only work on the one markdown buffer
             (add-hook 'after-save-hook 'markdown-export nil 'local)
