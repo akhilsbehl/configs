@@ -42,7 +42,8 @@
 (el-get-bundle emacsfodder/emacs-mainline)
 ;; This will also load the theme if standalone. For loading the theme when
 ;; running as a client, see the appearance section.
-(el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
+;; (el-get-bundle darktooth-theme in akhilsbehl/emacs-theme-darktooth)
+(el-get-bundle atom-one-dark-theme in jonathanchu/atom-one-dark-theme)
 (el-get-bundle gromnitsky/wordnut)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
