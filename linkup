@@ -53,7 +53,7 @@ fzf/install
 rm "$HOME"/.fzf.{ba,z}sh
 git checkout .
 
-mk-dir-if-not-found "$HOME"/.emacs-auto-backups 
+mk-dir-if-not-found "$HOME"/.emacs-auto-backups
 
 mk-dir-if-not-found "$HOME"/.fonts
 cp "$PWD"/Monaco_Linux.ttf "$HOME"/.fonts
