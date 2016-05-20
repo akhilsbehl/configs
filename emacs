@@ -157,8 +157,7 @@
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (select-frame frame)
-                (set-face-attribute 'default nil :font "Monaco 10")
-                (load-theme 'darktooth t))))
+                (set-face-attribute 'default nil :font "Monaco 10"))))
 
 ;;; Show line numbers
 (global-linum-mode 1)
