@@ -567,7 +567,6 @@
   "R-FUNC: The R function to use on the object.
 Run R-FUN for object at point, and display results in a popup."
   (let ((objname (current-word))
-        (curbuf (current-buffer))
         (tmpbuf (get-buffer-create "**ess-R-object-popup**")))
     (if objname
         (progn
@@ -577,8 +576,8 @@ Run R-FUN for object at point, and display results in a popup."
                 (progn
                   (ess-command (concat r-func "(" objname ")\n") tmpbuf)
                   (let ((bs (asb-read-into-string tmpbuf)))
-                    (popup-tip bs))))))))
-  (kill-buffer tmpbuf))
+                    (popup-tip bs)))))))
+  (kill-buffer tmpbuf)))
 
 (defun asb-ess-R-object-popup-str ()
   (interactive)
