@@ -554,6 +554,40 @@
 (define-key inferior-ess-mode-map (kbd "<down>")
   'comint-previous-matching-input-from-input)
 
+;; Inspiration:
+;; blogisticreflections.wordpress.com/2009/10/01/r-object-tooltips-in-ess/
+
+(defun asb-ess-R-object-popup (r-func)
+  "R-FUNC: The R function to use on the object.
+Run R-FUN for object at point, and display results in a popup."
+  (let ((objname (current-word))
+        (curbuf (current-buffer))
+        (tmpbuf (get-buffer-create "**ess-R-object-popup**")))
+    (if objname
+        (progn
+          (ess-command (concat "class(" objname ")\n")  tmpbuf)
+          (set-buffer tmpbuf)
+          (let ((bs (buffer-string)))
+            (if (not(string-match "\(object .* not found\)\|unexpected" bs))
+                (progn
+                  (message (concat r-func "(" objname ")\n"))
+                  (ess-command (concat r-func "(" objname ")\n") tmpbuf)
+                  (let ((bs (buffer-string)))
+                    (progn
+                      (set-buffer curbuf)
+                      (popup-tip bs))))))))
+    (kill-buffer tmpbuf)))
+
+(defun asb-ess-R-object-str-popup-str (asb-ess-R-object-popup "str"))
+
+(defun asb-ess-R-object-popup-interactive (r-func)
+  (interactive "sR function to execute: ")
+  (asb-ess-R-object-popup r-func))
+
+(evil-leader/set-key-for-mode 'ess-mode "ei" 'asb-ess-R-object-popup-str)
+(evil-leader/set-key-for-mode 'ess-mode "eI"
+  'asb-ess-R-object-popup-interactive)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Python set-up
