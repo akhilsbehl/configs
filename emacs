@@ -416,6 +416,7 @@
 (evil-leader/set-key "ff" 'flycheck-first-error)
 (evil-leader/set-key "fn" 'flycheck-next-error)
 (evil-leader/set-key "fp" 'flycheck-previous-error)
+(evil-leader/set-key "fsc" 'flycheck-select-checker)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
