@@ -236,7 +236,7 @@
   (open-line 2)
   (next-line)
   (evil-insert-line 1))
-(evil-leader/set-key "o" #'asb-open-between-empty-lines)
+(global-set-key (kbd "C-S-o") #'asb-open-between-empty-lines)
 
 ;;; Delete all blank lines (or containing only whitespace)
 (evil-leader/set-key "db" ; Delete all blank lines
@@ -487,6 +487,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;; Org-mode
+
+;;; Global bindings
+(evil-leader/set-key "oS" 'org-store-link)
+(evil-leader/set-key "oA" 'org-agenda)
+(evil-leader/set-key "oC" 'org-capture)
+(evil-leader/set-key "oI" 'org-iswitchb)
+
+;;; We'll follow the manual here.
+
+;;; Document structure
+
+;; Cycling
+(setq org-catch-invisible-edits 'error)
+(evil-leader/set-key "osp" 'org-reveal)
+(evil-leader/set-key "osa" 'show-all)
+(evil-leader/set-key "osa" 'show-branches)
+(evil-leader/set-key "osc" 'show-children)
+
+;; Motion
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
