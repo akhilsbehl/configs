@@ -152,8 +152,8 @@ clock-show-date=true
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom1]
 binding=['<Shift><Alt>Return']
-command='/home/asb/scripts/firequake'
-name='Firequake'
+command='/home/asb/scripts/quachrome'
+name='Quachrome'
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom0]
 binding=['<Alt>Return']
