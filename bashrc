@@ -143,6 +143,7 @@ export OIFS=$IFS
 export HISTCONTROL='ignoredups' 
 export SVN_EDITOR='vim'
 
+export PROMPT_COMMAND=''  # Don't un-necessarily set the title.
 export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 
 if [ -n "$DISPLAY" ]
