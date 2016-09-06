@@ -653,7 +653,7 @@ Run R-FUN for object at point, and display results in a popup."
 ;; This is to allow some md buffers to switch this behavior off.
 ;; See: http://stackoverflow.com/questions/14913398/
 ;; in-emacs-how-do-i-save-without-running-save-hooks
-(defvar asb-inhibit-md2html nil)
+(defvar asb-inhibit-md2html t)
 
 (defun asb-toggle-md2html ()
   (interactive)
