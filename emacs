@@ -649,12 +649,32 @@ Run R-FUN for object at point, and display results in a popup."
 
 ;;; Using Firefox auto-reload extension, this will automatically regenerate the
 ;;; markdown to html and refresh it in the browser on each buffer write.
+
+;; This is to allow some md buffers to switch this behavior off.
+;; See: http://stackoverflow.com/questions/14913398/
+;; in-emacs-how-do-i-save-without-running-save-hooks
+(defvar asb-inhibit-md2html nil)
+
+(defun asb-toggle-md2html ()
+  (interactive)
+  (let ((this-buffer (current-buffer)))
+    (if (buffer-local-value asb-inhibit-md2html this-buffer)
+        (progn
+          (set (make-local-variable 'asb-inhibit-md2html) nil)
+          (message "md2html export uninhibited."))
+      (progn
+        (set (make-local-variable 'asb-inhibit-md2html) t)
+          (message "md2html export inhibited.")))))
+
+(defun asb-markdown-export (&rest)
+  (unless asb-inhibit-md2html (markdown-export)))
+
 (add-hook 'markdown-mode-hook
           (lambda ()
             (auto-complete-mode)
             (setq markdown-command "md2html")
             ; Only work on the one markdown buffer
-            (add-hook 'after-save-hook 'markdown-export nil 'local)
+            (add-hook 'after-save-hook 'asb-markdown-export nil 'local)
             ; Use this for opening the preview
             (evil-leader/set-key-for-mode
               'markdown-mode "mp" 'markdown-export-and-preview)
