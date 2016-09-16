@@ -31,6 +31,7 @@
    helm
    helm-ag
    jedi  ; jedi:install-server manually!
+   lua-mode
    magit
    markdown-mode
    org-mode
