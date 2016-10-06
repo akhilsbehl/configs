@@ -743,6 +743,12 @@ Run R-FUN for object at point, and display results in a popup."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;; Globally enable automatic pairing
+
+(electric-pair-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;;; TODO: Packages & Functionality to explore
 
 ;;; 0. A good snippet system. Please.
