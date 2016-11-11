@@ -66,8 +66,8 @@ shutdown='<Super>Delete'
 
 [org/cinnamon/settings-daemon/plugins/xsettings]
 antialiasing='rgba'
-buttons-have-icons=false
-menus-have-icons=false
+buttons-have-icons=true
+menus-have-icons=true
 hinting='none'
 
 [org/cinnamon/settings-daemon/peripherals/touchpad]
@@ -91,8 +91,8 @@ middle-button-enabled=true
 
 [org/cinnamon/keybindings/custom-keybindings/custom1]
 binding='<Shift><Alt>Return'
-command='/home/asb/scripts/quachrome'
-name='Quachrome'
+command='/home/asb/scripts/firequake'
+name='Firequake'
 
 [org/cinnamon/keybindings/custom-keybindings/custom0]
 binding='<Alt>Return'
@@ -143,11 +143,12 @@ cursor-size=13
 first-day-of-week=7
 clock-use-24h=false
 font-name='Ubuntu 9'
-cursor-theme='Vanilla-DMZ-AA'
+cursor-theme='Paper'
 scaling-factor=uint32 0
 clock-show-seconds=true
-icon-theme='Faience-Azur'
-gtk-theme='Adwaita'
+icon-theme='Paper'
+toolkit-accessibility=false
+gtk-theme='Adapta-Nokto'
 clock-show-date=true
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom1]
@@ -224,7 +225,7 @@ remember-recent-files=false
 action-right-click-titlebar='menu'
 mouse-button-modifier=''
 action-middle-click-titlebar='toggle-shade'
-theme='Adwaita'
+theme='Adapta-Nokto'
 num-workspaces=4
 action-scroll-titlebar='opacity'
 auto-raise=true
@@ -234,18 +235,39 @@ min-window-opacity=0
 workspace-names=@as []
 titlebar-font='Ubuntu Bold 10'
 
+[org/cinnamon/desktop/a11y/magnifier]
+mag-factor=1.5
+
+[org/cinnamon/desktop/a11y/applications]
+screen-keyboard-enabled=false
+screen-magnifier-enabled=false
+screen-reader-enabled=false
+
+[org/cinnamon/desktop/a11y/mouse]
+secondary-click-enabled=false
+secondary-click-time=1.2
+dwell-time=1.2
+dwell-threshold=10
+dwell-click-enabled=false
+
+[org/cinnamon/desktop/sound]
+event-sounds=false
+
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpapers/68747470733a2f2f6c68352e676f6f676c6575736572636f6e74656e742e636f6d2f2d71626c7151524b2d5157342f554d4655434551337a65492f4141414141414141794f492f536e53566f4a714d75496b2f73313238302d77313238302d632d683732302d6b2d6e6f2f323031322532422d25324231.jpe'
+picture-uri='file:///home/asb/git/configs/wallpapers/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f2d58484f5258416f7864316b2f556c3274716b5a6a7331492f41414141414141414770732f48355f484f615034624c732f73313932302d77313932302d68313038302d632f70616f57532e6a7067.jpe'
 color-shading-type='solid'
 primary-color='#023c88'
 picture-options='zoom'
 secondary-color='#5789ca'
 
-[org/cinnamon/sounds]
-login-enabled=false
+[org/cinnamon/desktop/background/slideshow]
+image-source='xml:///usr/share/gnome-background-properties/adwaita.xml'
 
 [org/cinnamon/theme]
-name='Faience+'
+name='Adapta-Nokto'
+
+[org/cinnamon/sounds]
+login-enabled=false
 
 [org/gnome/brasero/plugins/dvd-rw-format]
 priority=0
