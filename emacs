@@ -270,6 +270,16 @@
     (interactive)
     (fill-paragraph)))
 
+;;; Copy the 's'election to system clipboard.
+(evil-leader/set-key "ys"
+  (lambda ()
+    (interactive)
+    (if (use-region-p) ; If there is an active selection
+        (progn
+          (clipboard-kill-ring-save (region-beginning) (region-end))
+          (message "Selection copied."))
+      (message "No selection."))))
+
 ;;; Copy the whole 'b'uffer to system clipboard.
 (evil-leader/set-key "yb"
   (lambda ()
