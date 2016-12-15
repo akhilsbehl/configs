@@ -312,7 +312,7 @@ function up() {
 #############################
 
 # Keep this at the end.
- 
+
 alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
 
 alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
@@ -331,7 +331,7 @@ alias ww='cd "$HOME"/warchives'
 #########
 #  FZF  #
 #########
- 
+
 # Setup fzf
 if [[ ! "$PATH" =~ "$HOME/git/configs/fzf/bin" ]]; then
   export PATH="$PATH:$HOME/git/configs/fzf/bin"
@@ -385,7 +385,7 @@ function play () {
   local file
   file=$(find -L ~/audio ~/video -type f | \
     fzf-tmux --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && mpl "$file"
+  [ -n "$file" ] && mpv $(echo $file)
 }
 
 function cdf() {
@@ -398,7 +398,7 @@ function fzf-locate-widget() {
   local selected
   if selected=$(locate / | fzf-tmux); then
     LBUFFER="$LBUFFER$selected"
-  fi  
+  fi
   zle redisplay
 }
 zle -N fzf-locate-widget
