@@ -19,8 +19,8 @@
 
 ;;; Use this section for standard edition el-get packages
 (el-get
- 'sync
- '(auto-complete
+ 'sync '(
+   auto-complete
    elscreen
    evil
    evil-exchange
@@ -30,13 +30,15 @@
    evil-surround
    helm
    helm-ag
+   helm-projectile
    jedi  ; jedi:install-server manually!
    lua-mode
    magit
    markdown-mode
    org-mode
    projectile
-   helm-projectile))
+   transpose-frame
+   ))
 
 ;;; Use this section for el-get packages that need to be bundled.
 (el-get-bundle krisajenkins/evil-tabs)
@@ -128,6 +130,12 @@
 
 ; 2. Make windomove cycle windows
 (setq windmove-wrap-around t)
+
+;; Stuff that uses transpose frame.
+;; Let's continue using the "tX" series of keybindings that work with tabs.
+(evil-leader/set-key "tT" 'transpose-frame)
+(evil-leader/set-key "th" 'flip-frame)
+(evil-leader/set-key "tv" 'flop-frame)
 
 ;;; Do this last
 (evil-mode 1)
