@@ -576,7 +576,7 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 "-------------------------
 
-" Preview markdown in Firefox
+" Preview markdown
 
 function! PreviewMarkdown()
   let outFile = '/tmp/' . expand('%:r') . '.html'

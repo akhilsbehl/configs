@@ -207,7 +207,7 @@ export READNULLCMD='less'
 
 if [ -n "$DISPLAY" ]
 then
-  BROWSER=firefox
+  BROWSER=google-chrome-stable
   EDITOR=e
 else
   BROWSER=elinks

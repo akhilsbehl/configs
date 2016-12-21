@@ -339,9 +339,9 @@
 ;;; Open ibuffer when I want it
 (evil-leader/set-key "b" 'ibuffer)
 
-;;; Browse in firefox
+;;; Browse in google-chrome
 (setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "firefox")
+      browse-url-generic-program "google-chrome-stable")
 
 ;;; Revert buffers easily
 (evil-leader/set-key "rb" 'revert-buffer)
@@ -665,9 +665,6 @@ Run R-FUN for object at point, and display results in a popup."
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;;; Using Firefox auto-reload extension, this will automatically regenerate the
-;;; markdown to html and refresh it in the browser on each buffer write.
 
 ;; This is to allow some md buffers to switch this behavior off.
 ;; See: http://stackoverflow.com/questions/14913398/

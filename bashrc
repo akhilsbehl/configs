@@ -148,7 +148,7 @@ export PS1='\[\e[29;1m\]\D{%H:%M:%S} | \w | \u@\H $ \[\e[30;0m\]'
 
 if [ -n "$DISPLAY" ]
 then
-  BROWSER=firefox
+  BROWSER=google-chrome-stable
   EDITOR=gvim
 else
   BROWSER=elinks
