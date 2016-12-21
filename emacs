@@ -133,7 +133,7 @@
 
 ;; Stuff that uses transpose frame.
 ;; Let's continue using the "tX" series of keybindings that work with tabs.
-(evil-leader/set-key "tT" 'transpose-frame)
+(evil-leader/set-key "tf" 'transpose-frame)
 (evil-leader/set-key "th" 'flip-frame)
 (evil-leader/set-key "tv" 'flop-frame)
 
