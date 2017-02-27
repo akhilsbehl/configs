@@ -25,6 +25,7 @@ update Rprofile
 update sbcl_completions
 update emacs
 update dircolors
+update devilspie
 
 rm -rf "$HOME/scripts"
 ln -s "$PWD/scripts" "$HOME/scripts"

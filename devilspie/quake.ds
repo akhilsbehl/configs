@@ -1,0 +1,29 @@
+(if
+  (and
+    (is (application_name) 'ArchWizard')
+    (is (window_class) 'Roxterm'))
+  (begin
+    (undecorate)
+    (maximize)
+    (skip_tasklist)
+    (skip_pager)))
+
+(if
+  (and
+    (is (application_name) 'emacs')
+    (is (window_class) 'Emacs'))
+  (begin
+    (undecorate)
+    (maximize)
+    (skip_tasklist)
+    (skip_pager)))
+
+(if
+  (and
+    (matches (application_name) 'Google Chrome$')
+    (is (window_class) 'Google-chrome'))
+  (begin
+    (undecorate)
+    (maximize)
+    (skip_tasklist)
+    (skip_pager)))

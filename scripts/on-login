@@ -2,6 +2,8 @@
 
 artha &
 
+devilspie &
+
 $HOME/scripts/randomize-wallpaper
 
 sleep 1s && zenity --info \
