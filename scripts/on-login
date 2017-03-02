@@ -10,6 +10,6 @@ sleep 1s && zenity --info \
   --title 'Fortune cookie for the cookie monster!' \
   --text "$(fortune -s)"
 
-emacs --daemon # If there already is a daemon this will just fail. 
+emacs --daemon # If there already is a daemon this will just fail.
 
 exit 0
