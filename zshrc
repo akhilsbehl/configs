@@ -123,7 +123,7 @@ alias lsa='lsg -A'
 
 alias tmux='tmux -2'
 
-alias launchpad='tmux new-session -s launchPad'
+alias launchpad='tmux new-session -s launchPad -n push-the-tempo'
 
 alias locate='locate -e'
 
