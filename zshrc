@@ -230,7 +230,7 @@ alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
 
 alias fstab='sudo $EDITOR /etc/fstab &'
 
-alias show='gvfs-open'
+alias show='gio open'
 
 ####################
 #  Global aliases  #
@@ -358,7 +358,7 @@ export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no
 function fzshow () {
   local file
   file=$(find -L ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && gvfs-open "$file"
+  [ -n "$file" ] && gio open "$file"
 }
 
 function vi () {
