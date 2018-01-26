@@ -433,6 +433,20 @@ function penv () {
   [[ -n "$gitroot" ]] && source $gitroot
 }
 
+########################
+# Do something forever #
+########################
+
+function forever() {
+    echo 'This will loop the command forever.'
+    echo 'You will need to kill the shell to exit.'
+    echo '<Enter> now to proceed. <Ctrl-C> to interrupt.'
+    read
+    while true; do
+        "$@"
+    done
+}
+
 ###################
 # Fortune cookies #
 ###################
