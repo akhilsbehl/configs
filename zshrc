@@ -406,7 +406,7 @@ bindkey '\ei' fzf-locate-widget
 
 function install () {
   pkgs=$(pacman -Slq | fzf-tmux --query="$1")
-  [ -n "$pkgs" ] && sudo pacman -S "$pkgs"
+  [ -n "$pkgs" ] && sudo pacman -S --needed "$pkgs"
 }
 
 function uninstall () {
