@@ -7,7 +7,7 @@ unsetopt beep
 bindkey -v
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename "$HOME/.zshrc"
+zstyle :compinstall filename '/home/asb/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -84,7 +84,7 @@ else
     zle && zle reset-prompt
     return $(( 128 + $1 ))
   }
-  prompt "$USER"
+  prompt asb
   RPROMPT='${vim_mode}'
 fi
 
