@@ -91,12 +91,12 @@ middle-button-enabled=true
 
 [org/cinnamon/keybindings/custom-keybindings/custom1]
 binding='<Shift><Alt>Return'
-command='/home/asb/scripts/firequake'
+command='/home/neo/scripts/firequake'
 name='Firequake'
 
 [org/cinnamon/keybindings/custom-keybindings/custom0]
 binding='<Alt>Return'
-command='/home/asb/scripts/quake'
+command='/home/neo/scripts/quake'
 name='Quake'
 
 [org/cinnamon/keybindings]
@@ -158,17 +158,17 @@ name='Screenshot'
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom1]
 binding=['<Shift><Alt>Return']
-command='/home/asb/scripts/quachrome'
+command='/home/neo/scripts/quachrome'
 name='Quachrome'
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom0]
 binding=['<Alt>Return']
-command='/home/asb/scripts/quake'
+command='/home/neo/scripts/quake'
 name='Quake'
 
 [org/cinnamon/desktop/keybindings/custom-keybindings/custom3]
 binding=['<Primary><Alt>Return']
-command='/home/asb/scripts/quakemacs'
+command='/home/neo/scripts/quakemacs'
 name='Quakemacs'
 
 [org/cinnamon/desktop/keybindings]
@@ -259,7 +259,7 @@ dwell-click-enabled=false
 event-sounds=false
 
 [org/cinnamon/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpapers/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f2d58484f5258416f7864316b2f556c3274716b5a6a7331492f41414141414141414770732f48355f484f615034624c732f73313932302d77313932302d68313038302d632f70616f57532e6a7067.jpe'
+picture-uri='file:///home/neo/git/configs/wallpapers/68747470733a2f2f6c68332e676f6f676c6575736572636f6e74656e742e636f6d2f2d58484f5258416f7864316b2f556c3274716b5a6a7331492f41414141414141414770732f48355f484f615034624c732f73313932302d77313932302d68313038302d632f70616f57532e6a7067.jpe'
 color-shading-type='solid'
 primary-color='#023c88'
 picture-options='zoom'
@@ -357,7 +357,7 @@ state=128
 panel-id='world'
 
 [org/gnome/gnome-screenshot]
-auto-save-directory='file:///home/asb/tmp'
+auto-save-directory='file:///home/neo/tmp'
 
 [org/gnome/nautilus/window-state]
 geometry='819x556+50+87'
@@ -385,7 +385,7 @@ window-height=480
 window-width=600
 
 [org/gnome/desktop/background]
-picture-uri='file:///home/asb/git/configs/wallpapers/grey-pixel-mesh.png'
+picture-uri='file:///home/neo/git/configs/wallpapers/grey-pixel-mesh.png'
 
 [org/gnome/desktop/interface]
 scaling-factor=uint32 0
@@ -459,7 +459,7 @@ alternateaccessmethod=false
 viewtitle=false
 viewfiletype=false
 promptoverwritefile=true
-uploadpath='/home/asb/video/poker/million-dollar-cash-season-2'
+uploadpath='/home/neo/video/poker/million-dollar-cash-season-2'
 viewfolders=false
 viewartist=false
 ignorepathinplaylist=false
