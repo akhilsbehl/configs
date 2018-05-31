@@ -2,7 +2,7 @@
 
 ISOPEN=$(wmctrl -l | grep 'Google Chrome$')
 if [[ -z $ISOPEN ]]; then
-  google-chrome-stable &&
+  google-chrome-stable %U --password-store=basic &&
     wmctrl -r 'Google Chrome' -b add,maximized_vert,maximized_horz &&
     wmctrl -a 'Google Chrome'
 fi
