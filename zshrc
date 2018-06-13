@@ -169,8 +169,6 @@ alias tpon='synclient TouchpadOff=0'
 
 alias netlog='sudo journalctl -f -u NetworkManager'
 
-alias record-desktop='ffmpeg -f x11grab -video_size 1920x1080 -framerate 45 -i :0.0 -c:v libx264 -qp 0 -preset ultrafast /tmp/out.mkv'
-
 alias resolv='echo "nameserver 8.8.4.4\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf'
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
