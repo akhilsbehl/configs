@@ -10,6 +10,3 @@
 [submodule "fzf"]
 	path = fzf
 	url = https://github.com/junegunn/fzf
-[submodule "VimCom"]
-	path = VimCom
-	url = https://github.com/jalvesaq/VimCom
