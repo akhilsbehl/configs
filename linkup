@@ -11,9 +11,7 @@ mk-dir-if-not-found () {
 }
 
 update xinitrc
-update bashrc
 update zshrc
-update bash_profile
 update inputrc
 update gvimrc
 update vimrc
@@ -22,7 +20,6 @@ update gitignore
 update gitconfig
 update R
 update Rprofile
-update sbcl_completions
 update emacs
 update dircolors
 update devilspie
@@ -33,9 +30,6 @@ ln -s "$PWD/scripts" "$HOME/scripts"
 rm -rf "$HOME/.config/roxterm.sourceforge.net"
 ln -s "$PWD/roxterm" "$HOME/.config/roxterm.sourceforge.net"
 
-sudo rm -f '/usr/share/zsh/functions/Prompts/prompt_asb_setup'
-sudo ln -s $(readlink -m $PWD/prompt_asb_setup) \
-  /usr/share/zsh/functions/Prompts/prompt_asb_setup
 mk-dir-if-not-found "$HOME"/.cache/zsh
 
 if [[ -f /usr/bin/packer ]]; then
@@ -68,17 +62,11 @@ if [[ "$1" == "--vundle" ]]; then
   git clone 'https://github.com/VundleVim/Vundle.vim' \
       "$HOME"/.vim/bundle/Vundle.vim
   vim +PluginInstall +qall
-  ln -s "$(readlink -m "$PWD"/mysnippets)" "$HOME"/.vim
-  rm -r "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/*
-  ln -s "$PWD"/latex-templates/article.tex "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/article.tex
-  ln -s "$PWD"/latex-templates/beamer.tex "$HOME"/.vim/bundle/LaTeX-Suite-aka-Vim-LaTeX/ftplugin/latex-suite/templates/beamer.tex
 fi
 
 if [[ "$1" == "--nukemacs" || "$2" == "--nukemacs" ]]; then
   rm -rf "$HOME"/.emacs.d
 fi
-
-R CMD INSTALL setwidth*.tar.gz colorout*.tar.gz VimCom
 
 "$HOME"/scripts/load-cinnamon-settings
 
