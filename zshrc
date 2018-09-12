@@ -196,7 +196,7 @@ export SHELL='/usr/bin/zsh'
 
 export TERM='xterm'
 
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/scripts:$HOME/git/packer:$PATH"
 
 export SVN_EDITOR='e'
 
