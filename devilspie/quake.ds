@@ -19,10 +19,7 @@
     (skip_pager)))
 
 (if
-  (and
-    (matches (application_name) 'Google Chrome$')
-    (is (window_class) 'Google-chrome')
-    (is (window_role) 'browser'))
+  (is (window_class) 'Firefox')
   (begin
     (undecorate)
     (maximize)
