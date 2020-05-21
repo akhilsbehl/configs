@@ -44,7 +44,10 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'godlygeek/tabular'
 
 " FZF for fuzzy searching
-Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
+" Fugitive for git
+Plugin 'tpope/vim-fugitive'
 
 "-------------------------
 
@@ -73,6 +76,12 @@ Plugin 'JuliaLang/julia-vim'
 
 " GHCi plugin: SHIM for Vim.
 Plugin 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
+
+" Jedi for Python
+Plugin 'davidhalter/jedi-vim'
+
+" TOC for markdown
+Plugin 'mzlogin/vim-markdown-toc'
 
 "-------------------------
 
@@ -182,10 +191,6 @@ let maplocalleader=","
 
 "-------------------------
 
-" Show powerline
-
-let $PYTHONPATH='/usr/lib/python3.4/site-packages/'
-
 "-------------------------
 
 " FZF configuration
@@ -213,11 +218,12 @@ function FuzzyFind()
 endfunction
 
 " Search in FZF
-nnoremap <silent> <LocalLeader>fz :call FuzzyFind()<CR>
+nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
 
-nnoremap <silent> <LocalLeader>fh :FZF ~<CR>
-
-nnoremap <silent> <LocalLeader>ru :call fzf#run({
+nnoremap <silent> <leader>fz :FZF .<CR>
+nnoremap <silent> <leader>fh :FZF ~<CR>
+nnoremap <silent> <leader>fd :FZF D:<CR>
+nnoremap <silent> <leader>fr :call fzf#run({
       \ 'source': v:oldfiles,
       \ 'sink' : 'e ',
       \ 'options' : '-m',
@@ -234,19 +240,13 @@ function! s:bufopen(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
-nnoremap <silent> <LocalLeader><LocalLeader>b :call fzf#run({
-      \ 'source':  reverse(<sid>buflist()),
-      \ 'sink':    function('<sid>bufopen'),
-      \ 'options': '+m',
-      \ 'down':    len(<sid>buflist()) + 2 })<CR>
-
 "-------------------------
 
 " Options for nerdcommenter to use spaces with the commenting char.
 
 let NERDSpaceDelims=1
 
-let NERDRemoveExtraSpaces=1 
+let NERDRemoveExtraSpaces=1
 
 "-------------------------
 
@@ -270,29 +270,33 @@ let vimrplugin_indent_commented = 0
 
 " Custom commands.
 
-map <LocalLeader>nr :call RAction("rownames")<CR>
-map <LocalLeader>nc :call RAction("colnames")<CR>
-map <LocalLeader>n2 :call RAction("names")<CR>
-map <LocalLeader>nn :call RAction("dimnames")<CR>
-map <LocalLeader>nd :call RAction("dim")<CR>
-map <LocalLeader>nh :call RAction("head")<CR>
-map <LocalLeader>nt :call RAction("tail")<CR>
-map <LocalLeader>nl :call RAction("length")<CR>
-map <LocalLeader>cc :call RAction("class")<CR>
-map <LocalLeader>nw :call SendCmdToR("system('clear')")<CR>
-map <LocalLeader>ne :call SendCmdToR("system('traceback()')")<CR>
-map <LocalLeader>sb :call SendCmdToR("system.time({")<CR>
-map <LocalLeader>se :call SendCmdToR("})")<CR>
+map <leader>rr :call RAction("rownames")<CR>
+map <leader>rc :call RAction("colnames")<CR>
+map <leader>rn :call RAction("names")<CR>
+map <leader>rN :call RAction("dimnames")<CR>
+map <leader>rd :call RAction("dim")<CR>
+map <leader>rh :call RAction("head")<CR>
+map <leader>rt :call RAction("tail")<CR>
+map <leader>rl :call RAction("length")<CR>
+map <leader>rC :call RAction("class")<CR>
+map <leader>rL :call SendCmdToR("system('clear')")<CR>
+map <leader>rT :call SendCmdToR("system('traceback()')")<CR>
+map <leader>rt :call SendCmdToR("system.time({")<CR>
+map <leader>ra :call SendCmdToR("})")<CR>
 
 "-------------------------
 
 " These options are for UltiSnips.
 
-let g:UltiSnipsEditSplit = "horizontal"
+let g:UltiSnipsExpandTrigger = "<tab>"
 
-let g:UltiSnipsSnippetsDir = "~/git/configs/mysnippets"
+let g:UltiSnipsListSnippets = "<C-tab>"
 
-let g:UltiSnipsSnippetDirectories = ["mysnippets"]
+let g:UltiSnipsEditSplit = "context"
+
+let g:UltiSnipsSnippetsDir = "~/.vim/mysnippets"
+
+let g:UltiSnipsSnippetDirectories = [$HOME.'/.vim/mysnippets']
 
 let g:UltiSnipsJumpForwardTrigger = "<C-k>"
 
@@ -339,7 +343,7 @@ let g:SuperTabDefaultCompletionType = 'context'
 
 " Gundo's config.
 
-nnoremap <LocalLeader>gu :GundoToggle<CR>
+nnoremap <leader>gu :GundoToggle<CR>
 
 let g:gundo_preview_bottom = 1
 
@@ -360,83 +364,96 @@ let g_multi_cursor_insert_maps = {',': 1, '\': 1}
 " Turn on PEP8 style guidelines for python files.
 
 autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-autocmd FileType python map <buffer> <LocalLeader>ff :call Flake8()<CR>
+autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
 
 "-------------------------
 
 " ervandew/screen configuration to send commands to ipython.
 
-let g:ScreenImpl = "Tmux"
+" let g:ScreenImpl = "Tmux"
 
 " Open an ipython3 shell.
-autocmd FileType python map <LocalLeader>p :ScreenShell! ipython3<CR>
+autocmd FileType python map <leader>p3 :ScreenShell! ipython<CR>
 
 " Open an ipython2 shell.
-autocmd FileType python map <LocalLeader>pp :ScreenShell! ipython2<CR>
+autocmd FileType python map <leader>p2 :ScreenShell! ipython2<CR>
 
 " Close whichever shell is running.
-autocmd FileType python map <LocalLeader>q :ScreenQuit<CR>
+autocmd FileType python map <leader>pq :ScreenQuit<CR>
 
 " Send current line to python and move to next line.
-autocmd FileType python map <LocalLeader>r V:ScreenSend<CR>j
+autocmd FileType python map <leader>pr V:ScreenSend<CR>j
 
 " Send visual selection to python and move to next line.
-autocmd FileType python map <LocalLeader>v :ScreenSend<CR>`>0j
+autocmd FileType python map <leader>pv :ScreenSend<CR>`>0j
 
 " Send a carriage return line to python.
-autocmd FileType python map <LocalLeader>a :call g:ScreenShellSend("\r")<CR>
+autocmd FileType python map <leader>pa :call g:ScreenShellSend("\r")<CR>
 
 " Clear screen.
-autocmd FileType python map <LocalLeader>L
+autocmd FileType python map <leader>pc
       \ :call g:ScreenShellSend('!clear')<CR>
 
 " Start a time block to execute code in.
-autocmd FileType python map <LocalLeader>t
+autocmd FileType python map <leader>pt
       \ :call g:ScreenShellSend('%%time')<CR>
 
 " Start a timeit block to execute code in.
-autocmd FileType python map <LocalLeader>tt
+autocmd FileType python map <leader>pT
       \ :call g:ScreenShellSend('%%timeit')<CR>
 
 " Start a debugger repl to execute code in.
-autocmd FileType python map <LocalLeader>db
+autocmd FileType python map <leader>pD
       \ :call g:ScreenShellSend('%%debug')<CR>
 
 " Start a profiling block to execute code in.
-autocmd FileType python map <LocalLeader>pr
+autocmd FileType python map <leader>pp
       \ :call g:ScreenShellSend('%%prun')<CR>
 
 " Print the current working directory.
-autocmd FileType python map <LocalLeader>gw
+autocmd FileType python map <leader>pg
       \ :call g:ScreenShellSend('!pwd')<CR>
 
 " Set working directory to current file's folder.
 function SetWD()
-  let wd = '!cd ' . expand('%:p:h')
+  let wd = 'cd ' . expand('%:p:h')
   :call g:ScreenShellSend(wd)
 endfunction
-autocmd FileType python map <LocalLeader>sw :call SetWD()<CR>
+autocmd FileType python map <leader>ps :call SetWD()<CR>
 
 " Get ipython help for word under cursor. Complement it with Shift + K.
 function GetHelp()
   let w = expand("<cword>") . "??"
   :call g:ScreenShellSend(w)
 endfunction
-autocmd FileType python map <LocalLeader>h :call GetHelp()<CR>
+autocmd FileType python map <leader>ph :call GetHelp()<CR>
 
 " Get `dir` help for word under cursor.
 function GetDir()
   let w = "dir(" . expand("<cword>") . ")"
   :call g:ScreenShellSend(w)
 endfunction
-autocmd FileType python map <LocalLeader>d :call GetDir()<CR>
+autocmd FileType python map <leader>pd :call GetDir()<CR>
 
 " Get len of the word under cursor.
 function GetLen()
   let w = "len(" . expand("<cword>") . ")"
   :call g:ScreenShellSend(w)
 endfunction
-autocmd FileType python map <LocalLeader>l :call GetLen()<CR>
+autocmd FileType python map <leader>pl :call GetLen()<CR>
+
+"-------------------------
+
+" Jedi configuration for Python
+
+let g:jedi#use_splits_not_buffers = "winwidth"
+let g:jedi#popup_on_dot = 1
+let g:jedi#show_call_signatures = "2"
+
+let g:jedi#goto_command = "<LocalLeader>jg"
+let g:jedi#documentation_command = "<LocalLeader>jh"
+let g:jedi#rename_command = "<LocalLeader>jr"
+let g:jedi#usages_command = "<LocalLeader>ju"
 
 "-------------------------
 
@@ -457,18 +474,29 @@ au BufWritePost * call ModeChange()
 " Navigate between and delete tabs.
 
 if has("gui_running")
+  nnoremap <M-c> :tabnew<CR>
+  nnoremap <M-e> :tabnew<Space>
   nnoremap <M-j> :tabprevious<CR>
   nnoremap <M-k> :tabnext<CR>
   nnoremap <M-h> :tabfirst<CR>
   nnoremap <M-l> :tablast<CR>
   nnoremap <M-d> :bdelete<CR>
+  nnoremap <M-s> :split<Space>
+  nnoremap <M-S> :vsplit<Space>
 endif
 
+nnoremap gt <C-w><S-t><CR>
+nnoremap ge :tabnew<Space>
 nnoremap gj :tabprevious<CR>
 nnoremap gk :tabnext<CR>
 nnoremap gh :tabfirst<CR>
 nnoremap gl :tablast<CR>
+nnoremap gc :close<CR>
 nnoremap gd :bdelete<CR>
+nnoremap gs :split<Space>
+nnoremap gS :vsplit<Space>
+nnoremap gS :vsplit<Space>
+nnoremap gb :buffers<CR>:buffer<Space>
 
 "-------------------------
 
@@ -482,25 +510,40 @@ nnoremap k gk
 " Puts an empty line above and below the cursor position and enters the insert
 " mode.
 
-nnoremap <leader><leader>o <Esc>O<CR>
+nnoremap <leader>oo <Esc>O<CR>
 
 "-------------------------
+
+" Fix whitespace issues
 
 " Delete all trailing whitespace.
+function DeleteTrailingWhitespace()
+  :%s/\s\+$//g
+  :let @/=''
+endfunction
+nnoremap <leader>wt :call DeleteTrailingWhitespace()<CR>
 
-nnoremap <leader><leader>w :%s/\s\+$//e<CR>:let @/=''<CR>
+" Delete blank lines (or containing only whitespace).
+function DeleteBlankLines()
+  :g:^\s*$:d
+  :let @/=''
+endfunction
+nnoremap <leader>bd :call DeleteBlankLines()<CR>
 
-"-------------------------
+" Condense multiple blank lines (or containing only whitespace)
+function CondenseBlankLines()
+  :call DeleteTrailingWhitespace()
+  :%s/\(\n\n\)\n\+/\1/
+  :let @/=''
+endfunction
+nnoremap <leader>bc :call CondenseBlankLines()<CR>
 
-" Delete all blank lines (or containing only whitespace).
-
-nnoremap <leader><leader>dd :g:^\s*$:d<CR>
-
-"-------------------------
-
-" Condense multiple blanks lines (or containing only whitespace) into one.
-
-nnoremap <leader><leader>c :%s/\s\+$//e<CR>:let @/=''<CR>:g/^$/,/./-j<CR>
+" All of the above
+function TreatAllWhitespace()
+  :call CondenseBlankLines()
+  :call DeleteBlankLines()
+endfunction
+nnoremap <leader>wa :call TreatAllWhitespace()<CR>
 
 "-------------------------
 
@@ -509,7 +552,7 @@ nnoremap <leader><leader>c :%s/\s\+$//e<CR>:let @/=''<CR>:g/^$/,/./-j<CR>
 function SudoOnTheFly()
   write !sudo tee % > /dev/null
 endfunction
-nnoremap <leader><leader>s :call SudoOnTheFly()<CR>
+nnoremap <leader>sd :call SudoOnTheFly()<CR>
 
 "-------------------------
 
@@ -523,8 +566,8 @@ function ToggleHighLightsearch()
   endif
 endfunction
 
-nnoremap <leader><leader>h :call ToggleHighLightsearch()<CR>
-
+nnoremap <leader>hs :let @/=''<CR>
+  
 " Toggle paste mode.
 
 function TogglePasteMode()
@@ -535,23 +578,31 @@ function TogglePasteMode()
   endif
 endfunction
 
-nnoremap <leader><leader>p :call TogglePasteMode()<CR>
+nnoremap <leader>tpm :call TogglePasteMode()<CR>
 
 "-------------------------
 
 " Reformat the paragraph.
 
-nnoremap <leader><leader>f gqipj
+nnoremap <leader>fp gqipj
 
 "-------------------------
 
 " Copy a paragraph to the os clipboard.
 
-nnoremap <leader><leader>y mz"+yip`z
+nnoremap <leader>yp mz"+yip`z
 
 " Copy the whole buffer to the os clipboard.
 
-nnoremap <leader><leader>Y mzgg"+yG`z
+nnoremap <leader>yb mzgg"+yG`z
+
+" Copy up to point to the os clipboard.
+
+nnoremap <leader>yu mz"+ygg`z
+
+" Copy from point to the os clipboard.
+
+nnoremap <leader>yf mz"+yG`z
 
 "-------------------------
 
@@ -576,6 +627,18 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 "-------------------------
 
+" Insert table of contents in Markdown
+
+let g:vmt_auto_update_on_save = 1
+
+let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
+
+let g:vmt_fence_closing_text = 'toc-marker : do-not-edit-this-line'
+
+let g:vmt_fence_hidden_markdown_style = 'GFM'
+
+"-------------------------
+
 " Preview markdown
 
 function! PreviewMarkdown()
@@ -589,9 +652,9 @@ endfunction
 
 augroup markdown
     au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
     au BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    autocmd FileType ghmarkdown map <LocalLeader>p
+    autocmd FileType markdown map <leader>pm
           \ :call PreviewMarkdown()<CR>
 augroup END
 
@@ -608,3 +671,7 @@ autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
 
 vmap "sy :!xclip -f -sel clip
 map "sp :r!xclip -o -sel clip
+
+" Fix the weird issue with backspace not behaving correctly around linebreaks
+" and indentation stops
+set backspace=indent,eol,start
