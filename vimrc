@@ -217,28 +217,18 @@ function FuzzyFind()
   endif
 endfunction
 
-" Search in FZF
-nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
-
-nnoremap <silent> <leader>fz :FZF .<CR>
-nnoremap <silent> <leader>fh :FZF ~<CR>
-nnoremap <silent> <leader>fd :FZF D:<CR>
-nnoremap <silent> <leader>fr :call fzf#run({
-      \ 'source': v:oldfiles,
-      \ 'sink' : 'e ',
-      \ 'options' : '-m',
-      \ })<CR>
-
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
+" Search in FZF but it does not work on Cygwin
+if !has('win32unix')
+  nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
+  nnoremap <silent> <leader>fz :FZF .<CR>
+  nnoremap <silent> <leader>fh :FZF ~<CR>
+  nnoremap <silent> <leader>fd :FZF D:<CR>
+  nnoremap <silent> <leader>fr :call fzf#run({
+        \ 'source': v:oldfiles,
+        \ 'sink' : 'e ',
+        \ 'options' : '-m',
+        \ })<CR>
+endif
 
 "-------------------------
 
@@ -473,18 +463,6 @@ au BufWritePost * call ModeChange()
 
 " Navigate between and delete tabs.
 
-if has("gui_running")
-  nnoremap <M-c> :tabnew<CR>
-  nnoremap <M-e> :tabnew<Space>
-  nnoremap <M-j> :tabprevious<CR>
-  nnoremap <M-k> :tabnext<CR>
-  nnoremap <M-h> :tabfirst<CR>
-  nnoremap <M-l> :tablast<CR>
-  nnoremap <M-d> :bdelete<CR>
-  nnoremap <M-s> :split<Space>
-  nnoremap <M-S> :vsplit<Space>
-endif
-
 nnoremap gt <C-w><S-t><CR>
 nnoremap ge :tabnew<Space>
 nnoremap gj :tabprevious<CR>
@@ -672,6 +650,12 @@ autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
 vmap "sy :!xclip -f -sel clip
 map "sp :r!xclip -o -sel clip
 
+"-------------------------
+
 " Fix the weird issue with backspace not behaving correctly around linebreaks
 " and indentation stops
 set backspace=indent,eol,start
+
+"-------------------------
+
+nnoremap <silent> <leader>G :Gstatus<CR>
