@@ -46,6 +46,9 @@ Plugin 'godlygeek/tabular'
 " FZF for fuzzy searching
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
+" Ctrlp where FZF doesn't work
+Plugin 'ctrlpvim/ctrlp.vim'
+
 " Fugitive for git
 Plugin 'tpope/vim-fugitive'
 
@@ -220,7 +223,6 @@ endfunction
 " Search in FZF but it does not work on Cygwin
 if !has('win32unix')
   nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
-  nnoremap <silent> <leader>fz :FZF .<CR>
   nnoremap <silent> <leader>fh :FZF ~<CR>
   nnoremap <silent> <leader>fd :FZF D:<CR>
   nnoremap <silent> <leader>fr :call fzf#run({
@@ -228,6 +230,56 @@ if !has('win32unix')
         \ 'sink' : 'e ',
         \ 'options' : '-m',
         \ })<CR>
+else
+  let g:ctrlp_map = ''
+  let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+  let g:ctrlp_use_caching = 1
+  let g:ctrlp_clear_cache_on_exit = 0
+  let g:ctrlp_show_hidden = 1
+  let g:ctrlp_open_multiple_files = '2vjr'
+  let g:ctrlp_arg_map = 1
+  let g:ctrlp_prompt_mappings = {
+    \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
+    \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
+    \ 'PrtHistory(-1)':       ['<c-n>'],
+    \ 'PrtHistory(1)':        ['<c-p>'],
+    \ 'AcceptSelection("e")': ['<c-e>', '<2-LeftMouse>'],
+    \ 'AcceptSelection("h")': ['<c-s>'],
+    \ 'AcceptSelection("t")': ['<c-t>'],
+    \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+    \ 'ToggleRegex()':        ['<c-r>'],
+    \ 'ToggleByFname()':      ['<c-f>'],
+    \ 'ToggleType(1)':        ['<c-h>'],
+    \ 'ToggleType(-1)':        ['<c-l>'],
+    \ 'PrtClearCache()':      ['<c-d>'],
+    \ 'CreateNewFile()':      ['<c-cr>'],
+    \ 'MarkToOpen()':         ['<tab>'],
+    \ 'OpenMulti()':          ['<cr>'],
+    \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
+    \
+    \
+    \
+    \ 'PrtBS()':              ['<bs>', '<c-]>'],
+    \ 'PrtDelete()':          ['<del>'],
+    \ 'PrtDeleteWord()':      ['<c-w>'],
+    \ 'PrtClear()':           ['<c-u>'],
+    \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+    \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+    \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+    \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+    \ 'ToggleFocus()':        ['<c-F>'],
+    \ 'PrtExpandDir()':       ['<c-X>'],
+    \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+    \ 'PrtInsert()':          ['<c-\>'],
+    \ 'PrtCurStart()':        ['<c-A>'],
+    \ 'PrtCurEnd()':          ['<c-E>'],
+    \ 'PrtCurLeft()':         ['<left>'],
+    \ 'PrtCurRight()':        ['<right>'],
+    \ }
+  nnoremap <silent> <leader>fz :CtrlP<CR>
+  nnoremap <silent> <leader>fh :CtrlP ~/<CR>
+  nnoremap <silent> <leader>fd :CtrlP D:/<CR>
+  nnoremap <silent> <leader>fr :CtrlPMRU<CR>
 endif
 
 "-------------------------
