@@ -221,7 +221,19 @@ function FuzzyFind()
 endfunction
 
 " Search in FZF but it does not work on Cygwin
-if !has('win32unix')
+" Also doesn't work on WSL
+
+function DetectWSL()
+  " This may not work on WSL2
+  let kernel=system('uname -r')
+  if stridx(kernel, "Microsoft") > -1
+    return 1
+  else
+    return 0
+  endif
+endfunction
+
+if !(has('win32unix') || DetectWSL())
   nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
   nnoremap <silent> <leader>fh :FZF ~<CR>
   nnoremap <silent> <leader>fd :FZF D:<CR>
