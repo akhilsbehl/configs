@@ -192,13 +192,14 @@ fi
 # Variables and Exports #
 #########################
 
-export SHELL='/usr/bin/zsh'
+export GEM_HOME="$HOME/.gem"
+
 
 export TERM='xterm'
 
 export PATH="$HOME/scripts:$HOME/git/packer:$PATH"
 
-export SVN_EDITOR='e'
+export SVN_EDITOR='vim'
 
 # Less is more!
 export READNULLCMD='less'
