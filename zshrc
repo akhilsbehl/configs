@@ -11,6 +11,9 @@ zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
 compinit
+
+autoload -Uz bashcompinit
+bashcompinit
 # End of lines added by compinstall
 
 ##################
@@ -355,6 +358,15 @@ function get_first_available() {
   done
 }
 
+function fz () {
+  local cmd file 
+  file=$(locate * | fzf-tmux --select-1 --exit-0)
+  if [[ -n "$file" ]]; then
+    cmd=$(compgen -abckA function | fzf-tmux --select-1 --exit-0)
+    [[ -n "$cmd" ]] && "$cmd" "$file"
+  fi
+}
+
 function fzs () {
   local cmd args search_dir file 
   cmd=$(get_first_available gio start)
@@ -394,6 +406,7 @@ function fzp () {
   pkgs=$(eval "$search_cmd $search_args" | fzf-tmux --query="$2" | tr '\n' ' ')
   if [[ -n "$pkgs" ]]; then
     command -v sudo > /dev/null && prefix="sudo"
+    echo "$prefix $install_cmd $install_args $pkgs"
     eval "$prefix $install_cmd $install_args $pkgs"
   fi
 }
