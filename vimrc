@@ -527,18 +527,17 @@ au BufWritePost * call ModeChange()
 
 " Navigate between and delete tabs.
 
-nnoremap gt <C-w><S-t><CR>
-nnoremap ge :tabnew<Space>
-nnoremap gj :tabprevious<CR>
-nnoremap gk :tabnext<CR>
-nnoremap gh :tabfirst<CR>
-nnoremap gl :tablast<CR>
-nnoremap gc :close<CR>
-nnoremap gd :bdelete<CR>
-nnoremap gs :split<Space>
-nnoremap gS :vsplit<Space>
-nnoremap gS :vsplit<Space>
-nnoremap gb :buffers<CR>:buffer<Space>
+nnoremap tt <C-w><S-t><CR>
+nnoremap te :tabnew<Space>
+nnoremap tj :tabprevious<CR>
+nnoremap tk :tabnext<CR>
+nnoremap th :tabfirst<CR>
+nnoremap tl :tablast<CR>
+nnoremap tc :close<CR>
+nnoremap td :bdelete<CR>
+nnoremap ts :split<Space>
+nnoremap tS :vsplit<Space>
+nnoremap tb :buffers<CR>:buffer<Space>
 
 "-------------------------
 
