@@ -672,7 +672,7 @@ let g:vmt_fence_hidden_markdown_style = 'GFM'
 " Preview markdown
 
 function! PreviewMarkdown()
-  let outFile = '/tmp/' . expand('%:r') . '.html'
+  let outFile = './' . expand('%:r') . '.html'
   silent execute '!cd %:p:h'
   silent execute '!md2html % >' . outFile
   silent execute 'redraw!'
