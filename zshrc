@@ -84,7 +84,7 @@ else
     zle && zle reset-prompt
     return $(( 128 + $1 ))
   }
-  prompt "$USER"
+  prompt adam2
   RPROMPT='${vim_mode}'
 fi
 
@@ -171,21 +171,21 @@ alias netlog='sudo journalctl -f -u NetworkManager'
 
 alias resolv='echo "nameserver 8.8.4.4\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf'
 
-OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
+alias sleep='sudo systemctl suspend && lock'
 
-if [[ "$OS" == "Ubuntu" ]];
-then
+alias freeze='sudo systemctl hibernate && lock'
+
+alias die='sudo systemctl poweroff'
+
+alias respawn='sudo systemctl reboot'
+
+OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
+if [[ "$OS" == "Ubuntu" ]]; then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
-  alias sleep='sudo pm-suspend && lock'
-  alias freeze='sudo pm-hibernate && lock'
-  alias die='sudo shutdown -h 0'
-  alias respawn='sudo shutdown -r 0'
-else
+elif [[ "$OS" == "Arch Linux" ]]; then
   alias upgrade='packer -Syu --noconfirm --noedit'
-  alias sleep='sudo systemctl suspend && lock'
-  alias freeze='sudo systemctl hibernate && lock'
-  alias die='sudo systemctl poweroff'
-  alias respawn='sudo systemctl reboot'
+else
+  alias upgrade='echo Unknown OS!'
 fi
 
 #########################
@@ -206,10 +206,10 @@ export READNULLCMD='less'
 if [ -n "$DISPLAY" ]
 then
   BROWSER=google-chrome-stable
-  EDITOR=e
+  EDITOR=vim
 else
   BROWSER=elinks
-  EDITOR=e
+  EDITOR=vim
 fi
 
 eval $(dircolors ~/.dircolors)
@@ -218,15 +218,15 @@ eval $(dircolors ~/.dircolors)
 # File Aliases #
 ################
 
-alias bashrc='$EDITOR "$HOME"/.bashrc &'
+alias bashrc='$EDITOR "$HOME"/.bashrc'
 
-alias zshrc='$EDITOR "$HOME"/.zshrc &'
+alias zshrc='$EDITOR "$HOME"/.zshrc'
 
-alias vimrc='$EDITOR "$HOME"/.vimrc &'
+alias vimrc='$EDITOR "$HOME"/.vimrc'
 
-alias gvimrc='$EDITOR "$HOME"/.gvimrc &'
+alias gvimrc='$EDITOR "$HOME"/.gvimrc'
 
-alias fstab='sudo $EDITOR /etc/fstab &'
+alias fstab='sudo $EDITOR /etc/fstab'
 
 alias show='gio open'
 
@@ -251,12 +251,6 @@ alias -g N='&>! /dev/null &'
 alias -g hd='| head'
 
 alias -g tl='| tail'
-
-####################################
-#  Source stuff local to each box  #
-####################################
-
-[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
 
 ##############
 #  Dirstack  #
@@ -284,15 +278,15 @@ setopt pushdminus
 #  Modules  #
 #############
 
-source $HOME/git/configs/zshmodules/opp.zsh/opp.zsh
-source $HOME/git/configs/zshmodules/opp.zsh/opp/*
+source $HOME/configs/zshmodules/opp.zsh/opp.zsh
+source $HOME/configs/zshmodules/opp.zsh/opp/*
 
-source $HOME/git/configs/zshmodules/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $HOME/configs/zshmodules/zsh-history-substring-search/zsh-history-substring-search.zsh
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
 # Source this one last
-source $HOME/git/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #############################
 #  up n to go up n folders  #
@@ -322,7 +316,7 @@ alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
 alias aa='cd "$HOME"/audio'
 alias vv='cd "$HOME"/video'
 alias tt='cd "$HOME"/tmp'
-alias cc='cd "$HOME"/git/configs'
+alias cc='cd "$HOME"/configs'
 alias gg='cd "$HOME"/git'
 alias ww='cd "$HOME"/warchives'
 
@@ -331,21 +325,21 @@ alias ww='cd "$HOME"/warchives'
 #########
 
 # Setup fzf
-if [[ ! "$PATH" =~ "$HOME/git/configs/fzf/bin" ]]; then
-  export PATH="$PATH:$HOME/git/configs/fzf/bin"
+if [[ ! "$PATH" =~ "$HOME/configs/fzf/bin" ]]; then
+  export PATH="$PATH:$HOME/configs/fzf/bin"
 fi
 
 # Man path
-if [[ ! "$MANPATH" =~ "$HOME/git/configs/fzf/man" && \
-    -d "$HOME/git/configs/fzf/man" ]]; then
-  export MANPATH="$MANPATH:$HOME/git/configs/fzf/man"
+if [[ ! "$MANPATH" =~ "$HOME/configs/fzf/man" && \
+    -d "$HOME/configs/fzf/man" ]]; then
+  export MANPATH="$MANPATH:$HOME/configs/fzf/man"
 fi
 
 # Auto-completion
-[[ $- =~ i ]] && source "$HOME/git/configs/fzf/shell/completion.zsh" 2> /dev/null
+[[ $- =~ i ]] && source "$HOME/configs/fzf/shell/completion.zsh" 2> /dev/null
 
 # Key bindings
-source "$HOME/git/configs/fzf/shell/key-bindings.zsh"
+source "$HOME/configs/fzf/shell/key-bindings.zsh"
 
 export FZF_CTRL_T_COMMAND="ag -l -g ''"
 export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
@@ -353,64 +347,59 @@ export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
 export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no-mouse'
 
-function fzshow () {
-  local file
-  file=$(find -L ~ -type f | fzf-tmux --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && gio open "$file"
+function get_first_available() {
+  local first
+  for candidate in "$@"; do
+    command -v "$candidate" > /dev/null && first="$candidate"
+    (test "$first" && echo "$first") && break
+  done
 }
 
-function vi () {
-  local out file key
-  out=$(find -L ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
-  key=$(head -1 <<< "$out")
-  file=$(head -2 <<< "$out" | tail -1)
-  if [[ -n "$file" ]]; then
-    [ "$key" = ctrl-g ] && gvim "$file" || vim "$file"
+function fzs () {
+  local cmd args search_dir file 
+  cmd=$(get_first_available gio start)
+  args=""
+  [[ "$cmd" == gio ]] && args="open"
+  search_dir="."
+  [[ -n "$1" ]] && search_dir="$1"
+  file=$(find -L "$search_dir" -type f | fzf-tmux --query="$2" --select-1 --exit-0)
+  [[ -n "$file" ]] && "$cmd" "$args" "$file"
+}
+
+function fzp () {
+  local mode prefix search_cmd search_args install_cmd install_args
+  mode="$1"
+  prefix=""
+  install_cmd=$(get_first_available pacman apt-get)
+  if [[ "$install_cmd" == "pacman" ]]; then
+    search_cmd="$install_cmd"
+    if [[ "$mode" == "install" ]]; then
+      search_args="-Slq"
+      install_args="-S --needed"
+    elif [[ "$mode" == "uninstall" ]]; then
+      search_args="-Qq"
+      install_args="-Rns"
+    fi
+  elif [[ "$install_cmd" == "apt-get" ]]; then
+    if [[ "$mode" == "install" ]]; then
+      search_cmd="apt-cache"
+      search_args="pkgnames"
+      install_args="install"
+    elif [[ "$mode" == "uninstall" ]]; then
+      search_cmd="dpkg-query"
+      search_args="-W | cut -f 1"
+      install_args="remove"
+    fi
+  fi
+  pkgs=$(eval "$search_cmd $search_args" | fzf-tmux --query="$2" | tr '\n' ' ')
+  if [[ -n "$pkgs" ]]; then
+    command -v sudo > /dev/null && prefix="sudo"
+    eval "$prefix $install_cmd $install_args $pkgs"
   fi
 }
 
-function ez () {
-  local out file key
-  out=$(find -L ~ -type f | fzf-tmux --query="$1" --exit-0 --expect=ctrl-g)
-  key=$(head -1 <<< "$out")
-  file=$(head -2 <<< "$out" | tail -1)
-  if [[ -n "$file" ]]; then
-    [ "$key" = ctrl-g ] && e "$file" || e "$file"
-  fi
-}
-
-function play () {
-  local file
-  file=$(find -L ~/audio ~/video -type f | \
-    fzf-tmux --query="$1" --select-1 --exit-0)
-  [ -n "$file" ] && mpv $(echo $file)
-}
-
-function cdf() {
-  local file
-  local dir
-  file=$(find -L ~ -type f | fzf-tmux --query="$1") && dir=$(dirname "$file") && cd "$dir"
-}
-
-function fzf-locate-widget() {
-  local selected
-  if selected=$(locate / | fzf-tmux); then
-    LBUFFER="$LBUFFER$selected"
-  fi
-  zle redisplay
-}
-zle -N fzf-locate-widget
-bindkey '\ei' fzf-locate-widget
-
-function install () {
-  pkgs=$(pacman -Slq | fzf-tmux --query="$1")
-  [ -n "$pkgs" ] && sudo pacman -S --needed "$pkgs"
-}
-
-function uninstall () {
-  pkgs=$(pacman -Qq | fzf-tmux --query="$1")
-  [ -n "$pkgs" ] && sudo pacman -Rns "$pkgs"
-}
+function install () { fzp "install" "$@" }
+function uninstall () { fzp "uninstall" "$@" }
 
 #############
 # SSH Agent #
@@ -425,10 +414,26 @@ find "$HOME"/.ssh -type f -name '*.pem' -exec ssh-add -k {} \; &> /dev/null
 ####################################
 
 function penv () {
-  local gitroot=$(git rev-parse --show-toplevel 2> /dev/null)
-  [[ -n "$gitroot" ]] && gitroot=$(find $gitroot -type d -name '.virtualenv')
-  [[ -n "$gitroot" ]] && gitroot=$(find $gitroot -type f -name 'activate')
-  [[ -n "$gitroot" ]] && source $gitroot
+  declare -a ENVSEARCH=(
+    "$(git rev-parse --show-toplevel 2> /dev/null)"
+    "$PWD"
+    "$HOME"
+  )
+  ENVSEARCH=($(echo ${ENVSEARCH[@]} | tr [:space:] '\n' | awk '!x[$0]++'))
+  for envroot in "${ENVSEARCH[@]}"; do
+    test -n "$envroot" || continue
+    if test -d $envroot/.virtualenv; then
+      echo Found $envroot/.virtualenv
+      act="$envroot/.virtualenv/bin/activate"
+      test -f $act && source $act
+      if [[ $? -eq 0 ]]; then
+        return 0
+      else
+        echo 'Could not activate this .virtualenv. Moving on'
+      fi
+    fi
+  done
+  echo "No usable virtualenv found. Giving up." && return 1
 }
 
 ########################
@@ -444,6 +449,12 @@ function forever() {
         "$@"
     done
 }
+
+####################################
+#  Source stuff local to each box  #
+####################################
+
+[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
 
 ###################
 # Fortune cookies #
