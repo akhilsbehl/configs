@@ -737,6 +737,7 @@ endif
 " Paste support on WSL
 
 if HasWSL()
+  " Unfortunately, this breaks tmux for whatever reason
   let g:wsl_paste_cmd = 'PowerShell.exe gcb -raw | tr -d "\15\32"'
-  nnoremap "+p "=system(g:wsl_paste_cmd)[:-2]<C-M>p
+  nnoremap "+p "=system(g:wsl_paste_cmd)[:-2]<CR>p
 endif
