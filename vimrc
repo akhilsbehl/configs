@@ -710,4 +710,33 @@ set backspace=indent,eol,start
 
 "-------------------------
 
-nnoremap <silent> <leader>G :Gstatus<CR>
+nnoremap <silent> <leader>gs :Gstatus<CR>
+
+"-------------------------
+
+" Copy support on WSL
+
+function HasWSL()
+  return system('uname -r') =~ "Microsoft"
+endfunction
+
+function WSLYank()
+  let s:clip = '/mnt/c/Windows/System32/clip.exe'
+  if v:event.operator ==# 'y'
+    call system(s:clip, @0)
+  endif
+endfunction
+
+if HasWSL()
+  augroup WSLYank
+    autocmd!
+    autocmd TextYankPost * call WSLYank()
+  augroup END
+endif
+
+" Paste support on WSL
+
+if HasWSL()
+  let g:wsl_paste_cmd = 'PowerShell.exe gcb -raw | tr -d "\15\32"'
+  nnoremap "+p "=system(g:wsl_paste_cmd)[:-2]<C-M>p
+endif
