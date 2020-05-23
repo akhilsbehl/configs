@@ -510,7 +510,7 @@ function ModeChange()
   endif
 endfunction
 
-au BufWritePost * call ModeChange()
+autocmd BufWritePost * call ModeChange()
 
 "-------------------------
 
@@ -644,8 +644,8 @@ inoremap <C-z> <C-x><C-f>
 
 " Only show cursorline in the current window and in normal mode
 
-au WinLeave,InsertEnter * set nocursorline
-au WinEnter,InsertLeave * set cursorline
+autocmd WinLeave,InsertEnter * set nocursorline
+autocmd WinEnter,InsertLeave * set cursorline
 
 "-------------------------
 
@@ -681,9 +681,9 @@ endfunction
 " Use the github flavored markdown by default.
 
 augroup markdown
-    au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
-    au BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
+    autocmd!
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
     autocmd FileType markdown map <leader>pm
           \ :call PreviewMarkdown()<CR>
 augroup END
