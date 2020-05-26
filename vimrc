@@ -19,9 +19,6 @@ Plugin 'vim-scripts/AutoClose--Alves'
 " The awesome commenter.
 Plugin 'scrooloose/nerdcommenter'
 
-" The screen / tmux plugin.
-Plugin 'ervandew/screen'
-
 " Overload the fucking tab!
 Plugin 'ervandew/supertab'
 
@@ -60,7 +57,10 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
 
 " R plugin.
-Plugin 'vim-scripts/Vim-R-plugin'
+Plugin 'jalvesaq/Nvim-R'
+
+" Python plugin.
+Plugin 'jalvesaq/vimcmdline'
 
 " Better indentation for Python
 Plugin 'hynek/vim-python-pep8-indent'
@@ -411,88 +411,28 @@ autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
 
 "-------------------------
 
-" ervandew/screen configuration to send commands to ipython.
+" vimcmdline configuration for Python (and others)
 
-" let g:ScreenImpl = "Tmux"
+let cmdline_map_start          = '<Leader>vo'
+let cmdline_map_send           = '<Leader>vs'
+let cmdline_map_send_and_stay  = '<Leader>vr'
+let cmdline_map_source_fun     = '<Leader>vf'
+let cmdline_map_send_paragraph = '<Leader>vp'
+let cmdline_map_send_block     = '<Leader>vb'
+let cmdline_map_quit           = '<Leader>vq'
+let cmdline_follow_colorscheme = 1
+let cmdline_vsplit             = 1
+let cmdline_term_width         = 120
+let cmdline_app                = {}
+let cmdline_app['python']      = 'ipython'
 
-" Open an ipython3 shell.
-autocmd FileType python map <leader>p3 :ScreenShell! ipython<CR>
-
-" Open an ipython2 shell.
-autocmd FileType python map <leader>p2 :ScreenShell! ipython2<CR>
-
-" Close whichever shell is running.
-autocmd FileType python map <leader>pq :ScreenQuit<CR>
-
-" Send current line to python and move to next line.
-autocmd FileType python map <leader>pr V:ScreenSend<CR>j
-
-" Send visual selection to python and move to next line.
-autocmd FileType python map <leader>pv :ScreenSend<CR>`>0j
-
-" Send a carriage return line to python.
-autocmd FileType python map <leader>pa :call g:ScreenShellSend("\r")<CR>
-
-" Clear screen.
-autocmd FileType python map <leader>pc
-      \ :call g:ScreenShellSend('!clear')<CR>
-
-" Start a time block to execute code in.
-autocmd FileType python map <leader>pt
-      \ :call g:ScreenShellSend('%%time')<CR>
-
-" Start a timeit block to execute code in.
-autocmd FileType python map <leader>pT
-      \ :call g:ScreenShellSend('%%timeit')<CR>
-
-" Start a debugger repl to execute code in.
-autocmd FileType python map <leader>pD
-      \ :call g:ScreenShellSend('%%debug')<CR>
-
-" Start a profiling block to execute code in.
-autocmd FileType python map <leader>pp
-      \ :call g:ScreenShellSend('%%prun')<CR>
-
-" Print the current working directory.
-autocmd FileType python map <leader>pg
-      \ :call g:ScreenShellSend('!pwd')<CR>
-
-" Set working directory to current file's folder.
-function SetWD()
-  let wd = 'cd ' . expand('%:p:h')
-  :call g:ScreenShellSend(wd)
-endfunction
-autocmd FileType python map <leader>ps :call SetWD()<CR>
-
-" Get ipython help for word under cursor. Complement it with Shift + K.
-function GetHelp()
-  let w = expand("<cword>") . "??"
-  :call g:ScreenShellSend(w)
-endfunction
-autocmd FileType python map <leader>ph :call GetHelp()<CR>
-
-" Get `dir` help for word under cursor.
-function GetDir()
-  let w = "dir(" . expand("<cword>") . ")"
-  :call g:ScreenShellSend(w)
-endfunction
-autocmd FileType python map <leader>pd :call GetDir()<CR>
-
-" Get len of the word under cursor.
-function GetLen()
-  let w = "len(" . expand("<cword>") . ")"
-  :call g:ScreenShellSend(w)
-endfunction
-autocmd FileType python map <leader>pl :call GetLen()<CR>
-
-"-------------------------
+"------------------------
 
 " Jedi configuration for Python
 
 let g:jedi#use_splits_not_buffers = "winwidth"
 let g:jedi#popup_on_dot = 1
 let g:jedi#show_call_signatures = "2"
-
 let g:jedi#goto_command = "<LocalLeader>jg"
 let g:jedi#documentation_command = "<LocalLeader>jh"
 let g:jedi#rename_command = "<LocalLeader>jr"
