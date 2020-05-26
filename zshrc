@@ -197,9 +197,6 @@ fi
 
 export GEM_HOME="$HOME/.gem"
 
-
-export TERM='xterm'
-
 export PATH="$HOME/scripts:$HOME/git/packer:$PATH"
 
 export SVN_EDITOR='vim'
