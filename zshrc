@@ -417,8 +417,8 @@ function uninstall () { fzp "uninstall" "$@" }
 #############
 
 eval $(ssh-agent) &> /dev/null
-ssh-add &> /dev/null
 find "$HOME"/.ssh -type f -name '*.pem' -exec ssh-add -k {} \; &> /dev/null
+find "$HOME"/.ssh -type f -name 'id_rsa*' -exec ssh-add {} \; &> /dev/null
 
 ####################################
 # Find the virtualenv and activate #

@@ -457,7 +457,8 @@ autocmd BufWritePost * call ModeChange()
 " Navigate between and delete tabs.
 
 nnoremap tt <C-w><S-t><CR>
-nnoremap te :tabnew<Space>
+nnoremap te :e<Space>
+nnoremap tE :tabnew<Space>
 nnoremap to :only<CR>
 nnoremap tj :tabprevious<CR>
 nnoremap tk :tabnext<CR>

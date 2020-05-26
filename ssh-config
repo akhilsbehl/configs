@@ -1,0 +1,20 @@
+# Work
+Host github.com-fractal
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_rsa
+	IdentitiesOnly yes
+
+# Work Gitlab
+Host gitlab-fractal
+	HostName gitlab.fractalanalytics.com
+	User git
+	IdentityFile ~/.ssh/id_rsa
+	IdentitiesOnly yes
+
+# Personal
+Host github.com-asb
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_rsa_asb
+	IdentitiesOnly yes
