@@ -458,6 +458,7 @@ autocmd BufWritePost * call ModeChange()
 
 nnoremap tt <C-w><S-t><CR>
 nnoremap te :tabnew<Space>
+nnoremap to :only<CR>
 nnoremap tj :tabprevious<CR>
 nnoremap tk :tabnext<CR>
 nnoremap th :tabfirst<CR>
@@ -677,7 +678,6 @@ endif
 " Paste support on WSL
 
 if HasWSL()
-  " Unfortunately, this breaks tmux for whatever reason
-  let g:wsl_paste_cmd = 'PowerShell.exe gcb -raw | tr -d "\15\32"'
-  nnoremap "+p "=system(g:wsl_paste_cmd)[:-2]<CR>p
+  " https://github.com/neosmart/paste
+  nnoremap "+p "=system('paste.exe --lf')[:-2]<CR>p
 endif
