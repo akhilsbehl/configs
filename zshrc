@@ -416,9 +416,13 @@ function uninstall () { fzp "uninstall" "$@" }
 # SSH Agent #
 #############
 
-eval $(ssh-agent) &> /dev/null
-find "$HOME"/.ssh -type f -name '*.pem' -exec ssh-add -k {} \; &> /dev/null
-find "$HOME"/.ssh -type f -name 'id_rsa*' -exec ssh-add {} \; &> /dev/null
+export SSH_AUTH_SOCK="$HOME/.ssh/ssh-agent.$HOST.sock"
+ssh-add -l &>/dev/null
+if [ $? -ge 2 ]; then
+  ssh-agent -a "$SSH_AUTH_SOCK" &>/dev/null
+  find "$HOME"/.ssh -type f -name '*.pem' -exec ssh-add -k {} \; &> /dev/null
+  find "$HOME"/.ssh -type f -name 'id_rsa*' -exec ssh-add {} \; &> /dev/null
+fi
 
 ####################################
 # Find the virtualenv and activate #
