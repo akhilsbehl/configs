@@ -413,17 +413,28 @@ autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
 
 " vimcmdline configuration for Python (and others)
 
-let cmdline_map_start          = '<Leader>vo'
-let cmdline_map_send           = '<Leader>vs'
-let cmdline_map_send_and_stay  = '<Leader>vr'
-let cmdline_map_source_fun     = '<Leader>vf'
-let cmdline_map_send_paragraph = '<Leader>vp'
-let cmdline_map_send_block     = '<Leader>vb'
-let cmdline_map_quit           = '<Leader>vq'
-let cmdline_follow_colorscheme = 1
+let cmdline_map_start          = '<Leader>co'
+
+let cmdline_map_send           = '<Leader>cs'
+
+let cmdline_map_send_and_stay  = '<Leader>cr'
+
+let cmdline_map_source_fun     = '<Leader>cf'
+
+let cmdline_map_send_paragraph = '<Leader>cp'
+
+let cmdline_map_send_block     = '<Leader>cb'
+
+let cmdline_map_quit           = '<Leader>cq'
+
+" let cmdline_follow_colorscheme = 1
+
 let cmdline_vsplit             = 1
+
 let cmdline_term_width         = 120
+
 let cmdline_app                = {}
+
 let cmdline_app['python']      = 'ipython'
 
 "------------------------
@@ -431,11 +442,17 @@ let cmdline_app['python']      = 'ipython'
 " Jedi configuration for Python
 
 let g:jedi#use_splits_not_buffers = "winwidth"
+
 let g:jedi#popup_on_dot = 1
+
 let g:jedi#show_call_signatures = "2"
+
 let g:jedi#goto_command = "<LocalLeader>jg"
+
 let g:jedi#documentation_command = "<LocalLeader>jh"
+
 let g:jedi#rename_command = "<LocalLeader>jr"
+
 let g:jedi#usages_command = "<LocalLeader>ju"
 
 "-------------------------
