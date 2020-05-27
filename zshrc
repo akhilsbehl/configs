@@ -356,25 +356,25 @@ function get_first_available() {
   done
 }
 
-function fz () {
-  local cmd file
-  file=$(locate -i "$HOME/*" | fzf-tmux --select-1 --exit-0)
-  if [[ -n "$file" ]]; then
-    cmd=$(compgen -abckA function | fzf-tmux --select-1 --exit-0)
-    [[ -n "$cmd" ]] && "$cmd" "$file"
+function fzbin () {
+  local file
+  if [[ -n "$2" ]]; then
+    file=$(print -r -l -- $2/**/*(.D:q) | \
+      fzf-tmux --query="$3" --select-1 --exit-0)
+  else
+    echo 'I need a dir to start in.'
   fi
+  [[ -n "$file" ]] && echo "$1" "$file"
+  [[ -n "$file" ]] && eval "$1 $file"
 }
 
-function fzs () {
-  local cmd args search_dir file 
-  cmd=$(get_first_available gio start)
-  args=""
-  [[ "$cmd" == gio ]] && args="open"
-  search_dir="."
-  [[ -n "$1" ]] && search_dir="$1"
-  file=$(find -L "$search_dir" -type f | fzf-tmux --query="$2" --select-1 --exit-0)
-  [[ -n "$file" ]] && "$cmd" "$args" "$file"
-}
+function vif () { fzbin "vim" "$@" }
+
+# This is possibly running on:
+# Some flavor of WSL: Use wslopen
+# Some flavor of Cygwin: Use start
+# Some flavor of Linux: Use xdg-open
+function open () { fzbin $(get_first_available wslopen start xdg-open) "$@" }
 
 function fzp () {
   local mode prefix search_cmd search_args install_cmd install_args
