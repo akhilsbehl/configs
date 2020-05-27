@@ -680,5 +680,5 @@ endif
 
 if HasWSL()
   " https://github.com/neosmart/paste
-  nnoremap "+p "=system('paste.exe --lf')[:-2]<CR>p
+  nnoremap "+p "=system('paste.exe --lf')<CR>p
 endif
