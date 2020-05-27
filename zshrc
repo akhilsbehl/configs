@@ -357,8 +357,8 @@ function get_first_available() {
 }
 
 function fz () {
-  local cmd file 
-  file=$(locate * | fzf-tmux --select-1 --exit-0)
+  local cmd file
+  file=$(locate -i "$HOME/*" | fzf-tmux --select-1 --exit-0)
   if [[ -n "$file" ]]; then
     cmd=$(compgen -abckA function | fzf-tmux --select-1 --exit-0)
     [[ -n "$cmd" ]] && "$cmd" "$file"
