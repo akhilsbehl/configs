@@ -358,7 +358,9 @@ function get_first_available() {
 
 function fzbin () {
   local file
-  if [[ -n "$2" ]]; then
+  if [[ -f "$2" ]]; then
+    eval "$1 $2"
+  elif [[ -d "$2" ]]; then
     file=$(print -r -l -- $2/**/*(.D:q) | \
       fzf-tmux --query="$3" --select-1 --exit-0)
   else
