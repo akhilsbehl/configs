@@ -427,8 +427,6 @@ let cmdline_map_send_block     = '<Leader>cb'
 
 let cmdline_map_quit           = '<Leader>cq'
 
-" let cmdline_follow_colorscheme = 1
-
 let cmdline_vsplit             = 1
 
 let cmdline_term_width         = 120

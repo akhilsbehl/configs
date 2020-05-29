@@ -235,9 +235,9 @@ alias show='gio open'
 #  Global aliases  #
 ####################
 
-alias -g g='| grep'
+alias -g g='| ag'
 
-alias -g G='| grep -i'
+alias -g G='| ag -i'
 
 alias -g l='| less'
 
@@ -342,7 +342,13 @@ fi
 # Key bindings
 source "$HOME/configs/fzf/shell/key-bindings.zsh"
 
+# RG is not working on WSL yet due to glibc nanosleep bug
+# export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+# export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
 export FZF_CTRL_T_COMMAND="ag -l -g ''"
+export FZF_DEFAULT_COMMAND="ag -l -g ''"
+export FZF_ALT_C_COMMAND='find -type d -not -empty | grep -v "/\.git/"'
 export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
 export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
