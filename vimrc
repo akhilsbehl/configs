@@ -697,3 +697,20 @@ if HasWSL()
   " https://github.com/neosmart/paste
   nnoremap "+p "=system('paste.exe --lf')<CR>p
 endif
+
+"-------------------------
+
+" For when I lose the cursor especially on WSL
+
+function ToggleHighlightNearCursor()
+  if !exists("s:highlightcursor")
+    :normal zz
+    match Error /\k*\%#\k*/
+    let s:highlightcursor=1
+  else
+    match None
+    unlet s:highlightcursor
+  endif
+endfunction
+
+nnoremap <leader>hc :call ToggleHighlightNearCursor()<CR>
