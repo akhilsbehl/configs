@@ -35,6 +35,7 @@
   dr = "!fff() { git diff -w "$1"^.."$1"; }; fff"
 
   f = fetch
+  fa = fetch --all
 
   ha = "!git config -l | grep alias | cut -c 7-"
 
@@ -47,6 +48,7 @@
 
   p = push -u origin
   pl = pull
+  pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
   ps = push --set-upstream -u origin 
 
   rc = rebase --continue
