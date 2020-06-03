@@ -318,8 +318,16 @@ alias aa='cd "$HOME"/audio'
 alias vv='cd "$HOME"/video'
 alias tt='cd "$HOME"/tmp'
 alias cc='cd "$HOME"/configs'
-alias gg='cd "$HOME"/git'
 alias ww='cd "$HOME"/warchives'
+
+#####################
+#  Aliases for Git  #
+#####################
+
+local GIT_ALIASES=$(git config -l | grep alias | cut -c 7- | cut -f 1 -d '=' | tr '\r\n' ' ')
+for al in ${(z)GIT_ALIASES}; do
+  alias gg$al="git $al"
+done
 
 #########
 #  FZF  #
