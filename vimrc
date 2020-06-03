@@ -49,6 +49,9 @@ Plugin 'ctrlpvim/ctrlp.vim'
 " Fugitive for git
 Plugin 'tpope/vim-fugitive'
 
+" Fugitive for git
+Plugin 'mileszs/ack.vim'
+
 "-------------------------
 
 " Language specific plugins
@@ -714,3 +717,22 @@ function ToggleHighlightNearCursor()
 endfunction
 
 nnoremap <leader>hc :call ToggleHighlightNearCursor()<CR>
+
+"-------------------------
+
+" Ack configuration
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep --smart-case'
+endif
+
+function FindGitRoot()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+command! -nargs=1 Ag execute "Ack! <args> " . FindGitRoot()
+
+nnoremap <Leader>aG :Ag<Space>
+nnoremap <Leader>ag :execute 'Ack! ' .
+      \ expand('<cword>') . ' ' .
+      \ FindGitRoot()<CR>
