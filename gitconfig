@@ -3,7 +3,6 @@
   email = akhilsbehl@gmail.com
 [core]
   editor = vim
-  pager = vim - -R -c 'AnsiEsc'
   excludesfile = /home/akhilsbehl/.gitignore
 [merge]
   tool = vimdiff
@@ -39,10 +38,9 @@
 
   ha = "!git config -l | grep alias | cut -c 7-"
 
-  l = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
-  la = "!git config -l | grep alias | cut -c 7-"
+  lg = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
   lf = log -u
-  ll = git log --numstat -1
+  ll = !git log --numstat -1
   ls = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --numstat
 
   m = merge
