@@ -8,6 +8,70 @@
 [merge]
   tool = vimdiff
 [alias]
-  hist = log --pretty=format:\"%h %ad | %an | %s %d\" --graph --date=short
-  unstage = reset HEAD
-  visual = !gitk
+
+  a = add
+  ap = add -p
+  ai = add --interactive
+
+  b = checkout
+  bs = branch --show-current
+  bc = checkout -b
+  bd = branch -D
+  bl = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+
+  c = commit --verbose -m
+  cm = commit --amend --verbose --no-edit
+  cmm = commit --amend --verbose -m
+  ca = commit -a --verbose -m
+  cam = commit -a --amend --verbose --no-edit
+  camm = commit -a --amend --verbose -m
+
+  co = checkout
+  cl = clone
+
+  d = diff --word-diff
+  dc = diff --cached
+  dl = diff --cached HEAD^
+  ds = diff --stat
+  dr = "!fff() { git diff -w "$1"^.."$1"; }; fff"
+
+  f = fetch
+
+  ha = "!git config -l | grep alias | cut -c 7-"
+
+  l = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+  la = "!git config -l | grep alias | cut -c 7-"
+  lf = log -u
+  ll = git log --numstat -1
+  ls = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --numstat
+
+  m = merge
+
+  p = push -u origin
+  pl = pull
+  ps = push --set-upstream -u origin 
+
+  rc = rebase --continue
+  re = rebase --edit
+  ri = rebase --interactive
+  rs = rebase --skip
+
+  rvw = 
+
+  s = status -s
+
+  st = stash
+  sl = stash list
+  sp = stash pop
+
+  u = reset 
+  uh = reset --hard
+  u1 = reset HEAD^
+  u2 = reset HEAD^^
+  uh1 = reset --hard HEAD^
+  uh2 = reset --hard HEAD^^
+
+  vi = !gitk
+
+  ours = "!fff() { git co --ours $@ && git add $@; }; fff"
+  theirs = "!fff() { git co --theirs $@ && git add $@; }; fff"
