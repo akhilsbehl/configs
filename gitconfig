@@ -28,7 +28,8 @@
   co = checkout
   cl = clone
 
-  d = diff --word-diff
+  d = diff
+  dw = diff --word-diff
   dc = diff --cached
   dl = diff --cached HEAD^
   ds = diff --stat
