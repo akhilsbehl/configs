@@ -98,7 +98,6 @@ Plugin 'AnsiEsc.vim'
 
 " Gruvbox & my edit of Monokai
 Plugin 'morhetz/gruvbox'
-Plugin 'akhilsbehl/vim-monokai'
 
 "-------------------------
 
@@ -115,13 +114,12 @@ filetype indent plugin on
 syntax enable
 
 " Colorscheme.
-if has('gui_running')
-  set background=dark
-  colorscheme gruvbox
-else
-  set background=dark
-  colorscheme gruvbox
-endif
+set termguicolors
+let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
+set background=dark
+let g:gruvbox_contrast_dark='hard'
+colorscheme gruvbox
 
 "-------------------------
 
