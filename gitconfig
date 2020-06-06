@@ -9,6 +9,7 @@
 [alias]
 
   a = add
+  az = "!git add $(git status -s | fzf-tmux | cut -f 3 -d ' ' | tr '\n' ' ')"
   ap = add -p
   ai = add --interactive
 
@@ -58,8 +59,8 @@
   ri = rebase --interactive
   rs = rebase --skip
 
-  ts = status
-  tt = status -s
+  s = status
+  ss = status -s
 
   st = stash
   sl = stash list
