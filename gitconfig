@@ -46,6 +46,7 @@
   ls = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --numstat
 
   m = merge
+  mt = mergetool
 
   p = push -u origin
   pl = pull
@@ -57,13 +58,14 @@
   ri = rebase --interactive
   rs = rebase --skip
 
-  rvw = 
-
-  s = status -s
+  t = status
+  ts = status -s
 
   st = stash
   sl = stash list
   sp = stash pop
+  sd = stash drop
+  sc = stash clear
 
   u = reset 
   uh = reset --hard
