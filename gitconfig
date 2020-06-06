@@ -58,8 +58,8 @@
   ri = rebase --interactive
   rs = rebase --skip
 
-  t = status
-  ts = status -s
+  ts = status
+  tt = status -s
 
   st = stash
   sl = stash list
