@@ -54,6 +54,7 @@
   pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
   ps = !git push --set-upstream origin $(git bs)
 
+  ra = rebase --abort
   rc = rebase --continue
   re = rebase --edit
   ri = rebase --interactive
