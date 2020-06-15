@@ -400,33 +400,6 @@ if [ $? -ge 2 ]; then
   find "$HOME"/.ssh -type f -name 'id_rsa*' -exec ssh-add {} \; &> /dev/null
 fi
 
-####################################
-# Find the virtualenv and activate #
-####################################
-
-function penv () {
-  declare -a ENVSEARCH=(
-    "$(git rev-parse --show-toplevel 2> /dev/null)"
-    "$PWD"
-    "$HOME"
-  )
-  ENVSEARCH=($(echo ${ENVSEARCH[@]} | tr [:space:] '\n' | awk '!x[$0]++'))
-  for envroot in "${ENVSEARCH[@]}"; do
-    test -n "$envroot" || continue
-    if test -d $envroot/.virtualenv; then
-      echo Found $envroot/.virtualenv
-      act="$envroot/.virtualenv/bin/activate"
-      test -f $act && source $act
-      if [[ $? -eq 0 ]]; then
-        return 0
-      else
-        echo 'Could not activate this .virtualenv. Moving on'
-      fi
-    fi
-  done
-  echo "No usable virtualenv found. Giving up." && return 1
-}
-
 ########################
 # Do something forever #
 ########################

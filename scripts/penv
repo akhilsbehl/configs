@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+declare -a ENVSEARCH=(
+"$(git rev-parse --show-toplevel 2> /dev/null)"
+"$PWD"
+"$HOME"
+)
+
+for envroot in "${ENVSEARCH[@]}"; do
+  test -n "$envroot" || continue
+  if test -d $envroot/.virtualenv; then
+    echo Found $envroot/.virtualenv
+    act="$envroot/.virtualenv/bin/activate"
+    test -f $act && source $act
+    if [[ $? -eq 0 ]]; then
+      return 0
+    else
+      echo 'Could not activate this .virtualenv. Moving on'
+    fi
+  fi
+done
+echo "No usable virtualenv found. Giving up." && return 1
