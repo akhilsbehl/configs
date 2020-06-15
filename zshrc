@@ -51,46 +51,6 @@ bindkey -v '^?' backward-delete-char
 # do not hang my terminal
 stty -ixon
 
-########################
-#  Prompting goodness  #
-########################
-
-# Vi mode indicator
-###################
-
-PLPRMT='/usr/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh'
-
-if [[ -f $PLPRMT ]]; then
-  source $PLPRMT
-else
-  autoload -U promptinit
-  promptinit
-  autoload -U colors && colors
-
-  vim_ins_mode="%B%{$fg[red]%}<<< INS%{$reset_color%}"
-  vim_cmd_mode="%B%{$fg[blue]%}<<< CMD%{$reset_color%}"
-  vim_mode=$vim_cmd_mode
-
-  function zle-keymap-select {
-    vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-    zle reset-prompt
-  }
-  zle -N zle-keymap-select
-
-  function zle-line-finish {
-    vim_mode=$vim_cmd_mode
-  }
-  zle -N zle-line-finish
-
-  function TRAPINT() {
-    vim_mode=$vim_ins_mode
-    zle && zle reset-prompt
-    return $(( 128 + $1 ))
-  }
-  prompt adam2
-  RPROMPT='${vim_mode}'
-fi
-
 #####################
 #  Emacs utilities  #
 #####################
