@@ -721,7 +721,7 @@ nnoremap <leader>hc :call ToggleHighlightNearCursor()<CR>
 " Ack configuration
 
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep --smart-case'
+  let g:ackprg = 'rg --vimgrep --smart-case'
 endif
 
 function FindGitRoot()
