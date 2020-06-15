@@ -195,9 +195,9 @@ alias show='gio open'
 #  Global aliases  #
 ####################
 
-alias -g g='| ag'
+alias -g g='| rg'
 
-alias -g G='| ag -i'
+alias -g G='| rg -i'
 
 alias -g l='| less'
 
@@ -314,8 +314,8 @@ source "$HOME/configs/fzf/shell/key-bindings.zsh"
 # export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 # export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 
-export FZF_CTRL_T_COMMAND="ag -l -g ''"
-export FZF_DEFAULT_COMMAND="ag -l -g ''"
+export FZF_CTRL_T_COMMAND="rg -l -g ''"
+export FZF_DEFAULT_COMMAND="rg -l -g ''"
 export FZF_ALT_C_COMMAND='find -type d -not -empty | grep -v "/\.git/"'
 export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
 export FZF_TMUX_HEIGHT='20%'
