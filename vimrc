@@ -199,10 +199,6 @@ let maplocalleader=","
 
 " FZF configuration
 
-if has("gui_running")
-  let g:fzf_launcher='roxterm -e zsh -ic %s'
-endif
-
 let g:fzf_action = {
       \ 'ctrl-e': 'e',
       \ 'ctrl-t': 'tabedit',
