@@ -134,7 +134,7 @@ alias netlog='sudo journalctl -f -u NetworkManager'
 
 alias resolv='echo "nameserver 8.8.4.4\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf'
 
-alias sleep='sudo systemctl suspend && lock'
+alias susp='sudo systemctl suspend && lock'
 
 alias freeze='sudo systemctl hibernate && lock'
 
