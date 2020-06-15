@@ -18,9 +18,9 @@ if [[ -e "$1" ]]; then
   echo "A script with the same name exists. Exiting."
   exit 0
 else
-  echo -e '#!/bin/bash\n\n\n\nexit 0' > "$1" &&
+  echo -e '#!/usr/bin/env bash\n\n\n\nexit 0' > "$1" &&
     chmod u+x "$1" &&
-    gvim +3 "$1"
+    vim "$1"
   exit 0
 fi
 }
