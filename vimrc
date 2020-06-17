@@ -572,21 +572,23 @@ nnoremap <leader>fp gqipj
 
 "-------------------------
 
+set clipboard=unnamedplus
+
 " Copy a paragraph to the os clipboard.
 
-nnoremap <leader>yp mz"+yip`z
+nnoremap <leader>yp mzyip`z
 
 " Copy the whole buffer to the os clipboard.
 
-nnoremap <leader>yb mzgg"+yG`z
+nnoremap <leader>yb mzggyG`z
 
 " Copy up to point to the os clipboard.
 
-nnoremap <leader>yu mz"+ygg`z
+nnoremap <leader>yu mzygg`z
 
 " Copy from point to the os clipboard.
 
-nnoremap <leader>yf mz"+yG`z
+nnoremap <leader>yf mzyG`z
 
 "-------------------------
 
