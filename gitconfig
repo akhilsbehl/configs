@@ -50,6 +50,7 @@
   mt = mergetool
 
   p = push -u origin
+  pf = push -u origin --force
   pl = pull
   pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
   ps = !git push --set-upstream origin $(git bs)
