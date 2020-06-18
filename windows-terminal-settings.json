@@ -9,7 +9,7 @@
 
     "showTabsInTitlebar": false,
 
-    "launchMode": "maximized",
+    "launchMode": "fullscreen",
 
     "copyOnSelect": true,
 
@@ -40,8 +40,8 @@
                 "name": "Ubuntu",
                 "source": "Windows.Terminal.Wsl",
                 "colorScheme": "GruvOnHalf",
-                "cursorShape": "vintage",
-                "cursorColor": "#FABD2F",
+                "cursorShape": "filledBox",
+                "cursorTextColor": null,
                 "scrollbarState": "hidden",
                 "snapOnInput": true,
                 "historySize": 100000,
