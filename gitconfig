@@ -13,7 +13,8 @@
   ap = add -p
   ai = add --interactive
 
-  b = checkout
+  b = branch
+  ba = branch -a
   bs = branch --show-current
   bc = checkout -b
   bd = branch -D
