@@ -7,5 +7,5 @@ fi
 
 TMPFILE=$(mktemp).html
 md2html $1 > $TMPFILE &&
-  wkhtmltopdf $TMPFILE $2 &&
+  weasyprint $TMPFILE $2 &&
   exit 0
