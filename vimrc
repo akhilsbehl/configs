@@ -472,14 +472,18 @@ nnoremap tt <C-w><S-t><CR>
 nnoremap te :e<Space>
 nnoremap tE :tabnew<Space>
 nnoremap to :only<CR>
-nnoremap tj :tabprevious<CR>
-nnoremap tk :tabnext<CR>
-nnoremap th :tabfirst<CR>
-nnoremap tl :tablast<CR>
+nnoremap tj <C-w>j<CR>
+nnoremap tk <C-w>k<CR>
+nnoremap th <C-w>h<CR>
+nnoremap tl <C-w>l<CR>
+nnoremap tJ :tabprevious<CR>
+nnoremap tK :tabnext<CR>
+nnoremap tH :tabfirst<CR>
+nnoremap tL :tablast<CR>
 nnoremap tc :close<CR>
 nnoremap td :bdelete<CR>
 nnoremap ts :split<Space>
-nnoremap tS :vsplit<Space>
+nnoremap tv :vsplit<Space>
 nnoremap tb :buffers<CR>:buffer<Space>
 
 "-------------------------
