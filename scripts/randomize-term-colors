@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+CONFIG_DIR="$SCRIPTS_DIR/.."
+
+WIN_TERM_SETTINGS=~/winhome/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
+WIN_TERM_SETTINGS_GIT="$CONFIG_DIR/windows-terminal-settings.json"
+
+IFS=$'\n'
+# Grepping only name also pulls up profile names
+SCHEMES=($(grep -B 1 "foreground" $WIN_TERM_SETTINGS_GIT | grep "name" | cut -f 2- -d ':'))
+
+USE_SCHEME=${SCHEMES[$RANDOM % ${#SCHEMES[@]}]}
+
+SED_CMD="s/\"colorScheme\": \".*\",/\"colorScheme\":$USE_SCHEME/"
+
+sed -e $SED_CMD $WIN_TERM_SETTINGS_GIT > /tmp/wts
+
+[[ $? -eq 0 ]] && mv /tmp/wts $WIN_TERM_SETTINGS
+
+exit 0
