@@ -28,6 +28,7 @@
   camm = commit -a --amend --verbose -m
 
   co = checkout
+  cb = !git checkout $(git ba | fzf-tmux)
   cl = clone
 
   d = diff
