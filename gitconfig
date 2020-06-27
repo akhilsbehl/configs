@@ -51,6 +51,13 @@
   m = merge
   mt = mergetool
 
+  nn = clean -n
+  nf = clean -f
+  nd = clean -f -d
+  nX = clean -f -X
+  nx = clean -f -x
+  ni = clean -i
+
   p = push -u origin
   pf = push -u origin --force
   pl = pull
