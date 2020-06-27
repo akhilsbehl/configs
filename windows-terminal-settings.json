@@ -18,7 +18,7 @@
     "profiles":
     {
         "defaults": {
-
+          "fontFace": "Fira Code"
         },
         "list":
         [
