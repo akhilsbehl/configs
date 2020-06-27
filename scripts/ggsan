@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# https://unix.stackexchange.com/questions/31947/how-to-add-a-newline-to-the-end-of-a-file
+git ls-files -z | while IFS= read -rd '' f; do tail -c1 < "$f" | read -r _ || echo >> "$f"; done
+git ls-files -z | while IFS= read -rd '' f; do dos2unix "$f" &> /dev/null ; done
+
+exit 0
