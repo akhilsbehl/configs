@@ -482,8 +482,10 @@ nnoremap tH :tabfirst<CR>
 nnoremap tL :tablast<CR>
 nnoremap tc :close<CR>
 nnoremap td :bdelete<CR>
-nnoremap ts :split<Space>
-nnoremap tv :vsplit<Space>
+nnoremap ts :split<CR><C-w>j<CR>:buffers<CR>:buffer<Space>
+nnoremap tS :split<Space>
+nnoremap tv :vsplit<CR><C-w>l<CR>:buffers<CR>:buffer<Space>
+nnoremap tV :vsplit<Space>
 nnoremap tb :buffers<CR>:buffer<Space>
 
 "-------------------------
