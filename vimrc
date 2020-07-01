@@ -739,3 +739,12 @@ nnoremap <Leader>aG :Ag<Space>
 nnoremap <Leader>ag :execute 'Ack! ' .
       \ expand('<cword>') . ' ' .
       \ FindGitRoot()<CR>
+
+"-------------------------
+
+" Working with diffs
+
+nnoremap <Leader>dgr :diffget RE<CR>
+nnoremap <Leader>dgl :diffget LO<CR>
+nnoremap <Leader>dpr :diffput RE<CR>
+nnoremap <Leader>dpl :diffput LO<CR>
