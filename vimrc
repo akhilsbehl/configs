@@ -476,6 +476,7 @@ nnoremap tj <C-w>j<CR>
 nnoremap tk <C-w>k<CR>
 nnoremap th <C-w>h<CR>
 nnoremap tl <C-w>l<CR>
+nnoremap tr <C-w>r<CR>
 nnoremap tJ :tabprevious<CR>
 nnoremap tK :tabnext<CR>
 nnoremap tH :tabfirst<CR>
