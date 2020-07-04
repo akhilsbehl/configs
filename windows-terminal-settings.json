@@ -23,23 +23,11 @@
         "list":
         [
             {
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "name": "Windows PowerShell",
-                "commandline": "powershell.exe",
-                "hidden": false
-            },
-            {
-                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-                "name": "Command Prompt",
-                "commandline": "cmd.exe",
-                "hidden": false
-            },
-            {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
-                "name": "Ubuntu",
-                "source": "Windows.Terminal.Wsl",
-                "colorScheme": "Srcery",
+                "name": "archWizard",
+                "commandline": "wsl -d archWizard -u archwizard",
+                "colorScheme": "Crayon Pony Fish",
                 "cursorShape": "filledBox",
                 "cursorTextColor": null,
                 "scrollbarState": "hidden",
@@ -49,10 +37,29 @@
 
             },
             {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "PowerShell",
+                "colorScheme": "Solarized Light",
+                "commandline": "powershell.exe",
+                "hidden": false
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "cmd",
+                "commandline": "cmd.exe",
+                "hidden": false
+            },
+            {
                 "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
                 "hidden": false,
-                "name": "Azure Cloud Shell",
+                "name": "Azure",
                 "source": "Windows.Terminal.Azure"
+            },
+            {
+                "guid": "{81739693-4fb8-5d91-85aa-568a582b2242}",
+                "hidden": false,
+                "name": "archWizard",
+                "source": "Windows.Terminal.Wsl"
             }
         ]
     },
@@ -226,28 +233,6 @@
         "brightPurple": "#ffffff",
         "brightCyan": "#a0cef0",
         "brightWhite": "#ffffff"
-      },
-      {
-        "name": "Crayon Pony Fish",
-        "foreground": "#68525a",
-        "background": "#150707",
-        "cursorColor": "#68525a",
-        "black": "#2b1b1d",
-        "red": "#91002b",
-        "green": "#579524",
-        "yellow": "#ab311b",
-        "blue": "#8c87b0",
-        "purple": "#692f50",
-        "cyan": "#e8a866",
-        "white": "#68525a",
-        "brightBlack": "#3d2b2e",
-        "brightRed": "#c5255d",
-        "brightGreen": "#8dff57",
-        "brightYellow": "#c8381d",
-        "brightBlue": "#cfc9ff",
-        "brightPurple": "#fc6cba",
-        "brightCyan": "#ffceaf",
-        "brightWhite": "#b0949d"
       },
       {
         "name": "Earthsong",

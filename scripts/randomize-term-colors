@@ -12,7 +12,7 @@ SCHEMES=($(grep -B 1 "foreground" $WIN_TERM_SETTINGS | grep "name" | cut -f 2- -
 
 USE_SCHEME=${SCHEMES[$RANDOM % ${#SCHEMES[@]}]}
 
-SED_CMD="s/\"colorScheme\": \".*\",/\"colorScheme\":$USE_SCHEME/"
+SED_CMD="0,/"colorScheme"/s/\"colorScheme\": \".*\",/\"colorScheme\":$USE_SCHEME/"
 
 sed -i -e $SED_CMD $WIN_TERM_SETTINGS
 
