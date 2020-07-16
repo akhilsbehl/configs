@@ -420,4 +420,4 @@ function forever() {
 # Fortune cookies #
 ###################
 
-fortune -s
+cowsay -f milk -W 79 $(fortune)
