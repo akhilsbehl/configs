@@ -27,7 +27,7 @@
                 "hidden": false,
                 "name": "archWizard",
                 "commandline": "wsl -d archWizard -u archwizard",
-                "colorScheme": "Crayon Pony Fish",
+                "colorScheme": "One Half Dark",
                 "cursorShape": "filledBox",
                 "cursorTextColor": null,
                 "scrollbarState": "hidden",
