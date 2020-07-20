@@ -9,7 +9,7 @@
 
     "showTabsInTitlebar": false,
 
-    "launchMode": "fullscreen",
+    "launchMode": "maximized",
 
     "copyOnSelect": true,
 
@@ -26,7 +26,7 @@
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
                 "name": "archWizard",
-                "commandline": "wsl -d archWizard -u archwizard",
+                "commandline": "wsl.exe",
                 "colorScheme": "One Half Dark",
                 "cursorShape": "filledBox",
                 "cursorTextColor": null,
