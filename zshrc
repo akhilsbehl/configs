@@ -86,8 +86,6 @@ alias lsa='lsg -A'
 
 alias tmux='tmux -2'
 
-alias launchpad='tmux new-session -s launchPad -n push-the-tempo'
-
 alias locate='locate -e'
 
 alias free='free -mt'
@@ -421,3 +419,14 @@ function forever() {
 ###################
 
 cowsay -f milk -W 79 $(fortune)
+
+######################
+# Start tmux session #
+######################
+
+function launchpad () {
+  test $TMUX ||
+    tmux attach-session -t launchPad ||
+    tmux new-session -s launchPad -n push-the-tempo
+}
+launchpad
