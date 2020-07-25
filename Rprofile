@@ -5,9 +5,7 @@ options(prompt="R> ")
 options("pdfviewer"="mupdf")
 options(showWarnCalls=TRUE, showErrorCalls=TRUE)
 options(max.print=1000)
-options(repos=c("http://cran.stat.nus.edu.sg/",
-                "http://cran.cnr.berkeley.edu/",
-                "http://stat.ethz.ch/CRAN/"))
+options(repos=c("http://lib.stat.cmu.edu/R/CRAN", "http://cran.case.edu/"))
 
 .ls.objects <- function (pos = 1, pattern, order.by,
                          decreasing=FALSE, head=FALSE, n=5) {
