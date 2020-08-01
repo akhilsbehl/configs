@@ -92,6 +92,11 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
   ln -s $HOME/winhome/Downloads $HOME/tmp
   ln -s $(get_win_var %TMP%) $HOME/temp
 
+  mk-dir-if-not-found $HOME/.ssh
+  cp $HOME/winhome/.ssh/* $HOME/.ssh/
+  chmod 400 $HOME/.ssh/*
+  chmod 600 $HOME/.ssh/known_hosts
+
   WIN_TERM_SETTINGS=$HOME/winhome/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
   cp windows-terminal-settings.json $WIN_TERM_SETTINGS
 
