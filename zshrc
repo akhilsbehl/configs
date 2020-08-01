@@ -51,6 +51,10 @@ bindkey -v '^?' backward-delete-char
 # do not hang my terminal
 stty -ixon
 
+fpath+=$HOME/.zprompt/pure
+autoload -U promptinit; promptinit
+prompt pure
+
 #####################
 #  Emacs utilities  #
 #####################
@@ -143,6 +147,7 @@ alias respawn='sudo systemctl reboot'
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 if [[ "$OS" == "Ubuntu" ]]; then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
+  alias autorm='sudo apt-get autoremove'
 elif [[ "$OS" == "Arch Linux" ]]; then
   alias upgrade='packer -Syu --noconfirm --noedit'
 else
@@ -155,7 +160,7 @@ fi
 
 export GEM_HOME="$HOME/.gem"
 
-export PATH="$HOME/scripts:$HOME/git/packer:$PATH"
+export PATH="$HOME/scripts:$HOME/packer:$HOME/.local/bin:$PATH"
 
 export SVN_EDITOR='vim'
 
