@@ -8,8 +8,10 @@ alias cmd='cmd.exe'
 alias psh='powershell.exe'
 
 if [[ -d "/run/WSL" ]]; then # WSL2
+  export WSL_VER=2
   export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
 else
+  export WSL_VER=1
   export DISPLAY=:0
 fi
 export LIBGL_ALWAYS_INDIRECT=1
