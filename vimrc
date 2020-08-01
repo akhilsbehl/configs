@@ -290,39 +290,52 @@ let NERDRemoveExtraSpaces=1
 
 "-------------------------
 
-" These options are for the vim-R-plugin
+" These options are for the Nvim-R plugin
 
-let vimrplugin_assign = 0
+let R_assign = 0
 
-let vimrplugin_by_vim_instance = 1
+let R_nvimpager = "vertical"
 
-let vimrplugin_vimpager = "vertical"
+let R_editor_w = 80
 
-let vimrplugin_editor_w = 80
-
-let vimrplugin_editor_h = 60
-
-let vimrplugin_notmuxconf = 1
+let R_editor_h = 60
 
 let Rout_more_colors = 1
+let g:Rout_prompt_str = 'R> '
 
-let vimrplugin_indent_commented = 0
+let R_indent_commented = 0
 
 " Custom commands.
 
-map <leader>rr :call RAction("rownames")<CR>
-map <leader>rc :call RAction("colnames")<CR>
-map <leader>rn :call RAction("names")<CR>
-map <leader>rN :call RAction("dimnames")<CR>
-map <leader>rd :call RAction("dim")<CR>
-map <leader>rh :call RAction("head")<CR>
-map <leader>rt :call RAction("tail")<CR>
-map <leader>rl :call RAction("length")<CR>
-map <leader>rC :call RAction("class")<CR>
-map <leader>rL :call SendCmdToR("system('clear')")<CR>
-map <leader>rT :call SendCmdToR("system('traceback()')")<CR>
-map <leader>rt :call SendCmdToR("system.time({")<CR>
-map <leader>ra :call SendCmdToR("})")<CR>
+let R_user_maps_only = 1
+
+nmap <leader>ro <Plug>RStart
+nmap <leader>rq <Plug>RClose
+nmap <leader>rl <Plug>RDSendLine
+vmap <leader>rs <Plug>REDSendSelection
+nmap <leader>rb <Plug>REDSendMBlock
+nmap <leader>rp <Plug>REDSendParagraph
+nmap <leader>rf <Plug>RSendFunction
+nmap <leader>rF <Plug>RSendFile
+
+nmap <leader>rh <Plug>RHelp
+nmap <leader>rg <Plug>RPlot
+nmap <leader>rD <Plug>RSetwd
+
+nmap <leader>rr :call RAction("rownames")<CR>
+nmap <leader>rc :call RAction("colnames")<CR>
+nmap <leader>rn :call RAction("names")<CR>
+nmap <leader>rN :call RAction("dimnames")<CR>
+nmap <leader>rd :call RAction("dim")<CR>
+nmap <leader>rH :call RAction("head")<CR>
+nmap <leader>rT :call RAction("tail")<CR>
+nmap <leader>rL :call RAction("length")<CR>
+nmap <leader>rC :call RAction("class")<CR>
+nmap <leader>rm <Plug>RClearAll
+nmap <leader>rcc <Plug>RClearConsole
+nmap <leader>rt :call SendCmdToR("system.time({")<CR>
+nmap <leader>ra :call SendCmdToR("})")<CR>
+nmap <leader>rtb :call SendCmdToR("traceback()")<CR>
 
 "-------------------------
 
