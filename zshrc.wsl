@@ -1,0 +1,18 @@
+if [[ "$(umask)" == "0000" ]]; then
+  umask 0022
+fi
+
+alias start=wslopen
+alias winsu='runas.exe /user:admin'
+alias cmd='cmd.exe'
+alias psh='powershell.exe'
+
+if [[ -d "/run/WSL" ]]; then # WSL2
+  export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+else
+  export DISPLAY=:0
+fi
+export LIBGL_ALWAYS_INDIRECT=1
+
+export WIN_TERM_SETTINGS="$HOME"/winhome/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
+randomize-term-colors
