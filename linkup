@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git submodules update --init
+git submodule update --init
 
 update () {
   rm -rf "$HOME/.$1"
@@ -29,6 +29,7 @@ update devilspie
 rm -rf $HOME/scripts
 ln -s $PWD/scripts $HOME/scripts
 
+mkdir-if-not-found $HOME/.config
 rm -rf $HOME/.config/roxterm.sourceforge.net
 ln -s $PWD/roxterm $HOME/.config/roxterm.sourceforge.net
 
