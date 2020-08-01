@@ -24,16 +24,16 @@ update emacs
 update dircolors
 update devilspie
 
-rm -rf "$HOME/scripts"
-ln -s "$PWD/scripts" "$HOME/scripts"
+rm -rf $HOME/scripts
+ln -s $PWD/scripts $HOME/scripts
 
-rm -rf "$HOME/.config/roxterm.sourceforge.net"
-ln -s "$PWD/roxterm" "$HOME/.config/roxterm.sourceforge.net"
+rm -rf $HOME/.config/roxterm.sourceforge.net
+ln -s $PWD/roxterm $HOME/.config/roxterm.sourceforge.net
 
-[[ -f "$HOME/.ssh/config" ]] && mv "$HOME/.ssh/config{,.bkup}"
-ln -s "$PWD/ssh-config" "$HOME/.ssh/config"
+[[ -f $HOME/.ssh/config ]] && mv $HOME/.ssh/config{,.bkup}
+ln -s $PWD/ssh-config $HOME/.ssh/config
 
-mk-dir-if-not-found "$HOME"/.cache/zsh
+mk-dir-if-not-found $HOME/.cache/zsh
 
 if [[ -f /usr/bin/packer ]]; then
   if [[ -f /usr/bin/powerline ]]; then
@@ -48,29 +48,70 @@ fi
 # Assuming the submodule is populated
 fzf/uninstall
 fzf/install
-rm "$HOME"/.fzf.{ba,z}sh
+rm $HOME/.fzf.{ba,z}sh
 git checkout .
 
-mk-dir-if-not-found "$HOME"/.emacs-auto-backups
+mk-dir-if-not-found $HOME/.emacs-auto-backups
 
-mk-dir-if-not-found "$HOME"/.fonts
-cp "$PWD"/Monaco_Linux.ttf "$HOME"/.fonts
+mk-dir-if-not-found $HOME/.fonts
+cp $PWD/Monaco_Linux.ttf $HOME/.fonts
 
-mk-dir-if-not-found "$HOME"/.icons/default
-cp "$PWD"/index.theme "$HOME"/.icons/default/index.theme
+mk-dir-if-not-found $HOME/.icons/default
+cp $PWD/index.theme $HOME/.icons/default/index.theme
 
 if [[ "$1" == "--vundle" ]]; then
-  rm -rf "$HOME"/.vim
-  mkdir -p "$HOME"/.vim/bundle
+  rm -rf $HOME/.vim
+  mkdir -p $HOME/.vim/bundle
   git clone 'https://github.com/VundleVim/Vundle.vim' \
-      "$HOME"/.vim/bundle/Vundle.vim
+      $HOME/.vim/bundle/Vundle.vim
   vim +PluginInstall +qall
 fi
 
 if [[ "$1" == "--nukemacs" || "$2" == "--nukemacs" ]]; then
-  rm -rf "$HOME"/.emacs.d
+  rm -rf $HOME/.emacs.d
 fi
 
-"$HOME"/scripts/load-cinnamon-settings
+$HOME/scripts/load-cinnamon-settings
+
+rm -rf $HOME/.tmux/plugins/tpm
+git clone 'https://github.com/tmux-plugins/tpm' $HOME/.tmux/plugins/tpm
+
+git clone 'https://github.com/sindresorhus/pure.git' $HOME/.zprompt/pure
+
+if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
+
+  sudo cp wsl.conf /etc/wsl.conf
+  sudo apt-get update && sudo apt-get upgrade
+  sudo apt-get install zsh
+  chsh
+
+  MNT=/mnt
+  get_win_var () {
+    cd $MNT/c
+    wslpath -u $(cmd.exe /c echo $1 | wslpath | tr -d '')
+  }
+
+  ln -s $MNT/c $HOME/c
+  ln -s $MNT/d $HOME/d
+  ln -s $MNT/c/$(get_win_var %HOMEPATH%) $HOME/winhome
+  ln -s $HOME/winhome/Documents $HOME/doc
+  ln -s $HOME/winhome/Downloads $HOME/tmp
+  ln -s $(get_win_var %TMP%) $HOME/temp
+
+  WIN_TERM_SETTINGS=$HOME/winhome/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
+  mv windows-terminal-settings.json $WIN_TERM_SETTINGS
+
+  PS_DIR=$HOME/winhome/Documents/WindowsPowerShell/
+  PS_PROF=Microsoft.PowerShell_profile.ps1
+  mkdir-if-not-found $PS_DIR
+  if [[ -f $PS_DIR/$PS_PROF ]]; then
+    cat $PS_PROF >> $PS_DIR/$PS_PROF
+  else
+    mv $PS_PROF $PS_DIR/
+  fi
+
+  cat zshrc.wsl >> $HOME/.zshrc.more
+
+fi
 
 exit 0
