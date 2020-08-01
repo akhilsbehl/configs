@@ -182,7 +182,7 @@ set wildmenu wildmode=longest,list,full
 
 " Config.
 set history=50 undolevels=500 tabpagemax=100 t_Co=256 t_ut="" winaltkeys=no
-set showtabline=1 timeoutlen=500
+set showtabline=1 timeout timeoutlen=500 ttimeout ttimeoutlen=20
 
 " Buffer switching behavior.
 set switchbuf="useopen,usetab"
