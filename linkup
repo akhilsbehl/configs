@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git submodules update --init
+
 update () {
   rm -rf "$HOME/.$1"
   ln -s "$PWD/$1" "$HOME/.$1"
@@ -36,7 +38,6 @@ ln -s $PWD/ssh-config $HOME/.ssh/config
 mk-dir-if-not-found $HOME/.cache/zsh
 
 # Assuming the submodule is populated
-git submodules update --init
 fzf/uninstall
 fzf/install
 rm $HOME/.fzf.{ba,z}sh
