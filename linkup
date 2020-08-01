@@ -29,7 +29,7 @@ update devilspie
 rm -rf $HOME/scripts
 ln -s $PWD/scripts $HOME/scripts
 
-mkdir-if-not-found $HOME/.config
+mk-dir-if-not-found $HOME/.config
 rm -rf $HOME/.config/roxterm.sourceforge.net
 ln -s $PWD/roxterm $HOME/.config/roxterm.sourceforge.net
 
@@ -82,7 +82,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
   MNT=/mnt
   get_win_var () {
     cd $MNT/c
-    wslpath -u $(cmd.exe /c echo $1 | wslpath | tr -d '')
+    wslpath -u $(cmd.exe /c echo $1) | tr -d ''
   }
 
   ln -s $MNT/c $HOME/c
