@@ -35,17 +35,8 @@ ln -s $PWD/ssh-config $HOME/.ssh/config
 
 mk-dir-if-not-found $HOME/.cache/zsh
 
-if [[ -f /usr/bin/packer ]]; then
-  if [[ -f /usr/bin/powerline ]]; then
-    echo 'Powerline found.'
-  else
-    packer -S python-powerline-git
-  fi
-else
-  echo 'No powerline but also no packer. Install manually.'
-fi
-
 # Assuming the submodule is populated
+git submodules update --init
 fzf/uninstall
 fzf/install
 rm $HOME/.fzf.{ba,z}sh
@@ -76,6 +67,7 @@ $HOME/scripts/load-cinnamon-settings
 rm -rf $HOME/.tmux/plugins/tpm
 git clone 'https://github.com/tmux-plugins/tpm' $HOME/.tmux/plugins/tpm
 
+rm -rf $HOME/.zprompt/pure
 git clone 'https://github.com/sindresorhus/pure.git' $HOME/.zprompt/pure
 
 if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
