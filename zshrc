@@ -408,18 +408,6 @@ function forever() {
     done
 }
 
-####################################
-#  Source stuff local to each box  #
-####################################
-
-[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
-
-###################
-# Fortune cookies #
-###################
-
-cowsay -f milk -W 79 $(fortune)
-
 ######################
 # Start tmux session #
 ######################
@@ -430,3 +418,15 @@ function launchpad () {
     tmux new-session -s launchPad -n push-the-tempo
 }
 launchpad
+
+###################
+# Fortune cookies #
+###################
+
+cowsay -f milk -W 79 $(fortune)
+
+####################################
+#  Source stuff local to each box  #
+####################################
+
+[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
