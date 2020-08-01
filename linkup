@@ -87,7 +87,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
 
   ln -s $MNT/c $HOME/c
   ln -s $MNT/d $HOME/d
-  ln -s $MNT/c/$(get_win_var %HOMEPATH%) $HOME/winhome
+  ln -s $MNT/c/Users$(get_win_var %USERNAME%) $HOME/winhome
   ln -s $HOME/winhome/Documents $HOME/doc
   ln -s $HOME/winhome/Downloads $HOME/tmp
   ln -s $(get_win_var %TMP%) $HOME/temp
