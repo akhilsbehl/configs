@@ -7,7 +7,7 @@
 
     "alwaysShowTabs": false,
 
-    "showTabsInTitlebar": false,
+    "showTabsInTitlebar": true,
 
     "launchMode": "maximized",
 
@@ -15,10 +15,15 @@
 
     "copyFormatting": false,
 
+    "largePasteWarning": false,
+
+    "multiLinePasteWarning": false,
+
     "profiles":
     {
         "defaults": {
-          "fontFace": "Fira Code"
+            "fontFace": "Fira Code",
+            "fontSize": 11
         },
         "list":
         [
