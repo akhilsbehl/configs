@@ -303,7 +303,7 @@ alias ww='cd "$HOME"/warchives'
 
 local GIT_ALIASES=$(git config -l | grep alias | cut -c 7- | cut -f 1 -d '=' | tr '\r\n' ' ')
 for al in ${(z)GIT_ALIASES}; do
-  alias gg$al="git $al"
+  alias g$al="git $al"
 done
 
 #########
