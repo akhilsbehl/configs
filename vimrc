@@ -451,7 +451,9 @@ let cmdline_app['python']      = 'ipython'
 
 let g:jedi#use_splits_not_buffers = "winwidth"
 
-let g:jedi#popup_on_dot = 1
+let g:jedi#popup_on_dot = 0
+
+let g:jedi#completions_enabled = 1
 
 let g:jedi#show_call_signatures = "2"
 
