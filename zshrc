@@ -210,7 +210,7 @@ alias show='gio open'
 #  Global aliases  #
 ####################
 
-alias GREPPER=$(get_first_available rg ag grep)
+export GREPPER=$(get_first_available rg ag grep)
 
 alias -g g="| $GREPPER"
 
@@ -327,13 +327,13 @@ fi
 # Key bindings
 source "$HOME/configs/fzf/shell/key-bindings.zsh"
 
-if [[ exists_command rg ]]; then
+if [[ $(get_first_available rg ag grep) == "rg" ]]; then
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
   export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-elif [[ exists_command ag ]]; then
+elif [[ $(get_first_available rg ag grep) == "ag" ]]; then
   export FZF_DEFAULT_COMMAND='ag --files-with-matches --follow --ignore ".git/*"'
   export FZF_CTRL_T_COMMAND='ag --files-with-matches --follow --ignore ".git/*"'
-else
+elif [[ $(get_first_available rg ag grep) == "grep" ]]; then
   export FZF_DEFAULT_COMMAND='find . -type f | grep -v "/\.git/"'
   export FZF_CTRL_T_COMMAND='find . -type f | grep -v "/\.git/"'
 fi
