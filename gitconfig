@@ -62,13 +62,17 @@
   pf = push -u origin --force
   pl = pull
   pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
+  pr = remote prune origin
   ps = !git push --set-upstream origin $(git bs)
 
+  r = rebase
   ra = rebase --abort
   rc = rebase --continue
   re = rebase --edit
   ri = rebase --interactive
   rs = rebase --skip
+
+  rm = rm
 
   s = status
   ss = status -s
