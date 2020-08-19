@@ -739,6 +739,11 @@ nnoremap <leader>hc :call ToggleHighlightNearCursor()<CR>
 " Ack configuration
 
 if executable('ag')
+  let g:ackprg = 'ag --vimgrep --smart-case'
+endif
+
+" Use rg where available
+if executable('rg')
   let g:ackprg = 'rg --vimgrep --smart-case'
 endif
 

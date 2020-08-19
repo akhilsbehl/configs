@@ -78,6 +78,18 @@ function e () {
 # Command Aliases #
 ###################
 
+function exists_command() {
+  command -v "$1" > /dev/null
+}
+
+function get_first_available() {
+  local first
+  for candidate in "$@"; do
+    exists_command "$candidate" && first="$candidate"
+    (test "$first" && echo "$first") && break
+  done
+}
+
 alias ls='ls --color=auto'
 
 alias ll='ls -l'
@@ -198,9 +210,11 @@ alias show='gio open'
 #  Global aliases  #
 ####################
 
-alias -g g='| rg'
+alias GREPPER=$(get_first_available rg ag grep)
 
-alias -g G='| rg -i'
+alias -g g="| $GREPPER"
+
+alias -g G="| $GREPPER -i"
 
 alias -g l='| less'
 
@@ -313,21 +327,22 @@ fi
 # Key bindings
 source "$HOME/configs/fzf/shell/key-bindings.zsh"
 
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+if [[ exists_command rg ]]; then
+  export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+  export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+elif [[ exists_command ag ]]; then
+  export FZF_DEFAULT_COMMAND='ag --files-with-matches --follow --ignore ".git/*"'
+  export FZF_CTRL_T_COMMAND='ag --files-with-matches --follow --ignore ".git/*"'
+else
+  export FZF_DEFAULT_COMMAND='find . -type f | grep -v "/\.git/"'
+  export FZF_CTRL_T_COMMAND='find . -type f | grep -v "/\.git/"'
+fi
+
 export FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v "/\.git/"'
 export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
 export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
 export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no-mouse'
-
-function get_first_available() {
-  local first
-  for candidate in "$@"; do
-    command -v "$candidate" > /dev/null && first="$candidate"
-    (test "$first" && echo "$first") && break
-  done
-}
 
 function fzbin () {
   local file
@@ -378,7 +393,7 @@ function fzp () {
   fi
   pkgs=$(eval "$search_cmd $search_args" | fzf-tmux --query="$2" | tr '\n' ' ')
   if [[ -n "$pkgs" ]]; then
-    command -v sudo > /dev/null && prefix="sudo"
+    exists_command sudo && prefix="sudo"
     echo "$prefix $install_cmd $install_args $pkgs"
     eval "$prefix $install_cmd $install_args $pkgs"
   fi
