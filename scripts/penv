@@ -13,10 +13,12 @@ for envroot in "${ENVSEARCH[@]}"; do
     act="$envroot/.virtualenv/bin/activate"
     test -f $act && source $act
     if [[ $? -eq 0 ]]; then
-      return 0
+      echo "Activated .virtualenv at $envroot."
+      $SHELL
+      exit 0
     else
       echo 'Could not activate this .virtualenv. Moving on'
     fi
   fi
 done
-echo "No usable virtualenv found. Giving up." && return 1
+echo "No usable virtualenv found. Giving up." && exit 1
