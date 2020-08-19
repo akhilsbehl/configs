@@ -51,6 +51,8 @@
   m = merge
   mt = mergetool
 
+  mv = mv
+
   nn = clean -n
   nf = clean -f
   nd = clean -f -d
@@ -72,7 +74,7 @@
   ri = rebase --interactive
   rs = rebase --skip
 
-  rm = rm
+  rm = rm -r
 
   s = status
   ss = status -s
