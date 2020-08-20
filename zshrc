@@ -331,14 +331,14 @@ if [[ $(get_first_available rg ag grep) == "rg" ]]; then
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
   export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 elif [[ $(get_first_available rg ag grep) == "ag" ]]; then
-  export FZF_DEFAULT_COMMAND='ag --files-with-matches --follow --ignore ".git/*"'
-  export FZF_CTRL_T_COMMAND='ag --files-with-matches --follow --ignore ".git/*"'
+  export FZF_DEFAULT_COMMAND='ag --follow -g ""'
+  export FZF_CTRL_T_COMMAND='ag --follow -g ""'
 elif [[ $(get_first_available rg ag grep) == "grep" ]]; then
   export FZF_DEFAULT_COMMAND='find . -type f | grep -v "/\.git/"'
   export FZF_CTRL_T_COMMAND='find . -type f | grep -v "/\.git/"'
 fi
 
-export FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v "/\.git/"'
+export FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v "/\.git/" -v "/\.virtualenv/"'
 export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
 export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
