@@ -327,15 +327,16 @@ fi
 # Key bindings
 source "$HOME/configs/fzf/shell/key-bindings.zsh"
 
+# TODO: Fix rg to ignore virtualenv
 if [[ $(get_first_available rg ag grep) == "rg" ]]; then
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
   export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 elif [[ $(get_first_available rg ag grep) == "ag" ]]; then
-  export FZF_DEFAULT_COMMAND='ag --follow -g ""'
-  export FZF_CTRL_T_COMMAND='ag --follow -g ""'
+  export FZF_DEFAULT_COMMAND='ag --hidden --follow -g "" | ag -v "\.git|\.virtualenv"'
+  export FZF_CTRL_T_COMMAND='ag --hidden --follow -g "" | ag -v "\.git|\.virtualenv"'
 elif [[ $(get_first_available rg ag grep) == "grep" ]]; then
-  export FZF_DEFAULT_COMMAND='find . -type f | grep -v "/\.git/"'
-  export FZF_CTRL_T_COMMAND='find . -type f | grep -v "/\.git/"'
+  export FZF_DEFAULT_COMMAND='find . -type f | grep -v "\.git|\.virtualenv"'
+  export FZF_CTRL_T_COMMAND='find . -type f | grep -v "\.git|\.virtualenv"'
 fi
 
 export FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v "/\.git/" -v "/\.virtualenv/"'
