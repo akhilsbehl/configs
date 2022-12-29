@@ -20,7 +20,7 @@ bashcompinit
 #  Misc options  #
 ##################
 
-KEYTIMEOUT=10
+KEYTIMEOUT=1
 
 bindkey '^r' history-incremental-search-backward
 
