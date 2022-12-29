@@ -96,3 +96,5 @@
 
   ours = "!fff() { git co --ours $@ && git add $@; }; fff"
   theirs = "!fff() { git co --theirs $@ && git add $@; }; fff"
+[credential]
+	helper = store
