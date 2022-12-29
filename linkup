@@ -12,7 +12,6 @@ mk-dir-if-not-found () {
     mkdir -p "$1"
 }
 
-update xinitrc
 update zshrc
 update inputrc
 update gvimrc
@@ -22,16 +21,10 @@ update gitignore
 update gitconfig
 update R
 update Rprofile
-update emacs
 update dircolors
-update devilspie
 
 rm -rf $HOME/scripts
 ln -s $PWD/scripts $HOME/scripts
-
-mk-dir-if-not-found $HOME/.config
-rm -rf $HOME/.config/roxterm.sourceforge.net
-ln -s $PWD/roxterm $HOME/.config/roxterm.sourceforge.net
 
 mk-dir-if-not-found $HOME/.ssh
 [[ -f $HOME/.ssh/config ]] && mv $HOME/.ssh/config{,.bkup}
@@ -48,15 +41,7 @@ fzf/install
 rm $HOME/.fzf.{ba,z}sh
 git checkout .
 
-mk-dir-if-not-found $HOME/.emacs-auto-backups
-
-mk-dir-if-not-found $HOME/.fonts
-cp $PWD/Monaco_Linux.ttf $HOME/.fonts
-
-mk-dir-if-not-found $HOME/.icons/default
-cp $PWD/index.theme $HOME/.icons/default/index.theme
-
-if [[ "$1" == "--vundle" || "$2" == "--vundle" || "$3" == "--vundle" ]]; then
+if [[ "$1" == "--vundle" || "$2" == "--vundle" ]]; then
   rm -rf $HOME/.vim
   mkdir -p $HOME/.vim/bundle
   git clone 'https://github.com/VundleVim/Vundle.vim' \
@@ -64,23 +49,17 @@ if [[ "$1" == "--vundle" || "$2" == "--vundle" || "$3" == "--vundle" ]]; then
   vim +PluginInstall +qall
 fi
 
-if [[ "$1" == "--nukemacs" || "$2" == "--nukemacs" || "$3" == "--nukemacs" ]]; then
-  rm -rf $HOME/.emacs.d
-fi
-
-$HOME/scripts/load-cinnamon-settings
-
 rm -rf $HOME/.tmux/plugins/tpm
 git clone 'https://github.com/tmux-plugins/tpm' $HOME/.tmux/plugins/tpm
 
 rm -rf $HOME/.zprompt/pure
 git clone 'https://github.com/sindresorhus/pure.git' $HOME/.zprompt/pure
 
-if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
+if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
 
   sudo cp wsl.conf /etc/wsl.conf
   sudo apt-get update && sudo apt-get upgrade
-  sudo apt-get install zsh fortune-mod cowsay x11-apps mlocate mupdf r-base vim-gtk3 unzip
+  sudo apt-get install zsh fortune-mod cowsay x11-apps mlocate mupdf r-base vim-gtk3 unzip fzf
   chsh
 
   MNT=/mnt
@@ -96,12 +75,10 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" || "$3" == "--wsl" ]]; then
   ln -s $(get_win_var %TMP%) $HOME/temp
 
   mk-dir-if-not-found $HOME/.ssh
-  cp $HOME/winhome/.ssh/* $HOME/.ssh/
+  sudo cp $HOME/winhome/.ssh/* $HOME/.ssh/
+  sudo chown $USER:$USER $HOME/.ssh/*
   chmod 400 $HOME/.ssh/*
   chmod 600 $HOME/.ssh/known_hosts
-
-  WIN_TERM_SETTINGS=$HOME/winhome/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
-  cp windows-terminal-settings.json $WIN_TERM_SETTINGS
 
   PS_DIR=$HOME/winhome/Documents/WindowsPowerShell/
   PS_PROF=Microsoft.PowerShell_profile.ps1
