@@ -210,7 +210,7 @@ alias show='gio open'
 #  Global aliases  #
 ####################
 
-export GREPPER=$(get_first_available rg ag grep)
+export GREPPER=$(get_first_available rg grep)
 
 alias -g g="| $GREPPER"
 
@@ -281,8 +281,6 @@ function up() {
 #  Redirect to a temp file  #
 #############################
 
-# Keep this at the end.
-
 alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
 
 alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
@@ -327,31 +325,37 @@ fi
 # Key bindings
 source "$HOME/configs/fzf/shell/key-bindings.zsh"
 
-# TODO: Fix rg to ignore virtualenv
-if [[ $(get_first_available rg ag grep) == "rg" ]]; then
-  export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-  export FZF_CTRL_T_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-elif [[ $(get_first_available rg ag grep) == "ag" ]]; then
-  export FZF_DEFAULT_COMMAND='ag --hidden --follow -g "" | ag -v "\.git|\.virtualenv"'
-  export FZF_CTRL_T_COMMAND='ag --hidden --follow -g "" | ag -v "\.git|\.virtualenv"'
+GREP_IGNORE_PATHS='-e "/\.git/" -e "/\.virtualenv/" -e "__pycache__"'
+RG_IGNORE_PATHS="-g '!.git/*' -g '!.virtualenv/*' -g '!__pycache__'"
+
+if [[ $(get_first_available rg grep) == "rg" ]]; then
+  FZF_IGNORE_PATHS=$RG_IGNORE_PATHS
+  export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow '
 elif [[ $(get_first_available rg ag grep) == "grep" ]]; then
-  export FZF_DEFAULT_COMMAND='find . -type f | grep -v "\.git|\.virtualenv"'
-  export FZF_CTRL_T_COMMAND='find . -type f | grep -v "\.git|\.virtualenv"'
+  FZF_IGNORE_PATHS=$RG_IGNORE_PATHS
+  export FZF_DEFAULT_COMMAND='find . -type f | grep -v '
 fi
 
-export FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v "/\.git/" -v "/\.virtualenv/"'
-export FZF_DEFAULT_OPTS='--extended --cycle --reverse --multi --no-mouse --prompt="?: "'
+FZF_DEFAULT_COMMAND+=$FZF_IGNORE_PATHS
+export FZF_DEFAULT_COMMAND
+export FZF_DEFAULT_OPTS='--exact --extended --cycle --reverse --multi --no-mouse --prompt="?: "'
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+
+FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v '
+FZF_ALT_C_COMMAND+=$GREP_IGNORE_PATHS
+export FZF_ALT_C_COMMAND
+export FZF_ALT_C_OPTS=$FZF_DEFAULT_OPTS
+
 export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
-export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi --no-mouse'
+export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi'
 
 function fzbin () {
   local file
   if [[ -f "$2" ]]; then
     eval "$1 $2"
   elif [[ -d "$2" ]]; then
-    file=$(print -r -l -- $2/**/*(.D:q) | \
-      fzf-tmux --query="$3" --select-1 --exit-0)
+    file=$(fzf-tmux --query="$3" --select-1 --exit-0)
   else
     echo 'I need a dir to start in.'
   fi
