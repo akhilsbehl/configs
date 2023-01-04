@@ -1,5 +1,0 @@
-#!/bin/bash
-
-dconf load / < ~/configs/cinnamon-settings.dconf
-
-exit 0

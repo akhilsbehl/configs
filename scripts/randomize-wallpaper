@@ -1,7 +1,0 @@
-#!/bin/bash
-
-WPDIR="$HOME/git/configs/wallpapers/"
-WP=$(find $WPDIR -type f | shuf | head -1)
-gsettings set org.cinnamon.desktop.background picture-uri "'file://$WP'"
-
-exit $?
