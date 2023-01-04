@@ -195,8 +195,6 @@ let maplocalleader=","
 
 "-------------------------
 
-"-------------------------
-
 " FZF configuration
 
 let g:fzf_action = {

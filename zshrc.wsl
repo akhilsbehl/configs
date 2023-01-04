@@ -21,3 +21,5 @@ else
   export DISPLAY=:0
 fi
 export LIBGL_ALWAYS_INDIRECT=1
+
+export BROWSER=wslopen
