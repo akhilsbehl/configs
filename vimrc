@@ -220,7 +220,7 @@ endfunction
 if !has('win32unix')
   nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
   nnoremap <silent> <leader>fh :FZF ~<CR>
-  nnoremap <silent> <leader>fd :FZF D:<CR>
+  nnoremap <silent> <leader>fd :FZF /mnt/d<CR>
   nnoremap <silent> <leader>fr :call fzf#run({
         \ 'source': v:oldfiles,
         \ 'sink' : 'e ',
