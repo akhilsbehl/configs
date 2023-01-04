@@ -363,7 +363,8 @@ function fzbin () {
   [[ -n "$file" ]] && eval "$1 $file"
 }
 
-function vif () { fzbin "vim" "$@" }
+# Simplify this
+function vif () { fzbin "vim" "$PWD" }
 
 # This is possibly running on:
 # Some flavor of WSL: Use wslopen
