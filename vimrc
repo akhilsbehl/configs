@@ -525,7 +525,7 @@ function DeleteTrailingWhitespace()
   :%s/\s\+$//g
   :let @/=''
 endfunction
-nnoremap <leader>wt :call DeleteTrailingWhitespace()<CR>
+nnoremap <leader>dtw :call DeleteTrailingWhitespace()<CR>
 
 " Delete blank lines (or containing only whitespace).
 function DeleteBlankLines()
