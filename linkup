@@ -60,7 +60,8 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   sudo cp wsl.conf /etc/wsl.conf
   sudo apt-get update && sudo apt-get upgrade
   sudo apt-get install zsh fortune-mod cowsay x11-apps \
-    mlocate mupdf r-base vim-gtk3 unzip ripgrep
+    mlocate mupdf r-base vim-gtk3 unzip ripgrep mplayer \
+    virtualenv python3-pip tree dos2unix
   chsh
 
   MNT=/mnt
