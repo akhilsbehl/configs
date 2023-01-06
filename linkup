@@ -33,7 +33,7 @@ ln -s $PWD/ssh-config $HOME/.ssh/config
 mk-dir-if-not-found $HOME/.cache/zsh
 
 mk-dir-if-not-found $HOME/.ipython/profile_default
-ln -s $PWD/ipython_config $HOME/.ipython/profile_default/ipython_config
+ln -s $PWD/ipython_config.py $HOME/.ipython/profile_default/ipython_config.py
 
 # Assuming the submodule is populated
 fzf/uninstall
