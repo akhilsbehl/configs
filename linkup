@@ -61,7 +61,8 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   sudo apt-get update && sudo apt-get upgrade
   sudo apt-get install zsh fortune-mod cowsay x11-apps \
     mlocate mupdf r-base vim-gtk3 unzip ripgrep mplayer \
-    virtualenv python3-pip tree dos2unix
+    virtualenv python3-pip tree dos2unix python3-tk
+  pip install scipy pandas ipython statsmodels
   chsh
 
   MNT=/mnt
