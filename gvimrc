@@ -1,4 +1,4 @@
-set guifont=Monaco\ Regular\ 11
+set guifont=Fira\ Code\ weight=453\ 11
 set lines=43
 set columns=84
 set novisualbell
