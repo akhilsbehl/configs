@@ -52,6 +52,9 @@ Plugin 'tpope/vim-fugitive'
 " Fugitive for git
 Plugin 'mileszs/ack.vim'
 
+" Github CoPilot
+Plugin 'github/copilot.vim'
+
 "-------------------------
 
 " Language specific plugins
