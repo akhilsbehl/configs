@@ -64,7 +64,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   sudo apt-get install zsh fortune-mod cowsay x11-apps \
     mlocate mupdf r-base vim-gtk3 unzip ripgrep mplayer \
     virtualenv python3-pip tree dos2unix python3-tk \
-    fonts-firacode
+    fonts-firacode fonts-cascadia-code
   pip install scipy pandas ipython statsmodels
   chsh
 
