@@ -125,6 +125,29 @@
                 "hidden": true,
                 "name": "wsl-vpnkit",
                 "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "closeOnExit": "always",
+                "colorScheme": "GruvOnHalf",
+                "commandline": "wsl.exe --distribution Ubuntu-20.04",
+                "cursorShape": "bar",
+                "font":
+                {
+                    "face": "Fira Code",
+                    "size": 11
+                },
+                "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
+                "name": "playground",
+                "source": "Windows.Terminal.Wsl",
+                "hidden": false,
+                "historySize": 100000,
+                "name": "playground",
+                "scrollbarState": "hidden",
+                "snapOnInput": true,
+                "colorScheme" : "Solarized Dark",
+                "cursorColor" : "#FFFFFF",
+                "cursorShape": "doubleUnderscore",
+                "tabTitle" : "Playground"
             }
         ]
     },
