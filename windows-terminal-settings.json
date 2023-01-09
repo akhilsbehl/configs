@@ -100,8 +100,7 @@
                 "historySize": 100000,
                 "name": "archWizard",
                 "scrollbarState": "hidden",
-                "snapOnInput": true,
-                "source": "CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc"
+                "snapOnInput": true
             },
             {
                 "colorScheme": "Solarized Light",
