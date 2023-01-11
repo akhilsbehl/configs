@@ -1,6 +1,0 @@
-#!/bin/bash
-
-(cd $HOME; zip vim-setup.zip -r -xi .vim{,rc} .gvimrc)
-mv $HOME/vim-setup.zip $HOME/tmp/
-
-exit 0

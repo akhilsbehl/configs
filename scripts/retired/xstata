@@ -1,8 +1,0 @@
-#!/bin/bash
-
-BASEDIR="$HOME"/.stata
-
-cd "$BASEDIR"
-"$BASEDIR"/xstata
-
-exit 0

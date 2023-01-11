@@ -1,5 +1,0 @@
-#!/bin/bash
-
-/usr/bin/gvim $HOME/tmp/scratch_"$RANDOM".txt
-
-exit 0

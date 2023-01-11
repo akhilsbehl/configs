@@ -1,5 +1,0 @@
-#!/bin/bash
-
-xhost +si:localuser:"$USER"
-
-exit 0

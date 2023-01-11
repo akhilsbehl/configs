@@ -1,6 +1,0 @@
-#!/bin/bash
-
-dconf load /org/gnome/terminal/legacy/ < \
-  "$HOME"/git/configs/gnome-terminal-profile.dump
-
-exit 0

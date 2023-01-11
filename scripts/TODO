@@ -1,2 +1,0 @@
-1. Add a help message to each script.
-2. Use getopt(s) to parse script arguments.

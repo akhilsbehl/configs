@@ -1,8 +1,0 @@
-#!/bin/bash
-
-echo "Give name of the output file."
-read OUTPUTNAME
-
-mencoder -oac copy -ovc copy -idx -o "$OUTPUTNAME" "$*"
-
-exit 0

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-rdesktop -D -d IGIDR -u akhil -n term -x lan -g 95% \
-  -r clipboard:CLIPBOARD -r sound:remote \
-  -r disk:root=/ term.igidr.ac.in &> /dev/null &
-
-exit 0

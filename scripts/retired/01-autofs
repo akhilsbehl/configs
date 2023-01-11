@@ -1,5 +1,0 @@
-#!/bin/sh
-
-sudo -u akhilsbehl /usr/local/bin/nm-autofs $*
-
-exit 0
