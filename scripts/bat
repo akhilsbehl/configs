@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+/usr/bin/env batcat $@
+
+exit 0

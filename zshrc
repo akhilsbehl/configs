@@ -338,7 +338,7 @@ fi
 
 FZF_DEFAULT_COMMAND+=$FZF_IGNORE_PATHS
 export FZF_DEFAULT_COMMAND
-export FZF_DEFAULT_OPTS='--exact --extended --cycle --reverse --multi --no-mouse --prompt="?: " --preview "[[ -f {} ]] && [[ $(file -b --mime-type {} | cut -f 1 -d '/') == "text" ]] && cat {} | head -30"'
+export FZF_DEFAULT_OPTS='--exact --extended --cycle --reverse --multi --no-mouse --prompt="?: " --preview "[[ -f {} ]] && [[ $(file -b --mime-type {} | cut -f 1 -d '/') == "text" ]] && bat --color=always {} | head -30"'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 
 FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v '
