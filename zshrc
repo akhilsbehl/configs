@@ -408,6 +408,14 @@ function fzp () {
 function install () { fzp "install" "$@" }
 function uninstall () { fzp "uninstall" "$@" }
 
+function gloc () {
+  local file handler
+  file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
+  handler=$(get_first_available wslopen start xdg-open)
+  [[ -n "$file" ]] && echo "$handler" "$file"
+  [[ -n "$file" ]] && "$handler" "$file"
+}
+
 #############
 # SSH Agent #
 #############
