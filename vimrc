@@ -466,6 +466,22 @@ let g:jedi#rename_command = "<LocalLeader>jr"
 
 let g:jedi#usages_command = "<LocalLeader>ju"
 
+"------------------------
+
+" Copilot configuration
+
+let b:copilot_enabled = v:false
+
+nmap ,cS :Copilot<CR>
+
+imap ,cs <Plug>(copilot-suggest)
+
+imap ,cn <Plug>(copilot-next)
+
+imap ,cp <Plug>(copilot-previous)
+
+imap ,cd <Plug>(copilot-dismiss)
+
 "-------------------------
 
 " Make a file executable if found #!/bin/ at the start of a file.
