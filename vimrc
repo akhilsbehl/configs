@@ -293,6 +293,8 @@ let NERDRemoveExtraSpaces=1
 
 " These options are for the Nvim-R plugin
 
+let R_external_term = 'tmux split-pane'
+
 let R_assign = 0
 
 let R_nvimpager = "vertical"
@@ -302,6 +304,7 @@ let R_editor_w = 80
 let R_editor_h = 60
 
 let Rout_more_colors = 1
+
 let g:Rout_prompt_str = 'R> '
 
 let R_indent_commented = 0
@@ -470,7 +473,7 @@ let g:jedi#usages_command = "<LocalLeader>ju"
 
 " Copilot configuration
 
-let b:copilot_enabled = v:false
+let g:copilot_enabled = v:false
 
 nmap ,cS :Copilot<CR>
 
