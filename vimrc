@@ -544,8 +544,9 @@ nnoremap <leader>oo <Esc>O<CR>
 
 " Delete all trailing whitespace.
 function DeleteTrailingWhitespace()
-  :%s/\s\+$//g
+  :%s/\s\+$//e
   :let @/=''
+  :%s///e
 endfunction
 nnoremap <leader>dtw :call DeleteTrailingWhitespace()<CR>
 
