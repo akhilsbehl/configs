@@ -51,9 +51,8 @@ bindkey -v '^?' backward-delete-char
 # do not hang my terminal
 stty -ixon
 
-fpath+=$HOME/.zprompt/pure
-autoload -U promptinit; promptinit
-prompt pure
+autoload -U promptinit
+promptinit
 
 #####################
 #  Emacs utilities  #
