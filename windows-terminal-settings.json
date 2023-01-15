@@ -114,7 +114,6 @@
                 },
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "name": "playground",
-                "source": "Windows.Terminal.Wsl",
                 "hidden": false,
                 "historySize": 100000,
                 "name": "playground",
