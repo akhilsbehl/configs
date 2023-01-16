@@ -13,10 +13,20 @@ cp ~/scripts/get-win-certs.ps1 $TMPFILE
 
 cd /tmp
 powershell.exe -File get-win-certs.ps1
-[[ -d /etc/ssl/certs.bkup ]] || sudo cp /etc/ssl/certs{,.bkup}
-sudo rm /etc/ssl/certs/*
-sudo cp /tmp/windows-certificates/* /etc/ssl/certs/
-sudo update-ca-certificates
+
+OS=$(grep '^NAME' /etc/os-release | cut -f 2 -d '=')
+
+if [[ $OS == '"Arch Linux"' ]]; then
+  sudo cp /tmp/windows-certificates/* /etc/ca-certificates/trust-source/anchors
+  sudo trust extract-compat
+fi
+
+if [[ $OS == '"Ubuntu"' ]]; then
+  [[ -d /etc/ssl/certs.bkup ]] || sudo cp -r /etc/ssl/certs{,.bkup}
+  sudo rm /etc/ssl/certs/*
+  sudo cp /tmp/windows-certificates/* /etc/ssl/certs/
+  sudo update-ca-certificates
+fi
 
 curl -vI 'https://aur.archlinux.org/rpc?v=5&type=search&by=name-desc&arg=marp'
 
