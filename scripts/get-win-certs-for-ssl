@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+sudo echo # Cache up sudo
+
+echo This will nuke all your current certificates.
+echo This can fcuk up your system.
+echo Ctrl-C now if you do not want to do this.
+read
+
+TMPFILE=/tmp/get-win-certs.ps1
+[[ -f $TMPFILE ]] && rm $TMPFILE
+cp ~/scripts/get-win-certs.ps1 $TMPFILE
+
+cd /tmp
+powershell.exe -File get-win-certs.ps1
+[[ -d /etc/ssl/certs.bkup ]] || sudo cp /etc/ssl/certs{,.bkup}
+sudo rm /etc/ssl/certs/*
+sudo cp /tmp/windows-certificates/* /etc/ssl/certs/
+sudo update-ca-certificates
+
+curl -vI 'https://aur.archlinux.org/rpc?v=5&type=search&by=name-desc&arg=marp'
+
+exit 0
