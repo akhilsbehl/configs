@@ -545,8 +545,8 @@ nnoremap <leader>oo <Esc>O<CR>
 " Delete all trailing whitespace.
 function DeleteTrailingWhitespace()
   :%s/\s\+$//e
-  :let @/=''
   :%s///e
+  :let @/=''
 endfunction
 nnoremap <leader>dtw :call DeleteTrailingWhitespace()<CR>
 
@@ -571,6 +571,16 @@ function TreatAllWhitespace()
   :call DeleteBlankLines()
 endfunction
 nnoremap <leader>wa :call TreatAllWhitespace()<CR>
+
+"-------------------------
+
+" Remove control characters
+
+function DeleteCtrlChars()
+  :%s/[[:cntrl:]]//e
+  :let @/=''
+endfunction
+nnoremap <leader>dcc :call DeleteCtrlChars<CR>
 
 "-------------------------
 
