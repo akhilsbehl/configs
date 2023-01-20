@@ -1,0 +1,1 @@
+powershell.exe 'Get-ChildItem -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss'
