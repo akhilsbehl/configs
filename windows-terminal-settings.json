@@ -6,6 +6,14 @@
         {
             "command":
             {
+                "action": "adjustFontSize",
+                "delta": -1
+            },
+            "keys": "ctrl+minus"
+        },
+        {
+            "command":
+            {
                 "action": "globalSummon",
                 "desktop": "toCurrent",
                 "dropdownDuration": 100,
@@ -17,17 +25,10 @@
         {
             "command":
             {
-                "action": "adjustFontSize",
-                "delta": -1
+                "action": "copy",
+                "singleLine": false
             },
-            "keys": "ctrl+minus"
-        },
-        {
-            "command":
-            {
-                "action": "openSettings"
-            },
-            "keys": "ctrl+alt+s"
+            "keys": "ctrl+shift+c"
         },
         {
             "command": "paste",
@@ -36,10 +37,9 @@
         {
             "command":
             {
-                "action": "copy",
-                "singleLine": false
+                "action": "openSettings"
             },
-            "keys": "ctrl+shift+c"
+            "keys": "ctrl+alt+s"
         },
         {
             "command": "toggleFullscreen",
@@ -72,75 +72,55 @@
         "defaults":
         {
             "bellStyle": "window",
-            "colorScheme": "GruvOnHalf",
+            "closeOnExit": "always",
+            "colorScheme": "Treehouse",
             "cursorShape": "bar",
             "font":
             {
                 "face": "Fira Code Retina",
                 "size": 11
             },
+            "hidden": false,
+            "historySize": 100000,
             "intenseTextStyle": "all",
             "scrollbarState": "hidden",
             "suppressApplicationTitle": true,
+            "snapOnInput": true,
             "useAcrylic": true
         },
         "list":
         [
             {
-                "closeOnExit": "always",
                 "colorScheme": "GruvOnHalf",
                 "commandline": "wsl.exe",
-                "cursorShape": "bar",
-                "font":
+                "cursorShape": "doubleUnderscore",
+                "font": 
                 {
                     "face": "Cascadia Code PL"
                 },
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
-                "hidden": false,
-                "historySize": 100000,
-                "name": "archWizard",
-                "scrollbarState": "hidden",
-                "snapOnInput": true
+                "name": "archWizard"
             },
             {
-                "closeOnExit": "always",
-                "colorScheme": "GruvOnHalf",
+                "colorScheme": "Solarized Dark",
                 "commandline": "wsl.exe --distribution Ubuntu",
-                "cursorShape": "bar",
-                "font":
-                {
-                    "face": "Fira Code",
-                    "size": 11
-                },
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
-                "name": "playground",
-                "hidden": false,
-                "historySize": 100000,
-                "name": "playground",
-                "scrollbarState": "hidden",
-                "snapOnInput": true,
-                "colorScheme" : "Solarized Dark",
-                "cursorColor" : "#FFFFFF",
-                "cursorShape": "doubleUnderscore",
-                "tabTitle" : "Playground"
+                "name": "playground"
             },
             {
-                "colorScheme": "Solarized Light",
+                "colorScheme": "Ubuntu-ColorScheme",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": false,
                 "name": "PowerShell"
             },
             {
                 "colorScheme": "One Half Light",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-                "hidden": false,
                 "name": "cmd"
             },
             {
-                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                "hidden": true,
-                "name": "Azure",
-                "source": "Windows.Terminal.Azure"
+                "guid": "{8ab8e6f6-35c6-5b46-8419-3e1568105476}",
+                "commandline": "wsl.exe --distribution podman-machine-default",
+                "name": "podman-machine-default"
             }
         ]
     },
