@@ -49,6 +49,12 @@ Plugin 'github/copilot.vim'
 " Better matching on language elements
 Plugin 'andymass/vim-matchup'
 
+" Snippets even though Copilot
+Plugin 'SirVer/UltiSnips'
+
+" Mostly for the boxed comments
+Plugin 'honza/vim-snippets'
+
 "-------------------------
 
 " Language specific plugins
@@ -310,7 +316,13 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 "-------------------------
 
-" Supertab config.
+" UltiSnips
+
+let g:UltiSnipsListSnippets="<C-u>"
+
+"-------------------------
+
+" Supertab
 
 let g:SuperTabDefaultCompletionType = 'context'
 
@@ -640,7 +652,7 @@ nnoremap <leader>hc :call ToggleHighlightNearCursor()<CR>
 
 "-------------------------
 
-" Ack configuration
+" Ack
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep --smart-case'
