@@ -632,23 +632,6 @@ set backspace=indent,eol,start
 
 "-------------------------
 
-" Paste support on WSL
-
-function HasWSL()
-  return system('uname -r') =~ "microsoft"
-endfunction
-
-function GetFromClipboard()
-  silent let clip = system('paste.exe --lf')
-  call setreg('=', clip)
-endfunction
-
-if HasWSL()
-  nnoremap P :call:
-endif
-
-"-------------------------
-
 " For when I lose the cursor especially on WSL
 
 function ToggleHighlightNearCursor()
