@@ -28,54 +28,51 @@ Plugin 'tpope/vim-surround'
 " And repeat the surrounds. Hallelujah!
 Plugin 'tpope/vim-repeat'
 
-" Snippets FTW \m/.
-Plugin 'vim-scripts/UltiSnips'
-
 " Graphical UNDO
-Plugin 'sjl/gundo.vim'
+Plugin 'mbbill/undotree'
 
-" Use multiple cursors a la Sublime Text.
-Plugin 'terryma/vim-multiple-cursors'
+" Use multiple cursors - needs more practice.
+Plugin 'mg979/vim-visual-multi'
 
-" Mofo plugin: Tabular.vim
+" Mofo plugin: Tabular.vim - needs more practice.
 Plugin 'godlygeek/tabular'
 
 " FZF for fuzzy searching
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
-" Ctrlp where FZF doesn't work
-Plugin 'ctrlpvim/ctrlp.vim'
-
 " Fugitive for git
 Plugin 'tpope/vim-fugitive'
 
-" Fugitive for git
+" Ack for vim
 Plugin 'mileszs/ack.vim'
 
 " Github CoPilot
 Plugin 'github/copilot.vim'
+
+" Better matching on language elements
+Plugin 'andymass/vim-matchup'
 
 "-------------------------
 
 " Language specific plugins
 
 " Latex suite.
-Plugin 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
+Plugin 'gerw/vim-latex-suite'
 
 " R plugin.
 Plugin 'jalvesaq/Nvim-R'
 
-" Python plugin.
+" Plugin to send commands to an external terminal - I use for Python
 Plugin 'jalvesaq/vimcmdline'
 
 " Better indentation for Python
 Plugin 'hynek/vim-python-pep8-indent'
 
+" Jedi for Python
+Plugin 'davidhalter/jedi-vim'
+
 " Flake8 linter.
 Plugin 'nvie/vim-flake8'
-
-" Scala by derekwyatt.
-Plugin 'derekwyatt/vim-scala'
 
 " Javascript indentation for vim.
 Plugin 'pangloss/vim-javascript'
@@ -83,23 +80,17 @@ Plugin 'pangloss/vim-javascript'
 " Julia for Vim.
 Plugin 'JuliaLang/julia-vim'
 
-" GHCi plugin: SHIM for Vim.
-Plugin 'vim-scripts/Superior-Haskell-Interaction-Mode-SHIM'
-
-" Jedi for Python
-Plugin 'davidhalter/jedi-vim'
-
 " TOC for markdown
 Plugin 'mzlogin/vim-markdown-toc'
 
 "-------------------------
 
-" I'm fabulous
+" Coloring related stuff
 
 " Escape shell color codes in Vim.
 Plugin 'AnsiEsc.vim'
 
-" Gruvbox & my edit of Monokai
+" Gruvbox colorscheme.
 Plugin 'morhetz/gruvbox'
 
 "-------------------------
@@ -198,7 +189,7 @@ let maplocalleader=","
 
 "-------------------------
 
-" FZF configuration
+" FZF
 
 let g:fzf_action = {
       \ 'ctrl-e': 'e',
@@ -218,80 +209,37 @@ function FuzzyFind()
   endif
 endfunction
 
-" Search in FZF but it does not work on Cygwin
-
-if !has('win32unix')
-  nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
-  nnoremap <silent> <leader>fh :FZF ~<CR>
-  nnoremap <silent> <leader>fd :FZF /mnt/d<CR>
-  nnoremap <silent> <leader>fr :call fzf#run({
-        \ 'source': v:oldfiles,
-        \ 'sink' : 'e ',
-        \ 'options' : '-m',
-        \ })<CR>
-else
-  let g:ctrlp_map = ''
-  let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-  let g:ctrlp_use_caching = 1
-  let g:ctrlp_clear_cache_on_exit = 0
-  let g:ctrlp_show_hidden = 1
-  let g:ctrlp_open_multiple_files = '2vjr'
-  let g:ctrlp_arg_map = 1
-  let g:ctrlp_prompt_mappings = {
-    \ 'PrtSelectMove("j")':   ['<c-j>', '<down>'],
-    \ 'PrtSelectMove("k")':   ['<c-k>', '<up>'],
-    \ 'PrtHistory(-1)':       ['<c-n>'],
-    \ 'PrtHistory(1)':        ['<c-p>'],
-    \ 'AcceptSelection("e")': ['<c-e>', '<2-LeftMouse>'],
-    \ 'AcceptSelection("h")': ['<c-s>'],
-    \ 'AcceptSelection("t")': ['<c-t>'],
-    \ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
-    \ 'ToggleRegex()':        ['<c-r>'],
-    \ 'ToggleByFname()':      ['<c-f>'],
-    \ 'ToggleType(1)':        ['<c-h>'],
-    \ 'ToggleType(-1)':        ['<c-l>'],
-    \ 'PrtClearCache()':      ['<c-d>'],
-    \ 'CreateNewFile()':      ['<c-cr>'],
-    \ 'MarkToOpen()':         ['<tab>'],
-    \ 'OpenMulti()':          ['<cr>'],
-    \ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
-    \
-    \
-    \
-    \ 'PrtBS()':              ['<bs>', '<c-]>'],
-    \ 'PrtDelete()':          ['<del>'],
-    \ 'PrtDeleteWord()':      ['<c-w>'],
-    \ 'PrtClear()':           ['<c-u>'],
-    \ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
-    \ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
-    \ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
-    \ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
-    \ 'ToggleFocus()':        ['<c-F>'],
-    \ 'PrtExpandDir()':       ['<c-X>'],
-    \ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
-    \ 'PrtInsert()':          ['<c-\>'],
-    \ 'PrtCurStart()':        ['<c-A>'],
-    \ 'PrtCurEnd()':          ['<c-E>'],
-    \ 'PrtCurLeft()':         ['<left>'],
-    \ 'PrtCurRight()':        ['<right>'],
-    \ }
-  nnoremap <silent> <leader>fz :CtrlP<CR>
-  nnoremap <silent> <leader>fh :CtrlP ~/<CR>
-  nnoremap <silent> <leader>fd :CtrlP D:/<CR>
-  nnoremap <silent> <leader>fr :CtrlPMRU<CR>
-endif
+nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
+nnoremap <silent> <leader>fh :FZF ~<CR>
+nnoremap <silent> <leader>fd :FZF /mnt/d<CR>
+nnoremap <silent> <leader>fr :call fzf#run({
+      \ 'source': v:oldfiles,
+      \ 'sink' : 'e ',
+      \ 'options' : '-m',
+      \ })<CR>
 
 "-------------------------
 
-" Options for nerdcommenter to use spaces with the commenting char.
+" NerdCommenter
 
-let NERDSpaceDelims=1
+let g:NERDCreateDefaultMappings = 0
 
-let NERDRemoveExtraSpaces=1
+let NERDSpaceDelims = 1
+
+let NERDRemoveExtraSpaces = 1
+
+let NERDToggleCheckAllLines = 1
+
+" Normal & visual mode map
+nnoremap <silent> <leader>c<space> <Plug>NERDCommenterToggle
+vnoremap <silent> <leader>c<space> <Plug>NERDCommenterToggle
+nnoremap <silent> <leader>cA <Plug>NERDCommenterAppend
 
 "-------------------------
 
-" These options are for the Nvim-R plugin
+" Nvim-R plugin
+
+let g:Rout_prompt_str = 'R> '
 
 let R_external_term = 'tmux split-pane'
 
@@ -305,88 +253,61 @@ let R_editor_h = 60
 
 let Rout_more_colors = 1
 
-let g:Rout_prompt_str = 'R> '
-
 let R_indent_commented = 0
-
-" Custom commands.
 
 let R_user_maps_only = 1
 
-nmap <leader>ro <Plug>RStart
-nmap <leader>rq <Plug>RClose
-nmap <leader>rl <Plug>RDSendLine
-vmap <leader>rs <Plug>REDSendSelection
-nmap <leader>rb <Plug>REDSendMBlock
-nmap <leader>rp <Plug>REDSendParagraph
-nmap <leader>rf <Plug>RSendFunction
-nmap <leader>rF <Plug>RSendFile
-
-nmap <leader>rh <Plug>RHelp
-nmap <leader>rg <Plug>RPlot
-nmap <leader>rD <Plug>RSetwd
-
-nmap <leader>rr :call RAction("rownames")<CR>
-nmap <leader>rc :call RAction("colnames")<CR>
-nmap <leader>rn :call RAction("names")<CR>
-nmap <leader>rN :call RAction("dimnames")<CR>
-nmap <leader>rd :call RAction("dim")<CR>
-nmap <leader>rH :call RAction("head")<CR>
-nmap <leader>rT :call RAction("tail")<CR>
-nmap <leader>rL :call RAction("length")<CR>
-nmap <leader>rC :call RAction("class")<CR>
-nmap <leader>rm <Plug>RClearAll
-nmap <leader>rcc <Plug>RClearConsole
-nmap <leader>rt :call SendCmdToR("system.time({")<CR>
-nmap <leader>ra :call SendCmdToR("})")<CR>
-nmap <leader>rtb :call SendCmdToR("traceback()")<CR>
+autocmd FileType r nmap <leader>ro <Plug>RStart
+autocmd FileType r nmap <leader>rq <Plug>RClose
+autocmd FileType r nmap <leader>rl <Plug>RDSendLine
+autocmd FileType r vmap <leader>rs <Plug>REDSendSelection
+autocmd FileType r nmap <leader>rb <Plug>REDSendMBlock
+autocmd FileType r nmap <leader>rp <Plug>REDSendParagraph
+autocmd FileType r nmap <leader>rf <Plug>RSendFunction
+autocmd FileType r nmap <leader>rF <Plug>RSendFile
+autocmd FileType r nmap <leader>rh <Plug>RHelp
+autocmd FileType r nmap <leader>rg <Plug>RPlot
+autocmd FileType r nmap <leader>rD <Plug>RSetwd
+autocmd FileType r nmap <leader>rr :call RAction("rownames")<CR>
+autocmd FileType r nmap <leader>rc :call RAction("colnames")<CR>
+autocmd FileType r nmap <leader>rn :call RAction("names")<CR>
+autocmd FileType r nmap <leader>rN :call RAction("dimnames")<CR>
+autocmd FileType r nmap <leader>rd :call RAction("dim")<CR>
+autocmd FileType r nmap <leader>rH :call RAction("head")<CR>
+autocmd FileType r nmap <leader>rT :call RAction("tail")<CR>
+autocmd FileType r nmap <leader>rL :call RAction("length")<CR>
+autocmd FileType r nmap <leader>rC :call RAction("class")<CR>
+autocmd FileType r nmap <leader>rm <Plug>RClearAll
+autocmd FileType r nmap <leader>rcc <Plug>RClearConsole
+autocmd FileType r nmap <leader>rt :call SendCmdToR("system.time({")<CR>
+autocmd FileType r nmap <leader>ra :call SendCmdToR("})")<CR>
+autocmd FileType r nmap <leader>rtb :call SendCmdToR("traceback()")<CR>
 
 "-------------------------
 
-" These options are for UltiSnips.
-
-let g:UltiSnipsExpandTrigger = "<tab>"
-
-let g:UltiSnipsListSnippets = "<C-tab>"
-
-let g:UltiSnipsEditSplit = "context"
-
-let g:UltiSnipsSnippetsDir = "~/.vim/mysnippets"
-
-let g:UltiSnipsSnippetDirectories = [$HOME.'/.vim/mysnippets']
-
-let g:UltiSnipsJumpForwardTrigger = "<C-k>"
-
-let g:UltiSnipsJumpBackwardTrigger = "<C-j>"
-
-"-------------------------
-
-" These options are for the tex-suite plugin.
+" Latex-Suite
 
 set grepprg=grep\ -nH\ $*
 
 let g:tex_flavor='latex'
 
-let g:Tex_CompileRule_pdf='pdflatex -interaction=nonstopmode'
-
-let g:Tex_ViewRule_pdf='evince'
+let g:Tex_ViewRule_pdf='mupdf'
 
 let g:Tex_DefaultTargetFormat='pdf'
 
-" Do not convert my quotes.
 let g:Tex_SmartKeyQuote=0
 
-" Ignore any makefiles when called from vim.
 let g:Tex_UseMakefile=0
 
-" Do not let this plugin fold anything for me.
 let g:Tex_FoldedSections=""
+
 let g:Tex_FoldedEnvironments=""
+
 let g:Tex_FoldedMisc=""
 
 "-------------------------
 
-" Remove single quotes from the set of autocompletions.
+" AutoClose
 
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
@@ -398,92 +319,124 @@ let g:SuperTabDefaultCompletionType = 'context'
 
 "-------------------------
 
-" Gundo's config.
+" Undotree
 
-nnoremap <leader>gu :GundoToggle<CR>
+nnoremap <leader>ut :UndotreeToggle<CR>
 
-let g:gundo_preview_bottom = 1
+let g:undotree_WindowLayout = 2
 
-let g:gundo_right = 1
-
-"-------------------------
-
-" Multi-cursor configuration.
-
-let g:multi_cursor_exit_from_visual_mode = 0
-
-let g:multi_cursor_exit_from_insert_mode = 0
-
-let g_multi_cursor_insert_maps = {',': 1, '\': 1}
+let g:undotree_DiffpanelHeight = 20
 
 "-------------------------
 
-" Turn on PEP8 style guidelines for python files.
+" Python plugins
 
 autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
+
+let cmdline_vsplit                = 1
+
+let cmdline_term_width            = 120
+
+let cmdline_app                   = {}
+
+let cmdline_app['python']         = 'ipython'
+
+let g:jedi#auto_vim_configuration = 0
+
+let g:jedi#use_splits_not_buffers = "winwidth"
+
+let g:jedi#popup_on_dot           = 0
+
+let g:jedi#completions_enabled    = 1
+
+let g:jedi#show_call_signatures   = 1
+
+let g:jedi#smart_auto_mappings    = 1
+
+let g:flake8_show_in_gutter       = 1
+
+autocmd FileType python let g:jedi#completions_command      = "<Tab>"
+autocmd FileType python let cmdline_map_start               = '<leader>po'
+autocmd FileType python let cmdline_map_send                = '<leader>ps'
+autocmd FileType python let cmdline_map_send_and_stay       = '<leader>pS'
+autocmd FileType python let cmdline_map_source_fun          = '<leader>pF'
+autocmd FileType python let cmdline_map_send_paragraph      = '<leader>pp'
+autocmd FileType python let cmdline_map_send_block          = '<leader>pb'
+autocmd FileType python let cmdline_map_quit                = '<leader>pq'
+autocmd FileType python let g:jedi#goto_command             = "<leader>pg"
+autocmd FileType python let g:jedi#documentation_command    = "<leader>ph"
+autocmd FileType python let g:jedi#rename_command_keep_name = "<leader>pr"
+autocmd FileType python let g:jedi#usages_command           = "<leader>pu"
 autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
 
 "-------------------------
 
-" vimcmdline configuration for Python (and others)
+" Julia plugin
 
-let cmdline_map_start          = '<Leader>co'
-
-let cmdline_map_send           = '<Leader>cs'
-
-let cmdline_map_send_and_stay  = '<Leader>cr'
-
-let cmdline_map_source_fun     = '<Leader>cf'
-
-let cmdline_map_send_paragraph = '<Leader>cp'
-
-let cmdline_map_send_block     = '<Leader>cb'
-
-let cmdline_map_quit           = '<Leader>cq'
-
-let cmdline_vsplit             = 1
-
-let cmdline_term_width         = 120
-
-let cmdline_app                = {}
-
-let cmdline_app['python']      = 'ipython'
+autocmd FileType julia nmap <buffer> <leader>jh K
+autocmd FileType julia nmap <buffer> <leader>jH <Plug>(JuliaDocPrompt)
 
 "------------------------
 
-" Jedi configuration for Python
+" Github Copilot
 
-let g:jedi#use_splits_not_buffers = "winwidth"
+let g:copilot_enabled = v:true
 
-let g:jedi#popup_on_dot = 0
+nmap <C-s> :Copilot<CR>
 
-let g:jedi#completions_enabled = 1
+imap <C-s> <Plug>(copilot-suggest)
 
-let g:jedi#show_call_signatures = "2"
+imap <C-j> <Plug>(copilot-next)
 
-let g:jedi#goto_command = "<LocalLeader>jg"
+imap <C-k> <Plug>(copilot-previous)
 
-let g:jedi#documentation_command = "<LocalLeader>jh"
+"-------------------------
 
-let g:jedi#rename_command = "<LocalLeader>jr"
+" Markdown config
 
-let g:jedi#usages_command = "<LocalLeader>ju"
+" vim-markdown-toc
 
-"------------------------
+let g:vmt_auto_update_on_save = 1
 
-" Copilot configuration
+let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
 
-let g:copilot_enabled = v:false
+let g:vmt_fence_closing_text = 'toc-marker : do-not-edit-this-line'
 
-nmap ,cS :Copilot<CR>
+let g:vmt_fence_hidden_markdown_style = 'GFM'
 
-imap ,cs <Plug>(copilot-suggest)
+"-------------------------
 
-imap ,cn <Plug>(copilot-next)
+" Fugitive
 
-imap ,cp <Plug>(copilot-previous)
+nnoremap <silent> <leader>gs :Git<CR>
 
-imap ,cd <Plug>(copilot-dismiss)
+"-------------------------
+
+" Preview markdown
+
+function! PreviewMarkdown()
+  let outFile = './' . expand('%:r') . '.html'
+  silent execute '!cd %:p:h'
+  silent execute '!md2html % >' . outFile
+  silent execute 'redraw!'
+endfunction
+
+" Use the github flavored markdown by default.
+
+augroup markdown
+    autocmd!
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
+    autocmd FileType markdown map <leader>pm
+          \ :call PreviewMarkdown()<CR>
+augroup END
+
+"-------------------------
+
+" HTML / JS: Don't break my lines; just wrap them visually.
+
+autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
+autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
 
 "-------------------------
 
@@ -647,7 +600,7 @@ nnoremap <leader>yf mzyG`z
 
 " Remap file path completion bindings.
 
-inoremap <C-z> <C-x><C-f>
+inoremap <C-p> <C-x><C-f>
 
 "-------------------------
 
@@ -666,46 +619,6 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 "-------------------------
 
-" Insert table of contents in Markdown
-
-let g:vmt_auto_update_on_save = 1
-
-let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
-
-let g:vmt_fence_closing_text = 'toc-marker : do-not-edit-this-line'
-
-let g:vmt_fence_hidden_markdown_style = 'GFM'
-
-"-------------------------
-
-" Preview markdown
-
-function! PreviewMarkdown()
-  let outFile = './' . expand('%:r') . '.html'
-  silent execute '!cd %:p:h'
-  silent execute '!md2html % >' . outFile
-  silent execute 'redraw!'
-endfunction
-
-" Use the github flavored markdown by default.
-
-augroup markdown
-    autocmd!
-    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
-    autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    autocmd FileType markdown map <leader>pm
-          \ :call PreviewMarkdown()<CR>
-augroup END
-
-"-------------------------
-
-" HTML / JS: Don't break my lines; just wrap them visually.
-
-autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
-autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
-
-"-------------------------
-
 " Forward the clipboard over SSH when connected with forwarding.
 
 vmap "sy :!xclip -f -sel clip
@@ -719,35 +632,19 @@ set backspace=indent,eol,start
 
 "-------------------------
 
-nnoremap <silent> <leader>gs :Gstatus<CR>
-
-"-------------------------
-
-" Copy support on WSL
-
-function HasWSL()
-  return system('uname -r') =~ "Microsoft"
-endfunction
-
-function WSLYank()
-  let s:clip = '/mnt/c/Windows/System32/clip.exe'
-  if v:event.operator ==# 'y'
-    call system(s:clip, @0)
-  endif
-endfunction
-
-if HasWSL()
-  augroup WSLYank
-    autocmd!
-    autocmd TextYankPost * call WSLYank()
-  augroup END
-endif
-
 " Paste support on WSL
 
+function HasWSL()
+  return system('uname -r') =~ "microsoft"
+endfunction
+
+function GetFromClipboard()
+  silent let clip = system('paste.exe --lf')
+  call setreg('=', clip)
+endfunction
+
 if HasWSL()
-  " https://github.com/neosmart/paste
-  nnoremap "+p "=system('paste.exe --lf')<CR>p
+  nnoremap P :call:
 endif
 
 "-------------------------
@@ -786,8 +683,8 @@ endfunction
 
 command! -nargs=1 Ag execute "Ack! <args> " . FindGitRoot()
 
-nnoremap <Leader>aG :Ag<Space>
-nnoremap <Leader>ag :execute 'Ack! ' .
+nnoremap <leader>aG :Ag<Space>
+nnoremap <leader>ag :execute 'Ack! ' .
       \ expand('<cword>') . ' ' .
       \ FindGitRoot()<CR>
 
@@ -795,16 +692,16 @@ nnoremap <Leader>ag :execute 'Ack! ' .
 
 " Working with diffs
 
-nnoremap <Leader>dgr :diffget RE<CR>
-nnoremap <Leader>dgl :diffget LO<CR>
-nnoremap <Leader>dpr :diffput RE<CR>
-nnoremap <Leader>dpl :diffput LO<CR>
+nnoremap <leader>dgr :diffget RE<CR>
+nnoremap <leader>dgl :diffget LO<CR>
+nnoremap <leader>dpr :diffput RE<CR>
+nnoremap <leader>dpl :diffput LO<CR>
 
 "-------------------------
 
 " Fixing the cursor shapes in WSL vim
 " https://github.com/microsoft/terminal/issues/4335
-"
+
 if &term =~ '^tmux'
     " Cursor in terminal:
     " Link: https://vim.fandom.com/wiki/Configuring_the_cursor
@@ -827,4 +724,4 @@ if &term =~ '^tmux'
       autocmd VimEnter * silent !echo -ne "\e[3 q"
       autocmd VimLeave * silent !echo -ne "\e[5 q"
     augroup END
-  endif
+endif
