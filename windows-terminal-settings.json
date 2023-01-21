@@ -119,7 +119,7 @@
             },
             {
                 "guid": "{8ab8e6f6-35c6-5b46-8419-3e1568105476}",
-                "commandline": "wsl.exe --distribution podman-machine-default",
+                "commandline": "wsl.exe --user root --distribution podman-machine-default",
                 "name": "podman-machine-default"
             }
         ]
