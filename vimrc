@@ -40,9 +40,6 @@ Plugin 'godlygeek/tabular'
 " FZF for fuzzy searching
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
-" Fugitive for git
-Plugin 'tpope/vim-fugitive'
-
 " Ack for vim
 Plugin 'mileszs/ack.vim'
 
@@ -403,12 +400,6 @@ let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
 let g:vmt_fence_closing_text = 'toc-marker : do-not-edit-this-line'
 
 let g:vmt_fence_hidden_markdown_style = 'GFM'
-
-"-------------------------
-
-" Fugitive
-
-nnoremap <silent> <leader>gs :Git<CR>
 
 "-------------------------
 
