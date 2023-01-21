@@ -58,7 +58,7 @@
             "keys": "ctrl+plus"
         }
     ],
-    "alwaysOnTop": true,
+    "alwaysOnTop": false,
     "alwaysShowTabs": false,
     "copyFormatting": "none",
     "copyOnSelect": true,
