@@ -260,31 +260,34 @@ let R_indent_commented = 0
 
 let R_user_maps_only = 1
 
-autocmd FileType r nmap <leader>ro <Plug>RStart
-autocmd FileType r nmap <leader>rq <Plug>RClose
-autocmd FileType r nmap <leader>rl <Plug>RDSendLine
-autocmd FileType r vmap <leader>rs <Plug>REDSendSelection
-autocmd FileType r nmap <leader>rb <Plug>REDSendMBlock
-autocmd FileType r nmap <leader>rp <Plug>REDSendParagraph
-autocmd FileType r nmap <leader>rf <Plug>RSendFunction
-autocmd FileType r nmap <leader>rF <Plug>RSendFile
-autocmd FileType r nmap <leader>rh <Plug>RHelp
-autocmd FileType r nmap <leader>rg <Plug>RPlot
-autocmd FileType r nmap <leader>rD <Plug>RSetwd
-autocmd FileType r nmap <leader>rr :call RAction("rownames")<CR>
-autocmd FileType r nmap <leader>rc :call RAction("colnames")<CR>
-autocmd FileType r nmap <leader>rn :call RAction("names")<CR>
-autocmd FileType r nmap <leader>rN :call RAction("dimnames")<CR>
-autocmd FileType r nmap <leader>rd :call RAction("dim")<CR>
-autocmd FileType r nmap <leader>rH :call RAction("head")<CR>
-autocmd FileType r nmap <leader>rT :call RAction("tail")<CR>
-autocmd FileType r nmap <leader>rL :call RAction("length")<CR>
-autocmd FileType r nmap <leader>rC :call RAction("class")<CR>
-autocmd FileType r nmap <leader>rm <Plug>RClearAll
-autocmd FileType r nmap <leader>rcc <Plug>RClearConsole
-autocmd FileType r nmap <leader>rt :call SendCmdToR("system.time({")<CR>
-autocmd FileType r nmap <leader>ra :call SendCmdToR("})")<CR>
-autocmd FileType r nmap <leader>rtb :call SendCmdToR("traceback()")<CR>
+augroup R
+  autocmd!
+  autocmd FileType r nmap <leader>ro <Plug>RStart
+  autocmd FileType r nmap <leader>rq <Plug>RClose
+  autocmd FileType r nmap <leader>rl <Plug>RDSendLine
+  autocmd FileType r vmap <leader>rs <Plug>REDSendSelection
+  autocmd FileType r nmap <leader>rb <Plug>REDSendMBlock
+  autocmd FileType r nmap <leader>rp <Plug>REDSendParagraph
+  autocmd FileType r nmap <leader>rf <Plug>RSendFunction
+  autocmd FileType r nmap <leader>rF <Plug>RSendFile
+  autocmd FileType r nmap <leader>rh <Plug>RHelp
+  autocmd FileType r nmap <leader>rg <Plug>RPlot
+  autocmd FileType r nmap <leader>rD <Plug>RSetwd
+  autocmd FileType r nmap <leader>rr :call RAction("rownames")<CR>
+  autocmd FileType r nmap <leader>rc :call RAction("colnames")<CR>
+  autocmd FileType r nmap <leader>rn :call RAction("names")<CR>
+  autocmd FileType r nmap <leader>rN :call RAction("dimnames")<CR>
+  autocmd FileType r nmap <leader>rd :call RAction("dim")<CR>
+  autocmd FileType r nmap <leader>rH :call RAction("head")<CR>
+  autocmd FileType r nmap <leader>rT :call RAction("tail")<CR>
+  autocmd FileType r nmap <leader>rL :call RAction("length")<CR>
+  autocmd FileType r nmap <leader>rC :call RAction("class")<CR>
+  autocmd FileType r nmap <leader>rm <Plug>RClearAll
+  autocmd FileType r nmap <leader>rcc <Plug>RClearConsole
+  autocmd FileType r nmap <leader>rt :call SendCmdToR("system.time({")<CR>
+  autocmd FileType r nmap <leader>ra :call SendCmdToR("})")<CR>
+  autocmd FileType r nmap <leader>rtb :call SendCmdToR("traceback()")<CR>
+augroup END
 
 "-------------------------
 
@@ -340,7 +343,6 @@ let g:undotree_DiffpanelHeight = 20
 
 " Python plugins
 
-autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
 
 let cmdline_vsplit                = 1
 
@@ -364,26 +366,34 @@ let g:jedi#smart_auto_mappings    = 1
 
 let g:flake8_show_in_gutter       = 1
 
-autocmd FileType python let g:jedi#completions_command      = "<Tab>"
-autocmd FileType python let cmdline_map_start               = '<leader>po'
-autocmd FileType python let cmdline_map_send                = '<leader>ps'
-autocmd FileType python let cmdline_map_send_and_stay       = '<leader>pS'
-autocmd FileType python let cmdline_map_source_fun          = '<leader>pF'
-autocmd FileType python let cmdline_map_send_paragraph      = '<leader>pp'
-autocmd FileType python let cmdline_map_send_block          = '<leader>pb'
-autocmd FileType python let cmdline_map_quit                = '<leader>pq'
-autocmd FileType python let g:jedi#goto_command             = "<leader>pg"
-autocmd FileType python let g:jedi#documentation_command    = "<leader>ph"
-autocmd FileType python let g:jedi#rename_command_keep_name = "<leader>pr"
-autocmd FileType python let g:jedi#usages_command           = "<leader>pu"
-autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
+augroup python
+  autocmd!
+  autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  " These don't work if restricted to py files
+  let cmdline_map_start               = '<leader>po'
+  let cmdline_map_send                = '<leader>ps'
+  let cmdline_map_send_and_stay       = '<leader>pS'
+  let cmdline_map_source_fun          = '<leader>pF'
+  let cmdline_map_send_paragraph      = '<leader>pp'
+  let cmdline_map_send_block          = '<leader>pb'
+  let cmdline_map_quit                = '<leader>pq'
+  autocmd FileType python let g:jedi#completions_command      = "<Tab>"
+  autocmd FileType python let g:jedi#goto_command             = "<leader>pg"
+  autocmd FileType python let g:jedi#documentation_command    = "<leader>ph"
+  autocmd FileType python let g:jedi#rename_command_keep_name = "<leader>pr"
+  autocmd FileType python let g:jedi#usages_command           = "<leader>pu"
+  autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
+augroup END
 
 "-------------------------
 
 " Julia plugin
 
-autocmd FileType julia nmap <buffer> <leader>jh K
-autocmd FileType julia nmap <buffer> <leader>jH <Plug>(JuliaDocPrompt)
+augroup julia
+  autocmd!
+  autocmd FileType julia nmap <buffer> <leader>jh K
+  autocmd FileType julia nmap <buffer> <leader>jH <Plug>(JuliaDocPrompt)
+augroup END
 
 "------------------------
 
@@ -438,8 +448,11 @@ augroup END
 
 " HTML / JS: Don't break my lines; just wrap them visually.
 
-autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
-autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
+augroup html
+  autocmd!
+  autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
+  autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
+augroup END
 
 "-------------------------
 
