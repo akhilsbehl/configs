@@ -350,6 +350,7 @@ export FZF_COMPLETION_TRIGGER=';;'
 export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi'
 
 function fzbin () {
+  local orig_dir=$PWD
   local file
   if [[ -z "$1" ]]; then
     echo 'I need at least a program to start with.'
@@ -358,16 +359,15 @@ function fzbin () {
   elif [[ -f "$2" ]]; then
     file="$2"
   elif [[ -d "$2" ]]; then
-    ORIG_PWD=$PWD
     cd "$2"
     file=$(fzf-tmux --query="$3" --select-1 --exit-0)
-    cd "$ORIG_PWD"
   else
     echo "$2 is not a file or directory."
     return 0
   fi
   [[ -n "$file" ]] && echo "$1" "$file"
   [[ -n "$file" ]] && eval "$1 $file"
+  cd "$orig_dir"
 }
 
 # Simplify this
