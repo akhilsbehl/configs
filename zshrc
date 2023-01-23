@@ -351,19 +351,27 @@ export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi'
 
 function fzbin () {
   local file
-  if [[ -f "$2" ]]; then
-    eval "$1 $2"
+  if [[ -z "$1" ]]; then
+    echo 'I need at least a program to start with.'
+  elif [[ -z "$2" ]]; then
+    file=$(fzf-tmux --select-1 --exit-0)
+  elif [[ -f "$2" ]]; then
+    file="$2"
   elif [[ -d "$2" ]]; then
+    ORIG_PWD=$PWD
+    cd "$2"
     file=$(fzf-tmux --query="$3" --select-1 --exit-0)
+    cd "$ORIG_PWD"
   else
-    echo 'I need a dir to start in.'
+    echo "$2 is not a file or directory."
+    return 0
   fi
   [[ -n "$file" ]] && echo "$1" "$file"
   [[ -n "$file" ]] && eval "$1 $file"
 }
 
 # Simplify this
-function vif () { fzbin "vim" "$PWD" }
+function vif () { fzbin "vim" "$1" }
 
 # This is possibly running on:
 # Some flavor of WSL: Use wslopen
