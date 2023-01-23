@@ -471,3 +471,4 @@ cowsay -f milk -W 79 $(fortune)
 ####################################
 
 [[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
+[[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
