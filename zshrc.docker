@@ -1,0 +1,25 @@
+function dc-select-container {
+  im=$(docker ps -a | fzf-tmux --select-1 --exit-0)
+  if [ -n "$im" ]; then
+    echo $im | awk '{print $1}'
+  fi
+}
+
+function dc-select-image {
+  im=$(docker images | fzf-tmux --select-1 --exit-0)
+  if [ -n "$im" ]; then
+    echo $im | awk '{print $1":"$2}'
+  fi
+}
+
+alias dc=docker
+alias dcstart='docker start'
+alias dcstop='docker stop'
+alias dcls='docker ps -a'
+alias dclsi='docker images'
+alias dcrm='docker rm $(dc-select-container)'
+alias dcrma='docker rm $(docker ps -a -q)'
+alias dcrmi='docker rmi $(dc-select-image)'
+alias dcrmia='docker rmi $(docker images -q)'
+alias dcrun='docker run --rm --entrypoint bash -t -i $(dc-select-image)'
+alias dcgrun='docker run --rm --gpus all --entrypoint bash -t -i $(dc-select-image)'
