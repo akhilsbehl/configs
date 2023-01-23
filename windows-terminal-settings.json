@@ -96,7 +96,11 @@
                 "cursorShape": "doubleUnderscore",
                 "font": 
                 {
-                    "face": "Cascadia Code PL"
+                    "face": "Cascadia Code PL",
+                    "size": 11,
+                    "axes": {
+                      "ital": 1
+                    }
                 },
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "name": "archWizard"
