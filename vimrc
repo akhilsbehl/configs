@@ -430,11 +430,22 @@ let g:vmt_fence_hidden_markdown_style = 'GFM'
 
 " Preview markdown
 
-function! PreviewMarkdown()
+function PreviewMarkdown()
   let outFile = './' . expand('%:r') . '.html'
   silent execute '!cd %:p:h'
   silent execute '!md2html % >' . outFile
   silent execute 'redraw!'
+endfunction
+
+
+function! DecorateSelection(str)
+  normal gv"xy
+  let cursor_pos = getpos('.')
+  let cursor_pos[2] = cursor_pos[2] - 1
+  let @x = a:str . @x . a:str
+  normal gvd
+  call setpos('.', cursor_pos)
+  normal "xp
 endfunction
 
 " Use the github flavored markdown by default.
@@ -443,8 +454,14 @@ augroup markdown
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    autocmd FileType markdown map <leader>pm
-          \ :call PreviewMarkdown()<CR>
+    " <leader>m is really hard to type
+    autocmd FileType markdown map <localleader>p :call PreviewMarkdown()<CR>
+    autocmd FileType markdown map <localleader>i
+          \ :call DecorateSelection('*')<CR>
+    autocmd FileType markdown map <localleader>b
+          \ :call DecorateSelection('**')<CR>
+    autocmd FileType markdown map <localleader>t :GenTocGFM<CR>
+    autocmd FileType markdown map <localleader>u :UpdateToc<CR>
 augroup END
 
 "-------------------------
