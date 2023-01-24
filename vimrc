@@ -86,6 +86,9 @@ Plugin 'JuliaLang/julia-vim'
 " TOC for markdown
 Plugin 'mzlogin/vim-markdown-toc'
 
+" Pasting for markdown
+Plugin 'akhilsbehl/md-image-paste'
+
 "-------------------------
 
 " Coloring related stuff
