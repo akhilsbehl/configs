@@ -191,7 +191,7 @@ set switchbuf="useopen,usetab"
 
 let mapleader=","
 
-let maplocalleader=","
+let maplocalleader="."
 
 "-------------------------
 
@@ -265,31 +265,31 @@ let R_user_maps_only = 1
 
 augroup R
   autocmd!
-  autocmd FileType r nmap <leader>ro <Plug>RStart
-  autocmd FileType r nmap <leader>rq <Plug>RClose
-  autocmd FileType r nmap <leader>rl <Plug>RDSendLine
-  autocmd FileType r vmap <leader>rs <Plug>REDSendSelection
-  autocmd FileType r nmap <leader>rb <Plug>REDSendMBlock
-  autocmd FileType r nmap <leader>rp <Plug>REDSendParagraph
-  autocmd FileType r nmap <leader>rf <Plug>RSendFunction
-  autocmd FileType r nmap <leader>rF <Plug>RSendFile
-  autocmd FileType r nmap <leader>rh <Plug>RHelp
-  autocmd FileType r nmap <leader>rg <Plug>RPlot
-  autocmd FileType r nmap <leader>rD <Plug>RSetwd
-  autocmd FileType r nmap <leader>rr :call RAction("rownames")<CR>
-  autocmd FileType r nmap <leader>rc :call RAction("colnames")<CR>
-  autocmd FileType r nmap <leader>rn :call RAction("names")<CR>
-  autocmd FileType r nmap <leader>rN :call RAction("dimnames")<CR>
-  autocmd FileType r nmap <leader>rd :call RAction("dim")<CR>
-  autocmd FileType r nmap <leader>rH :call RAction("head")<CR>
-  autocmd FileType r nmap <leader>rT :call RAction("tail")<CR>
-  autocmd FileType r nmap <leader>rL :call RAction("length")<CR>
-  autocmd FileType r nmap <leader>rC :call RAction("class")<CR>
-  autocmd FileType r nmap <leader>rm <Plug>RClearAll
-  autocmd FileType r nmap <leader>rcc <Plug>RClearConsole
-  autocmd FileType r nmap <leader>rt :call SendCmdToR("system.time({")<CR>
-  autocmd FileType r nmap <leader>ra :call SendCmdToR("})")<CR>
-  autocmd FileType r nmap <leader>rtb :call SendCmdToR("traceback()")<CR>
+  autocmd FileType r nmap <localleader>o <Plug>RStart
+  autocmd FileType r nmap <localleader>q <Plug>RClose
+  autocmd FileType r nmap <localleader>l <Plug>RDSendLine
+  autocmd FileType r vmap <localleader>s <Plug>REDSendSelection
+  autocmd FileType r nmap <localleader>b <Plug>REDSendMBlock
+  autocmd FileType r nmap <localleader>p <Plug>REDSendParagraph
+  autocmd FileType r nmap <localleader>f <Plug>RSendFunction
+  autocmd FileType r nmap <localleader>F <Plug>RSendFile
+  autocmd FileType r nmap <localleader>h <Plug>RHelp
+  autocmd FileType r nmap <localleader>g <Plug>RPlot
+  autocmd FileType r nmap <localleader>D <Plug>RSetwd
+  autocmd FileType r nmap <localleader>r :call RAction("rownames")<CR>
+  autocmd FileType r nmap <localleader>c :call RAction("colnames")<CR>
+  autocmd FileType r nmap <localleader>n :call RAction("names")<CR>
+  autocmd FileType r nmap <localleader>N :call RAction("dimnames")<CR>
+  autocmd FileType r nmap <localleader>d :call RAction("dim")<CR>
+  autocmd FileType r nmap <localleader>H :call RAction("head")<CR>
+  autocmd FileType r nmap <localleader>T :call RAction("tail")<CR>
+  autocmd FileType r nmap <localleader>L :call RAction("length")<CR>
+  autocmd FileType r nmap <localleader>C :call RAction("class")<CR>
+  autocmd FileType r nmap <localleader>m <Plug>RClearAll
+  autocmd FileType r nmap <localleader>cc <Plug>RClearConsole
+  autocmd FileType r nmap <localleader>t :call SendCmdToR("system.time({")<CR>
+  autocmd FileType r nmap <localleader>a :call SendCmdToR("})")<CR>
+  autocmd FileType r nmap <localleader>tb :call SendCmdToR("traceback()")<CR>
 augroup END
 
 "-------------------------
@@ -373,19 +373,20 @@ augroup python
   autocmd!
   autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
   " These don't work if restricted to py files
-  let cmdline_map_start               = '<leader>po'
-  let cmdline_map_send                = '<leader>ps'
-  let cmdline_map_send_and_stay       = '<leader>pS'
-  let cmdline_map_source_fun          = '<leader>pF'
-  let cmdline_map_send_paragraph      = '<leader>pp'
-  let cmdline_map_send_block          = '<leader>pb'
-  let cmdline_map_quit                = '<leader>pq'
-  autocmd FileType python let g:jedi#completions_command      = "<Tab>"
-  autocmd FileType python let g:jedi#goto_command             = "<leader>pg"
-  autocmd FileType python let g:jedi#documentation_command    = "<leader>ph"
-  autocmd FileType python let g:jedi#rename_command_keep_name = "<leader>pr"
-  autocmd FileType python let g:jedi#usages_command           = "<leader>pu"
-  autocmd FileType python map <buffer> <leader>pf :call Flake8()<CR>
+  let cmdline_map_start               = '<localleader>o'
+  let cmdline_map_send                = '<localleader>s'
+  let cmdline_map_send_and_stay       = '<localleader>S'
+  let cmdline_map_source_fun          = '<localleader>F'
+  let cmdline_map_send_paragraph      = '<localleader>p'
+  let cmdline_map_send_block          = '<localleader>b'
+  let cmdline_map_quit                = '<localleader>q'
+  autocmd FileType python let g:jedi#completions_command = "<Tab>"
+  autocmd FileType python let g:jedi#goto_command = "<localleader>g"
+  autocmd FileType python let g:jedi#documentation_command = "<localleader>h"
+  autocmd FileType python let g:jedi#rename_command_keep_name
+        \ = "<localleader>r"
+  autocmd FileType python let g:jedi#usages_command = "<localleader>u"
+  autocmd FileType python map <buffer> <localleader>pf :call Flake8()<CR>
 augroup END
 
 "-------------------------
@@ -394,8 +395,8 @@ augroup END
 
 augroup julia
   autocmd!
-  autocmd FileType julia nmap <buffer> <leader>jh K
-  autocmd FileType julia nmap <buffer> <leader>jH <Plug>(JuliaDocPrompt)
+  autocmd FileType julia nmap <buffer> <localleader>h K
+  autocmd FileType julia nmap <buffer> <localleader>H <Plug>(JuliaDocPrompt)
 augroup END
 
 "------------------------
@@ -470,7 +471,8 @@ augroup END
 
 augroup html
   autocmd!
-  autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist filetype=html.javascript
+  autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist
+  autocmd FileType html set filetype=html.javascript
   autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
 augroup END
 
