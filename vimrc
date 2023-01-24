@@ -324,7 +324,7 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 " UltiSnips
 
-let g:UltiSnipsListSnippets="<C-u>"
+let g:UltiSnipsListSnippets="<c-l>"
 
 "-------------------------
 
