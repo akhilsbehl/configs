@@ -91,7 +91,6 @@
         "list":
         [
             {
-                "colorScheme": "GruvOnHalf",
                 "commandline": "wsl.exe",
                 "cursorShape": "doubleUnderscore",
                 "font": 
