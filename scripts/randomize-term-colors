@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+CONFIG_DIR="$SCRIPTS_DIR/.."
+
+# Needs to be hardcoded. Terminal does not like a symlink there.
+WIN_TERM_SETTINGS=~/winhome/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json
+
+IFS=$'\n'
+# Grepping only name also pulls up profile names
+SCHEMES=($(grep -C 2 "foreground" $WIN_TERM_SETTINGS | grep "name" | cut -f 2- -d ':'))
+
+USE_SCHEME=${SCHEMES[$RANDOM % ${#SCHEMES[@]}]}
+SED_CMD="0,/"colorScheme"/s/\"colorScheme\": \".*\",/\"colorScheme\":$USE_SCHEME/"
+
+sed -i -e $SED_CMD $WIN_TERM_SETTINGS
+
+exit 0
