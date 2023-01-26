@@ -133,7 +133,7 @@ set nocompatible
 set autochdir
 
 " Look and feel options.
-set cursorline ruler number numberwidth=4 showmode showcmd mousefocus
+set cursorline cursorcolumn ruler number numberwidth=4 showmode showcmd mousefocus
 set textwidth=79 colorcolumn=+1 laststatus=2
 
 " Search options.
@@ -488,7 +488,10 @@ function ModeChange()
   endif
 endfunction
 
-autocmd BufWritePost * call ModeChange()
+augroup modechange
+  autocmd!
+  autocmd BufWritePost * call ModeChange()
+augroup END
 
 "-------------------------
 
@@ -642,13 +645,6 @@ inoremap <C-p> <C-x><C-f>
 
 "-------------------------
 
-" Only show cursorline in the current window and in normal mode
-
-autocmd WinLeave,InsertEnter * set nocursorline
-autocmd WinEnter,InsertLeave * set cursorline
-
-"-------------------------
-
 " Reload and source the vim config at will
 
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
@@ -670,20 +666,40 @@ set backspace=indent,eol,start
 
 "-------------------------
 
-" For when I lose the cursor especially on WSL
+" Making the cursor more conspicuous so I don't keep losing it.
 
-function ToggleHighlightNearCursor()
+function HighlightCursor()
+  :normal zz
+  match PmenuSel /\k*\%#\k*/
+  let s:highlightcursor=1
+endfunction
+
+function NoHighlightCursor()
+  match None
+  unlet s:highlightcursor
+endfunction
+
+function ToggleHighlightCursor()
   if !exists("s:highlightcursor")
-    :normal zz
-    match Error /\k*\%#\k*/
-    let s:highlightcursor=1
+    call HighlightCursor()
   else
-    match None
-    unlet s:highlightcursor
+    call NoHighlightCursor()
   endif
 endfunction
 
-nnoremap <leader>hc :call ToggleHighlightNearCursor()<CR>
+nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
+
+" Only show cursorline in the current window and in normal mode
+
+augroup findcursor
+  autocmd!
+  autocmd WinEnter * call HighlightCursor()
+  autocmd InsertEnter * call NoHighlightCursor()
+  autocmd InsertLeave * call HighlightCursor()
+  autocmd CursorMoved * call HighlightCursor()
+  autocmd WinEnter,InsertLeave * set cursorline
+  autocmd WinLeave,InsertEnter * set nocursorline
+augroup END
 
 "-------------------------
 
@@ -736,13 +752,13 @@ if &term =~ '^tmux'
     " 6 -> solid vertical bar
 
     " normal mode
-    let &t_EI .= "\e[3 q"
+    let &t_EI .= "\e[2 q"
     " insert mode
-    let &t_SI .= "\e[5 q"
+    let &t_SI .= "\e[6 q"
 
     augroup windows_term
       autocmd!
-      autocmd VimEnter * silent !echo -ne "\e[3 q"
-      autocmd VimLeave * silent !echo -ne "\e[5 q"
+      autocmd VimEnter * silent !echo -ne "\e[2 q"
+      autocmd VimLeave * silent !echo -ne "\e[6 q"
     augroup END
 endif
