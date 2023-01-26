@@ -8,7 +8,7 @@ fi
 
 sudo echo 'Cache sudo credentials'
 
-OS = $(cat /etc/os-release | grep ^ID= | cut -d '=' -f 2)
+OS=$(cat /etc/os-release | grep ^ID= | cut -d '=' -f 2)
 
 git submodule update --init
 
@@ -38,11 +38,12 @@ ln -s $PWD/scripts $HOME/scripts
 
 mk-dir-if-not-found $HOME/.ssh
 sudo chown -R $USER:$USER $HOME/.ssh
+[[ -f $HOME/.ssh/config ]] && mv $HOME/.ssh/config{,.bkup}
+unlink $HOME/.ssh/config 2> /dev/null
+ln -s $PWD/ssh-config $HOME/.ssh/config
 chmod 700 $HOME/.ssh
 chmod 400 $HOME/.ssh/*
-chmod 600 $HOME/.ssh/known_hosts
-[[ -f $HOME/.ssh/config ]] && mv $HOME/.ssh/config{,.bkup}
-ln -s $PWD/ssh-config $HOME/.ssh/config
+[[ -f $HOME/.ssh/known_hosts ]] && chmod 600 $HOME/.ssh/known_hosts
 
 mk-dir-if-not-found $HOME/.cache/zsh
 
@@ -51,6 +52,7 @@ mk-dir-if-not-found $HOME/.rstat/lib
 mk-dir-if-not-found $HOME/.ipython/profile_default
 [[ -f $HOME/.ipython/profile_default/ipython_config.py ]] &&
   mv $HOME/.ipython/profile_default/ipython_config.py{,.bkup}
+unlink $HOME/.ipython/profile_default/ipython_config.py 2> /dev/null
 ln -s $PWD/ipython_config.py $HOME/.ipython/profile_default/ipython_config.py
 
 # Assuming the submodule is populated
