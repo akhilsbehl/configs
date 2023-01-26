@@ -159,12 +159,19 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   [[ -d "$HOME/tmp" ]] || ln -s $HOME/winhome/Downloads $HOME/tmp
   [[ -d "$HOME/temp" ]] || ln -s $(get_win_var %TMP%) $HOME/temp
 
-  mk-dir-if-not-found $HOME/.ssh
-  sudo cp $HOME/winhome/.ssh/* $HOME/.ssh/
-  sudo chown -R $USER:$USER $HOME/.ssh
-  chmod 700 $HOME/.ssh
-  chmod 400 $HOME/.ssh/*
-  chmod 600 $HOME/.ssh/known_hosts
+  if [[ -d $HOME/winhome/.ssh ]]; then
+    mk-dir-if-not-found $HOME/.ssh
+    [[ -f $HOME/.ssh/known_hosts ]] && cp $HOME/.ssh/known_hosts{,.bkup}
+    sudo cp $HOME/winhome/.ssh/* $HOME/.ssh/
+    sudo chown -R $USER:$USER $HOME/.ssh
+    chmod 700 $HOME/.ssh
+    chmod 400 $HOME/.ssh/*
+    if [[ -f $HOME/.ssh/known_hosts.bkup ]]; then
+      cat $HOME/.ssh/known_hosts.bkup >> $HOME/.ssh/known_hosts
+      rm $HOME/.ssh/known_hosts.bkup
+    fi
+    [[ -f $HOME/.ssh/known_hosts ]] && chmod 600 $HOME/.ssh/known_hosts
+  fi
 
   PS_DIR=$HOME/winhome/Documents/WindowsPowerShell/
   PS_PROF=Microsoft.PowerShell_profile.ps1
@@ -175,7 +182,9 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
     cp $PS_PROF $PS_DIR/
   fi
 
+  [[ -f $HOME/.zshrc.wsl ]] && rm $HOME/.zshrc.wsl
   ln -s zshrc.wsl >> $HOME/.zshrc.wsl
+  [[ -f $HOME/.zshrc.docker ]] && rm $HOME/.zshrc.docker
   ln -s zshrc.docker >> $HOME/.zshrc.docker
   touch .zshrc.more
 
