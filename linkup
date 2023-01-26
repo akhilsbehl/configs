@@ -2,7 +2,7 @@
 
 sudo echo 'Cache sudo credentials'
 
-GIT_CLEAN=$(git status --porcelain)
+GIT_CLEAN=$(git status --porcelain | wc -l)
 if [[ -z $GIT_DIRTY ]]; then
   echo "Git repo is dirty. Please commit or stash changes before updating."
   exit 1
