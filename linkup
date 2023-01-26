@@ -112,7 +112,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
       vim-gtk3 \
       virtualenv \
       x11-apps \
-      zsh \
+      zsh
 
     sudo ln -s /usr/bin/fdfind /usr/bin/fd
     sudo ln -s /usr/bin/batcat /usr/bin/bat
@@ -142,7 +142,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
       vim \
       python-virtualenv \
       xorg-xclock \
-      zsh \
+      zsh
   fi
 
   chsh
