@@ -9,6 +9,7 @@ fi
 sudo echo 'Cache sudo credentials'
 
 OS=$(cat /etc/os-release | grep ^ID= | cut -d '=' -f 2)
+echo "Running on $OS"
 
 git submodule update --init
 
@@ -119,7 +120,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
 
   fi
 
- if [[ "$OS" == "arch" ]]; then
+  if [[ "$OS" == "arch" ]]; then
     sudo pacman -Syyu
     sudo pacman -S --needed \
       bat \
