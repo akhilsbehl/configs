@@ -162,7 +162,7 @@ set fileformat=unix fileformats=unix,dos,mac
 set omnifunc=syntaxcomplete#Complete
 
 " Folding text.
-set foldmethod=indent foldlevel=0 foldenable
+set foldmethod=indent foldlevel=0 nofoldenable
 
 " Stop backups and swap files.
 set nobackup noswapfile
@@ -355,11 +355,11 @@ let cmdline_app                   = {}
 
 let cmdline_app['python']         = 'ipython'
 
-let g:jedi#auto_vim_configuration = 0
+let g:jedi#auto_vim_configuration = 1
 
 let g:jedi#use_splits_not_buffers = "winwidth"
 
-let g:jedi#popup_on_dot           = 0
+let g:jedi#popup_on_dot           = 1
 
 let g:jedi#completions_enabled    = 1
 
@@ -369,24 +369,24 @@ let g:jedi#smart_auto_mappings    = 1
 
 let g:flake8_show_in_gutter       = 1
 
+let cmdline_map_start               = '<localleader>o'
+let cmdline_map_send                = '<localleader>s'
+let cmdline_map_send_and_stay       = '<localleader>S'
+let cmdline_map_source_fun          = '<localleader>F'
+let cmdline_map_send_paragraph      = '<localleader>p'
+let cmdline_map_send_block          = '<localleader>b'
+let cmdline_map_quit                = '<localleader>q'
+let g:jedi#completions_command = "<Tab>"
+let g:jedi#goto_assignments = "<localleader>g"
+let g:jedi#goto_definitions = "<localleader>d"
+let g:jedi#documentation_command = "<localleader>h"
+let g:jedi#rename_command_keep_name = "<localleader>r"
+let g:jedi#usages_command = "<localleader>u"
+
 augroup python
   autocmd!
   autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  " These don't work if restricted to py files
-  let cmdline_map_start               = '<localleader>o'
-  let cmdline_map_send                = '<localleader>s'
-  let cmdline_map_send_and_stay       = '<localleader>S'
-  let cmdline_map_source_fun          = '<localleader>F'
-  let cmdline_map_send_paragraph      = '<localleader>p'
-  let cmdline_map_send_block          = '<localleader>b'
-  let cmdline_map_quit                = '<localleader>q'
-  autocmd FileType python let g:jedi#completions_command = "<Tab>"
-  autocmd FileType python let g:jedi#goto_command = "<localleader>g"
-  autocmd FileType python let g:jedi#documentation_command = "<localleader>h"
-  autocmd FileType python let g:jedi#rename_command_keep_name
-        \ = "<localleader>r"
-  autocmd FileType python let g:jedi#usages_command = "<localleader>u"
-  autocmd FileType python map <buffer> <localleader>pf :call Flake8()<CR>
+  autocmd FileType python map <buffer> <localleader>f :call Flake8()<CR>
 augroup END
 
 "-------------------------
@@ -405,13 +405,19 @@ augroup END
 
 let g:copilot_enabled = v:true
 
-nmap <C-s> :Copilot<CR>
+let g:copilot_no_tab_map = v:true
+
+nmap <leader>cs :Copilot<CR>
 
 imap <C-s> <Plug>(copilot-suggest)
 
 imap <C-j> <Plug>(copilot-next)
 
 imap <C-k> <Plug>(copilot-previous)
+
+imap <silent><script><expr> <C-a> copilot#Accept("\<CR>")
+
+imap <C-d> <Plug>(copilot-dismiss)
 
 "-------------------------
 
@@ -455,7 +461,7 @@ augroup markdown
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    " <leader>m is really hard to type
+    " <localleader>m is really hard to type
     autocmd FileType markdown map <localleader>p :call PreviewMarkdown()<CR>
     autocmd FileType markdown map <localleader>i
           \ :call DecorateSelection('*')<CR>
@@ -647,7 +653,7 @@ inoremap <C-p> <C-x><C-f>
 
 " Reload and source the vim config at will
 
-nnoremap <leader>ev :tabnew $MYVIMRC<CR>
+nnoremap <leader>ev :20split $MYVIMRC<CR>
 nnoremap <leader>eg :tabnew $MYGVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
