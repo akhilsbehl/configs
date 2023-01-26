@@ -183,9 +183,9 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   fi
 
   [[ -f $HOME/.zshrc.wsl ]] && rm $HOME/.zshrc.wsl
-  ln -s $PWD/zshrc.wsl >> $HOME/.zshrc.wsl
+  ln -s $PWD/zshrc.wsl $HOME/.zshrc.wsl
   [[ -f $HOME/.zshrc.docker ]] && rm $HOME/.zshrc.docker
-  ln -s $PWD/zshrc.docker >> $HOME/.zshrc.docker
+  ln -s $PWD/zshrc.docker $HOME/.zshrc.docker
   touch $HOME/.zshrc.more
 
   source zshrc.wsl; cp $PWD/windows-terminal-settings.json $WIN_TERM_SETTINGS
