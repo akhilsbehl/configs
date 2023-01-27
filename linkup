@@ -155,7 +155,9 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   }
 
   [[ -d "$HOME/c" ]] || ln -s $MNT/c $HOME/c
-  [[ -d "$HOME/d" ]] || ln -s $MNT/d $HOME/d
+  if [[ -d $MNT/d ]]; then
+    [[ -d "$HOME/d" ]] || ln -s $MNT/d $HOME/d
+  fi
   [[ -d "$HOME/winhome" ]] || ln -s $MNT/c/Users/$(get_win_var %USERNAME%) $HOME/winhome
   [[ -d "$HOME/doc" ]] || ln -s $HOME/winhome/Documents $HOME/doc
   [[ -d "$HOME/tmp" ]] || ln -s $HOME/winhome/Downloads $HOME/tmp
@@ -190,9 +192,8 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   ln -s $PWD/zshrc.docker $HOME/.zshrc.docker
   touch $HOME/.zshrc.more
 
-  # source zshrc
-  # source zshrc.wsl
-  cp $PWD/windows-terminal-settings.json $WIN_TERM_SETTINGS
+  
+  cp $PWD/windows-terminal-settings.json '~/winhome/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json'
 
 fi
 
