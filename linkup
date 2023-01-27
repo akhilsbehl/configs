@@ -69,8 +69,8 @@ if [[ "$1" == "--vundle" || "$2" == "--vundle" ]]; then
       $HOME/.vim/bundle/Vundle.vim
   vim -c "colorscheme default" +PluginInstall +qall
 fi
-[[ -f $HOME/mysnippets ]] && rm $HOME/mysnippets
-ln -s $PWD/snippets $HOME/mysnippets
+[[ -d $HOME/.vim/mysnippets ]] && rm $HOME/.vim/mysnippets
+ln -s $PWD/snippets $HOME/.vim/mysnippets
 
 rm -rf $HOME/.tmux/plugins/tpm
 git clone 'https://github.com/tmux-plugins/tpm' $HOME/.tmux/plugins/tpm
@@ -116,9 +116,9 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
       x11-apps \
       zsh
 
-    sudo ln -s /usr/bin/fdfind /usr/bin/fd
-    sudo ln -s /usr/bin/batcat /usr/bin/bat
-    sudo ln -s /usr/bin/python3 /usr/bin/python
+    [[ -f /usr/bin/fd ]] || sudo ln -s /usr/bin/fdfind /usr/bin/fd
+    [[ -f /usr/bin/bat ]] || sudo ln -s /usr/bin/batcat /usr/bin/bat
+    [[ -f /usr/bin/python ]] || sudo ln -s /usr/bin/python3 /usr/bin/python
 
   fi
 
