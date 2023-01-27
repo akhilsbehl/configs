@@ -74,6 +74,7 @@
             "bellStyle": "window",
             "closeOnExit": "always",
             "colorScheme": "Treehouse",
+            "cursorColor": "#FFA500",
             "cursorShape": "bar",
             "font":
             {
