@@ -1,0 +1,38 @@
+snippet marp "Put the front matter for a Marp presentation" b
+---
+marp: true
+theme: gaia
+class: invert
+style: |
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  },
+  p { font-size: 20px; }
+  li { font-size: 20px; }
+---
+
+$0
+endsnippet
+
+snippet mcols "Put the front matter for a Marp slide with columns" b
+<div class="columns">
+<div>
+
+$1
+
+</div>
+
+<div>
+
+$2
+
+</div>
+</div>
+
+---
+
+$0
+endsnippet
+
