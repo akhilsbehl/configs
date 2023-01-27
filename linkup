@@ -67,7 +67,7 @@ if [[ "$1" == "--vundle" || "$2" == "--vundle" ]]; then
   mkdir -p $HOME/.vim/bundle
   git clone 'https://github.com/VundleVim/Vundle.vim' \
       $HOME/.vim/bundle/Vundle.vim
-  vim -u NONE +PluginInstall +qall
+  vim -c "colorscheme default" +PluginInstall +qall
 fi
 [[ -f $HOME/mysnippets ]] && rm $HOME/mysnippets
 ln -s $PWD/snippets $HOME/mysnippets
@@ -141,7 +141,7 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
       ttf-cascadia-code \
       ttf-fira-code \
       unzip \
-      vim \
+      gvim \
       python-virtualenv \
       xorg-xclock \
       zsh
@@ -190,8 +190,8 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   ln -s $PWD/zshrc.docker $HOME/.zshrc.docker
   touch $HOME/.zshrc.more
 
-  source zshrc
-  source zshrc.wsl
+  # source zshrc
+  # source zshrc.wsl
   cp $PWD/windows-terminal-settings.json $WIN_TERM_SETTINGS
 
 fi
