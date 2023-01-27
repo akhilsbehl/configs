@@ -270,6 +270,7 @@ let R_user_maps_only = 1
 
 augroup R
   autocmd!
+  autocmd FileType r nmap <buffer> K <Plug>RHelp
   autocmd FileType r nmap <buffer> <localleader>o <Plug>RStart
   autocmd FileType r nmap <buffer> <localleader>q <Plug>RClose
   autocmd FileType r nmap <buffer> <localleader>l <Plug>RDSendLine
@@ -278,7 +279,6 @@ augroup R
   autocmd FileType r nmap <buffer> <localleader>p <Plug>REDSendParagraph
   autocmd FileType r nmap <buffer> <localleader>f <Plug>RSendFunction
   autocmd FileType r nmap <buffer> <localleader>F <Plug>RSendFile
-  autocmd FileType r nmap <buffer> <localleader>h <Plug>RHelp
   autocmd FileType r nmap <buffer> <localleader>g <Plug>RPlot
   autocmd FileType r nmap <buffer> <localleader>D <Plug>RSetwd
   autocmd FileType r nmap <buffer> <localleader>r :call RAction("rownames")<CR>
@@ -356,42 +356,46 @@ let g:undotree_DiffpanelHeight = 20
 
 " Python plugins
 
+let cmdline_vsplit                    = 0
 
-let cmdline_vsplit                = 1
+let g:jedi#auto_vim_configuration     = 1
 
-let cmdline_term_width            = 120
+let g:jedi#popup_on_dot               = 1
 
-let cmdline_app                   = {}
+let g:jedi#popup_select_first         = 1
 
-let cmdline_app['python']         = 'ipython'
+let g:jedi#completions_enabled        = 1
 
-let g:jedi#auto_vim_configuration = 1
+let g:jedi#show_call_signatures       = 1
 
-let g:jedi#use_splits_not_buffers = "winwidth"
+let g:jedi#smart_auto_mappings        = 1
 
-let g:jedi#popup_on_dot           = 1
+let g:flake8_show_in_gutter           = 1
 
-let g:jedi#completions_enabled    = 1
+let cmdline_app                       = {}
 
-let g:jedi#show_call_signatures   = 1
+let cmdline_term_width                = 120
 
-let g:jedi#smart_auto_mappings    = 1
+let g:jedi#show_call_signatures_delay = 200
 
-let g:flake8_show_in_gutter       = 1
+let cmdline_app['python']             = 'ipython'
 
-let cmdline_map_start               = '<localleader>o'
-let cmdline_map_send                = '<localleader>s'
-let cmdline_map_send_and_stay       = '<localleader>S'
-let cmdline_map_source_fun          = '<localleader>F'
-let cmdline_map_send_paragraph      = '<localleader>p'
-let cmdline_map_send_block          = '<localleader>b'
-let cmdline_map_quit                = '<localleader>q'
-let g:jedi#completions_command = "<Tab>"
-let g:jedi#goto_assignments = "<localleader>g"
-let g:jedi#goto_definitions = "<localleader>d"
-let g:jedi#documentation_command = "<localleader>h"
-let g:jedi#rename_command_keep_name = "<localleader>r"
-let g:jedi#usages_command = "<localleader>u"
+let g:jedi#use_splits_not_buffers     = "winwidth"
+
+let g:jedi#environment_path           = '.virtualenv'
+
+let g:jedi#documentation_command      = "K"
+let cmdline_map_start                 = '<localleader>o'
+let cmdline_map_send                  = '<localleader>s'
+let cmdline_map_source_fun            = '<localleader>F'
+let cmdline_map_send_paragraph        = '<localleader>p'
+let cmdline_map_send_block            = '<localleader>b'
+let cmdline_map_quit                  = '<localleader>q'
+let g:jedi#goto_definitions_command   = "<localleader>d"
+let g:jedi#goto_assignments_command   = "<localleader>g"
+let g:jedi#call_signatures_command    = '<localleader>S'
+let g:jedi#rename_command_keep_name   = "<localleader>r"
+let g:jedi#usages_command             = "<localleader>u"
 
 augroup python
   autocmd!
@@ -405,8 +409,7 @@ augroup END
 
 augroup julia
   autocmd!
-  autocmd FileType julia nmap <buffer> <localleader>h K
-  autocmd FileType julia nmap <buffer> <localleader>H <Plug>(JuliaDocPrompt)
+  autocmd FileType julia nmap <buffer> <localleader>h <Plug>(JuliaDocPrompt)
 augroup END
 
 "------------------------
