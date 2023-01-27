@@ -65,9 +65,6 @@ Plugin 'gerw/vim-latex-suite'
 " R plugin.
 Plugin 'jalvesaq/Nvim-R'
 
-" Python mode
-Plugin 'python-mode/python-mode'
-
 " Plugin to send commands to an external terminal - I use for Python
 Plugin 'jalvesaq/vimcmdline'
 
@@ -356,46 +353,44 @@ let g:undotree_DiffpanelHeight = 20
 
 " Python plugins
 
-let cmdline_vsplit                    = 0
+let g:flake8_show_in_gutter             = 1
 
-let g:jedi#auto_vim_configuration     = 1
+let cmdline_app                         = {}
 
-let g:jedi#popup_on_dot               = 1
+let cmdline_app['python']               = 'ipython'
 
-let g:jedi#popup_select_first         = 1
+let cmdline_term_width                  = 120
 
-let g:jedi#completions_enabled        = 1
+let cmdline_vsplit                      = 0
 
-let g:jedi#show_call_signatures       = 1
+let g:jedi#auto_vim_configuration       = 1
 
-let g:jedi#smart_auto_mappings        = 1
+let g:jedi#completions_enabled          = 1
 
-let g:flake8_show_in_gutter           = 1
+let g:jedi#popup_on_dot                 = 1
 
-let cmdline_app                       = {}
+let g:jedi#popup_select_first           = 1
 
-let cmdline_term_width                = 120
+let g:jedi#show_call_signatures         = 1
 
-let g:jedi#show_call_signatures_delay = 200
+let g:jedi#show_call_signatures_delay   = 200
 
-let cmdline_app['python']             = 'ipython'
+let g:jedi#smart_auto_mappings          = 1
 
-let g:jedi#use_splits_not_buffers     = "winwidth"
+let g:jedi#use_splits_not_buffers       = 'winwidth'
 
-let g:jedi#environment_path           = '.virtualenv'
-
-let g:jedi#documentation_command      = "K"
-let cmdline_map_start                 = '<localleader>o'
-let cmdline_map_send                  = '<localleader>s'
-let cmdline_map_source_fun            = '<localleader>F'
-let cmdline_map_send_paragraph        = '<localleader>p'
-let cmdline_map_send_block            = '<localleader>b'
-let cmdline_map_quit                  = '<localleader>q'
-let g:jedi#goto_definitions_command   = "<localleader>d"
-let g:jedi#goto_assignments_command   = "<localleader>g"
-let g:jedi#call_signatures_command    = '<localleader>S'
-let g:jedi#rename_command_keep_name   = "<localleader>r"
-let g:jedi#usages_command             = "<localleader>u"
+let cmdline_map_quit                    = '<localleader>q'
+let cmdline_map_send                    = '<localleader>s'
+let cmdline_map_send_block              = '<localleader>b'
+let cmdline_map_send_paragraph          = '<localleader>p'
+let cmdline_map_source_fun              = '<localleader>F'
+let cmdline_map_start                   = '<localleader>o'
+let g:jedi#call_signatures_command      = '<localleader>S'
+let g:jedi#documentation_command        = "K"
+let g:jedi#goto_assignments_command     = "<localleader>g"
+let g:jedi#goto_definitions_command     = "<localleader>d"
+let g:jedi#rename_command_keep_name     = "<localleader>r"
+let g:jedi#usages_command               = "<localleader>u"
 
 augroup python
   autocmd!
