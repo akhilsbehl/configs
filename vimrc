@@ -270,32 +270,32 @@ let R_user_maps_only = 1
 
 augroup R
   autocmd!
-  autocmd FileType r nmap <buffer> K <Plug>RHelp
-  autocmd FileType r nmap <buffer> <localleader>o <Plug>RStart
-  autocmd FileType r nmap <buffer> <localleader>q <Plug>RClose
-  autocmd FileType r nmap <buffer> <localleader>l <Plug>RDSendLine
-  autocmd FileType r vmap <buffer> <localleader>s <Plug>REDSendSelection
-  autocmd FileType r nmap <buffer> <localleader>b <Plug>REDSendMBlock
-  autocmd FileType r nmap <buffer> <localleader>p <Plug>REDSendParagraph
-  autocmd FileType r nmap <buffer> <localleader>f <Plug>RSendFunction
-  autocmd FileType r nmap <buffer> <localleader>F <Plug>RSendFile
-  autocmd FileType r nmap <buffer> <localleader>g <Plug>RPlot
-  autocmd FileType r nmap <buffer> <localleader>D <Plug>RSetwd
-  autocmd FileType r nmap <buffer> <localleader>r :call RAction("rownames")<CR>
-  autocmd FileType r nmap <buffer> <localleader>c :call RAction("colnames")<CR>
-  autocmd FileType r nmap <buffer> <localleader>n :call RAction("names")<CR>
-  autocmd FileType r nmap <buffer> <localleader>N :call RAction("dimnames")<CR>
-  autocmd FileType r nmap <buffer> <localleader>d :call RAction("dim")<CR>
-  autocmd FileType r nmap <buffer> <localleader>H :call RAction("head")<CR>
-  autocmd FileType r nmap <buffer> <localleader>T :call RAction("tail")<CR>
-  autocmd FileType r nmap <buffer> <localleader>L :call RAction("length")<CR>
-  autocmd FileType r nmap <buffer> <localleader>C :call RAction("class")<CR>
-  autocmd FileType r nmap <buffer> <localleader>m <Plug>RClearAll
-  autocmd FileType r nmap <buffer> <localleader>t :call
+  autocmd FileType r nnoremap <buffer> K <Plug>RHelp
+  autocmd FileType r nnoremap <buffer> <localleader>o <Plug>RStart
+  autocmd FileType r nnoremap <buffer> <localleader>q <Plug>RClose
+  autocmd FileType r nnoremap <buffer> <localleader>l <Plug>RDSendLine
+  autocmd FileType r vnoremap <buffer> <localleader>s <Plug>REDSendSelection
+  autocmd FileType r nnoremap <buffer> <localleader>b <Plug>REDSendMBlock
+  autocmd FileType r nnoremap <buffer> <localleader>p <Plug>REDSendParagraph
+  autocmd FileType r nnoremap <buffer> <localleader>f <Plug>RSendFunction
+  autocmd FileType r nnoremap <buffer> <localleader>F <Plug>RSendFile
+  autocmd FileType r nnoremap <buffer> <localleader>g <Plug>RPlot
+  autocmd FileType r nnoremap <buffer> <localleader>D <Plug>RSetwd
+  autocmd FileType r nnoremap <buffer> <localleader>r :call RAction("rownames")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>c :call RAction("colnames")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>n :call RAction("names")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>N :call RAction("dimnames")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>d :call RAction("dim")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>H :call RAction("head")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>T :call RAction("tail")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>L :call RAction("length")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>C :call RAction("class")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>m <Plug>RClearAll
+  autocmd FileType r nnoremap <buffer> <localleader>t :call
         \ SendCmdToR("system.time({")<CR>
-  autocmd FileType r nmap <buffer> <localleader>a :call SendCmdToR("})")<CR>
-  autocmd FileType r nmap <buffer> <localleader>cc <Plug>RClearConsole
-  autocmd FileType r nmap <localleader>tb :call SendCmdToR("traceback()")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>a :call SendCmdToR("})")<CR>
+  autocmd FileType r nnoremap <buffer> <localleader>cc <Plug>RClearConsole
+  autocmd FileType r nnoremap <localleader>tb :call SendCmdToR("traceback()")<CR>
 augroup END
 
 "-------------------------
@@ -400,7 +400,7 @@ let g:jedi#usages_command             = "<localleader>u"
 augroup python
   autocmd!
   autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd FileType python nmap <buffer> <localleader>f :call Flake8()<CR>
+  autocmd FileType python nnoremap <buffer> <localleader>f :call Flake8()<CR>
 augroup END
 
 "-------------------------
@@ -409,7 +409,7 @@ augroup END
 
 augroup julia
   autocmd!
-  autocmd FileType julia nmap <buffer> <localleader>h <Plug>(JuliaDocPrompt)
+  autocmd FileType julia nnoremap <buffer> <localleader>h <Plug>(JuliaDocPrompt)
 augroup END
 
 "------------------------
@@ -420,17 +420,17 @@ let g:copilot_enabled = v:true
 
 let g:copilot_no_tab_map = v:true
 
-nmap <leader>cs :Copilot<CR>
+nnoremap <leader>cs :Copilot<CR>
 
-imap <C-s> <Plug>(copilot-suggest)
+inoremap <C-s> <Plug>(copilot-suggest)
 
-imap <C-j> <Plug>(copilot-next)
+inoremap <C-j> <Plug>(copilot-next)
 
-imap <C-k> <Plug>(copilot-previous)
+inoremap <C-k> <Plug>(copilot-previous)
 
-imap <silent><script><expr> <C-a> copilot#Accept("\<CR>")
+inoremap <silent><script><expr> <C-a> copilot#Accept("\<CR>")
 
-imap <C-d> <Plug>(copilot-dismiss)
+inoremap <C-d> <Plug>(copilot-dismiss)
 
 "-------------------------
 
@@ -474,13 +474,13 @@ augroup markdown
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    autocmd FileType markdown nmap <buffer> <localleader>t :GenTocGFM<CR>
-    autocmd FileType markdown nmap <buffer> <localleader>u :UpdateToc<CR>
-    autocmd FileType markdown nmap <buffer> <localleader>p
+    autocmd FileType markdown nnoremap <buffer> <localleader>t :GenTocGFM<CR>
+    autocmd FileType markdown nnoremap <buffer> <localleader>u :UpdateToc<CR>
+    autocmd FileType markdown nnoremap <buffer> <localleader>p
           \ :call PreviewMarkdown()<CR>
-    autocmd FileType markdown vmap <buffer> <localleader>i
+    autocmd FileType markdown vnoremap <buffer> <localleader>i
           \ :call DecorateSelection('*')<CR>
-    autocmd FileType markdown vmap <buffer> <localleader>b
+    autocmd FileType markdown vnoremap <buffer> <localleader>b
           \ :call DecorateSelection('**')<CR>
 augroup END
 
@@ -674,8 +674,8 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " Forward the clipboard over SSH when connected with forwarding.
 
-vmap "sy :!xclip -f -sel clip
-map "sp :r!xclip -o -sel clip
+vnoremap "sy :!xclip -f -sel clip
+nnoremap "sp :r!xclip -o -sel clip
 
 "-------------------------
 
