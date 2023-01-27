@@ -51,25 +51,6 @@ bindkey -v '^?' backward-delete-char
 # do not hang my terminal
 stty -ixon
 
-#####################
-#  Emacs utilities  #
-#####################
-
-alias se='emacs --daemon'
-
-alias ke='emacsclient --eval "(kill-emacs)"'
-
-alias re='emacsclient --eval "(kill-emacs)" && emacs --daemon'
-
-function e () {
-  local tmp=$(emacsclient -n -e "(if (> (length (frame-list)) 1) 't)")
-  if [[ "$tmp" == "nil" ]]; then
-    emacsclient -nc "$@"
-  else
-    emacsclient -n "$@"
-  fi
-}
-
 ###################
 # Command Aliases #
 ###################
@@ -158,15 +139,15 @@ if [[ "$OS" == "Ubuntu" ]]; then
   alias autorm='sudo apt-get autoremove'
 elif [[ "$OS" == "Arch Linux" ]]; then
   alias upgrade='packer -Syu --noconfirm --noedit'
+  alias autorm='sudo pacman -Rns $(pacman -Qqdt)'
 else
   alias upgrade='echo Unknown OS!'
+  alias autorm='echo Unknown OS!'
 fi
 
 #########################
 # Variables and Exports #
 #########################
-
-export GEM_HOME="$HOME/.gem"
 
 export PATH="$HOME/scripts:$HOME/packer:$HOME/.local/bin:$PATH"
 
@@ -177,7 +158,7 @@ export READNULLCMD='less'
 
 if [ -n "$DISPLAY" ]
 then
-  BROWSER=google-chrome-stable
+  BROWSER=chromium
   EDITOR=vim
 else
   BROWSER=elinks
@@ -467,15 +448,14 @@ cowsay -f milk -W 79 $(fortune)
 #  Source stuff local to each box  #
 ####################################
 
-# [[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
-# [[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
+[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
+[[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
 
 #######################
 #  Set up the prompt  #
 #######################
 
-OS="$(cat /etc/os-release | grep ^ID= | cut -d '=' -f 2)"
-[[ "$OS" == "ubuntu" ]] && fpath+=($HOME/.zprompt/pure)
+[[ "$OS" == "Ubuntu" ]] && fpath+=($HOME/.zprompt/pure)
 autoload -U promptinit
 promptinit
 prompt pure
