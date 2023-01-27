@@ -770,12 +770,10 @@ if &term =~ '^tmux'
     " 6 -> solid vertical bar
 
     " normal mode
-    let &t_EI .= "\e[2 q"
+    let &t_EI .= "\e[1 q"
+    " replace mode
+    let &t_SR .= "\e[3 q"
     " insert mode
-    let &t_SI .= "\e[6 q"
+    let &t_SI .= "\e[5 q"
 
-    augroup windows_term
-      autocmd!
-      autocmd VimEnter,VimLeave * silent !echo -ne "\<Esc>]12;orange\x7"
-    augroup END
 endif
