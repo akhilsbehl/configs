@@ -62,11 +62,8 @@ Plugin 'honza/vim-snippets'
 " Latex suite.
 Plugin 'gerw/vim-latex-suite'
 
-" R plugin.
-Plugin 'jalvesaq/Nvim-R'
-
-" Plugin to send commands to an external terminal - I use for Python
-Plugin 'jalvesaq/vimcmdline'
+" Sending commands from vim to tmux
+Plugin 'jpalardy/vim-slime'
 
 " Better indentation for Python
 Plugin 'hynek/vim-python-pep8-indent'
@@ -245,58 +242,6 @@ nnoremap <silent> <leader>cA <Plug>NERDCommenterAppend
 
 "-------------------------
 
-" Nvim-R plugin
-
-let g:Rout_prompt_str = 'R> '
-
-let R_external_term = 'tmux split-pane'
-
-let R_assign = 0
-
-let R_nvimpager = "vertical"
-
-let R_editor_w = 80
-
-let R_editor_h = 60
-
-let Rout_more_colors = 1
-
-let R_indent_commented = 0
-
-let R_user_maps_only = 1
-
-augroup R
-  autocmd!
-  autocmd FileType r nnoremap <buffer> K <Plug>RHelp
-  autocmd FileType r nnoremap <buffer> <localleader>o <Plug>RStart
-  autocmd FileType r nnoremap <buffer> <localleader>q <Plug>RClose
-  autocmd FileType r nnoremap <buffer> <localleader>l <Plug>RDSendLine
-  autocmd FileType r vnoremap <buffer> <localleader>s <Plug>REDSendSelection
-  autocmd FileType r nnoremap <buffer> <localleader>b <Plug>REDSendMBlock
-  autocmd FileType r nnoremap <buffer> <localleader>p <Plug>REDSendParagraph
-  autocmd FileType r nnoremap <buffer> <localleader>f <Plug>RSendFunction
-  autocmd FileType r nnoremap <buffer> <localleader>F <Plug>RSendFile
-  autocmd FileType r nnoremap <buffer> <localleader>g <Plug>RPlot
-  autocmd FileType r nnoremap <buffer> <localleader>D <Plug>RSetwd
-  autocmd FileType r nnoremap <buffer> <localleader>r :call RAction("rownames")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>c :call RAction("colnames")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>n :call RAction("names")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>N :call RAction("dimnames")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>d :call RAction("dim")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>H :call RAction("head")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>T :call RAction("tail")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>L :call RAction("length")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>C :call RAction("class")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>m <Plug>RClearAll
-  autocmd FileType r nnoremap <buffer> <localleader>t :call
-        \ SendCmdToR("system.time({")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>a :call SendCmdToR("})")<CR>
-  autocmd FileType r nnoremap <buffer> <localleader>cc <Plug>RClearConsole
-  autocmd FileType r nnoremap <localleader>tb :call SendCmdToR("traceback()")<CR>
-augroup END
-
-"-------------------------
-
 " Latex-Suite
 
 set grepprg=grep\ -nH\ $*
@@ -351,17 +296,26 @@ let g:undotree_DiffpanelHeight = 20
 
 "-------------------------
 
+" Slime configuration
+
+let g:slime_target = "tmux"
+
+let g:slime_preserve_curpos = 1
+
+let g:slime_bracketed_paste = 1
+
+let g:slime_paste_file = "/tmp/slime_paste_file"
+
+xnoremap <buffer> <localleader>s <Plug>SlimeRegionSend
+nnoremap <buffer> <localleader>l <Plug>SlimeLineSend
+nnoremap <buffer> <localleader>p <Plug>SlimeParagraphSend
+nnoremap <buffer> <localleader>m <Plug>SlimeMotionSend
+
+"-------------------------
+
 " Python plugins
 
 let g:flake8_show_in_gutter             = 1
-
-let cmdline_app                         = {}
-
-let cmdline_app['python']               = 'ipython'
-
-let cmdline_term_width                  = 120
-
-let cmdline_vsplit                      = 0
 
 let g:jedi#auto_vim_configuration       = 1
 
@@ -379,14 +333,8 @@ let g:jedi#smart_auto_mappings          = 1
 
 let g:jedi#use_splits_not_buffers       = 'winwidth'
 
-let cmdline_map_quit                    = '<localleader>q'
-let cmdline_map_send                    = '<localleader>s'
-let cmdline_map_send_block              = '<localleader>b'
-let cmdline_map_send_paragraph          = '<localleader>p'
-let cmdline_map_source_fun              = '<localleader>F'
-let cmdline_map_start                   = '<localleader>o'
-let g:jedi#call_signatures_command      = '<localleader>S'
 let g:jedi#documentation_command        = "K"
+let g:jedi#call_signatures_command      = '<localleader>S'
 let g:jedi#goto_assignments_command     = "<localleader>g"
 let g:jedi#goto_definitions_command     = "<localleader>d"
 let g:jedi#rename_command_keep_name     = "<localleader>r"
@@ -419,9 +367,9 @@ nnoremap <leader>cs :Copilot<CR>
 
 inoremap <C-s> <Plug>(copilot-suggest)
 
-inoremap <C-j> <Plug>(copilot-next)
+inoremap <C-n> <Plug>(copilot-next)
 
-inoremap <C-k> <Plug>(copilot-previous)
+inoremap <C-p> <Plug>(copilot-previous)
 
 inoremap <silent><script><expr> <C-a> copilot#Accept("\<CR>")
 
