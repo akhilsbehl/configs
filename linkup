@@ -69,6 +69,8 @@ if [[ "$1" == "--vundle" || "$2" == "--vundle" ]]; then
       $HOME/.vim/bundle/Vundle.vim
   vim -u NONE +PluginInstall +qall
 fi
+[[ -f $HOME/mysnippets ]] && rm $HOME/mysnippets
+ln -s $PWD/snippets $HOME/mysnippets
 
 rm -rf $HOME/.tmux/plugins/tpm
 git clone 'https://github.com/tmux-plugins/tpm' $HOME/.tmux/plugins/tpm
@@ -188,7 +190,9 @@ if [[ "$1" == "--wsl" || "$2" == "--wsl" ]]; then
   ln -s $PWD/zshrc.docker $HOME/.zshrc.docker
   touch $HOME/.zshrc.more
 
-  source zshrc.wsl; cp $PWD/windows-terminal-settings.json $WIN_TERM_SETTINGS
+  source zshrc
+  source zshrc.wsl
+  cp $PWD/windows-terminal-settings.json $WIN_TERM_SETTINGS
 
 fi
 
