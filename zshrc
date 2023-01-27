@@ -448,8 +448,9 @@ cowsay -f milk -W 79 $(fortune)
 #  Source stuff local to each box  #
 ####################################
 
-[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
+[[ -f ~/.zshrc.wsl ]] && source ~/.zshrc.wsl
 [[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
+[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
 
 #######################
 #  Set up the prompt  #
