@@ -400,7 +400,7 @@ let g:jedi#usages_command             = "<localleader>u"
 augroup python
   autocmd!
   autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd FileType python map <buffer> <localleader>f :call Flake8()<CR>
+  autocmd FileType python nmap <buffer> <localleader>f :call Flake8()<CR>
 augroup END
 
 "-------------------------
@@ -474,14 +474,14 @@ augroup markdown
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    " <localleader>m is really hard to type
-    autocmd FileType markdown map <localleader>p :call PreviewMarkdown()<CR>
-    autocmd FileType markdown map <localleader>i
+    autocmd FileType markdown nmap <buffer> <localleader>t :GenTocGFM<CR>
+    autocmd FileType markdown nmap <buffer> <localleader>u :UpdateToc<CR>
+    autocmd FileType markdown nmap <buffer> <localleader>p
+          \ :call PreviewMarkdown()<CR>
+    autocmd FileType markdown vmap <buffer> <localleader>i
           \ :call DecorateSelection('*')<CR>
-    autocmd FileType markdown map <localleader>b
+    autocmd FileType markdown vmap <buffer> <localleader>b
           \ :call DecorateSelection('**')<CR>
-    autocmd FileType markdown map <localleader>t :GenTocGFM<CR>
-    autocmd FileType markdown map <localleader>u :UpdateToc<CR>
 augroup END
 
 "-------------------------
