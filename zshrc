@@ -467,14 +467,14 @@ cowsay -f milk -W 79 $(fortune)
 #  Source stuff local to each box  #
 ####################################
 
-[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
-[[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
+# [[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
+# [[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
 
 #######################
 #  Set up the prompt  #
 #######################
 
-OS=$(cat /etc/os-release | grep ^ID= | cut -d '=' -f 2)
+OS="$(cat /etc/os-release | grep ^ID= | cut -d '=' -f 2)"
 [[ "$OS" == "ubuntu" ]] && fpath+=($HOME/.zprompt/pure)
 autoload -U promptinit
 promptinit
