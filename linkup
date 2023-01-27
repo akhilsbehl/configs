@@ -81,8 +81,8 @@ if [[ "$OS" == "ubuntu" ]]; then
 fi
 
 if [[ "$OS" == "arch" ]]; then
-  if [[ "$(command -v parus > /dev/null)" ]]; then
-    paru -S zsh-pure-prompt-git
+  if [[ "$(command -v paru > /dev/null)" ]]; then
+    paru -S --needed zsh-pure-prompt-git
   else
     echo "paru not found. Install paru first and then zsh-pure-prompt-git"
   fi
