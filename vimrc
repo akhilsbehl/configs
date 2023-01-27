@@ -759,7 +759,6 @@ nnoremap <leader>dpl :diffput LO<CR>
 " https://github.com/microsoft/terminal/issues/4335
 
 if &term =~ '^tmux'
-    " Cursor in terminal:
     " Link: https://vim.fandom.com/wiki/Configuring_the_cursor
     " 0 -> blinking block not working in wsl
     " 1 -> blinking block
@@ -771,13 +770,13 @@ if &term =~ '^tmux'
     " 6 -> solid vertical bar
 
     " normal mode
-    let &t_EI .= "\e[2 q"
+    let &t_EI .= "\<Esc>]12;orange\x7"
     " insert mode
     let &t_SI .= "\e[6 q"
 
     augroup windows_term
       autocmd!
-      autocmd VimEnter * silent !echo -ne "\e[2 q"
-      autocmd VimLeave * silent !echo -ne "\e[6 q"
+      autocmd VimEnter * silent !echo -ne "\<Esc>]12;orange\x7"
+      autocmd VimLeave * silent !echo -ne "\033]112\007"
     augroup END
 endif
