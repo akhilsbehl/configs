@@ -332,6 +332,10 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 let g:UltiSnipsListSnippets="<c-l>"
 
+let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit="~/.vim/mysnippets"
+
+let g:UltiSnipsSnippetDirectories=["mysnippets", "UltiSnips"]
+
 "-------------------------
 
 " Supertab
