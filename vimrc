@@ -65,6 +65,9 @@ Plugin 'gerw/vim-latex-suite'
 " R plugin.
 Plugin 'jalvesaq/Nvim-R'
 
+" Python mode
+Plugin 'python-mode/python-mode'
+
 " Plugin to send commands to an external terminal - I use for Python
 Plugin 'jalvesaq/vimcmdline'
 
@@ -189,9 +192,11 @@ set switchbuf="useopen,usetab"
 
 "-------------------------
 
-let mapleader=","
+nnoremap "," <NOP>
+nnoremap "\<Space>" <NOP>
 
-let maplocalleader="."
+let mapleader=","
+let maplocalleader="\<Space>"
 
 "-------------------------
 
@@ -265,30 +270,31 @@ let R_user_maps_only = 1
 
 augroup R
   autocmd!
-  autocmd FileType r nmap <localleader>o <Plug>RStart
-  autocmd FileType r nmap <localleader>q <Plug>RClose
-  autocmd FileType r nmap <localleader>l <Plug>RDSendLine
-  autocmd FileType r vmap <localleader>s <Plug>REDSendSelection
-  autocmd FileType r nmap <localleader>b <Plug>REDSendMBlock
-  autocmd FileType r nmap <localleader>p <Plug>REDSendParagraph
-  autocmd FileType r nmap <localleader>f <Plug>RSendFunction
-  autocmd FileType r nmap <localleader>F <Plug>RSendFile
-  autocmd FileType r nmap <localleader>h <Plug>RHelp
-  autocmd FileType r nmap <localleader>g <Plug>RPlot
-  autocmd FileType r nmap <localleader>D <Plug>RSetwd
-  autocmd FileType r nmap <localleader>r :call RAction("rownames")<CR>
-  autocmd FileType r nmap <localleader>c :call RAction("colnames")<CR>
-  autocmd FileType r nmap <localleader>n :call RAction("names")<CR>
-  autocmd FileType r nmap <localleader>N :call RAction("dimnames")<CR>
-  autocmd FileType r nmap <localleader>d :call RAction("dim")<CR>
-  autocmd FileType r nmap <localleader>H :call RAction("head")<CR>
-  autocmd FileType r nmap <localleader>T :call RAction("tail")<CR>
-  autocmd FileType r nmap <localleader>L :call RAction("length")<CR>
-  autocmd FileType r nmap <localleader>C :call RAction("class")<CR>
-  autocmd FileType r nmap <localleader>m <Plug>RClearAll
-  autocmd FileType r nmap <localleader>cc <Plug>RClearConsole
-  autocmd FileType r nmap <localleader>t :call SendCmdToR("system.time({")<CR>
-  autocmd FileType r nmap <localleader>a :call SendCmdToR("})")<CR>
+  autocmd FileType r nmap <buffer> <localleader>o <Plug>RStart
+  autocmd FileType r nmap <buffer> <localleader>q <Plug>RClose
+  autocmd FileType r nmap <buffer> <localleader>l <Plug>RDSendLine
+  autocmd FileType r vmap <buffer> <localleader>s <Plug>REDSendSelection
+  autocmd FileType r nmap <buffer> <localleader>b <Plug>REDSendMBlock
+  autocmd FileType r nmap <buffer> <localleader>p <Plug>REDSendParagraph
+  autocmd FileType r nmap <buffer> <localleader>f <Plug>RSendFunction
+  autocmd FileType r nmap <buffer> <localleader>F <Plug>RSendFile
+  autocmd FileType r nmap <buffer> <localleader>h <Plug>RHelp
+  autocmd FileType r nmap <buffer> <localleader>g <Plug>RPlot
+  autocmd FileType r nmap <buffer> <localleader>D <Plug>RSetwd
+  autocmd FileType r nmap <buffer> <localleader>r :call RAction("rownames")<CR>
+  autocmd FileType r nmap <buffer> <localleader>c :call RAction("colnames")<CR>
+  autocmd FileType r nmap <buffer> <localleader>n :call RAction("names")<CR>
+  autocmd FileType r nmap <buffer> <localleader>N :call RAction("dimnames")<CR>
+  autocmd FileType r nmap <buffer> <localleader>d :call RAction("dim")<CR>
+  autocmd FileType r nmap <buffer> <localleader>H :call RAction("head")<CR>
+  autocmd FileType r nmap <buffer> <localleader>T :call RAction("tail")<CR>
+  autocmd FileType r nmap <buffer> <localleader>L :call RAction("length")<CR>
+  autocmd FileType r nmap <buffer> <localleader>C :call RAction("class")<CR>
+  autocmd FileType r nmap <buffer> <localleader>m <Plug>RClearAll
+  autocmd FileType r nmap <buffer> <localleader>t :call
+        \ SendCmdToR("system.time({")<CR>
+  autocmd FileType r nmap <buffer> <localleader>a :call SendCmdToR("})")<CR>
+  autocmd FileType r nmap <buffer> <localleader>cc <Plug>RClearConsole
   autocmd FileType r nmap <localleader>tb :call SendCmdToR("traceback()")<CR>
 augroup END
 
