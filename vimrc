@@ -309,7 +309,7 @@ let g:slime_paste_file = "/tmp/slime_paste_file"
 xnoremap <buffer> <localleader>s <Plug>SlimeRegionSend
 nnoremap <buffer> <localleader>l <Plug>SlimeLineSend
 nnoremap <buffer> <localleader>p <Plug>SlimeParagraphSend
-nnoremap <buffer> <localleader>m <Plug>SlimeMotionSend
+nnoremap <buffer> <localleader>M <Plug>SlimeMotionSend
 
 "-------------------------
 
@@ -337,7 +337,8 @@ let g:jedi#documentation_command        = "K"
 let g:jedi#call_signatures_command      = '<localleader>S'
 let g:jedi#goto_assignments_command     = "<localleader>g"
 let g:jedi#goto_definitions_command     = "<localleader>d"
-let g:jedi#rename_command_keep_name     = "<localleader>r"
+let g:jedi#rename_command               = "<localleader>r"
+let g:jedi#rename_command_keep_name     = "<localleader>R"
 let g:jedi#usages_command               = "<localleader>u"
 
 augroup python
@@ -367,11 +368,12 @@ nnoremap <leader>cs :Copilot<CR>
 
 inoremap <C-s> <Plug>(copilot-suggest)
 
-inoremap <C-n> <Plug>(copilot-next)
+inoremap <C-j> <Nop>
+inoremap <C-j> <Plug>(copilot-next)
 
-inoremap <C-p> <Plug>(copilot-previous)
+inoremap <C-k> <Plug>(copilot-previous)
 
-inoremap <silent><script><expr> <C-a> copilot#Accept("\<CR>")
+inoremap <silent><script><expr> <S-Tab> copilot#Accept("\<CR>")
 
 inoremap <C-d> <Plug>(copilot-dismiss)
 
