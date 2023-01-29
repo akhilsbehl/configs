@@ -341,10 +341,28 @@ let g:jedi#rename_command               = "<localleader>r"
 let g:jedi#rename_command_keep_name     = "<localleader>R"
 let g:jedi#usages_command               = "<localleader>u"
 
+function! AddPyBreakpoint()
+  let l:line = line('.')
+  let l:col = col('.')
+  call feedkeys('Oimport pdb;pdb.set_trace()', 'nx')
+  call cursor(l:line + 1, l:col)
+endfunction
+
+function RemovePyBreakpoint()
+  let l:line = line('.')
+  let l:col = col('.')
+  call feedkeys('kdd', 'nx')
+  call cursor(l:line - 1, l:col)
+endfunction
+
 augroup python
   autocmd!
   autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
   autocmd FileType python nnoremap <buffer> <localleader>f :call Flake8()<CR>
+  autocmd FileType python nnoremap <buffer> <localleader>ba
+        \ :call AddPyBreakpoint()<CR>
+  autocmd FileType python nnoremap <buffer> <localleader>br
+        \ :call RemovePyBreakpoint()<CR>
 augroup END
 
 "-------------------------
