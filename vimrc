@@ -373,7 +373,12 @@ inoremap <C-j> <Plug>(copilot-next)
 
 inoremap <C-k> <Plug>(copilot-previous)
 
-inoremap <silent><script><expr> <S-Tab> copilot#Accept("\<CR>")
+inoremap <expr> <S-Tab> copilot#Accept("")
+" For some reason this mapping requires sourcing the rc once again
+augroup CopilotHack
+  autocmd!
+  autocmd VimEnter * source $MYVIMRC
+augroup END
 
 inoremap <C-d> <Plug>(copilot-dismiss)
 
