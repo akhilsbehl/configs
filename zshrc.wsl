@@ -7,6 +7,11 @@ alias winsu='runas.exe /user:admin'
 alias cmd='cmd.exe'
 alias psh='powershell.exe'
 
+alias susp='rundll32.exe powrprof.dll, SetSuspendState Sleep'
+alias freeze='rundll32.exe powrprof.dll, SetSuspendState Hibernate'
+alias die='shutdown.exe -s -t 0'
+alias respawn='shutdown.exe -r -t 0'
+
 if [[ -d "/mnt/wslg" ]]; then # WSLG
   export WSL_VER=2
   export WSLG=1
