@@ -700,6 +700,24 @@ nnoremap <leader>dpl :diffput LO<CR>
 
 "-------------------------
 
+function! SaveAsInPlace()
+" Rename current buffer's filename
+" delete old file from buffer
+" reload new file into buffer
+  let l:oldname = expand('%:p')
+  let l:newname = input('New name: ', expand('%:p'))
+  if l:newname != l:oldname
+    silent! execute 'silent! write ' . l:newname
+    silent! execute 'silent! bdelete ' . l:oldname
+    silent! execute 'silent! edit ' . l:newname
+    silent! execute '!rm ' . l:oldname
+  endif
+endfunction
+
+nnoremap <leader>sr :call SaveAsInPlace()<CR>
+
+"-------------------------
+
 " Fixing the cursor shapes in WSL vim
 " https://github.com/microsoft/terminal/issues/4335
 
