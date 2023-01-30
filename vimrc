@@ -51,9 +51,13 @@ Plugin 'andymass/vim-matchup'
 
 " Snippets even though Copilot
 Plugin 'SirVer/UltiSnips'
-
-" Mostly for the boxed comments
 Plugin 'honza/vim-snippets'
+
+" Ale for LSP
+Plugin 'dense-analysis/ale'
+
+" Sending commands from vim to tmux
+Plugin 'jpalardy/vim-slime'
 
 "-------------------------
 
@@ -62,17 +66,8 @@ Plugin 'honza/vim-snippets'
 " Latex suite.
 Plugin 'gerw/vim-latex-suite'
 
-" Sending commands from vim to tmux
-Plugin 'jpalardy/vim-slime'
-
-" Better indentation for Python
-Plugin 'hynek/vim-python-pep8-indent'
-
-" Jedi for Python
-Plugin 'davidhalter/jedi-vim'
-
-" Flake8 linter.
-Plugin 'nvie/vim-flake8'
+" Better folding for Python
+Plugin 'tmhedberg/SimpylFold'
 
 " Javascript indentation for vim.
 Plugin 'pangloss/vim-javascript'
@@ -88,13 +83,17 @@ Plugin 'akhilsbehl/md-image-paste'
 
 "-------------------------
 
-" Coloring related stuff
+" Stuff to make things prettier
 
 " Escape shell color codes in Vim.
 Plugin 'AnsiEsc.vim'
 
 " Gruvbox colorscheme.
 Plugin 'morhetz/gruvbox'
+
+" Airline for statusline.
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 "-------------------------
 
@@ -186,11 +185,23 @@ set switchbuf="useopen,usetab"
 
 "-------------------------
 
+" Set the leaders.
+
 nnoremap "," <NOP>
 nnoremap "\<Space>" <NOP>
 
 let mapleader=","
 let maplocalleader="\<Space>"
+
+"-------------------------
+
+" Configure airline themes & statusline.
+
+let g:airline#extensions#ale#enabled       = 1
+let g:airline_powerline_fonts              = 1
+let g:airline_theme                        = 'base16_gruvbox_dark_hard'
+let g:ariline#extensions#tabline#enabled   = 1
+let g:ariline#extensions#tabline#formatter = 'default'
 
 "-------------------------
 
@@ -225,15 +236,90 @@ nnoremap <silent> <leader>fr :call fzf#run({
 
 "-------------------------
 
+" Ale related configuration
+
+let g:ale_change_sign_column_color = 1
+let g:ale_comletion_autoimport = 1
+let g:ale_completion_delay = 20
+let g:ale_completion_enabled = 1
+let g:ale_cursor_detail = 1
+let g:ale_detail_to_floating_preview = 1
+let g:ale_enabled = 1
+let g:ale_fixers = {
+      \ 'python': [
+            \ 'add_blank_lines_for_python_control_statements',
+            \ 'autoimport',
+            \ 'black',
+            \ 'remove_trailing_lines',
+            \ 'trim_whitespace',
+      \ ],
+      \ 'r': ['styler'],
+      \ 'markdown': ['prettier'],
+      \ 'sh': ['shfmt'],
+      \ 'bash': ['shfmt'],
+      \ }
+let g:ale_floating_preview = 1
+let g:ale_hover_to_floating_preview = 1
+let g:ale_lint_delay = 1000
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_filetype_changed = 1
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_linter_aliases = {
+      \ 'rmarkdown': 'r',
+      \ 'rmd': 'r',
+      \ 'zsh': 'sh',
+      \}
+let g:ale_linters = {
+      \ 'python': ['flake8', 'pyright'],
+      \ 'r': ['lintr', 'styler'],
+      \ 'markdown': ['mdl', 'textlint'],
+      \ 'sh': ['shellcheck'],
+      \ 'bash': ['shellcheck'],
+      \ 'zsh': ['shellcheck'],
+      \ 'vim': ['vint', 'vimls'],
+      \  }
+let g:ale_linters_explicit = 1
+let g:ale_lsp_suggestions = 1
+let g:ale_python_flake8_change_directory = 'file'
+let g:ale_set_highlights = 1
+let g:ale_set_quickfix = 1
+let g:ale_set_signs = 1
+let g:ale_sign_column_always = 1
+let g:ale_virtualenv_dir_names = ['.virtualenv']
+let g:ale_virtualtext_cursor = 0
+set omnifunc=ale#completion#OmniFunc
+nnoremap <leader>aD <Plug>(ale_go_to_type_definition_in_split)
+nnoremap <leader>aF :ALEInfoToFile<Space>
+nnoremap <leader>aH <Plug>(ale_hover)
+nnoremap <leader>aI <Plug>(ale_import)
+nnoremap <leader>aR <Plug>(ale_find_references)
+nnoremap <leader>aT <Plug>(ale_Reset)
+nnoremap <leader>ad <Plug>(ale_go_to_definition_in_split)
+nnoremap <leader>af <Plug>(ale_fix)
+nnoremap <leader>ah <Plug>(ale_documentation)
+nnoremap <leader>ai <Plug>(ale_go_to_implementation_in_split)
+nnoremap <leader>aj <Plug>(ale_next_wrap)
+nnoremap <leader>ak <Plug>(ale_previous_wrap)
+nnoremap <leader>al <Plug>(ale_lint)
+nnoremap <leader>ar <Plug>(ale_rename)
+nnoremap <leader>at <Plug>(ale_toggle)
+
+" Show function signature after dot-completion
+augroup ALEHoverAfterComplete                                                        
+  autocmd!                                                                    
+  autocmd User ALECompletePost ALEHover                                       
+augroup END
+
+"-------------------------
+
 " NerdCommenter
 
-let g:NERDCreateDefaultMappings = 0
-
-let NERDSpaceDelims = 1
-
 let NERDRemoveExtraSpaces = 1
-
+let NERDSpaceDelims = 1
 let NERDToggleCheckAllLines = 1
+let g:NERDCreateDefaultMappings = 0
 
 " Normal & visual mode map
 nnoremap <silent> <leader>c<space> <Plug>NERDCommenterToggle
@@ -244,23 +330,15 @@ nnoremap <silent> <leader>cA <Plug>NERDCommenterAppend
 
 " Latex-Suite
 
-set grepprg=grep\ -nH\ $*
-
-let g:tex_flavor='latex'
-
-let g:Tex_ViewRule_pdf='mupdf'
-
 let g:Tex_DefaultTargetFormat='pdf'
-
-let g:Tex_SmartKeyQuote=0
-
-let g:Tex_UseMakefile=0
-
-let g:Tex_FoldedSections=""
-
 let g:Tex_FoldedEnvironments=""
-
 let g:Tex_FoldedMisc=""
+let g:Tex_FoldedSections=""
+let g:Tex_SmartKeyQuote=0
+let g:Tex_UseMakefile=0
+let g:Tex_ViewRule_pdf='mupdf'
+let g:tex_flavor='latex'
+set grepprg=grep\ -nH\ $*
 
 "-------------------------
 
@@ -273,10 +351,8 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 " UltiSnips
 
 let g:UltiSnipsListSnippets="<c-l>"
-
-let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit="~/.vim/mysnippets"
-
 let g:UltiSnipsSnippetDirectories=["mysnippets", "UltiSnips"]
+let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit="~/.vim/mysnippets"
 
 "-------------------------
 
@@ -288,58 +364,25 @@ let g:SuperTabDefaultCompletionType = 'context'
 
 " Undotree
 
-nnoremap <leader>ut :UndotreeToggle<CR>
-
+let g:undotree_DiffpanelHeight = 20
 let g:undotree_WindowLayout = 2
 
-let g:undotree_DiffpanelHeight = 20
+nnoremap <leader>ut :UndotreeToggle<CR>
 
 "-------------------------
 
 " Slime configuration
 
-let g:slime_target = "tmux"
-
-let g:slime_preserve_curpos = 1
-
 let g:slime_bracketed_paste = 1
-
 let g:slime_paste_file = "/tmp/slime_paste_file"
-
+let g:slime_preserve_curpos = 1
+let g:slime_target = "tmux"
 xnoremap <buffer> <localleader>s <Plug>SlimeRegionSend
 nnoremap <buffer> <localleader>l <Plug>SlimeLineSend
 nnoremap <buffer> <localleader>p <Plug>SlimeParagraphSend
 nnoremap <buffer> <localleader>M <Plug>SlimeMotionSend
 
 "-------------------------
-
-" Python plugins
-
-let g:flake8_show_in_gutter             = 1
-
-let g:jedi#auto_vim_configuration       = 1
-
-let g:jedi#completions_enabled          = 1
-
-let g:jedi#popup_on_dot                 = 1
-
-let g:jedi#popup_select_first           = 1
-
-let g:jedi#show_call_signatures         = 1
-
-let g:jedi#show_call_signatures_delay   = 200
-
-let g:jedi#smart_auto_mappings          = 1
-
-let g:jedi#use_splits_not_buffers       = 'winwidth'
-
-let g:jedi#documentation_command        = "K"
-let g:jedi#call_signatures_command      = '<localleader>S'
-let g:jedi#goto_assignments_command     = "<localleader>g"
-let g:jedi#goto_definitions_command     = "<localleader>d"
-let g:jedi#rename_command               = "<localleader>r"
-let g:jedi#rename_command_keep_name     = "<localleader>R"
-let g:jedi#usages_command               = "<localleader>u"
 
 function! AddPyBreakpoint()
   let l:line = line('.')
@@ -355,10 +398,23 @@ function RemovePyBreakpoint()
   call cursor(l:line - 1, l:col)
 endfunction
 
+function ActivateVirtualEnv()
+python3 << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  env_path = os.environ['VIRTUAL_ENV']
+  to_activate = os.path.join(env_path, 'bin', 'activate_this.py')
+  with open(to_activate) as f:
+    code = compile(f.read(), to_activate, 'exec')
+    exec(code, dict(__file__=to_activate))
+EOF
+endfunction
+
 augroup python
   autocmd!
   autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd FileType python nnoremap <buffer> <localleader>f :call Flake8()<CR>
+  autocmd BufEnter *.py call ActivateVirtualEnv()
   autocmd FileType python nnoremap <buffer> <localleader>ba
         \ :call AddPyBreakpoint()<CR>
   autocmd FileType python nnoremap <buffer> <localleader>br
@@ -379,44 +435,30 @@ augroup END
 " Github Copilot
 
 let g:copilot_enabled = v:true
-
 let g:copilot_no_tab_map = v:true
 
-nnoremap <leader>cs :Copilot<CR>
-
-inoremap <C-s> <Plug>(copilot-suggest)
-
+inoremap <C-d> <Plug>(copilot-dismiss)
 inoremap <C-j> <Nop>
 inoremap <C-j> <Plug>(copilot-next)
-
 inoremap <C-k> <Plug>(copilot-previous)
-
+inoremap <C-s> <Plug>(copilot-suggest)
 inoremap <expr> <S-Tab> copilot#Accept("")
-" For some reason this mapping requires sourcing the rc once again
+nnoremap <leader>cs :Copilot<CR>
+
+" For some reason copilot$Accept mapping requires sourcing the rc once again
 augroup CopilotHack
   autocmd!
   autocmd VimEnter * source $MYVIMRC
 augroup END
 
-inoremap <C-d> <Plug>(copilot-dismiss)
-
 "-------------------------
 
 " Markdown config
 
-" vim-markdown-toc
-
 let g:vmt_auto_update_on_save = 1
-
-let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
-
 let g:vmt_fence_closing_text = 'toc-marker : do-not-edit-this-line'
-
 let g:vmt_fence_hidden_markdown_style = 'GFM'
-
-"-------------------------
-
-" Preview markdown
+let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
 
 function PreviewMarkdown()
   let outFile = './' . expand('%:r') . '.html'
@@ -424,7 +466,6 @@ function PreviewMarkdown()
   silent execute '!md2html % >' . outFile
   silent execute 'redraw!'
 endfunction
-
 
 function! DecorateSelection(str)
   normal gv"xy
@@ -436,20 +477,18 @@ function! DecorateSelection(str)
   normal "xp
 endfunction
 
-" Use the github flavored markdown by default.
-
 augroup markdown
-    autocmd!
-    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
-    autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-    autocmd FileType markdown nnoremap <buffer> <localleader>t :GenTocGFM<CR>
-    autocmd FileType markdown nnoremap <buffer> <localleader>u :UpdateToc<CR>
-    autocmd FileType markdown nnoremap <buffer> <localleader>p
-          \ :call PreviewMarkdown()<CR>
-    autocmd FileType markdown vnoremap <buffer> <localleader>i
-          \ :call DecorateSelection('*')<CR>
-    autocmd FileType markdown vnoremap <buffer> <localleader>b
-          \ :call DecorateSelection('**')<CR>
+  autocmd!
+  autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
+  autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
+  autocmd FileType markdown nnoremap <buffer> <localleader>t :GenTocGFM<CR>
+  autocmd FileType markdown nnoremap <buffer> <localleader>u :UpdateToc<CR>
+  autocmd FileType markdown nnoremap <buffer> <localleader>p
+        \ :call PreviewMarkdown()<CR>
+  autocmd FileType markdown vnoremap <buffer> <localleader>i
+        \ :call DecorateSelection('*')<CR>
+  autocmd FileType markdown vnoremap <buffer> <localleader>b
+        \ :call DecorateSelection('**')<CR>
 augroup END
 
 "-------------------------
@@ -608,21 +647,14 @@ nnoremap <leader>fp gqipj
 
 set clipboard=unnamedplus
 
-" Copy a paragraph to the os clipboard.
-
-nnoremap <leader>yp mzyip`z
-
 " Copy the whole buffer to the os clipboard.
-
 nnoremap <leader>yb mzggyG`z
-
-" Copy up to point to the os clipboard.
-
-nnoremap <leader>yu mzygg`z
-
 " Copy from point to the os clipboard.
-
 nnoremap <leader>yf mzyG`z
+" Copy a paragraph to the os clipboard.
+nnoremap <leader>yp mzyip`z
+" Copy up to point to the os clipboard.
+nnoremap <leader>yu mzygg`z
 
 "-------------------------
 
@@ -723,6 +755,24 @@ nnoremap <leader>dpl :diffput LO<CR>
 
 "-------------------------
 
+" Working with quickfix and loclist
+
+nnoremap <leader>qo :copen<CR>
+nnoremap <leader>qc :cclose<CR>
+nnoremap <leader>qn :cnext<CR>
+nnoremap <leader>qp :cprev<CR>
+nnoremap <leader>qf :cfirst<CR>
+nnoremap <leader>ql :clast<CR>
+
+nnoremap <leader>lo :lopen<CR>
+nnoremap <leader>lc :lclose<CR>
+nnoremap <leader>ln :lnext<CR>
+nnoremap <leader>lp :lprev<CR>
+nnoremap <leader>lf :lfirst<CR>
+nnoremap <leader>ll :llast<CR>
+
+"-------------------------
+
 function! SaveAsInPlace()
 " Rename current buffer's filename
 " delete old file from buffer
@@ -754,12 +804,10 @@ if &term =~ '^tmux'
     " Recent versions of xterm (282 or above) also support
     " 5 -> blinking vertical bar
     " 6 -> solid vertical bar
-
     " normal mode
     let &t_EI .= "\e[1 q"
     " replace mode
     let &t_SR .= "\e[3 q"
     " insert mode
     let &t_SI .= "\e[5 q"
-
 endif
