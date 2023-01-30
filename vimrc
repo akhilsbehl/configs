@@ -307,9 +307,9 @@ nnoremap <leader>ar <Plug>(ale_rename)
 nnoremap <leader>at <Plug>(ale_toggle)
 
 " Show function signature after dot-completion
-augroup ALEHoverAfterComplete                                                        
-  autocmd!                                                                    
-  autocmd User ALECompletePost ALEHover                                       
+augroup ALEHoverAfterComplete
+  autocmd!
+  autocmd User ALECompletePost ALEHover
 augroup END
 
 "-------------------------
