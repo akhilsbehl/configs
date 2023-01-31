@@ -290,7 +290,7 @@ let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_virtualenv_dir_names = ['.virtualenv']
 let g:ale_virtualtext_cursor = 0
-set omnifunc=ale#completion#OmniFunc
+set omnifunc=ale#completion#OmniFunc  " Overrides global omnifunc.
 nnoremap <leader>aD <Plug>(ale_go_to_type_definition_in_split)
 nnoremap <leader>aF :ALEInfoToFile<Space>
 nnoremap <leader>ah <Plug>(ale_hover)
@@ -499,9 +499,9 @@ augroup END
 
 augroup HTMLSetup
   autocmd!
-  autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist
-  autocmd FileType html set filetype=html.javascript
-  autocmd FileType javascript set textwidth=0 wrapmargin=0 wrap nolist
+  autocmd FileType html setlocal textwidth=0 wrapmargin=0 wrap nolist
+  autocmd FileType html setlocal filetype=html.javascript
+  autocmd FileType javascript setlocal textwidth=0 wrapmargin=0 wrap nolist
 augroup END
 
 "-------------------------
