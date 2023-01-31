@@ -129,14 +129,14 @@ set nocompatible
 set autochdir
 
 " Look and feel options.
-set cursorline cursorcolumn ruler number numberwidth=4 showmode showcmd mousefocus
-set textwidth=79 colorcolumn=+1 laststatus=2
+set cursorline cursorcolumn ruler number numberwidth=4 showmode showcmd
+set textwidth=79 colorcolumn=+1 laststatus=2 mousefocus
 
 " Search options.
 set incsearch ignorecase smartcase hlsearch
 
 " Indentations (tabstops).
-set autoindent smartindent expandtab tabstop=8 softtabstop=2 shiftwidth=2
+set autoindent smartindent expandtab tabstop=8 softtabstop=4 shiftwidth=4
 
 " Round to 'shiftwidth' for '<<' and '>>'.
 set shiftround
@@ -293,13 +293,13 @@ let g:ale_virtualtext_cursor = 0
 set omnifunc=ale#completion#OmniFunc
 nnoremap <leader>aD <Plug>(ale_go_to_type_definition_in_split)
 nnoremap <leader>aF :ALEInfoToFile<Space>
-nnoremap <leader>aH <Plug>(ale_hover)
+nnoremap <leader>ah <Plug>(ale_hover)
 nnoremap <leader>aI <Plug>(ale_import)
 nnoremap <leader>aR <Plug>(ale_find_references)
 nnoremap <leader>aT <Plug>(ale_Reset)
 nnoremap <leader>ad <Plug>(ale_go_to_definition_in_split)
 nnoremap <leader>af <Plug>(ale_fix)
-nnoremap <leader>ah <Plug>(ale_documentation)
+nnoremap <leader>aH <Plug>(ale_documentation)
 nnoremap <leader>ai <Plug>(ale_go_to_implementation_in_split)
 nnoremap <leader>aj <Plug>(ale_next_wrap)
 nnoremap <leader>ak <Plug>(ale_previous_wrap)
@@ -412,10 +412,9 @@ if 'VIRTUAL_ENV' in os.environ:
 EOF
 endfunction
 
-augroup python
+augroup PythonSetup
   autocmd!
-  autocmd BufRead,BufNewFile *.py setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd BufEnter *.py call ActivateVirtualEnv()
+  autocmd FileType python call ActivateVirtualEnv()
   autocmd FileType python nnoremap <buffer> <localleader>ba
         \ :call AddPyBreakpoint()<CR>
   autocmd FileType python nnoremap <buffer> <localleader>br
@@ -426,9 +425,10 @@ augroup END
 
 " Julia plugin
 
-augroup julia
+augroup JuliaSetup
   autocmd!
-  autocmd FileType julia nnoremap <buffer> <localleader>h <Plug>(JuliaDocPrompt)
+  autocmd FileType julia nnoremap <buffer>
+        \ <localleader>h <Plug>(JuliaDocPrompt)
 augroup END
 
 "------------------------
@@ -446,7 +446,8 @@ inoremap <C-s> <Plug>(copilot-suggest)
 inoremap <expr> <S-Tab> copilot#Accept("")
 nnoremap <leader>cs :Copilot<CR>
 
-" For some reason copilot$Accept mapping requires sourcing the rc once again
+" For whatever reason copilot$Accept mapping requires sourcing the rc once
+" again
 augroup CopilotHack
   autocmd!
   autocmd VimEnter * source $MYVIMRC
@@ -478,7 +479,7 @@ function! DecorateSelection(str)
   normal "xp
 endfunction
 
-augroup markdown
+augroup MarkdownSetup
   autocmd!
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
@@ -496,7 +497,7 @@ augroup END
 
 " HTML / JS: Don't break my lines; just wrap them visually.
 
-augroup html
+augroup HTMLSetup
   autocmd!
   autocmd FileType html set textwidth=0 wrapmargin=0 wrap nolist
   autocmd FileType html set filetype=html.javascript
@@ -515,7 +516,7 @@ function ModeChange()
   endif
 endfunction
 
-augroup modechange
+augroup ModeChange
   autocmd!
   autocmd BufWritePost * call ModeChange()
 augroup END
@@ -711,7 +712,7 @@ nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
 
 " Only show cursorline in the current window and in normal mode
 
-augroup findcursor
+augroup FindCursor
   autocmd!
   autocmd WinEnter * call HighlightCursor()
   autocmd InsertEnter * call NoHighlightCursor()

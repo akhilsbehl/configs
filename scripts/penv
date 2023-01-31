@@ -7,18 +7,18 @@ declare -a ENVSEARCH=(
 )
 
 for envroot in "${ENVSEARCH[@]}"; do
-  test -n "$envroot" || continue
-  if test -d $envroot/.virtualenv; then
-    echo Found $envroot/.virtualenv
-    act="$envroot/.virtualenv/bin/activate"
-    test -f $act && source $act
-    if [[ $? -eq 0 ]]; then
-      echo "Activated .virtualenv at $envroot."
-      $SHELL
-      exit 0
-    else
-      echo 'Could not activate this .virtualenv. Moving on'
+    test -n "$envroot" || continue
+    if test -d "$envroot/.virtualenv"; then
+        echo Found "$envroot/.virtualenv"
+        act="$envroot/.virtualenv/bin/activate"
+        test -f "$act" && source "$act"
+        if [[ $? -eq 0 ]]; then
+            echo "Activated .virtualenv at $envroot."
+            $SHELL
+            exit 0
+        else
+            echo 'Could not activate this .virtualenv. Moving on'
+        fi
     fi
-  fi
 done
 echo "No usable virtualenv found. Giving up." && exit 1

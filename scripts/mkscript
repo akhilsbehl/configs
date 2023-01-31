@@ -4,9 +4,9 @@ SCRIPTHOME="$HOME"/scripts
 
 function print_help {
 echo "
-Usage:	mkscript -s=name [ for a script in "$SCRIPTHOME" ]
-Usage:	mkscript -e=/path/to/script.sh [ for a script anywhere else ]
-Help:	mkscript -h
+Usage:  mkscript -s=name [ for a script in $SCRIPTHOME ]
+Usage:  mkscript -e=/path/to/script.sh [ for a script anywhere else ]
+Help:   mkscript -h
 
 Raising the flag -h even with other options shall give help and exit.
 Conflicting options shall produce the same behavior.
@@ -15,41 +15,41 @@ Conflicting options shall produce the same behavior.
 
 function writescript {
 if [[ -e "$1" ]]; then
-  echo "A script with the same name exists. Exiting."
-  exit 0
+    echo "A script with the same name exists. Exiting."
+    exit 0
 else
-  echo -e '#!/usr/bin/env bash\n\n\n\nexit 0' > "$1" &&
-    chmod u+x "$1" &&
-    vim "$1"
-  exit 0
+    echo -e '#!/usr/bin/env bash\n\n\n\nexit 0' > "$1" &&
+        chmod u+x "$1" &&
+        vim "$1"
+    exit 0
 fi
 }
 
 case "$1" in
-  -s=*)
-    INSCRIPTHOME="y"
-    SCRIPT=$(echo "$1" | cut -f 2- -d '=')
-    ;;
-  -e=*)
-    ELSEWHERE="y"
-    SCRIPT=$(echo "$1" | cut -f 2- -d '=')
-    ;;
-  -h)
-    WANTHELP="y"
-    ;;
-  *)
-    WANTHELP="y"
-    ;;
+    -s=*)
+        INSCRIPTHOME="y"
+        SCRIPT=$(echo "$1" | cut -f 2- -d '=')
+        ;;
+    -e=*)
+        ELSEWHERE="y"
+        SCRIPT=$(echo "$1" | cut -f 2- -d '=')
+        ;;
+    -h)
+        WANTHELP="y"
+        ;;
+    *)
+        WANTHELP="y"
+        ;;
 esac
 
 if [[ $# -ne 1 || "$WANTHELP" = "y" ]]
 then
-  print_help
-  exit 0
+    print_help
+    exit 0
 fi
 
 if [[ "$INSCRIPTHOME" == "y" ]]; then
-  writescript "$SCRIPTHOME"/"$SCRIPT"
-else
-  writescript "$SCRIPT"
+    writescript "$SCRIPTHOME"/"$SCRIPT"
+elif [[ "$ELSEWHERE" == "y" ]]; then
+    writescript "$SCRIPT"
 fi

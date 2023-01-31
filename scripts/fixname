@@ -3,18 +3,18 @@
 OIFS="$IFS"
 IFS=$'\n'
 
-for d in $*; do
-  FPATH=$(dirname "$d")
-  EXT=$(getext "$d")
-  NEWEXT=$(getext "$d" | tr '[:upper:]' '[:lower:]')
-  NAME=$(basename "$d" $EXT)
-  NEWNAME=$(echo "$NAME" | tr -c '[:alnum:]' - | tr '[:upper:]' '[:lower:]' | \
-    sed 's:-\{2,\}:-:g; s:^-::g; s:-$::g')
-  if [[ ! -e "$FPATH"/"$NEWNAME"$NEWEXT ]]; then
-    mv -n "$FPATH"/"$NAME"$EXT "$FPATH"/"$NEWNAME"$NEWEXT
-  else
-    echo "$FPATH/$NEWNAME$NEWEXT exists."
-  fi
+for d in "$@"; do
+    FPATH=$(dirname "$d")
+    EXT=$(getext "$d")
+    NEWEXT=$(getext "$d" | tr '[:upper:]' '[:lower:]')
+    NAME=$(basename "$d" "$EXT")
+    NEWNAME=$(echo "$NAME" | tr -c '[:alnum:]' - | tr '[:upper:]' '[:lower:]' | \
+        sed 's:-\{2,\}:-:g; s:^-::g; s:-$::g')
+    if [[ ! -e "$FPATH"/"$NEWNAME"$NEWEXT ]]; then
+        mv -n "$FPATH/$NAME$EXT" "$FPATH/$NEWNAME$NEWEXT"
+    else
+        echo "$FPATH/$NEWNAME$NEWEXT exists."
+    fi
 done
 
 IFS=$OIFS

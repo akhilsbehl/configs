@@ -3,9 +3,9 @@
 OIFS="$IFS"
 IFS=$'\n'
 
-for d in $*
+for d in "$@"
 do
-  unlink "$d"
+    unlink "$d"
 done
 
 IFS="$OIFS"

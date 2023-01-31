@@ -24,11 +24,11 @@ BashFile=${BashFile:-~/.bashrc}
 
 # Error functions
 Error() {
-  echo "$Exe: ERROR: $*" >&2
-  exit 1
+    echo "$Exe: ERROR: $*" >&2
+    exit 1
 }
 Warning() {
-  echo "$Exe: WARNING: $*" >&2
+    echo "$Exe: WARNING: $*" >&2
 }
 
 # Usage message, ran on help (-h)
@@ -82,159 +82,159 @@ xdg\-open(1), Project Page \fIhttps://gitlab\.com/4U6U57/wsl\-open\fR
 
 # Path conversion functions
 WinPathToLinux() {
-  Path=$*
-  # Sanitize, remove \r and \n
-  Path=$(tr -d '\r\n' <<< "$Path")
-  # C:\\folder\path -> C:\folder\path (only if there is \\)
-  Path=${Path//\\\\/\\}
-  # C:\folder\path -> C:/folder/path
-  Path=${Path//\\/\/}
-  # C:/folder/path -> c/folder/path
-  # shellcheck disable=SC2018,SC2019
-  Path=$(tr 'A-Z' 'a-z' <<< "${Path:0:1}")${Path:2}
-  # c/folder/path -> /mnt/c/folder/path
-  Path=$WslDisks/$Path
-  echo "$Path"
+    Path=$*
+    # Sanitize, remove \r and \n
+    Path=$(tr -d '\r\n' <<< "$Path")
+    # C:\\folder\path -> C:\folder\path (only if there is \\)
+    Path=${Path//\\\\/\\}
+    # C:\folder\path -> C:/folder/path
+    Path=${Path//\\/\/}
+    # C:/folder/path -> c/folder/path
+    # shellcheck disable=SC2018,SC2019
+    Path=$(tr 'A-Z' 'a-z' <<< "${Path:0:1}")${Path:2}
+    # c/folder/path -> /mnt/c/folder/path
+    Path=$WslDisks/$Path
+    echo "$Path"
 }
 LinuxPathToWin() {
-  Path=$*
-  # If path not under $Disks, can't convert
-  [[ $Path != $WslDisks/* ]] && Error "Error converting Linux path to Windows"
-  # /mnt/c/folder/path -> c/folder/path
-  Path=${Path:$((${#WslDisks} + 1))}
-  # c/folder/path -> C://folder/path
-  Path=$(tr '[:lower:]' '[:upper:]' <<< "${Path:0:1}"):/${Path:1}
-  # C://folder/path -> C:\\folder\path
-  Path=${Path//\//\\}
-  echo "$Path"
+    Path=$*
+    # If path not under $Disks, can't convert
+    [[ $Path != $WslDisks/* ]] && Error "Error converting Linux path to Windows"
+    # /mnt/c/folder/path -> c/folder/path
+    Path=${Path:$((${#WslDisks} + 1))}
+    # c/folder/path -> C://folder/path
+    Path=$(tr '[:lower:]' '[:upper:]' <<< "${Path:0:1}"):/${Path:1}
+    # C://folder/path -> C:\\folder\path
+    Path=${Path//\//\\}
+    echo "$Path"
 }
 
 # Printer for dry run function
 DryRunner() {
-  echo "$Exe: RUN: $*"
+    echo "$Exe: RUN: $*"
 }
 
 # Check that we're on Windows Subsystem for Linux
 # shellcheck disable=SC2154
 if $EnableWslCheck; then
-  [[ ! $(uname -r) =~ (m|M)icrosoft ]] && Error "Could not detect WSL (Windows Subsystem for Linux)"
+    [[ ! $(uname -r) =~ (m|M)icrosoft ]] && Error "Could not detect WSL (Windows Subsystem for Linux)"
 fi
 
 # Check command line arguments
 while getopts "ha:d:wx" Opt; do
-  case $Opt in
-    (h)
-      man <(echo "$Usage")
-      ;;
-    (a)
-      File=$OPTARG
-      [[ ! -e $File ]] && Error "File does not exist: $File"
-      Type=$(xdg-mime query filetype "$File")
-      TypeSafe="${Type//\//\\/}"
-      echo "Associating type $Type with $Exe"
-      if ! $DryRun; then
-        [[ -e "$DefaultsFile" ]] && sed -i "/$TypeSafe/d" "$DefaultsFile"
-        echo "$Type; $Exe '%s'" >>"$DefaultsFile"
-      else
-        DryRunner "[[ -e \"$DefaultsFile ]] && sed -i \"/$TypeSafe/d\" \"$DefaultsFile\""
-        DryRunner "echo \"$Type; $Exe '%s'\" >>\"$DefaultsFile\""
-      fi
-      ;;
-    (d)
-      File=$OPTARG
-      [[ ! -e $File ]] && Error "File does not exist: $File"
-      Type=$(xdg-mime query filetype "$File")
-      TypeSafe="${Type//\//\\/}"
-      echo "Disassociating type $Type with $Exe"
-      if ! $DryRun; then
-        [[ -e "$DefaultsFile" ]] && sed -i "/$TypeSafe.*$Exe/d" "$DefaultsFile"
-      else
-        DryRunner "[[ -e \"$DefaultsFile\" ]] && sed -i \"/$TypeSafe.*$Exe/d\" \"$DefaultsFile\""
-      fi
-      ;;
-    (w)
-      if echo "$BROWSER" | grep "$Exe" >/dev/null; then
-        Warning "$Exe is already set as BROWSER"
-      else
-        [[ ! -e $BashFile ]] && touch "$BashFile"
-        echo "Adding $Exe to BROWSER environmental variables"
-        if grep "export.*BROWSER=.*$Exe" "$BashFile" >/dev/null; then
-          Error "$BashFile already adds $Exe to BROWSER, check it for problems or restart your Bash"
-        else
-          echo "
-          # Adding $Exe as a browser for Bash for Windows
-          if [[ \$(uname -r) =~ (m|M)icrosoft ]]; then
-            if [[ -z \$BROWSER ]]; then
-              export BROWSER=$Exe
+    case $Opt in
+        (h)
+            man <(echo "$Usage")
+            ;;
+        (a)
+            File=$OPTARG
+            [[ ! -e $File ]] && Error "File does not exist: $File"
+            Type=$(xdg-mime query filetype "$File")
+            TypeSafe="${Type//\//\\/}"
+            echo "Associating type $Type with $Exe"
+            if ! $DryRun; then
+                [[ -e "$DefaultsFile" ]] && sed -i "/$TypeSafe/d" "$DefaultsFile"
+                echo "$Type; $Exe '%s'" >>"$DefaultsFile"
             else
-              export BROWSER=\$BROWSER:$Exe
+                DryRunner "[[ -e \"$DefaultsFile ]] && sed -i \"/$TypeSafe/d\" \"$DefaultsFile\""
+                DryRunner "echo \"$Type; $Exe '%s'\" >>\"$DefaultsFile\""
             fi
-          fi
-          " >>"$BashFile"
-        fi
-      fi
-      ;;
-    (x)
-      DryRun=true
-      ;;
-    (?)
-      Error "Invalid option: -$OPTARG"
-      ;;
-  esac
+            ;;
+        (d)
+            File=$OPTARG
+            [[ ! -e $File ]] && Error "File does not exist: $File"
+            Type=$(xdg-mime query filetype "$File")
+            TypeSafe="${Type//\//\\/}"
+            echo "Disassociating type $Type with $Exe"
+            if ! $DryRun; then
+                [[ -e "$DefaultsFile" ]] && sed -i "/$TypeSafe.*$Exe/d" "$DefaultsFile"
+            else
+                DryRunner "[[ -e \"$DefaultsFile\" ]] && sed -i \"/$TypeSafe.*$Exe/d\" \"$DefaultsFile\""
+            fi
+            ;;
+        (w)
+            if echo "$BROWSER" | grep "$Exe" >/dev/null; then
+                Warning "$Exe is already set as BROWSER"
+            else
+                [[ ! -e $BashFile ]] && touch "$BashFile"
+                echo "Adding $Exe to BROWSER environmental variables"
+                if grep "export.*BROWSER=.*$Exe" "$BashFile" >/dev/null; then
+                    Error "$BashFile already adds $Exe to BROWSER, check it for problems or restart your Bash"
+                else
+                    echo "
+                    # Adding $Exe as a browser for Bash for Windows
+                    if [[ \$(uname -r) =~ (m|M)icrosoft ]]; then
+                        if [[ -z \$BROWSER ]]; then
+                            export BROWSER=$Exe
+                        else
+                            export BROWSER=\$BROWSER:$Exe
+                        fi
+                    fi
+                    " >>"$BashFile"
+                fi
+            fi
+            ;;
+        (x)
+            DryRun=true
+            ;;
+        (?)
+            Error "Invalid option: -$OPTARG"
+            ;;
+    esac
 done
 shift $(( OPTIND - 1 ))
 
 # Open file
 File=$1
 if [[ -n $File ]]; then
-  if [[ -e $File ]]; then
-    # File or directory
-    FilePath="$(readlink -f "$File")"
+    if [[ -e $File ]]; then
+        # File or directory
+        FilePath="$(readlink -f "$File")"
 
-    if $EnableWslPath && echo "$WslPathExe" | cut -d " " -f 1 | xargs which >/dev/null; then
-      # Native WSL path translation utility
-      FileWin=$($WslPathExe "$FilePath")
-    else
-      # Backwards compatability for WSL builds without wslpath
-      # shellcheck disable=SC2053
-      if [[ $FilePath != $WslDisks/* ]]; then
-        # File or directory is not on a Windows accessible disk
-        # If it is a directory, then we can't do anything, quit
-        [[ ! -f $FilePath ]] && Error "Directory not in Windows partition: $FilePath"
-        # If it's a file, we copy it to the user's temp folder before opening
-        Warning "File not in Windows partition: $FilePath"
-        # If we do not have a temp folder assigned, find one using Windows
-        if [[ -z $WslTempDir ]]; then
-          # shellcheck disable=SC2016
-          TempFolder=$(powershell.exe '$env:temp')
-          WslTempDir=$(WinPathToLinux "$TempFolder")
-        fi
-        ExeTempDir="$WslTempDir/$Exe"
-        if [[ ! -e $ExeTempDir ]]; then
-          Warning "Creating temp dir for $Exe to use: $ExeTempDir"
-          mkdir --parents "$ExeTempDir"
-        fi
-        FilePath="$ExeTempDir/$(basename "$FilePath")"
-        if ! $DryRun; then
-          echo -n "Copying " >&2
-          cp -v "$File" "$FilePath" 1>&2 || Error "Could not copy file, check that it's not open on Windows"
+        if $EnableWslPath && echo "$WslPathExe" | cut -d " " -f 1 | xargs which >/dev/null; then
+            # Native WSL path translation utility
+            FileWin=$($WslPathExe "$FilePath")
         else
-          DryRunner "cp -v \"$File\" \"$FilePath\""
+            # Backwards compatability for WSL builds without wslpath
+            # shellcheck disable=SC2053
+            if [[ $FilePath != $WslDisks/* ]]; then
+                # File or directory is not on a Windows accessible disk
+                # If it is a directory, then we can't do anything, quit
+                [[ ! -f $FilePath ]] && Error "Directory not in Windows partition: $FilePath"
+                # If it's a file, we copy it to the user's temp folder before opening
+                Warning "File not in Windows partition: $FilePath"
+                # If we do not have a temp folder assigned, find one using Windows
+                if [[ -z $WslTempDir ]]; then
+                    # shellcheck disable=SC2016
+                    TempFolder=$(powershell.exe '$env:temp')
+                    WslTempDir=$(WinPathToLinux "$TempFolder")
+                fi
+                ExeTempDir="$WslTempDir/$Exe"
+                if [[ ! -e $ExeTempDir ]]; then
+                    Warning "Creating temp dir for $Exe to use: $ExeTempDir"
+                    mkdir --parents "$ExeTempDir"
+                fi
+                FilePath="$ExeTempDir/$(basename "$FilePath")"
+                if ! $DryRun; then
+                    echo -n "Copying " >&2
+                    cp -v "$File" "$FilePath" 1>&2 || Error "Could not copy file, check that it's not open on Windows"
+                else
+                    DryRunner "cp -v \"$File\" \"$FilePath\""
+                fi
+            fi
+            FileWin=$(LinuxPathToWin "$FilePath")
         fi
-      fi
-      FileWin=$(LinuxPathToWin "$FilePath")
+    elif [[ $File == *://* ]]; then
+        # If "file" input is a link, just pass it directly
+        FileWin=$File
+    else
+        Error "File/directory does not exist: $File"
     fi
-  elif [[ $File == *://* ]]; then
-    # If "file" input is a link, just pass it directly
-    FileWin=$File
-  else
-    Error "File/directory does not exist: $File"
-  fi
 
-  # Open the file with Windows
-  if ! $DryRun; then
-    $WslOpenExe "\"$FileWin\""
-  else
-    DryRunner "$WslOpenExe \"$FileWin\""
-  fi
+    # Open the file with Windows
+    if ! $DryRun; then
+        $WslOpenExe "\"$FileWin\""
+    else
+        DryRunner "$WslOpenExe \"$FileWin\""
+    fi
 fi

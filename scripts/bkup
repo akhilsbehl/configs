@@ -3,13 +3,13 @@
 OIFS=$IFS
 IFS=$'\n'
 
-for d in $*
+for d in "$@"
 do
-  if [[ -e "$d".bkup ]]; then
-    cp -i -r "$d" "$d".bkup
-  else
-    cp -r "$d" "$d".bkup
-  fi
+    if [[ -e "$d".bkup ]]; then
+        cp -i -r "$d" "$d".bkup
+    else
+        cp -r "$d" "$d".bkup
+    fi
 done
 
 IFS=$OIFS

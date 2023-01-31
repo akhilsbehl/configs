@@ -1,11 +1,11 @@
 #!/bin/bash
 
 if [[ "$#" -ne 2 ]]; then
-  echo "Usage: $0 /path/to/input.html /path/to/output.pdf"
-  exit 1
+    echo "Usage: $0 /path/to/input.html /path/to/output.pdf"
+    exit 1
 fi
 
 TMPFILE=$(mktemp).html
-md2html $1 > $TMPFILE &&
-  weasyprint $TMPFILE $2 &&
-  exit 0
+md2html "$1" > "$TMPFILE" &&
+    weasyprint "$TMPFILE" "$2" &&
+    exit 0

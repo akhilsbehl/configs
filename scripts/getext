@@ -6,9 +6,9 @@ IFS=$'\n'
 DOTS=$(echo "$1" | tr -dc '.')
 
 if [[ -d "$1" || "$DOTS" == "" ]]; then
-  EXT=""
+    EXT=""
 else
-  EXT=.$(echo "$1" | awk -F '.' '{print $NF}')
+    EXT=.$(echo "$1" | awk -F '.' '{print $NF}')
 fi
 echo "$EXT"
 

@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
 _exists () {
-  type "$1" >/dev/null 2>/dev/null
+    type "$1" >/dev/null 2>/dev/null
 }
 
 if ! _exists python3; then
-  echo "No python3. Are you on the right machine? Quitting."
-  exit 1
+    echo "No python3. Are you on the right machine? Quitting."
+    exit 1
 fi
 
 if ! _exists virtualenv; then
-  echo "No virtualenv. Are you on the right machine? Quitting."
-  exit 2
+    echo "No virtualenv. Are you on the right machine? Quitting."
+    exit 2
 fi
 
 if test -d "$PWD/.virtualenv"; then
-  echo '.virtualenv already exists. Will update requirements if any.'
+    echo '.virtualenv already exists. Will update requirements if any.'
 else
-  virtualenv --python=$(which python3) "$PWD/.virtualenv"
+    virtualenv --python="$(which python3)" "$PWD/.virtualenv"
 fi
 
 source "$PWD/.virtualenv/bin/activate" && \
-  test -f "$PWD/requirements.txt" && \
-    "$PWD/.virtualenv/bin/pip" install -r "$PWD/requirements.txt"
-  "$PWD/.virtualenv/bin/pip" install jedi ipython
+    test -f "$PWD/requirements.txt" && \
+        "$PWD/.virtualenv/bin/pip" install -r "$PWD/requirements.txt"
+    "$PWD/.virtualenv/bin/pip" install jedi ipython
