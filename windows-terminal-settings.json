@@ -84,6 +84,7 @@
             "hidden": false,
             "historySize": 100000,
             "intenseTextStyle": "all",
+            "padding": "2",
             "scrollbarState": "hidden",
             "suppressApplicationTitle": true,
             "snapOnInput": true,
