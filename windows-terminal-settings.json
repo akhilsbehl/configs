@@ -107,19 +107,19 @@
                 "name": "archWizard"
             },
             {
-                "colorScheme": "Solarized Dark",
+                "colorScheme": "Builtin Solarized Dark",
                 "commandline": "wsl.exe --distribution Ubuntu",
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "name": "playground"
             },
             {
-                "colorScheme": "Ubuntu-ColorScheme",
+                "colorScheme": "Belafonte Day",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "name": "PowerShell",
                 "commandline": "pwsh.exe"
             },
             {
-                "colorScheme": "One Half Light",
+                "colorScheme": "3024 Day",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "name": "cmd"
             }
