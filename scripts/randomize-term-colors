@@ -5,7 +5,7 @@ WIN_TERM_SETTINGS=~/winhome/AppData/Local/Packages/Microsoft.WindowsTerminal_8we
 
 IFS=$'\n'
 # Grepping only name also pulls up profile names
-SCHEMES=($(grep -C 2 "foreground" $WIN_TERM_SETTINGS | grep "name" | cut -f 2- -d ':'))
+SCHEMES=($(grep -B 1 "black" $WIN_TERM_SETTINGS | grep "name" | cut -f 2- -d ':'))
 
 USE_SCHEME=${SCHEMES[$RANDOM % ${#SCHEMES[@]}]}
 SED_CMD="0,/"colorScheme"/s/\"colorScheme\": \".*\",/\"colorScheme\":$USE_SCHEME/"
