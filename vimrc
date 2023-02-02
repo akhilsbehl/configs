@@ -88,8 +88,10 @@ Plugin 'akhilsbehl/md-image-paste'
 " Escape shell color codes in Vim.
 Plugin 'AnsiEsc.vim'
 
-" Gruvbox colorscheme.
+" Colorschemes.
 Plugin 'morhetz/gruvbox'
+Plugin 'tomasr/molokai'
+Plugin 'joshdick/onedark.vim'
 
 " Airline for statusline.
 Plugin 'vim-airline/vim-airline'
@@ -115,7 +117,9 @@ let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
 set background=dark
 let g:gruvbox_contrast_dark='hard'
-silent! colorscheme gruvbox
+" silent! colorscheme gruvbox
+" silent! colorscheme molokai
+silent! colorscheme onedark
 
 "-------------------------
 
@@ -199,7 +203,9 @@ let maplocalleader="\<Space>"
 
 let g:airline#extensions#ale#enabled       = 1
 let g:airline_powerline_fonts              = 1
-let g:airline_theme                        = 'base16_gruvbox_dark_hard'
+" let g:airline_theme                        = 'base16_gruvbox_dark_hard'
+" let g:airline_theme                        = 'molokai'
+let g:airline_theme                        = 'onedark'
 let g:ariline#extensions#tabline#enabled   = 1
 let g:ariline#extensions#tabline#formatter = 'default'
 
