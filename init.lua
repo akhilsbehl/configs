@@ -69,3 +69,86 @@ return require('packer').startup(function(use)
     require('packer').sync()
   end
 end)
+
+-- These are global Vim options.
+
+-- Auto-detect the file type.
+filetype indent plugin on
+
+-- Highlight syntax.
+syntax enable
+
+-- Colorscheme.
+set termguicolors
+let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
+set background=dark
+let g:gruvbox_contrast_dark='hard'
+-- silent! colorscheme gruvbox
+-- silent! colorscheme molokai
+silent! colorscheme onedark
+
+---------------------------
+
+-- These are values for global vim `options'. To deactivate any option,
+-- prepend `no' to the option. To activate, simply remove the `no'.
+
+-- Auto-switch to dir of the file.
+set autochdir
+
+-- Look and feel options.
+set cursorline cursorcolumn ruler number relativenumber numberwidth=4
+set textwidth=79 colorcolumn=+1 showmode showcmd laststatus=2 mousefocus
+
+-- Search options.
+set incsearch ignorecase smartcase hlsearch
+
+-- Indentations (tabstops).
+set autoindent smartindent expandtab tabstop=8 softtabstop=4 shiftwidth=4
+
+-- Round to 'shiftwidth' for '<<' and '>>'.
+set shiftround
+
+-- Don't use two spaces when joining a line after a '.', '?' or '!'.
+set nojoinspaces
+
+-- Keep local rcs from executing harmful commands.
+set secure
+
+-- End-of-line formats: 'dos', 'unix' or 'mac'.
+set fileformat=unix fileformats=unix,dos,mac
+
+-- Stop backups and swap files.
+set nobackup noswapfile
+
+-- Set hidden: Seems like I want it afterall.
+set hidden
+
+-- Always keep at least 3 lines above and below the cursor, except at the ends
+-- of the file.
+set scrolloff=3
+
+-- Formatting options: read 'help formatoptions'.
+set formatoptions=tcqn
+
+-- Filename completion in ex mode.
+set wildmenu wildmode=longest,list,full
+
+-- Config.
+set history=50 undolevels=500 tabpagemax=100 t_Co=256 t_ut="" winaltkeys=no
+set showtabline=1 timeout timeoutlen=500 ttimeout ttimeoutlen=20
+
+-- Buffer switching behavior.
+set switchbuf="useopen,usetab"
+
+---------------------------
+
+-- Set the leaders.
+
+nnoremap "," <NOP>
+nnoremap "\<Space>" <NOP>
+
+let mapleader=","
+let maplocalleader="\<Space>"
+
+
