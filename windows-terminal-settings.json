@@ -78,7 +78,7 @@
             "cursorShape": "bar",
             "font":
             {
-                "face": "Fira Code Retina",
+                "face": "FiraCode Nerd Font Mono Retina",
                 "size": 11
             },
             "hidden": false,
@@ -97,7 +97,7 @@
                 "cursorShape": "doubleUnderscore",
                 "font": 
                 {
-                    "face": "Cascadia Code PL",
+                    "face": "CaskaydiaCove NFM",
                     "size": 11,
                     "axes": {
                         "ital": 1
