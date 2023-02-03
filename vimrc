@@ -391,6 +391,8 @@ nnoremap <buffer> <localleader>M <Plug>SlimeMotionSend
 
 "-------------------------
 
+" Python configuration
+
 function! AddPyBreakpoint()
   let l:line = line('.')
   let l:col = col('.')
