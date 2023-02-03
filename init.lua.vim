@@ -17,6 +17,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
     local packer_bootstrap = ensure_packer()
 
     return require('packer').startup(function(use)
+
         use 'wbthomason/packer.nvim'              -- Package manager
 
         -- General plugins
