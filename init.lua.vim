@@ -507,22 +507,8 @@ function RemovePyBreakpoint()
   call cursor(l:line - 1, l:col)
 endfunction
 
-function ActivateVirtualEnv()
-python3 << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  env_path = os.environ['VIRTUAL_ENV']
-  to_activate = os.path.join(env_path, 'bin', 'activate_this.py')
-  with open(to_activate) as f:
-    code = compile(f.read(), to_activate, 'exec')
-    exec(code, dict(__file__=to_activate))
-EOF
-endfunction
-
 augroup PythonSetup
   autocmd!
-  autocmd FileType python call ActivateVirtualEnv()
   autocmd FileType python nnoremap <buffer> <localleader>ba
         \ :call AddPyBreakpoint()<CR>
   autocmd FileType python nnoremap <buffer> <localleader>br
