@@ -1,32 +1,34 @@
 lua << EOF
 
 local ensure_packer = function()
-local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({
-        'git', 'clone', '--depth', '1',
-        'https://github.com/wbthomason/packer.nvim', install_path
-    })
-    vim.cmd [[packadd packer.nvim]]
-    return true
+    local vf = vim.fn
+    local install_path = vf.stdpath('data') ..
+    '/site/pack/packer/start/packer.nvim'
+    if vf.empty(vf.glob(install_path)) > 0 then
+        vf.system({
+            'git', 'clone', '--depth', '1',
+            'https://github.com/wbthomason/packer.nvim', install_path
+        })
+        vim.cmd [[packadd packer.nvim]]
+        return true
     end
     return false
-    end
+end
 
-    local packer_bootstrap = ensure_packer()
+local packer_bootstrap = ensure_packer()
 
-    return require('packer').startup(function(use)
+return require('packer').startup(
+    function(use)
 
         use 'wbthomason/packer.nvim'              -- Package manager
 
         -- General plugins
         use 'neovim/nvim-lspconfig'               -- Easily configure LSPs
         use 'williamboman/mason.nvim'             -- Easily installl stuff
-        use 'hrsh7th/cmp-nvim-lsp'                -- LSP completion server
-        use 'hrsh7th/cmp-buffer'                  -- Buf tokens completion server
-        use 'hrsh7th/cmp-path'                    -- Path completion server
-        use 'hrsh7th/cmp-cmdline'                 -- Command line completion server
+        use 'hrsh7th/cmp-nvim-lsp'                -- LSP completions
+        use 'hrsh7th/cmp-buffer'                  -- Buf tokens completions
+        use 'hrsh7th/cmp-path'                    -- Path completions
+        use 'hrsh7th/cmp-cmdline'                 -- Command line completions
         use 'hrsh7th/nvim-cmp'                    -- Completion engine
         use 'nvim-treesitter/nvim-treesitter'     -- The main reason
         use 'windwp/nvim-autopairs'               -- Match pairs
@@ -78,8 +80,9 @@ if fn.empty(fn.glob(install_path)) > 0 then
         if packer_bootstrap then
             require('packer').sync()
         end
+
     end
-    )
+)
 
 EOF
 
