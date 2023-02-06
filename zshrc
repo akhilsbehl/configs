@@ -149,7 +149,7 @@ fi
 # Variables and Exports #
 #########################
 
-export PATH="$HOME/scripts:$HOME/packer:$HOME/.local/bin:$PATH"
+export PATH="$HOME/scripts:$HOME/.local/bin:$PATH"
 
 export SVN_EDITOR='vim'
 
