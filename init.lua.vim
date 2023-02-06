@@ -16,8 +16,10 @@ local ensure_packer = function()
 end
 
 local packer_bootstrap = ensure_packer()
+local use = require('packer').use
 
-return require('packer').startup(
+require('packer').startup(
+
     function(use)
 
         use 'wbthomason/packer.nvim'              -- Package manager
@@ -50,7 +52,8 @@ return require('packer').startup(
         --   }
 
         -- Look back at this at some point:
-        -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#you-might-not-need-lsp-zero
+        -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/
+        -- v1.x/doc/md/lsp.md#you-might-not-need-lsp-zero
 
         -- Ported from my vimrc - legacy plugins I love
         use 'tpope/vim-surround'                  -- Use surround movements
