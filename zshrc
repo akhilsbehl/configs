@@ -138,7 +138,7 @@ if [[ "$OS" == "Ubuntu" ]]; then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
   alias autorm='sudo apt-get autoremove'
 elif [[ "$OS" == "Arch Linux" ]]; then
-  alias upgrade='packer -Syu --noconfirm --noedit'
+  alias upgrade='paru -Syu --noconfirm'
   alias autorm='sudo pacman -Rns $(pacman -Qqdt)'
 else
   alias upgrade='echo Unknown OS!'
