@@ -1,7 +1,17 @@
 lua << EOF
 
+vf = vim.fn
+vo = vim.opt
+vk = vim.keymap
+vg = vim.g
+vc = vim.cmd
+
+vg.mapleader = ','
+vg.maplocalleader = ' '
+
+local current_theme = 'onedark'
+
 local ensure_packer = function()
-    local vf = vim.fn
     local install_path = vf.stdpath('data') ..
     '/site/pack/packer/start/packer.nvim'
     if vf.empty(vf.glob(install_path)) > 0 then
@@ -9,7 +19,7 @@ local ensure_packer = function()
             'git', 'clone', '--depth', '1',
             'https://github.com/wbthomason/packer.nvim', install_path
         })
-        vim.cmd [[packadd packer.nvim]]
+        vc [[packadd packer.nvim]]
         return true
     end
     return false
@@ -22,63 +32,214 @@ require('packer').startup(
 
     function(use)
 
-        use 'wbthomason/packer.nvim'              -- Package manager
+        -- Some day look at this:
+        -- rockerBOO/awesome-neovim
 
-        -- General plugins
-        use 'neovim/nvim-lspconfig'               -- Easily configure LSPs
-        use 'williamboman/mason.nvim'             -- Easily installl stuff
-        use 'hrsh7th/cmp-nvim-lsp'                -- LSP completions
-        use 'hrsh7th/cmp-buffer'                  -- Buf tokens completions
-        use 'hrsh7th/cmp-path'                    -- Path completions
-        use 'hrsh7th/cmp-cmdline'                 -- Command line completions
-        use 'hrsh7th/nvim-cmp'                    -- Completion engine
-        use 'nvim-treesitter/nvim-treesitter'     -- The main reason
-        use 'windwp/nvim-autopairs'               -- Match pairs
-        use 'folke/which-key.nvim'                -- Show keybindings
-        use 'jiaoshijie/undotree'                 -- Undo history
-        use 'L3MON4D3/LuaSnip'                    -- Snippets engine
-        use 'rafamadriz/friendly-snippets'        -- Snippets library
-        use 'hkupty/iron.nvim'                    -- Slime
-        use 'scrooloose/nerdcommenter'            -- Commenting
-        use 'mileszs/ack.vim'                     -- Search
-        -- use 'tpope/vim-commentary'                -- Commenting
-        -- Or? use 'jpalardy/vim-slime'
+        use 'wbthomason/packer.nvim'               -- Package manager
 
+        use 'neovim/nvim-lspconfig'                -- Easily configure LSPs
+
+        use 'williamboman/mason.nvim'              -- Easily installl stuff
+
+        use 'hrsh7th/cmp-nvim-lsp'                 -- LSP completions
+
+        use 'hrsh7th/cmp-buffer'                   -- Buf tokens completions
+
+        use 'hrsh7th/cmp-path'                     -- Path completions
+
+        use 'hrsh7th/cmp-cmdline'                  -- Command line completions
+
+        use 'hrsh7th/nvim-cmp'                     -- Completion engine
+
+        use 'nvim-treesitter/nvim-treesitter'      -- The main reason
+
+        use 'L3MON4D3/LuaSnip'                     -- Snippets engine
+
+        use 'rafamadriz/friendly-snippets'         -- Snippets library
+
+        use {
+            'hkupty/iron.nvim',                    -- Slime
+            config = function ()
+                local icore = require('iron.core')
+                local iview = require('iron.view')
+                icore.setup {
+                    config = {
+                        scratch_repl = true,
+                        repl_defintion = {
+                            sh     = {'zsh'},
+                            python = {'ipython'},
+                            r      = {'R', '--no-save'},
+                            julia  = {'julia', '--color  = yes'},
+                        },
+                        repl_open_cmd = iview.split.bot('40%')
+                    },
+                    ignore_blank_lines = true,
+                    keymaps = {
+                        send_motion    = '<localleader>s',
+                        visual_send    = '<localleader>s',
+                        send_line      = '<localleader>l',
+                        send_file      = '<localleader>f',
+                        clear          = '<localleader>L',
+                        interrupt      = '<localleader>K',
+                        exit           = '<localleader>Q',
+                    },
+                }
+                vk.set('n', '<localleader>O', '<cmd>IronRepl<cr>')
+                vk.set('n', '<localleader>F', '<cmd>IronFocus<cr>')
+                vk.set('n', '<localleader>H', '<cmd>IronHide<cr>')
+            end,
+        }
+
+        use {
+            'mileszs/ack.vim',                     -- Search
+            config = function()
+                vg.ackprg = 'rg --vimgrep --no-heading --smart-case'
+                vc [[
+                    function! FindGitRoot()
+                        return system(
+                                    \ 'git rev-parse 
+                                    \ --show-toplevel
+                                    \ 2> /dev/null')[:-2]
+                    endfunction
+                    command! -nargs=1 AckInput 
+                                \ execute 'Ack! <args> ' . FindGitRoot()
+                    command! -nargs=0 AckCword
+                                \ execute 'Ack! ' .
+                                \ expand('<cword>') . ' ' . FindGitRoot()
+                ]]
+                vk.set('n', '<leader>ag', '<cmd>AckCword<cr>')
+                vk.set('n', '<leader>aG', ':AckInput ')
+            end,
+        }
+
+        use {
+            'github/copilot.vim',                  -- AI
+            config = function()
+                vg.copilot_enabled = 1
+                vg.copilot_no_tab_map = 1
+                vk.set('i', '<C-s>', '<Plug>(copilot-suggest)')
+                vk.set('i', '<C-d>', '<Plug>(copilot-dismiss)')
+                vk.set('i', '<C-j>', '<Plug>(copilot-next)')
+                vk.set('i', '<C-k>', '<Plug>(copilot-previous)')
+                vk.set('i', '<S-Tab>', 'copilot#Accept("")', {expr = true})
+                vk.set('n', '<leader>cs', '<cmd>Copilot<cr>')
+            end,
+        }
+
+        use {
+            'scrooloose/nerdcommenter',            -- Commenting
+            config = function()
+                vg.NERDCreateDefaultMappings = 0
+                vg.NERDRemoveExtraSpaces     = 1
+                vg.NERDSpaceDelims           = 1
+                vg.NERDToggleCheckAllLines   = 1
+                vk.set({'n', 'v'}, '<leader>c ', '<Plug>NERDCommenterToggle')
+                vk.set('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
+            end,
+        }
+
+        use 'junegunn/fzf'                         -- Fuzzy finder
         -- Stick with FZF until I have time to look at Telescope
-        use 'junegunn/fzf'                        -- Fuzzy finder
-        --   use {                                -- Fuzzy finder
-        --     'nvim-telescope/telescope.nvim', branch = '0.1.x',
+        --   use {                                 -- Fuzzy finder
+        --     'nvim-telescope/telescope.nvim',
+        --     branch = '0.1.x',
         --     requires = { {'nvim-lua/plenary.nvim'} }
         --   }
 
-        -- Look back at this at some point:
-        -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/
-        -- v1.x/doc/md/lsp.md#you-might-not-need-lsp-zero
+        use {
+            'lukas-reineke/indent-blankline.nvim', -- Show newlines
+            config = function ()
+                vo.list = true
+                vo.listchars:append('lead:·')
+                vo.listchars:append('trail:⋅')
+                vo.listchars:append('nbsp:␣')
+                vo.listchars:append('eol:↴')
+                vo.listchars:append('tab:▸ ')
+                require("indent_blankline").setup {
+                    space_char_blankline = " ",
+                    show_end_of_line = true,
+                    show_current_context = true,
+                    show_current_context_start = true,
+                }
+            end
+        }
 
-        -- Ported from my vimrc - legacy plugins I love
-        use 'tpope/vim-surround'                  -- Use surround movements
-        use 'tpope/vim-repeat'                    -- Repeat commands
-        use 'mg979/vim-visual-multi'              -- Multiple cursors
-        use 'godlygeek/tabular'                   -- Align rows
-        use 'github/copilot.vim'                  -- AI
+        use {
+            'nvim-tree/nvim-web-devicons',         -- Pretty icons everywhere
+            config = function ()
+                require('nvim-web-devicons').setup {
+                    default = true,
+                    color_icons = true,
+                }
+            end
+        }
 
-        -- Need to port this - look at pynvim
-        -- use 'akhilsbehl/md-image-paste'        -- Paste images in md files
+        use {
+            'nvim-lualine/lualine.nvim',           -- Status line
+            config = function()
+                require('lualine').setup {
+                    options = { theme = current_theme },
+                }
+            end
+        }
 
-        -- Make shit look good
-        use 'powerman/vim-plugin-AnsiEsc'         -- Escape shell color codes
-        use 'nvim-tree/nvim-web-devicons'         -- Pretty icons everywhere
-        use "lukas-reineke/indent-blankline.nvim" -- Show newlines
-        use 'airblade/vim-gitgutter'              -- Show git sign
+        use {
+            'airblade/vim-gitgutter',              -- Show git signs
+            config = function()
+                vg.gitgutter_map_keys = 0
+            end,
+        }
 
-        use 'morhetz/gruvbox'
-        use 'tomasr/molokai'
-        use 'joshdick/onedark.vim'
-        use 'folke/tokyonight.nvim'
-        use 'nvim-lualine/lualine.nvim'
+        use {
+            'jiaoshijie/undotree',                 -- Undo history
+            requires = {'nvim-lua/plenary.nvim'},
+        }
 
-        -- Some day look at this:
-        -- rockerBOO/awesome-neovim
+        use {
+            'windwp/nvim-autopairs',               -- Match pairs
+            config = function()
+                require('nvim-autopairs').setup({})
+            end,
+        }
+
+        use {
+            'folke/which-key.nvim',                -- Show keybindings
+            config = function()
+                require('which-key').setup({})
+            end,
+        }
+
+        use 'mg979/vim-visual-multi'               -- Multiple cursors
+
+        -- use 'akhilsbehl/md-image-paste'         -- Paste images in md files
+
+        use 'tpope/vim-surround'                   -- Use surround movements
+
+        use 'tpope/vim-repeat'                     -- Repeat commands
+
+        use 'godlygeek/tabular'                    -- Align rows
+
+        use 'powerman/vim-plugin-AnsiEsc'          -- Escape shell color codes
+
+        use 'morhetz/gruvbox'                      -- Theme: gruvbox
+
+        use 'tomasr/molokai'                       -- Theme: molokai
+
+        use 'joshdick/onedark.vim'                 -- Theme: onedark
+
+        use 'folke/tokyonight.nvim'                -- Theme: tokyonight
+
+        if packer_plugins['gruvbox'] and
+           packer_plugins['gruvbox'].loaded then
+            vg.gruvbox_contrast_dark = 'hard'
+        end
+
+        if packer_plugins['tokyonight'] and
+           packer_plugins['tokyonight'].loaded then
+            vg.tokyonight_style = 'night'
+        end
+
+        vc(string.format([[ silent! colorscheme %s ]], current_theme))
 
         if packer_bootstrap then
             require('packer').sync()
@@ -87,9 +248,14 @@ require('packer').startup(
     end
 )
 
+-- Lualine
+
 EOF
 
-" These are global Vim options.
+"-------------------------
+
+" These are values for global vim `options'. To deactivate any option,
+" prepend `no' to the option. To activate, simply remove the `no'.
 
 " Auto-detect the file type.
 filetype indent plugin on
@@ -97,33 +263,22 @@ filetype indent plugin on
 " Highlight syntax.
 syntax enable
 
-" Colorscheme.
-set termguicolors
-let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
-let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
-set background=dark
-let g:gruvbox_contrast_dark='hard'
-" silent! colorscheme gruvbox
-" silent! colorscheme molokai
-" silent! colorscheme onedark
-silent! colorscheme tokyonight
-
-"-------------------------
-
-" These are values for global vim `options'. To deactivate any option,
-" prepend `no' to the option. To activate, simply remove the `no'.
-
 " Auto-switch to dir of the file.
 set autochdir
 
 " Look and feel options.
+set termguicolors
+set background=dark
 set cursorline cursorcolumn ruler number relativenumber numberwidth=4
-set textwidth=79 colorcolumn=+1 showmode showcmd laststatus=2 mousefocus
+set textwidth=79 colorcolumn=+1 showmode showcmd laststatus=2
+set mouse= mousefocus mousehide
+let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
 
 " Search options.
 set incsearch ignorecase smartcase hlsearch
 
-" Indentations (tabstops).
+" Indentation and tabstops.
 set autoindent smartindent expandtab tabstop=8 softtabstop=4 shiftwidth=4
 
 " Round to 'shiftwidth' for '<<' and '>>'.
@@ -167,16 +322,6 @@ set backspace=indent,eol,start
 
 "-------------------------
 
-" Set the leaders.
-
-nnoremap "," <NOP>
-nnoremap "\<Space>" <NOP>
-
-let mapleader=","
-let maplocalleader="\<Space>"
-
-"-------------------------
-
 " Reload and source the vim config at will
 
 nnoremap <leader>ev :20split $MYVIMRC<CR>
@@ -194,7 +339,6 @@ nnoremap k gk
 " mode.
 
 nnoremap <leader>oo <Esc>O<CR>
-
 
 "-------------------------
 
@@ -367,7 +511,7 @@ nnoremap <leader>tpm :call TogglePasteMode()<CR>
 
 function HighlightCursor()
     :normal zz
-    match PmenuSel /\k*\%#\k*/
+    match PMenuSel /\k*\%#\k*/
     let s:highlightcursor=1
 endfunction
 
@@ -386,16 +530,12 @@ endfunction
 
 nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
 
-" Only show cursorline in the current window and in normal mode
-
-augroup FindCursor
+augroup HighLightCursor
     autocmd!
-    autocmd WinEnter * call HighlightCursor()
+    autocmd WinEnter,BufEnter * call HighlightCursor()
     autocmd InsertEnter * call NoHighlightCursor()
     autocmd InsertLeave * call HighlightCursor()
     autocmd CursorMoved * call HighlightCursor()
-    autocmd WinEnter,InsertLeave * set cursorline
-    autocmd WinLeave,InsertEnter * set nocursorline
 augroup END
 
 "-------------------------
@@ -447,54 +587,6 @@ nnoremap <silent> <leader>fr :call fzf#run({
       \ 'options' : '-m',
       \ })<CR>
 
-"------------------------
-
-" Github Copilot
-
-let g:copilot_enabled = v:true
-let g:copilot_no_tab_map = v:true
-
-inoremap <C-d> <Plug>(copilot-dismiss)
-inoremap <C-j> <Nop>
-inoremap <C-j> <Plug>(copilot-next)
-inoremap <C-k> <Plug>(copilot-previous)
-inoremap <C-s> <Plug>(copilot-suggest)
-inoremap <expr> <S-Tab> copilot#Accept("")
-nnoremap <leader>cs :Copilot<CR>
-
-"-------------------------
-
-" NerdCommenter
-
-let NERDRemoveExtraSpaces = 1
-let NERDSpaceDelims = 1
-let NERDToggleCheckAllLines = 1
-let g:NERDCreateDefaultMappings = 0
-
-" Normal & visual mode map
-nnoremap <silent> <leader>c<space> <Plug>NERDCommenterToggle
-vnoremap <silent> <leader>c<space> <Plug>NERDCommenterToggle
-nnoremap <silent> <leader>cA <Plug>NERDCommenterAppend
-
-"-------------------------
-
-" Ack
-
-" Use rg where available
-if executable('rg')
-  let g:ackprg = 'rg --vimgrep --smart-case'
-endif
-
-function FindGitRoot()
-  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
-endfunction
-
-command! -nargs=1 Ag execute "Ack! <args> " . FindGitRoot()
-
-nnoremap <leader>aG :Ag<Space>
-nnoremap <leader>ag :execute 'Ack! ' .
-      \ expand('<cword>') . ' ' .
-      \ FindGitRoot()<CR>
 "-------------------------
 
 " Python configuration
