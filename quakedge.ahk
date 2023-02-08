@@ -2,9 +2,18 @@
 
 !+Enter:: {
     If WinExist("ahk_exe msedge.exe") {
-        WinMaximize
+        ; WinMaximize
         WinActivate
     } else {
         Run "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+    }
+}
+
+!Enter:: {
+    If WinExist("ahk_exe WindowsTerminal.exe") {
+        ; WinMaximize
+        WinActivate
+    } else {
+        Run "C:\Users\akhil.behl\AppData\Local\Microsoft\WindowsApps\wt.exe"
     }
 }
