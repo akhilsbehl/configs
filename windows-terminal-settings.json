@@ -20,7 +20,7 @@
                 "monitor": "any",
                 "toggleVisibility": true
             },
-            "keys": "alt+enter"
+            "keys": ""
         },
         {
             "command":
@@ -6966,5 +6966,5 @@
     "tabWidthMode": "equal",
     "theme": "dark",
     "useAcrylicInTabRow": true,
-    "windowingBehavior": "useAnyExisting"
+    "windowingBehavior": "useExisting"
 }
