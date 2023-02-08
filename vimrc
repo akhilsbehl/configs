@@ -493,7 +493,7 @@ augroup MarkdownSetup
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
   autocmd FileType markdown nnoremap <buffer> <localleader>t :GenTocGFM<CR>
   autocmd FileType markdown nnoremap <buffer> <localleader>u :UpdateToc<CR>
-  autocmd FileType markdown nnoremap <buffer> <localleader>p
+  autocmd FileType markdown nnoremap <buffer> <localleader>P
         \ :call PreviewMarkdown()<CR>
   autocmd FileType markdown vnoremap <buffer> <localleader>i
         \ :call DecorateSelection('*')<CR>
