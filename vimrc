@@ -357,6 +357,7 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 " UltiSnips
 
+let g:UltiSnipsExpandTrigger="<c-tab>"
 let g:UltiSnipsListSnippets="<c-l>"
 let g:UltiSnipsSnippetDirectories=["mysnippets", "UltiSnips"]
 let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit="~/.vim/mysnippets"
