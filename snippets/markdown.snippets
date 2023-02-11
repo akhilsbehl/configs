@@ -11,6 +11,10 @@ style: |
   },
   p { font-size: 20px; }
   li { font-size: 20px; }
+  img[alt~="center"] {
+    display: block;
+    margin: 0 auto;
+  }
 ---
 
 $0
@@ -36,3 +40,26 @@ $2
 $0
 endsnippet
 
+snippet sli "Put a style tag for list items" b
+<style scoped> li { font-size: $1px; } </style>
+
+$0
+endsnippet
+
+snippet sp "Put a style tag for paragraphs" b
+<style scoped> p { font-size: $1px; } </style>
+
+$0
+endsnippet
+
+snippet $ "Close $ for inline math mode"
+\$$0\$
+endsnippet
+
+snippet $$ "Close $ for block math mode"
+$$
+
+$0
+
+$$
+endsnippet
