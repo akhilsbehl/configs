@@ -1,15 +1,11 @@
-lua << EOF
-
-vf = vim.fn
-vo = vim.opt
-vk = vim.keymap
-vg = vim.g
 vc = vim.cmd
+vf = vim.fn
+vg = vim.g
+vk = vim.keymap
+vo = vim.opt
 
 vg.mapleader = ','
 vg.maplocalleader = ' '
-
-local current_theme = 'onedark'
 
 local ensure_packer = function()
     local install_path = vf.stdpath('data') ..
@@ -91,6 +87,45 @@ require('packer').startup(
         }
 
         use {
+            'junegunn/fzf',                        -- Fuzzy finder
+            config = function ()
+                vg.fzf_action = {
+                    ['ctrl-e'] = 'e',
+                    ['ctrl-t'] = 'tabedit',
+                    ['ctrl-v'] = 'vertical botright split',
+                    ['ctrl-s'] = 'botright split',
+                    ['ctrl-m'] = 'vertical topleft split',
+                    ['ctrl-q'] = 'topleft split',
+                }
+                vc [[
+                    function! FuzzyFind()
+                        let gitparent=system('git rev-parse
+                                    \ --show-toplevel')[:-2]
+                        if empty(matchstr(gitparent, '^fatal:.*'))
+                            silent execute ':FZF ' . gitparent
+                        else
+                            silent execute ':FZF .'
+                        endif
+                    endfunction
+                    command! -nargs=0 FindInGitRoot execute 'call FuzzyFind()'
+                    command! -nargs=0 FindInFRU execute 'call fzf#run({
+                                \ "source": v:oldfiles,
+                                \ "sink": "e",
+                                \ "options": "-m"
+                                \ })'
+                ]]
+                vk.set('n', '<leader>fz', '<cmd>FindInGitRoot<cr>')
+                vk.set('n', '<leader>fr', '<cmd>FindInFRU<cr>')
+            end,
+        }
+
+        --   use {                                 -- Fuzzy finder
+        --     'nvim-telescope/telescope.nvim',
+        --     branch = '0.1.x',
+        --     requires = { {'nvim-lua/plenary.nvim'} }
+        --   }
+
+        use {
             'mileszs/ack.vim',                     -- Search
             config = function()
                 vg.ackprg = 'rg --vimgrep --no-heading --smart-case'
@@ -110,6 +145,24 @@ require('packer').startup(
                 vk.set('n', '<leader>ag', '<cmd>AckCword<cr>')
                 vk.set('n', '<leader>aG', ':AckInput ')
             end,
+        }
+
+        use {
+            'lukas-reineke/indent-blankline.nvim', -- Show newlines
+            config = function ()
+                vo.list = true
+                vo.listchars:append('lead:·')
+                vo.listchars:append('trail:⋅')
+                vo.listchars:append('nbsp:␣')
+                vo.listchars:append('eol:↴')
+                vo.listchars:append('tab:▸ ')
+                require('indent_blankline').setup {
+                    space_char_blankline = ' ',
+                    show_end_of_line = true,
+                    show_current_context = true,
+                    show_current_context_start = true,
+                }
+            end
         }
 
         use {
@@ -138,31 +191,17 @@ require('packer').startup(
             end,
         }
 
-        use 'junegunn/fzf'                         -- Fuzzy finder
-        -- Stick with FZF until I have time to look at Telescope
-        --   use {                                 -- Fuzzy finder
-        --     'nvim-telescope/telescope.nvim',
-        --     branch = '0.1.x',
-        --     requires = { {'nvim-lua/plenary.nvim'} }
-        --   }
-
         use {
-            'lukas-reineke/indent-blankline.nvim', -- Show newlines
-            config = function ()
-                vo.list = true
-                vo.listchars:append('lead:·')
-                vo.listchars:append('trail:⋅')
-                vo.listchars:append('nbsp:␣')
-                vo.listchars:append('eol:↴')
-                vo.listchars:append('tab:▸ ')
-                require("indent_blankline").setup {
-                    space_char_blankline = " ",
-                    show_end_of_line = true,
-                    show_current_context = true,
-                    show_current_context_start = true,
-                }
-            end
+            'mzlogin/vim-markdown-toc',            -- Markdown TOC
+            config = function()
+                vg.vmt_auto_update_on_save = 1
+                vg.vmt_fence_closing_text = 'toc-marker : do-not-edit'
+                vg.vmt_fence_hidden_markdown_style = 'GFM'
+                vg.vmt_fence_text = 'toc-marker : do-not-edit'
+            end,
         }
+
+        -- use iamcco/markdown-preview.nvim        -- Markdown preview
 
         use {
             'nvim-tree/nvim-web-devicons',         -- Pretty icons everywhere
@@ -178,7 +217,9 @@ require('packer').startup(
             'nvim-lualine/lualine.nvim',           -- Status line
             config = function()
                 require('lualine').setup {
-                    options = { theme = current_theme },
+                    options = {
+                        theme = 'tokyonight',
+                    }
                 }
             end
         }
@@ -229,56 +270,39 @@ require('packer').startup(
 
         use 'folke/tokyonight.nvim'                -- Theme: tokyonight
 
-        if packer_plugins['gruvbox'] and
-           packer_plugins['gruvbox'].loaded then
-            vg.gruvbox_contrast_dark = 'hard'
-        end
-
-        if packer_plugins['tokyonight'] and
-           packer_plugins['tokyonight'].loaded then
-            vg.tokyonight_style = 'night'
-        end
-
-        vc(string.format([[ silent! colorscheme %s ]], current_theme))
-
         if packer_bootstrap then
             require('packer').sync()
         end
 
     end
+
 )
 
--- Lualine
+vc [=[
 
-EOF
+"-----------------------
+" Look and feel options
+"-----------------------
 
-"-------------------------
-
-" These are values for global vim `options'. To deactivate any option,
-" prepend `no' to the option. To activate, simply remove the `no'.
-
-" Auto-detect the file type.
-filetype indent plugin on
-
-" Highlight syntax.
-syntax enable
+" Set colorscheme.
+colorscheme tokyonight
 
 " Auto-switch to dir of the file.
 set autochdir
 
 " Look and feel options.
-set termguicolors
-set background=dark
 set cursorline cursorcolumn ruler number relativenumber numberwidth=4
-set textwidth=79 colorcolumn=+1 showmode showcmd laststatus=2
-set mouse= mousefocus mousehide
+set showmode showcmd
+set mouse-=a
+set textwidth=79 colorcolumn=+1 laststatus=2 
+set termguicolors background=dark
 let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
 
 " Search options.
 set incsearch ignorecase smartcase hlsearch
 
-" Indentation and tabstops.
+" Indentations (tabstops).
 set autoindent smartindent expandtab tabstop=8 softtabstop=4 shiftwidth=4
 
 " Round to 'shiftwidth' for '<<' and '>>'.
@@ -292,6 +316,9 @@ set secure
 
 " End-of-line formats: 'dos', 'unix' or 'mac'.
 set fileformat=unix fileformats=unix,dos,mac
+
+" Folding text.
+set foldmethod=indent foldlevel=0 nofoldenable
 
 " Stop backups and swap files.
 set nobackup noswapfile
@@ -320,29 +347,9 @@ set switchbuf="useopen,usetab"
 " and indentation stops
 set backspace=indent,eol,start
 
-"-------------------------
-
-" Reload and source the vim config at will
-
-nnoremap <leader>ev :20split $MYVIMRC<CR>
-nnoremap <leader>eg :tabnew $MYGVIMRC<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
-
-"-------------------------
-
-" Move by display lines in place of actual lines.
-
-nnoremap j gj
-nnoremap k gk
-
-" Puts an empty line above and below the cursor position and enters the insert
-" mode.
-
-nnoremap <leader>oo <Esc>O<CR>
-
-"-------------------------
-
-" Navigate between and delete buffers, files, tabs.
+"-----------------------
+" Navigate between buffers, tabs, and windows.
+"-----------------------
 
 nnoremap tt <C-w><S-t><CR>
 nnoremap te :e<Space>
@@ -353,6 +360,8 @@ nnoremap tk <C-w>k<CR>
 nnoremap th <C-w>h<CR>
 nnoremap tl <C-w>l<CR>
 nnoremap tr <C-w>r<CR>
+nnoremap tmh <C-w>t<C-w>K<CR>
+nnoremap tmv <C-w>t<C-w>H<CR>
 nnoremap tJ :tabprevious<CR>
 nnoremap tK :tabnext<CR>
 nnoremap tH :tabfirst<CR>
@@ -366,15 +375,19 @@ nnoremap tV :vsplit<Space>
 nnoremap tb :buffers<CR>:buffer<Space>
 
 "-------------------------
+" Working with quickfix
+"-------------------------
 
-" Working with quickfix and loclist
+nnoremap qo :copen<CR>
+nnoremap qc :cclose<CR>
+nnoremap qn :cnext<CR>
+nnoremap qp :cprev<CR>
+nnoremap qf :cfirst<CR>
+nnoremap ql :clast<CR>
 
-nnoremap <leader>qo :copen<CR>
-nnoremap <leader>qc :cclose<CR>
-nnoremap <leader>qn :cnext<CR>
-nnoremap <leader>qp :cprev<CR>
-nnoremap <leader>qf :cfirst<CR>
-nnoremap <leader>ql :clast<CR>
+"-------------------------
+" Working with loclist
+"-------------------------
 
 nnoremap <leader>lo :lopen<CR>
 nnoremap <leader>lc :lclose<CR>
@@ -384,8 +397,8 @@ nnoremap <leader>lf :lfirst<CR>
 nnoremap <leader>ll :llast<CR>
 
 "-------------------------
-
 " Working with diffs
+"-------------------------
 
 nnoremap <leader>dgr :diffget RE<CR>
 nnoremap <leader>dgl :diffget LO<CR>
@@ -393,13 +406,27 @@ nnoremap <leader>dpr :diffput RE<CR>
 nnoremap <leader>dpl :diffput LO<CR>
 
 "-------------------------
+" Move by display lines in place of actual lines.
+"-----------------------
 
+nnoremap j gj
+nnoremap k gk
+
+"-------------------------
+" Start a new paragraph.
+"-------------------------
+
+nnoremap <leader>oo <Esc>O<CR>
+
+"-------------------------
 " Reformat the paragraph.
+"-------------------------
 
 nnoremap <leader>fp gqipj
 
 "-------------------------
-
+" Copy to clipboard.
+"-------------------------
 set clipboard=unnamedplus
 
 " Copy the whole buffer to the os clipboard.
@@ -411,223 +438,136 @@ nnoremap <leader>yp mzyip`z
 " Copy up to point to the os clipboard.
 nnoremap <leader>yu mzygg`z
 
+"-------------------------
+" Remap file path completion bindings.
+"-------------------------
+
+inoremap <C-p> <C-x><C-f>
+
+"-------------------------
+" Reload and source the vim config at will.
+"-------------------------
+
+nnoremap <leader>ev :20split $MYVIMRC<CR>
+nnoremap <leader>eg :tabnew $MYGVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+"-------------------------
 " Forward the clipboard over SSH when connected with forwarding.
+"-------------------------
 
 vnoremap "sy :!xclip -f -sel clip
 nnoremap "sp :r!xclip -o -sel clip
 
 "-------------------------
-
-" Make a file executable if found #!/bin/ at the start of a file.
-
-function ModeChange()
-    if getline(1) =~ "^#!"
-        if getline(1) =~ "/bin/"
-            silent execute "!chmod u+x <afile>"
-        endif
-    endif
-endfunction
-
-augroup ModeChange
-    autocmd!
-    autocmd BufWritePost * call ModeChange()
-augroup END
-
+" Delete all trailing whitespace.
 "-------------------------
 
-" Fix whitespace issues
-
-" Delete all trailing whitespace.
-function DeleteTrailingWhitespace()
-    :%s/\s\+$//e
-    :%s///e
-    :let @/=''
+function! DeleteTrailingWhitespace()
+  :%s/\s\+$//e
+  :%s///e
+  :let @/=''
 endfunction
 nnoremap <leader>dtw :call DeleteTrailingWhitespace()<CR>
 
-" Delete blank lines (or containing only whitespace).
-function DeleteBlankLines()
-    :g:^\s*$:d
-    :let @/=''
-endfunction
-nnoremap <leader>bd :call DeleteBlankLines()<CR>
-
-" Condense multiple blank lines (or containing only whitespace)
-function CondenseBlankLines()
-    :call DeleteTrailingWhitespace()
-    :%s/\(\n\n\)\n\+/\1/
-    :let @/=''
-endfunction
-nnoremap <leader>bc :call CondenseBlankLines()<CR>
-
+"-------------------------
+" Delete control characters.
 "-------------------------
 
-" Remove control characters
-
-function DeleteCtrlChars()
-    :%s/[[:cntrl:]]//e
-    :let @/=''
+function! DeleteCtrlChars()
+  :%s/[[:cntrl:]]//e
+  :let @/=''
 endfunction
 nnoremap <leader>dcc :call DeleteCtrlChars<CR>
 
 "-------------------------
-
 " Save when file was opened without sudo.
+"-------------------------
 
-function SudoOnTheFly()
-    write !sudo tee % > /dev/null
+function! SudoOnTheFly()
+  write !sudo tee % > /dev/null
 endfunction
 nnoremap <leader>sd :call SudoOnTheFly()<CR>
 
 "-------------------------
-
 " Toggle search highlighting.
+"-------------------------
 
-function ToggleHighLightsearch()
-    if &hlsearch
-        set nohlsearch
-    else
-        set hlsearch
-    endif
+function! ToggleHighLightsearch()
+  if &hlsearch
+    set nohlsearch
+  else
+    set hlsearch
+  endif
 endfunction
-
 nnoremap <leader>hs :let @/=''<CR>
 
+"-------------------------
 " Toggle paste mode.
+"-------------------------
 
-function TogglePasteMode()
-    if &paste
-        set nopaste
-    else
-        set paste
-    endif
+function! TogglePasteMode()
+  if &paste
+    set nopaste
+  else
+    set paste
+  endif
 endfunction
-
 nnoremap <leader>tpm :call TogglePasteMode()<CR>
 
 "-------------------------
-
 " Making the cursor more conspicuous so I don't keep losing it.
+"-------------------------
 
-function HighlightCursor()
-    :normal zz
-    match PMenuSel /\k*\%#\k*/
-    let s:highlightcursor=1
+function! HighlightCursor()
+  :normal zz
+  match PmenuSel /\k*\%#\k*/
+  let s:highlightcursor=1
 endfunction
 
-function NoHighlightCursor()
-    match None
-    unlet s:highlightcursor
+function! NoHighlightCursor()
+  match None
+  unlet s:highlightcursor
 endfunction
 
-function ToggleHighlightCursor()
-    if !exists("s:highlightcursor")
-        call HighlightCursor()
-    else
-        call NoHighlightCursor()
-    endif
+function! ToggleHighlightCursor()
+  if !exists("s:highlightcursor")
+    call HighlightCursor()
+  else
+    call NoHighlightCursor()
+  endif
 endfunction
-
 nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
 
-augroup HighLightCursor
-    autocmd!
-    autocmd WinEnter,BufEnter * call HighlightCursor()
-    autocmd InsertEnter * call NoHighlightCursor()
-    autocmd InsertLeave * call HighlightCursor()
-    autocmd CursorMoved * call HighlightCursor()
+augroup FindCursor
+  autocmd!
+  autocmd WinEnter * call HighlightCursor()
+  autocmd InsertEnter * call NoHighlightCursor()
+  autocmd InsertLeave * call HighlightCursor()
+  autocmd CursorMoved * call HighlightCursor()
+  autocmd WinEnter,InsertLeave * set cursorline
+  autocmd WinLeave,InsertEnter * set nocursorline
 augroup END
 
+"-------------------------
+" Rename the current buffer's file in place and reload.
 "-------------------------
 
 function! SaveAsInPlace()
-    " Rename current buffer's filename
-    " delete old file from buffer
-    " reload new file into buffer
-    let l:oldname = expand('%:p')
-    let l:newname = input('New name: ', expand('%:p'))
-    if l:newname != l:oldname
-        silent! execute 'silent! write ' . l:newname
-        silent! execute 'silent! bdelete ' . l:oldname
-        silent! execute 'silent! edit ' . l:newname
-        silent! execute '!rm ' . l:oldname
-    endif
+  let l:oldname = expand('%:p')
+  let l:newname = input('New name: ', expand('%:p'))
+  if l:newname != l:oldname
+    execute 'write ' . l:newname
+    execute 'bdelete ' . l:oldname
+    execute 'edit ' . l:newname
+    execute '!rm ' . l:oldname
+  endif
 endfunction
-
 nnoremap <leader>sr :call SaveAsInPlace()<CR>
 
 "-------------------------
-
-" FZF
-
-let g:fzf_action = {
-      \ 'ctrl-e': 'e',
-      \ 'ctrl-t': 'tabedit',
-      \ 'ctrl-v': 'vertical botright split',
-      \ 'ctrl-s': 'botright split',
-      \ 'ctrl-m': 'vertical topleft split',
-      \ 'ctrl-q': 'topleft split'}
-
-function FuzzyFind()
-  " Contains a null-byte that is stripped.
-  let gitparent=system('git rev-parse --show-toplevel')[:-2]
-  if empty(matchstr(gitparent, '^fatal:.*'))
-    silent execute ':FZF ' . gitparent
-  else
-    silent execute ':FZF .'
-  endif
-endfunction
-
-nnoremap <silent> <leader>fz :call FuzzyFind()<CR>
-nnoremap <silent> <leader>fh :FZF ~<CR>
-nnoremap <silent> <leader>fd :FZF /mnt/d<CR>
-nnoremap <silent> <leader>fr :call fzf#run({
-      \ 'source': v:oldfiles,
-      \ 'sink' : 'e ',
-      \ 'options' : '-m',
-      \ })<CR>
-
+" Markdown files config.
 "-------------------------
-
-" Python configuration
-
-function! AddPyBreakpoint()
-  let l:line = line('.')
-  let l:col = col('.')
-  call feedkeys('Oimport pdb;pdb.set_trace()', 'nx')
-  call cursor(l:line + 1, l:col)
-endfunction
-
-function RemovePyBreakpoint()
-  let l:line = line('.')
-  let l:col = col('.')
-  call feedkeys('kdd', 'nx')
-  call cursor(l:line - 1, l:col)
-endfunction
-
-augroup PythonSetup
-  autocmd!
-  autocmd FileType python nnoremap <buffer> <localleader>ba
-        \ :call AddPyBreakpoint()<CR>
-  autocmd FileType python nnoremap <buffer> <localleader>br
-        \ :call RemovePyBreakpoint()<CR>
-augroup END
-
-"-------------------------
-
-" Markdown config
-
-let g:vmt_auto_update_on_save = 1
-let g:vmt_fence_closing_text = 'toc-marker : do-not-edit-this-line'
-let g:vmt_fence_hidden_markdown_style = 'GFM'
-let g:vmt_fence_text = 'toc-marker : do-not-edit-this-line'
-
-function PreviewMarkdown()
-  let outFile = './' . expand('%:r') . '.html'
-  silent execute '!cd %:p:h'
-  silent execute '!md2html % >' . outFile
-  silent execute 'redraw!'
-endfunction
 
 function! DecorateSelection(str)
   normal gv"xy
@@ -645,10 +585,12 @@ augroup MarkdownSetup
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
   autocmd FileType markdown nnoremap <buffer> <localleader>t :GenTocGFM<CR>
   autocmd FileType markdown nnoremap <buffer> <localleader>u :UpdateToc<CR>
-  autocmd FileType markdown nnoremap <buffer> <localleader>p
-        \ :call PreviewMarkdown()<CR>
   autocmd FileType markdown vnoremap <buffer> <localleader>i
         \ :call DecorateSelection('*')<CR>
   autocmd FileType markdown vnoremap <buffer> <localleader>b
         \ :call DecorateSelection('**')<CR>
+  autocmd FileType markdown vnoremap <buffer> <localleader>d
+        \ :call DecorateSelection('$')<CR>
 augroup END
+
+]=]
