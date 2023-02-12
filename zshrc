@@ -159,10 +159,10 @@ export READNULLCMD='less'
 if [ -n "$DISPLAY" ]
 then
   BROWSER=chromium
-  EDITOR=vim
+  EDITOR=nvim
 else
   BROWSER=elinks
-  EDITOR=vim
+  EDITOR=nvim
 fi
 
 eval $(dircolors ~/.dircolors)
@@ -176,6 +176,8 @@ alias bashrc='$EDITOR "$HOME"/.bashrc'
 alias zshrc='$EDITOR "$HOME"/.zshrc'
 
 alias vimrc='$EDITOR "$HOME"/.vimrc'
+
+alias nvimrc='$EDITOR "$HOME"/configs/init.lua'
 
 alias gvimrc='$EDITOR "$HOME"/.gvimrc'
 
