@@ -527,7 +527,7 @@ endfunction
 
 function! NoHighlightCursor()
   match None
-  unlet s:highlightcursor
+  let s:highlightcursor=0
 endfunction
 
 function! ToggleHighlightCursor()
@@ -594,3 +594,6 @@ augroup MarkdownSetup
 augroup END
 
 ]=]
+
+-- TODOs:
+-- 1. Figure out copy-paste in WSL
