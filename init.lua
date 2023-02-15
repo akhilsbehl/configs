@@ -35,19 +35,98 @@ require('packer').startup(
 
         use 'neovim/nvim-lspconfig'                -- Easily configure LSPs
 
-        use 'williamboman/mason.nvim'              -- Easily installl stuff
+        use {
+            'williamboman/mason.nvim',             -- Easily installl stuff
+            config = function ()
+                require('mason').setup()
+            end
+        }
 
+        use {
+            'williamboman/mason-lspconfig.nvim',             -- Easily installl stuff
+            config = function ()
+                require('mason-lspconfig').setup()
+            end
+        }
+
+        -- TODO
         use 'hrsh7th/cmp-nvim-lsp'                 -- LSP completions
-
         use 'hrsh7th/cmp-buffer'                   -- Buf tokens completions
-
         use 'hrsh7th/cmp-path'                     -- Path completions
-
         use 'hrsh7th/cmp-cmdline'                  -- Command line completions
-
         use 'hrsh7th/nvim-cmp'                     -- Completion engine
 
-        use 'nvim-treesitter/nvim-treesitter'      -- The main reason
+        use {
+            'nvim-treesitter/nvim-treesitter',     -- Treesitter
+            run = function()
+                local ts_update = require('nvim-treesitter.install')
+                    .update({ with_sync = true })
+                ts_update()
+            end,
+            config = function ()
+                vim.api.nvim_create_autocmd(
+                    {'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEnter'},
+                    {
+                        group = vim.api.
+                            nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
+                        callback = function()
+                            vim.opt.foldmethod = 'expr'
+                            vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+                        end
+                    }
+                )
+                require('nvim-treesitter.configs').setup {
+                    ensure_installed = {'python', 'bash', 'r', 'lua'},
+                    auto_install = true,
+                    highlight = {
+                        enable = true,
+                    },
+                    indent = {
+                        enable = true,
+                    },
+                    incremental_selection = {
+                        enable = true,
+                        keymaps = {
+                            init_selection = 'gss',
+                            node_incremental = 'gin',
+                            scope_incremental = 'gis',
+                            node_decremental = 'gdn',
+                        },
+                    },
+                    textobjects = {
+                        select = {
+                            enable = true,
+                            keymaps = {
+                                ['af'] = '@function.outer',
+                                ['if'] = '@function.inner',
+                                ['ac'] = '@class.outer',
+                                ['ic'] = '@class.inner',
+                            },
+                        },
+                        move = {
+                            enable = true,
+                            set_jumps = true,
+                            goto_next_start = {
+                                ['gnf'] = '@function.outer',
+                                ['gnc'] = '@class.outer',
+                            },
+                            goto_next_end = {
+                                ['gnF'] = '@function.outer',
+                                ['gnC'] = '@class.outer',
+                            },
+                            goto_previous_start = {
+                                ['gpf'] = '@function.outer',
+                                ['gpc'] = '@class.outer',
+                            },
+                            goto_previous_end = {
+                                ['gpF'] = '@function.outer',
+                                ['gpC'] = '@class.outer',
+                            },
+                        },
+                    },
+                }
+            end,
+        }
 
         use 'L3MON4D3/LuaSnip'                     -- Snippets engine
 
@@ -119,11 +198,26 @@ require('packer').startup(
             end,
         }
 
-        --   use {                                 -- Fuzzy finder
-        --     'nvim-telescope/telescope.nvim',
-        --     branch = '0.1.x',
-        --     requires = { {'nvim-lua/plenary.nvim'} }
-        --   }
+        use {                                 -- Fuzzy finder
+          'nvim-telescope/telescope.nvim',
+          branch = '0.1.x',
+          requires = {{'nvim-lua/plenary.nvim'}}
+          config = function()
+            local actions = require('telescope.actions')
+            require('telescope').setup {
+                defaults = {mappings = {i = {
+                    ["<esc>"] = actions.close,
+                    ["<C-h>"] = actions.which_key,
+                    ["<C-j>"] = actions.move_selection_next,
+                    ["<C-k>"] = actions.move_selection_previous,
+                },},},
+            }
+            vk.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
+            vk.set('n', '<leader>fz', '<cmd>Telescope live_grep<cr>')
+            vk.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
+            vk.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
+          end,
+        }
 
         use {
             'mileszs/ack.vim',                     -- Search
@@ -201,6 +295,7 @@ require('packer').startup(
             end,
         }
 
+        -- TODO
         -- use iamcco/markdown-preview.nvim        -- Markdown preview
 
         use {
@@ -252,6 +347,7 @@ require('packer').startup(
 
         use 'mg979/vim-visual-multi'               -- Multiple cursors
 
+        -- TODO
         -- use 'akhilsbehl/md-image-paste'         -- Paste images in md files
 
         use 'tpope/vim-surround'                   -- Use surround movements
@@ -318,7 +414,9 @@ set secure
 set fileformat=unix fileformats=unix,dos,mac
 
 " Folding text.
-set foldmethod=indent foldlevel=0 nofoldenable
+set foldmethod=expr  " Uses tree-sitter
+set foldexpr=nvim_treesitter#foldexpr()
+set foldlevel=0 nofoldenable
 
 " Stop backups and swap files.
 set nobackup noswapfile
@@ -596,4 +694,3 @@ augroup END
 ]=]
 
 -- TODOs:
--- 1. Figure out copy-paste in WSL
