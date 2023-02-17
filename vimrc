@@ -92,6 +92,7 @@ Plugin 'AnsiEsc.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'tomasr/molokai'
 Plugin 'joshdick/onedark.vim'
+Plugin 'ghifarit53/tokyonight-vim'
 
 " Airline for statusline.
 Plugin 'vim-airline/vim-airline'
@@ -116,10 +117,10 @@ set termguicolors
 let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
 set background=dark
-let g:gruvbox_contrast_dark='hard'
+" let g:gruvbox_contrast_dark='hard'
 " silent! colorscheme gruvbox
 " silent! colorscheme molokai
-silent! colorscheme onedark
+silent! colorscheme tokyonight
 
 "-------------------------
 
@@ -357,7 +358,7 @@ let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"'}
 
 " UltiSnips
 
-let g:UltiSnipsExpandTrigger="<c-tab>"
+let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsListSnippets="<c-l>"
 let g:UltiSnipsSnippetDirectories=["mysnippets", "UltiSnips"]
 let g:UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit="~/.vim/mysnippets"
@@ -544,7 +545,8 @@ nnoremap tj <C-w>j<CR>
 nnoremap tk <C-w>k<CR>
 nnoremap th <C-w>h<CR>
 nnoremap tl <C-w>l<CR>
-nnoremap tr <C-w>r<CR>
+nnoremap tr :e<CR>
+nnoremap tR <C-w>r<CR>
 nnoremap tmh <C-w>t<C-w>K<CR>
 nnoremap tmv <C-w>t<C-w>H<CR>
 nnoremap tJ :tabprevious<CR>
