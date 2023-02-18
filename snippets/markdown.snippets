@@ -52,14 +52,70 @@ snippet sp "Put a style tag for paragraphs" b
 $0
 endsnippet
 
-snippet $ "Close $ for inline math mode"
-\$$0\$
-endsnippet
-
-snippet $$ "Close $ for block math mode"
+snippet bm "Close $ for block math mode" b
 $$
 
 $0
 
 $$
+endsnippet
+
+snippet $ "Close $ for inline math mode" i
+\$$1\$$0
+endsnippet
+
+snippet sub "subscript chunk" i
+{$1}_{$2}$0
+endsnippet
+
+snippet sup "superscript chunk" i
+{$1}^{$2}$0
+endsnippet
+
+snippet subp "sub & superscript chunk" i
+{$1}_{$2}^{$3}$0
+endsnippet
+
+snippet frac "fraction chunk" i
+\frac{$1}{$2}$0
+endsnippet
+
+snippet mc "mathcal chunk" i
+\mathcal{$1}$0
+endsnippet
+
+snippet mi "mathit chunk" i
+\mathit{$1}$0
+endsnippet
+
+snippet mr "mathrm chunk" i
+\mathrm{$1}$0
+endsnippet
+
+snippet mb "mathbf chunk" i
+\mathbf{$1}$0
+endsnippet
+
+snippet su "Union symbol" i
+\cup$0
+endsnippet
+
+snippet si "Intersection symbol" i
+\cap$0
+endsnippet
+
+snippet sset "Subset of chunk" i
+{$1}\subset{$2}$0
+endsnippet
+
+snippet ssete "Subset equal of chunk" i
+{$1}\subseteq{$2}$0
+endsnippet
+
+snippet in "In chunk" i
+{$1}\in{$2}$0}
+endsnippet
+
+snippet summ "Summation chunk" i
+\sum_{$1}^{$2}{$3}$0
 endsnippet
