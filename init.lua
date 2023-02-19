@@ -165,57 +165,118 @@ require('packer').startup(
             end,
         }
 
-        use {
-            'junegunn/fzf',                        -- Fuzzy finder
-            config = function ()
-                vg.fzf_action = {
-                    ['ctrl-e'] = 'e',
-                    ['ctrl-t'] = 'tabedit',
-                    ['ctrl-v'] = 'vertical botright split',
-                    ['ctrl-s'] = 'botright split',
-                    ['ctrl-m'] = 'vertical topleft split',
-                    ['ctrl-q'] = 'topleft split',
-                }
-                vc [[
-                    function! FuzzyFind()
-                        let gitparent=system('git rev-parse
-                                    \ --show-toplevel')[:-2]
-                        if empty(matchstr(gitparent, '^fatal:.*'))
-                            silent execute ':FZF ' . gitparent
-                        else
-                            silent execute ':FZF .'
-                        endif
-                    endfunction
-                    command! -nargs=0 FindInGitRoot execute 'call FuzzyFind()'
-                    command! -nargs=0 FindInFRU execute 'call fzf#run({
-                                \ "source": v:oldfiles,
-                                \ "sink": "e",
-                                \ "options": "-m"
-                                \ })'
-                ]]
-                vk.set('n', '<leader>fz', '<cmd>FindInGitRoot<cr>')
-                vk.set('n', '<leader>fr', '<cmd>FindInFRU<cr>')
-            end,
-        }
-
+        use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
         use {                                 -- Fuzzy finder
           'nvim-telescope/telescope.nvim',
           branch = '0.1.x',
-          requires = {{'nvim-lua/plenary.nvim'}}
+          requires = {{'nvim-lua/plenary.nvim'}},
           config = function()
             local actions = require('telescope.actions')
             require('telescope').setup {
-                defaults = {mappings = {i = {
-                    ["<esc>"] = actions.close,
-                    ["<C-h>"] = actions.which_key,
-                    ["<C-j>"] = actions.move_selection_next,
-                    ["<C-k>"] = actions.move_selection_previous,
-                },},},
+                defaults = {
+                    mappings = {
+                            i = {
+                                ["<esc>"]   = actions.close,
+                                ["<C-?>"]   = actions.which_key,
+                                ["<C-l>"]   = actions.move_selection_next,
+                                ["<C-k>"]   = actions.move_selection_previous,
+                                ["<cr>"]    = actions.select_default +
+                                    actions.center,
+                                ["<C-t>"]   = actions.select_tab,
+                                ["<C-s>"]   = actions.select_horizontal,
+                                ["<C-v>"]   = actions.select_vertical,
+                                ["<C-u>"]   = actions.preview_scrolling_up,
+                                ["<C-d>"]   = actions.preview_scrolling_down,
+                                ["<C-f>"]   = actions.results_scrolling_up,
+                                ["<C-b>"]   = actions.results_scrolling_down,
+                                ["<C-q>"]   = actions.smart_send_to_qflist +
+                                    actions.open_qflist,
+                                ["<Tab>"]   = actions.toggle_selection +
+                                    actions.move_selection_worse,
+                                ["<S-Tab>"] = actions.toggle_selection +
+                                    actions.move_selection_better,
+                            },
+                            n = {
+                                ["<esc>"]   = actions.close,
+                                ["?"]       = actions.which_key,
+                                ["j"]       = actions.move_selection_next,
+                                ["k"]       = actions.move_selection_previous,
+                                ["<cr>"]    = actions.select_default +
+                                    actions.center,
+                                ["t"]       = actions.select_tab,
+                                ["s"]       = actions.select_horizontal,
+                                ["v"]       = actions.select_vertical,
+                                ["u"]       = actions.preview_scrolling_up,
+                                ["d"]       = actions.preview_scrolling_down,
+                                ["f"]       = actions.results_scrolling_up,
+                                ["b"]       = actions.results_scrolling_down,
+                                ["gg"]      = actions.move_to_top,
+                                ["G"]       = actions.move_to_bottom,
+                                ["m"]       = actions.move_to_middle,
+                                ["q"]       = actions.smart_send_to_qflist +
+                                    actions.open_qflist,
+                                ["<Tab>"]   = actions.toggle_selection +
+                                    actions.move_selection_worse,
+                                ["<S-Tab>"] = actions.toggle_selection +
+                                    actions.move_selection_better,
+                            },
+                    },
+                    layout_config = {
+                        prompt_position = 'top',
+                        preview_cutoff = 120,
+                        width = 0.9,
+                        height = 0.4,
+                        horizontal = { mirror = false, },
+                        vertical = { mirror = false, },
+                    },
+                    extensions = {
+                        fzf = {
+                            fuzzy = false,
+                            override_generic_sorter = false,
+                            override_file_sorter = true,
+                            case_mode = 'smart_case',
+                        },
+                    },
+                },
             }
-            vk.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
-            vk.set('n', '<leader>fz', '<cmd>Telescope live_grep<cr>')
+
+            require('telescope').load_extension('fzf')
+
+            vk.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
+            vk.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
+            vk.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
             vk.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
             vk.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
+            vk.set('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
+            vk.set('n', '<leader>fc', '<cmd>Telescope commands<cr>')
+            vk.set('n', '<leader>ft', '<cmd>Telescope tags<cr>')
+            vk.set('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
+            vk.set('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
+            vk.set('n', '<leader>f`', '<cmd>Telescope marks<cr>')
+            vk.set('n', '<leader>fq', '<cmd>Telescope quickfix<cr>')
+            vk.set('n', '<leader>fQ', '<cmd>Telescope quickfixhistory<cr>')
+            vk.set('n', '<leader>fl', '<cmd>Telescope loclist<cr>')
+            vk.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
+            vk.set('n', '<leader>fo', '<cmd>Telescope vim_options<cr>')
+            vk.set('n', '<leader>f@', '<cmd>Telescope registers<cr>')
+            vk.set('n', '<leader>f?', '<cmd>Telescope keymaps<cr>')
+            vk.set('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
+            vk.set('n', '<leader>fr', '<cmd>Telescope resume<cr>')
+            vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+
+            vk.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
+            vk.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
+            vk.set('n', '<leader>td', '<cmd>Telescope lsp_definitions<cr>')
+            vk.set('n', '<leader>ti', '<cmd>Telescope lsp_incoming_calls<cr>')
+            vk.set('n', '<leader>to', '<cmd>Telescope lsp_outgoing_calls<cr>')
+            vk.set('n', '<leader>ti', '<cmd>Telescope lsp_implementations<cr>')
+            vk.set('n', '<leader>tt',
+                    '<cmd>Telescope lsp_type_definitions<cr>')
+            vk.set('n', '<leader>ts',
+                    '<cmd>Telescope lsp_document_symbols<cr>')
+            vk.set('n', '<leader>tS',
+                    '<cmd>Telescope lsp_workspace_symbols<cr>')
+
           end,
         }
 
