@@ -35,15 +35,15 @@ require('packer').startup(
 
         use 'neovim/nvim-lspconfig'                -- Easily configure LSPs
 
-        use {
-            'williamboman/mason.nvim',             -- Easily installl stuff
+        use { -- Easily installl stuff
+            'williamboman/mason.nvim',
             config = function ()
                 require('mason').setup()
             end
         }
 
-        use {
-            'williamboman/mason-lspconfig.nvim',             -- Easily installl stuff
+        use { -- Easily installl stuff
+            'williamboman/mason-lspconfig.nvim',
             config = function ()
                 require('mason-lspconfig').setup()
             end
@@ -56,8 +56,13 @@ require('packer').startup(
         use 'hrsh7th/cmp-cmdline'                  -- Command line completions
         use 'hrsh7th/nvim-cmp'                     -- Completion engine
 
-        use {
-            'nvim-treesitter/nvim-treesitter',     -- Treesitter
+        use { -- Treesitter text objects
+            'nvim-treesitter/nvim-treesitter-textobjects',
+            after = 'nvim-treesitter',
+            requires = 'nvim-treesitter/nvim-treesitter',
+        }
+        use { -- Treesitter
+            'nvim-treesitter/nvim-treesitter',
             run = function()
                 local ts_update = require('nvim-treesitter.install')
                     .update({ with_sync = true })
@@ -87,10 +92,10 @@ require('packer').startup(
                     incremental_selection = {
                         enable = true,
                         keymaps = {
-                            init_selection = 'gss',
-                            node_incremental = 'gin',
-                            scope_incremental = 'gis',
-                            node_decremental = 'gdn',
+                            init_selection = '<cr>',
+                            node_incremental = '<cr>',
+                            node_decremental = '<bs>',
+                            scope_incremental = '<S-cr>',
                         },
                     },
                     textobjects = {
@@ -107,20 +112,20 @@ require('packer').startup(
                             enable = true,
                             set_jumps = true,
                             goto_next_start = {
-                                ['gnf'] = '@function.outer',
-                                ['gnc'] = '@class.outer',
+                                ['<leader>nf'] = '@function.outer',
+                                ['<leader>nc'] = '@class.outer',
                             },
                             goto_next_end = {
-                                ['gnF'] = '@function.outer',
-                                ['gnC'] = '@class.outer',
+                                ['<leader>nF'] = '@function.outer',
+                                ['<leader>nC'] = '@class.outer',
                             },
                             goto_previous_start = {
-                                ['gpf'] = '@function.outer',
-                                ['gpc'] = '@class.outer',
+                                ['<leader>pf'] = '@function.outer',
+                                ['<leader>pc'] = '@class.outer',
                             },
                             goto_previous_end = {
-                                ['gpF'] = '@function.outer',
-                                ['gpC'] = '@class.outer',
+                                ['<leader>pF'] = '@function.outer',
+                                ['<leader>pC'] = '@class.outer',
                             },
                         },
                     },
@@ -132,8 +137,8 @@ require('packer').startup(
 
         use 'rafamadriz/friendly-snippets'         -- Snippets library
 
-        use {
-            'hkupty/iron.nvim',                    -- Slime
+        use { -- Slime
+            'hkupty/iron.nvim',
             config = function ()
                 local icore = require('iron.core')
                 local iview = require('iron.view')
@@ -150,7 +155,7 @@ require('packer').startup(
                     },
                     ignore_blank_lines = true,
                     keymaps = {
-                        send_motion    = '<localleader>s',
+                        send_motion    = '<>s',
                         visual_send    = '<localleader>s',
                         send_line      = '<localleader>l',
                         send_file      = '<localleader>f',
@@ -165,8 +170,11 @@ require('packer').startup(
             end,
         }
 
-        use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-        use {                                 -- Fuzzy finder
+        use { -- Fuzzy finder
+            'nvim-telescope/telescope-fzf-native.nvim',
+            run = 'make'
+        }
+        use {
           'nvim-telescope/telescope.nvim',
           branch = '0.1.x',
           requires = {{'nvim-lua/plenary.nvim'}},
@@ -244,7 +252,7 @@ require('packer').startup(
 
             vk.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
             vk.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
-            vk.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
+            vk.set('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
             vk.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
             vk.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
             vk.set('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
@@ -280,30 +288,27 @@ require('packer').startup(
           end,
         }
 
-        use {
-            'mileszs/ack.vim',                     -- Search
+        use { -- Search in git tree
+            'mileszs/ack.vim',
             config = function()
                 vg.ackprg = 'rg --vimgrep --no-heading --smart-case'
                 vc [[
                     function! FindGitRoot()
                         return system(
-                                    \ 'git rev-parse 
+                                    \ 'git rev-parse
                                     \ --show-toplevel
                                     \ 2> /dev/null')[:-2]
                     endfunction
-                    command! -nargs=1 AckInput 
-                                \ execute 'Ack! <args> ' . FindGitRoot()
                     command! -nargs=0 AckCword
                                 \ execute 'Ack! ' .
                                 \ expand('<cword>') . ' ' . FindGitRoot()
                 ]]
-                vk.set('n', '<leader>ag', '<cmd>AckCword<cr>')
-                vk.set('n', '<leader>aG', ':AckInput ')
+                vk.set('n', '<leader>fg', '<cmd>AckCword<cr>')
             end,
         }
 
-        use {
-            'lukas-reineke/indent-blankline.nvim', -- Show newlines
+        use { -- Show newlines
+            'lukas-reineke/indent-blankline.nvim',
             config = function ()
                 vo.list = true
                 vo.listchars:append('lead:·')
@@ -320,8 +325,8 @@ require('packer').startup(
             end
         }
 
-        use {
-            'github/copilot.vim',                  -- AI
+        use { -- AI
+            'github/copilot.vim',
             config = function()
                 vg.copilot_enabled = 1
                 vg.copilot_no_tab_map = 1
@@ -334,8 +339,8 @@ require('packer').startup(
             end,
         }
 
-        use {
-            'scrooloose/nerdcommenter',            -- Commenting
+        use { -- Commenting
+            'scrooloose/nerdcommenter',
             config = function()
                 vg.NERDCreateDefaultMappings = 0
                 vg.NERDRemoveExtraSpaces     = 1
@@ -346,8 +351,8 @@ require('packer').startup(
             end,
         }
 
-        use {
-            'mzlogin/vim-markdown-toc',            -- Markdown TOC
+        use { -- Markdown TOC
+            'mzlogin/vim-markdown-toc',
             config = function()
                 vg.vmt_auto_update_on_save = 1
                 vg.vmt_fence_closing_text = 'toc-marker : do-not-edit'
@@ -359,8 +364,8 @@ require('packer').startup(
         -- TODO
         -- use iamcco/markdown-preview.nvim        -- Markdown preview
 
-        use {
-            'nvim-tree/nvim-web-devicons',         -- Pretty icons everywhere
+        use { -- Pretty icons everywhere
+            'nvim-tree/nvim-web-devicons',
             config = function ()
                 require('nvim-web-devicons').setup {
                     default = true,
@@ -369,8 +374,8 @@ require('packer').startup(
             end
         }
 
-        use {
-            'nvim-lualine/lualine.nvim',           -- Status line
+        use { -- Status line
+            'nvim-lualine/lualine.nvim',
             config = function()
                 require('lualine').setup {
                     options = {
@@ -380,27 +385,27 @@ require('packer').startup(
             end
         }
 
-        use {
-            'airblade/vim-gitgutter',              -- Show git signs
+        use { -- Show git signs
+            'airblade/vim-gitgutter',
             config = function()
                 vg.gitgutter_map_keys = 0
             end,
         }
 
-        use {
-            'jiaoshijie/undotree',                 -- Undo history
+        use { -- Undo history
+            'jiaoshijie/undotree',
             requires = {'nvim-lua/plenary.nvim'},
         }
 
-        use {
-            'windwp/nvim-autopairs',               -- Match pairs
+        use { -- Match pairs
+            'windwp/nvim-autopairs',
             config = function()
                 require('nvim-autopairs').setup({})
             end,
         }
 
-        use {
-            'folke/which-key.nvim',                -- Show keybindings
+        use { -- Show keybindings
+            'folke/which-key.nvim',
             config = function()
                 require('which-key').setup({})
             end,
@@ -451,7 +456,7 @@ set autochdir
 set cursorline cursorcolumn ruler number relativenumber numberwidth=4
 set showmode showcmd
 set mouse-=a
-set textwidth=79 colorcolumn=+1 laststatus=2 
+set textwidth=79 colorcolumn=+1 laststatus=2
 set termguicolors background=dark
 let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
@@ -607,9 +612,9 @@ inoremap <C-p> <C-x><C-f>
 " Reload and source the vim config at will.
 "-------------------------
 
-nnoremap <leader>ev :20split $MYVIMRC<CR>
-nnoremap <leader>eg :tabnew $MYGVIMRC<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>ve :20split $MYVIMRC<CR>
+nnoremap <leader>vg :tabnew $MYGVIMRC<CR>
+nnoremap <leader>vs :source $MYVIMRC<CR>
 
 "-------------------------
 " Forward the clipboard over SSH when connected with forwarding.
@@ -627,7 +632,7 @@ function! DeleteTrailingWhitespace()
   :%s///e
   :let @/=''
 endfunction
-nnoremap <leader>dtw :call DeleteTrailingWhitespace()<CR>
+nnoremap <leader>dtw :silent! call DeleteTrailingWhitespace()<CR>
 
 "-------------------------
 " Delete control characters.
