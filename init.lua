@@ -45,6 +45,7 @@ require('packer').startup(
                 {'hrsh7th/cmp-path'},
                 {'hrsh7th/nvim-cmp'},
                 {'L3MON4D3/LuaSnip'},  -- Only to stop cmp's bitching
+                {'quangnguyen30192/cmp-nvim-ultisnips'},
             },
             config = function()
                 local lsp = require('lsp-zero').preset({
@@ -99,6 +100,7 @@ require('packer').startup(
                     'sqlls',
                     'vimls',
                 })
+                require('cmp_nvim_ultisnips').setup({})
                 lsp.setup_nvim_cmp({
                     sources = {
                         { name = 'buffer', keyword_length = 3},
@@ -106,10 +108,13 @@ require('packer').startup(
                         { name = 'nvim_lsp', keyword_length = 1},
                         { name = 'nvim_lua' },
                         { name = 'path' },
+                        { name = 'ultisnips' },
                     },
-                    expand = function(args)
-                        VF['UltiSnips#Anon'](args.body)
-                    end,
+                    snippet = {
+                        expand = function(args)
+                            VF['UltiSnips#Anon'](args.body)
+                        end,
+                    },
                     view = {
                         entries = {
                             name = 'custom',
@@ -156,13 +161,6 @@ require('packer').startup(
                 })
             end,
         }
-        use({
-            'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
-            config = function()
-                require('lsp_lines').setup()
-                VK.set('n', '<leader>vt', require('lsp_lines').toggle)
-            end,
-        })
         use {
             'jose-elias-alvarez/null-ls.nvim',
             config = function()
@@ -185,6 +183,13 @@ require('packer').startup(
                 })
             end,
         }
+        use({
+            'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
+            config = function()
+                require('lsp_lines').setup()
+                VK.set('n', '<leader>vt', require('lsp_lines').toggle)
+            end,
+        })
 
         use { -- Fuzzy finder
             'nvim-telescope/telescope.nvim',
@@ -898,7 +903,6 @@ augroup END
 
 
 -- TODOs:
--- 3. Support for snips: quangnguyen30192/cmp-nvim-ultisnips
 -- 5. Markdown preview: iamcco/markdown-preview.nvim
 -- 6. Copilot.lua seems more configurable: zbirenbaum/copilot.lua
 -- 7. yanky.nvim
