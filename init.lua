@@ -394,6 +394,24 @@ require('packer').startup(
             end,
         }
 
+        use { -- Markdown preview
+            "iamcco/markdown-preview.nvim",
+            run = "cd app && npm install",
+            setup = function()
+                VG.mkdp_filetypes = { "markdown" }
+            end,
+            ft = { "markdown" },
+            config = function()
+                VG.mkdp_auto_start = 0
+                VG.mkdp_auto_close = 0
+                VG.mkdp_refresh_slow = 1
+                VG.mkdp_command_for_global = 0
+                VG.mkdp_open_to_the_world = 0
+                VG.mkdp_page_title = '「${name}」'
+                VG.mkdp_filetypes = {'markdown'}
+            end
+        }
+
         use { -- Slime
             'hkupty/iron.nvim',
             config = function()
@@ -505,16 +523,6 @@ require('packer').startup(
                 VG.NERDToggleCheckAllLines   = 1
                 VK.set({'n', 'v'}, '<leader>c ', '<Plug>NERDCommenterToggle')
                 VK.set('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
-            end,
-        }
-
-        use { -- Markdown TOC
-            'mzlogin/vim-markdown-toc',
-            config = function()
-                VG.vmt_auto_update_on_save = 1
-                VG.vmt_fence_closing_text = 'toc-marker : do-not-edit'
-                VG.vmt_fence_hidden_markdown_style = 'GFM'
-                VG.vmt_fence_text = 'toc-marker : do-not-edit'
             end,
         }
 
@@ -900,8 +908,8 @@ augroup MarkdownSetup
   autocmd!
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
   autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-  autocmd FileType markdown nnoremap <buffer> <localleader>t :GenTocGFM<CR>
-  autocmd FileType markdown nnoremap <buffer> <localleader>u :UpdateToc<CR>
+  autocmd FileType markdown nnoremap <buffer> <localleader>p
+        \ <Plug>MarkdownPreviewToggle
   autocmd FileType markdown vnoremap <buffer> <localleader>i
         \ :call DecorateSelection('*')<CR>
   autocmd FileType markdown vnoremap <buffer> <localleader>b
@@ -914,11 +922,9 @@ augroup END
 
 
 -- TODOs:
--- 5. Markdown preview: iamcco/markdown-preview.nvim
--- 6. Copilot.lua seems more configurable: zbirenbaum/copilot.lua
--- 9. Debug Adaptor Protocol or Vimspector + telescope-dap
---     9.1. rcarriga/cmp-dap
---     9.2. bash-debug-adapter
--- Multiple cursors: 'mg979/vim-visual-multi'
--- Orgmode once again? nvim-orgmode/orgmode
--- Look at this for any other good ideas: rockerBOO/awesome-neovim
+-- 1. Debug Adaptor Protocol or Vimspector + telescope-dap
+--     1.1. rcarriga/cmp-dap
+--     1.2. bash-debug-adapter
+-- 3. Multiple cursors: 'mg979/vim-visual-multi'
+-- 4. Orgmode once again? nvim-orgmode/orgmode
+-- 5. Look at this for any other good ideas: rockerBOO/awesome-neovim
