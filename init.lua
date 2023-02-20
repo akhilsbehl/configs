@@ -30,42 +30,51 @@ require('packer').startup(
 
         use 'wbthomason/packer.nvim'               -- Package manager
 
-        use 'neovim/nvim-lspconfig'                -- Easily configure LSPs
+        use {
+            'VonHeikemen/lsp-zero.nvim',
+            branch = 'v1.x',
+            requires = {
 
-        use { -- Easily installl stuff
-            'williamboman/mason.nvim',
+                -- LSP Support
+                {'neovim/nvim-lspconfig'},
+                {'williamboman/mason-lspconfig.nvim'},
+                {'williamboman/mason.nvim'},
+
+                -- Autocompletion
+                {'hrsh7th/cmp-buffer'},
+                {'hrsh7th/cmp-cmdline'},
+                {'hrsh7th/cmp-nvim-lsp'},
+                {'hrsh7th/cmp-nvim-lua'},
+                {'hrsh7th/cmp-path'},
+                {'hrsh7th/nvim-cmp'},
+
+            },
             config = function ()
-                require('mason').setup()
-            end
+                require('lsp-zero')
+                .preset({
+                    name = 'minimal',
+                    set_lsp_keymaps = false,
+                    manage_nvim_cmp = true,
+                    suggest_lsp_servers = true,
+                })
+                .setup {
+                    lsp = {
+                        on_attach = function(client, bufnr)
+                            require('lsp').on_attach(client, bufnr)
+                        end,
+                    },
+                    cmp = {
+                        sources = {
+                            { name = 'buffer' },
+                            { name = 'cmdline' },
+                            { name = 'nvim_lsp' },
+                            { name = 'nvim_lua' },
+                            { name = 'path' },
+                        },
+                    },
+                }
+            end,
         }
-
-        use { -- Easily installl stuff
-            'williamboman/mason-lspconfig.nvim',
-            config = function ()
-                require('mason-lspconfig').setup()
-            end
-        }
-
-        -- TODO
-        use 'hrsh7th/cmp-nvim-lsp'                 -- LSP completions
-        use 'hrsh7th/cmp-buffer'                   -- Buf tokens completions
-        use 'hrsh7th/cmp-path'                     -- Path completions
-        use 'hrsh7th/cmp-cmdline'                  -- Command line completions
-        use 'hrsh7th/nvim-cmp'                     -- Completion engine
-
-        use { -- Snippets engine
-            'SirVer/UltiSnips',
-            config = function()
-                vg.UltiSnipsExpandTrigger       = "<c-e>"
-                vg.UltiSnipsListSnippets        = "<c-l>"
-                vg.UltiSnipsJumpForwardTrigger  = "<c-k>"
-                vg.UltiSnipsJumpBackwardTrigger = "<c-j>"
-                vg.UltiSnipsSnippetDirectories  = {"mysnippets", "UltiSnips"}
-                vg.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
-                "~/.vim/mysnippets"
-            end
-        }
-        use 'honza/vim-snippets'                   -- Snippets library
 
         use { -- Fuzzy finder
             'nvim-telescope/telescope.nvim',
@@ -350,6 +359,20 @@ require('packer').startup(
             end,
         }
 
+        use { -- Snippets engine
+            'SirVer/UltiSnips',
+            config = function()
+                vg.UltiSnipsExpandTrigger       = "<c-e>"
+                vg.UltiSnipsListSnippets        = "<c-l>"
+                vg.UltiSnipsJumpForwardTrigger  = "<c-k>"
+                vg.UltiSnipsJumpBackwardTrigger = "<c-j>"
+                vg.UltiSnipsSnippetDirectories  = {"mysnippets", "UltiSnips"}
+                vg.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
+                "~/.vim/mysnippets"
+            end
+        }
+        use 'honza/vim-snippets'                   -- Snippets library
+
         use { -- Commenting
             'scrooloose/nerdcommenter',
             config = function()
@@ -463,7 +486,7 @@ set autochdir
 set cursorline cursorcolumn ruler number relativenumber numberwidth=4
 set showmode showcmd
 set mouse-=a
-set textwidth=79 colorcolumn=+1 laststatus=2
+set textwidth=79 colorcolumn=+1 laststatus=2 signcolumn=yes
 set termguicolors background=dark
 let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
@@ -769,3 +792,6 @@ augroup END
 -- TODOs:
 -- Look at this for any other good ideas: rockerBOO/awesome-neovim
 -- Markdown preview: use iamcco/markdown-preview.nvim
+-- Debug Adaptor Protocol or Vimspector + telescope-dap
+-- yanky.nvim
+-- Replicating mason setup
