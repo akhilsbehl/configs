@@ -2,6 +2,7 @@ VA = vim.api
 VC = vim.cmd
 VF = vim.fn
 VG = vim.g
+VL = vim.lsp
 VK = vim.keymap
 VO = vim.opt
 
@@ -55,22 +56,38 @@ require('packer').startup(
                 local cmp = require('cmp')
                 lsp.on_attach(function(client, bufnr)
                     local opts = {buffer = bufnr}
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.open_float()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.goto_prev()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.goto_next()<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>LspZeroFormat<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>LspZeroWorkspaceRemove<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>LspZeroWorkspaceAdd<cr>', opts)
-                    -- VK.set('n', '<leader>', '<cmd>LspZeroWorkspaceList<cr>', opts)
+                    VK.set('n', '<leader>aR',
+                        '<cmd>lua VL.buf.rename()<cr>', opts)
+                    VK.set('n', '<leader>ah',
+                        '<cmd>lua VL.buf.hover()<cr>', opts)
+                    VK.set('n', '<leader>ad',
+                        '<cmd>lua VL.buf.definition()<cr>', opts)
+                    VK.set('n', '<leader>aD',
+                        '<cmd>lua VL.buf.declaration()<cr>', opts)
+                    VK.set('n', '<leader>ai',
+                        '<cmd>lua VL.buf.implementation()<cr>', opts)
+                    VK.set('n', '<leader>at',
+                        '<cmd>lua VL.buf.type_definition()<cr>', opts)
+                    VK.set('n', '<leader>ar',
+                        '<cmd>lua VL.buf.references()<cr>', opts)
+                    VK.set('n', '<leader>aH',
+                        '<cmd>lua VL.buf.signature_help()<cr>', opts)
+                    VK.set('n', '<leader>aa',
+                        '<cmd>lua VL.buf.code_action()<cr>', opts)
+                    VK.set('n', '<leader>ao',
+                        '<cmd>lua VL.buf.open_float()<cr>', opts)
+                    VK.set('n', '<leader>aj',
+                        '<cmd>lua VL.buf.goto_prev()<cr>', opts)
+                    VK.set('n', '<leader>ak',
+                        '<cmd>lua VL.buf.goto_next()<cr>', opts)
+                    VK.set('n', '<leader>af',
+                        '<cmd>LspZeroFormat<cr>', opts)
+                    VK.set('n', '<leader>aW',
+                        '<cmd>LspZeroWorkspaceRemove<cr>', opts)
+                    VK.set('n', '<leader>aw',
+                        '<cmd>LspZeroWorkspaceAdd<cr>', opts)
+                    VK.set('n', '<leader>al',
+                        '<cmd>LspZeroWorkspaceList<cr>', opts)
                 end)
                 lsp.ensure_installed({
                     'bashls',
@@ -100,7 +117,6 @@ require('packer').startup(
                         { name = 'nvim_lua' },
                         { name = 'path' },
                     },
-                    completion = {autocomplete = true},
                     expand = function(args)
                         VF["UltiSnips#Anon"](args.body)
                     end,
@@ -112,12 +128,13 @@ require('packer').startup(
                     },
                     mapping = cmp.mapping.preset.insert({
                         ['<c-e>'] = vim.NIL,
-                        ['<esc>'] = cmp.mapping.abort(),
+                        ['<localleader><tab>'] = cmp.mapping.complete(),
                         ['<cr>'] = cmp.mapping.confirm({select = true}),
+                        ['<esc>'] = cmp.mapping.abort(),
                         ['<tab>'] = cmp.mapping.select_next_item(),
                         ['<S-tab>'] = cmp.mapping.select_prev_item(),
-                        ['<C-j>'] = cmp.mapping.scroll_docs(3),
-                        ['<C-k>'] = cmp.mapping.scroll_docs(-3),
+                        ['<C-n>'] = cmp.mapping.scroll_docs(3),
+                        ['<C-p>'] = cmp.mapping.scroll_docs(-3),
                     }),
                 })
                 lsp.setup()
@@ -133,6 +150,7 @@ require('packer').startup(
                 end
                 vim.diagnostic.config({
                     virtual_text     = false,
+                    virtual_lines    = false,
                     signs            = true,
                     update_in_insert = false,
                     underline        = false,
@@ -257,8 +275,8 @@ require('packer').startup(
                 VK.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
                 VK.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
                 VK.set('n', '<leader>td', '<cmd>Telescope lsp_definitions<cr>')
-                VK.set('n', '<leader>ti', '<cmd>Telescope lsp_incoming_calls<cr>')
-                VK.set('n', '<leader>to', '<cmd>Telescope lsp_outgoing_calls<cr>')
+                VK.set('n', '<leader>tI', '<cmd>Telescope lsp_incoming_calls<cr>')
+                VK.set('n', '<leader>tO', '<cmd>Telescope lsp_outgoing_calls<cr>')
                 VK.set('n', '<leader>ti', '<cmd>Telescope lsp_implementations<cr>')
                 VK.set('n', '<leader>tt',
                     '<cmd>Telescope lsp_type_definitions<cr>')
@@ -293,8 +311,8 @@ require('packer').startup(
                         group = VA.
                             nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
                         callback = function()
-                            vim.opt.foldmethod = 'expr'
-                            vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+                            VO.foldmethod = 'expr'
+                            VO.foldexpr = 'nvim_treesitter#foldexpr()'
                         end
                     }
                 )
