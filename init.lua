@@ -28,9 +28,6 @@ require('packer').startup(
 
     function(use)
 
-        -- Some day look at this:
-        -- rockerBOO/awesome-neovim
-
         use 'wbthomason/packer.nvim'               -- Package manager
 
         use 'neovim/nvim-lspconfig'                -- Easily configure LSPs
@@ -56,6 +53,134 @@ require('packer').startup(
         use 'hrsh7th/cmp-cmdline'                  -- Command line completions
         use 'hrsh7th/nvim-cmp'                     -- Completion engine
 
+        use { -- Snippets engine
+            'SirVer/UltiSnips',
+            config = function()
+                vg.UltiSnipsExpandTrigger       = "<c-e>"
+                vg.UltiSnipsListSnippets        = "<c-l>"
+                vg.UltiSnipsJumpForwardTrigger  = "<c-k>"
+                vg.UltiSnipsJumpBackwardTrigger = "<c-j>"
+                vg.UltiSnipsSnippetDirectories  = {"mysnippets", "UltiSnips"}
+                vg.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
+                "~/.vim/mysnippets"
+            end
+        }
+        use 'honza/vim-snippets'                   -- Snippets library
+
+        use {
+            'nvim-telescope/telescope.nvim',
+            branch = '0.1.x',
+            requires = {{'nvim-lua/plenary.nvim'}},
+            config = function()
+                local actions = require('telescope.actions')
+                require('telescope').setup {
+                    defaults = {
+                        mappings = {
+                            i = {
+                                ["<esc>"]   = actions.close,
+                                ["<C-?>"]   = actions.which_key,
+                                ["<C-l>"]   = actions.move_selection_next,
+                                ["<C-k>"]   = actions.move_selection_previous,
+                                ["<cr>"]    = actions.select_default +
+                                    actions.center,
+                                ["<C-t>"]   = actions.select_tab,
+                                ["<C-s>"]   = actions.select_horizontal,
+                                ["<C-v>"]   = actions.select_vertical,
+                                ["<C-u>"]   = actions.preview_scrolling_up,
+                                ["<C-d>"]   = actions.preview_scrolling_down,
+                                ["<C-f>"]   = actions.results_scrolling_up,
+                                ["<C-b>"]   = actions.results_scrolling_down,
+                                ["<C-q>"]   = actions.smart_send_to_qflist +
+                                    actions.open_qflist,
+                                ["<Tab>"]   = actions.toggle_selection +
+                                    actions.move_selection_worse,
+                                ["<S-Tab>"] = actions.toggle_selection +
+                                    actions.move_selection_better,
+                            },
+                            n = {
+                                ["<esc>"]   = actions.close,
+                                ["?"]       = actions.which_key,
+                                ["j"]       = actions.move_selection_next,
+                                ["k"]       = actions.move_selection_previous,
+                                ["<cr>"]    = actions.select_default +
+                                    actions.center,
+                                ["t"]       = actions.select_tab,
+                                ["s"]       = actions.select_horizontal,
+                                ["v"]       = actions.select_vertical,
+                                ["u"]       = actions.preview_scrolling_up,
+                                ["d"]       = actions.preview_scrolling_down,
+                                ["f"]       = actions.results_scrolling_up,
+                                ["b"]       = actions.results_scrolling_down,
+                                ["gg"]      = actions.move_to_top,
+                                ["G"]       = actions.move_to_bottom,
+                                ["m"]       = actions.move_to_middle,
+                                ["q"]       = actions.smart_send_to_qflist +
+                                    actions.open_qflist,
+                                ["<Tab>"]   = actions.toggle_selection +
+                                    actions.move_selection_worse,
+                                ["<S-Tab>"] = actions.toggle_selection +
+                                    actions.move_selection_better,
+                            },
+                        },
+                        layout_config = {
+                            prompt_position = 'top',
+                            preview_cutoff = 120,
+                            width = 0.9,
+                            height = 0.4,
+                            horizontal = { mirror = false, },
+                            vertical = { mirror = false, },
+                        },
+                        extensions = {
+                            fzf = {
+                                fuzzy = false,
+                                override_generic_sorter = false,
+                                override_file_sorter = true,
+                                case_mode = 'smart_case',
+                            },
+                        },
+                    },
+                }
+
+                require('telescope').load_extension('fzf')
+
+                vk.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
+                vk.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
+                vk.set('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
+                vk.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
+                vk.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
+                vk.set('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
+                vk.set('n', '<leader>fc', '<cmd>Telescope commands<cr>')
+                vk.set('n', '<leader>ft', '<cmd>Telescope tags<cr>')
+                vk.set('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
+                vk.set('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
+                vk.set('n', '<leader>f`', '<cmd>Telescope marks<cr>')
+                vk.set('n', '<leader>fq', '<cmd>Telescope quickfix<cr>')
+                vk.set('n', '<leader>fQ', '<cmd>Telescope quickfixhistory<cr>')
+                vk.set('n', '<leader>fl', '<cmd>Telescope loclist<cr>')
+                vk.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
+                vk.set('n', '<leader>fo', '<cmd>Telescope vim_options<cr>')
+                vk.set('n', '<leader>f@', '<cmd>Telescope registers<cr>')
+                vk.set('n', '<leader>f?', '<cmd>Telescope keymaps<cr>')
+                vk.set('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
+                vk.set('n', '<leader>fr', '<cmd>Telescope resume<cr>')
+                vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+
+                vk.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
+                vk.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
+                vk.set('n', '<leader>td', '<cmd>Telescope lsp_definitions<cr>')
+                vk.set('n', '<leader>ti', '<cmd>Telescope lsp_incoming_calls<cr>')
+                vk.set('n', '<leader>to', '<cmd>Telescope lsp_outgoing_calls<cr>')
+                vk.set('n', '<leader>ti', '<cmd>Telescope lsp_implementations<cr>')
+                vk.set('n', '<leader>tt',
+                    '<cmd>Telescope lsp_type_definitions<cr>')
+                vk.set('n', '<leader>ts',
+                    '<cmd>Telescope lsp_document_symbols<cr>')
+                vk.set('n', '<leader>tS',
+                    '<cmd>Telescope lsp_workspace_symbols<cr>')
+
+            end,
+        }
+
         use { -- Treesitter text objects
             'nvim-treesitter/nvim-treesitter-textobjects',
             after = 'nvim-treesitter',
@@ -65,7 +190,7 @@ require('packer').startup(
             'nvim-treesitter/nvim-treesitter',
             run = function()
                 local ts_update = require('nvim-treesitter.install')
-                    .update({ with_sync = true })
+                .update({ with_sync = true })
                 ts_update()
             end,
             config = function ()
@@ -133,10 +258,6 @@ require('packer').startup(
             end,
         }
 
-        use 'L3MON4D3/LuaSnip'                     -- Snippets engine
-
-        use 'rafamadriz/friendly-snippets'         -- Snippets library
-
         use { -- Slime
             'hkupty/iron.nvim',
             config = function ()
@@ -169,123 +290,9 @@ require('packer').startup(
                 vk.set('n', '<localleader>H', '<cmd>IronHide<cr>')
             end,
         }
-
         use { -- Fuzzy finder
             'nvim-telescope/telescope-fzf-native.nvim',
             run = 'make'
-        }
-        use {
-          'nvim-telescope/telescope.nvim',
-          branch = '0.1.x',
-          requires = {{'nvim-lua/plenary.nvim'}},
-          config = function()
-            local actions = require('telescope.actions')
-            require('telescope').setup {
-                defaults = {
-                    mappings = {
-                            i = {
-                                ["<esc>"]   = actions.close,
-                                ["<C-?>"]   = actions.which_key,
-                                ["<C-l>"]   = actions.move_selection_next,
-                                ["<C-k>"]   = actions.move_selection_previous,
-                                ["<cr>"]    = actions.select_default +
-                                    actions.center,
-                                ["<C-t>"]   = actions.select_tab,
-                                ["<C-s>"]   = actions.select_horizontal,
-                                ["<C-v>"]   = actions.select_vertical,
-                                ["<C-u>"]   = actions.preview_scrolling_up,
-                                ["<C-d>"]   = actions.preview_scrolling_down,
-                                ["<C-f>"]   = actions.results_scrolling_up,
-                                ["<C-b>"]   = actions.results_scrolling_down,
-                                ["<C-q>"]   = actions.smart_send_to_qflist +
-                                    actions.open_qflist,
-                                ["<Tab>"]   = actions.toggle_selection +
-                                    actions.move_selection_worse,
-                                ["<S-Tab>"] = actions.toggle_selection +
-                                    actions.move_selection_better,
-                            },
-                            n = {
-                                ["<esc>"]   = actions.close,
-                                ["?"]       = actions.which_key,
-                                ["j"]       = actions.move_selection_next,
-                                ["k"]       = actions.move_selection_previous,
-                                ["<cr>"]    = actions.select_default +
-                                    actions.center,
-                                ["t"]       = actions.select_tab,
-                                ["s"]       = actions.select_horizontal,
-                                ["v"]       = actions.select_vertical,
-                                ["u"]       = actions.preview_scrolling_up,
-                                ["d"]       = actions.preview_scrolling_down,
-                                ["f"]       = actions.results_scrolling_up,
-                                ["b"]       = actions.results_scrolling_down,
-                                ["gg"]      = actions.move_to_top,
-                                ["G"]       = actions.move_to_bottom,
-                                ["m"]       = actions.move_to_middle,
-                                ["q"]       = actions.smart_send_to_qflist +
-                                    actions.open_qflist,
-                                ["<Tab>"]   = actions.toggle_selection +
-                                    actions.move_selection_worse,
-                                ["<S-Tab>"] = actions.toggle_selection +
-                                    actions.move_selection_better,
-                            },
-                    },
-                    layout_config = {
-                        prompt_position = 'top',
-                        preview_cutoff = 120,
-                        width = 0.9,
-                        height = 0.4,
-                        horizontal = { mirror = false, },
-                        vertical = { mirror = false, },
-                    },
-                    extensions = {
-                        fzf = {
-                            fuzzy = false,
-                            override_generic_sorter = false,
-                            override_file_sorter = true,
-                            case_mode = 'smart_case',
-                        },
-                    },
-                },
-            }
-
-            require('telescope').load_extension('fzf')
-
-            vk.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
-            vk.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
-            vk.set('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
-            vk.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
-            vk.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
-            vk.set('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
-            vk.set('n', '<leader>fc', '<cmd>Telescope commands<cr>')
-            vk.set('n', '<leader>ft', '<cmd>Telescope tags<cr>')
-            vk.set('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
-            vk.set('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
-            vk.set('n', '<leader>f`', '<cmd>Telescope marks<cr>')
-            vk.set('n', '<leader>fq', '<cmd>Telescope quickfix<cr>')
-            vk.set('n', '<leader>fQ', '<cmd>Telescope quickfixhistory<cr>')
-            vk.set('n', '<leader>fl', '<cmd>Telescope loclist<cr>')
-            vk.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
-            vk.set('n', '<leader>fo', '<cmd>Telescope vim_options<cr>')
-            vk.set('n', '<leader>f@', '<cmd>Telescope registers<cr>')
-            vk.set('n', '<leader>f?', '<cmd>Telescope keymaps<cr>')
-            vk.set('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
-            vk.set('n', '<leader>fr', '<cmd>Telescope resume<cr>')
-            vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
-
-            vk.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
-            vk.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
-            vk.set('n', '<leader>td', '<cmd>Telescope lsp_definitions<cr>')
-            vk.set('n', '<leader>ti', '<cmd>Telescope lsp_incoming_calls<cr>')
-            vk.set('n', '<leader>to', '<cmd>Telescope lsp_outgoing_calls<cr>')
-            vk.set('n', '<leader>ti', '<cmd>Telescope lsp_implementations<cr>')
-            vk.set('n', '<leader>tt',
-                    '<cmd>Telescope lsp_type_definitions<cr>')
-            vk.set('n', '<leader>ts',
-                    '<cmd>Telescope lsp_document_symbols<cr>')
-            vk.set('n', '<leader>tS',
-                    '<cmd>Telescope lsp_workspace_symbols<cr>')
-
-          end,
         }
 
         use { -- Search in git tree
@@ -361,9 +368,6 @@ require('packer').startup(
             end,
         }
 
-        -- TODO
-        -- use iamcco/markdown-preview.nvim        -- Markdown preview
-
         use { -- Pretty icons everywhere
             'nvim-tree/nvim-web-devicons',
             config = function ()
@@ -411,10 +415,9 @@ require('packer').startup(
             end,
         }
 
-        use 'mg979/vim-visual-multi'               -- Multiple cursors
+        use 'akhilsbehl/md-image-paste'            -- Paste images in md files
 
-        -- TODO
-        -- use 'akhilsbehl/md-image-paste'         -- Paste images in md files
+        use 'mg979/vim-visual-multi'               -- Multiple cursors
 
         use 'tpope/vim-surround'                   -- Use surround movements
 
@@ -760,3 +763,5 @@ augroup END
 ]=]
 
 -- TODOs:
+-- Look at this for any other good ideas: rockerBOO/awesome-neovim
+-- Markdown preview: use iamcco/markdown-preview.nvim
