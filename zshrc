@@ -446,14 +446,6 @@ launchpad
 
 cowsay -f milk -W 79 $(fortune)
 
-####################################
-#  Source stuff local to each box  #
-####################################
-
-[[ -f ~/.zshrc.wsl ]] && source ~/.zshrc.wsl
-[[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
-[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
-
 #######################
 #  Set up the prompt  #
 #######################
@@ -462,3 +454,11 @@ cowsay -f milk -W 79 $(fortune)
 autoload -U promptinit
 promptinit
 prompt pure
+
+####################################
+#  Source stuff local to each box  #
+####################################
+
+[[ -f ~/.zshrc.wsl ]] && source ~/.zshrc.wsl
+[[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
+[[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
