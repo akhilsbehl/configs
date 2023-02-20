@@ -1,28 +1,28 @@
-vc = vim.cmd
-vf = vim.fn
-vg = vim.g
-vk = vim.keymap
-vo = vim.opt
+VA = vim.api
+VC = vim.cmd
+VF = vim.fn
+VG = vim.g
+VK = vim.keymap
+VO = vim.opt
 
-vg.mapleader = ','
-vg.maplocalleader = ' '
+VG.mapleader = ','
+VG.maplocalleader = ' '
 
 local ensure_packer = function()
-    local install_path = vf.stdpath('data') ..
+    local install_path = VF.stdpath('data') ..
     '/site/pack/packer/start/packer.nvim'
-    if vf.empty(vf.glob(install_path)) > 0 then
-        vf.system({
+    if VF.empty(VF.glob(install_path)) > 0 then
+        VF.system({
             'git', 'clone', '--depth', '1',
             'https://github.com/wbthomason/packer.nvim', install_path
         })
-        vc [[packadd packer.nvim]]
+        VC [[packadd packer.nvim]]
         return true
     end
     return false
 end
 
 local packer_bootstrap = ensure_packer()
-local use = require('packer').use
 
 require('packer').startup(
 
@@ -34,47 +34,127 @@ require('packer').startup(
             'VonHeikemen/lsp-zero.nvim',
             branch = 'v1.x',
             requires = {
-
-                -- LSP Support
                 {'neovim/nvim-lspconfig'},
                 {'williamboman/mason-lspconfig.nvim'},
                 {'williamboman/mason.nvim'},
-
-                -- Autocompletion
                 {'hrsh7th/cmp-buffer'},
                 {'hrsh7th/cmp-cmdline'},
                 {'hrsh7th/cmp-nvim-lsp'},
                 {'hrsh7th/cmp-nvim-lua'},
                 {'hrsh7th/cmp-path'},
                 {'hrsh7th/nvim-cmp'},
-
+                {'L3MON4D3/LuaSnip'},  -- Only to stop cmp's bitching
             },
-            config = function ()
-                require('lsp-zero')
-                .preset({
-                    name = 'minimal',
+            config = function()
+                local lsp = require('lsp-zero').preset({
+                    name = 'recommended',
                     set_lsp_keymaps = false,
                     manage_nvim_cmp = true,
                     suggest_lsp_servers = true,
                 })
-                .setup {
-                    lsp = {
-                        on_attach = function(client, bufnr)
-                            require('lsp').on_attach(client, bufnr)
-                        end,
+                local cmp = require('cmp')
+                lsp.on_attach(function(client, bufnr)
+                    local opts = {buffer = bufnr}
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.open_float()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.goto_prev()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>lua vim.lsp.buf.goto_next()<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>LspZeroFormat<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>LspZeroWorkspaceRemove<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>LspZeroWorkspaceAdd<cr>', opts)
+                    -- VK.set('n', '<leader>', '<cmd>LspZeroWorkspaceList<cr>', opts)
+                end)
+                lsp.ensure_installed({
+                    'bashls',
+                    'grammarly',
+                    'lua_ls',
+                    'pyright',
+                    'r_language_server',
+                    'remark_ls',
+                    'sqlls',
+                    'vimls',
+                    -- 'bash-debug-adapter',
+                    -- 'beautysh',
+                    -- 'black',
+                    -- 'flake8',
+                    -- 'markdownlint',
+                    -- 'pydocstyle',
+                    -- 'reorder-python-imports',
+                    -- 'shellcheck',
+                    -- 'shfmt',
+                    -- 'sql-formatter',
+                })
+                lsp.setup_nvim_cmp({
+                    sources = {
+                        { name = 'buffer', keyword_length = 3},
+                        { name = 'cmdline' },
+                        { name = 'nvim_lsp', keyword_length = 1},
+                        { name = 'nvim_lua' },
+                        { name = 'path' },
                     },
-                    cmp = {
-                        sources = {
-                            { name = 'buffer' },
-                            { name = 'cmdline' },
-                            { name = 'nvim_lsp' },
-                            { name = 'nvim_lua' },
-                            { name = 'path' },
-                        },
+                    completion = {autocomplete = true},
+                    expand = function(args)
+                        VF["UltiSnips#Anon"](args.body)
+                    end,
+                    view = {
+                        entries = {
+                            name = 'custom',
+                            selection_order = 'near_cursor',
+                        }
                     },
+                    mapping = cmp.mapping.preset.insert({
+                        ['<c-e>'] = vim.NIL,
+                        ['<esc>'] = cmp.mapping.abort(),
+                        ['<cr>'] = cmp.mapping.confirm({select = true}),
+                        ['<tab>'] = cmp.mapping.select_next_item(),
+                        ['<S-tab>'] = cmp.mapping.select_prev_item(),
+                        ['<C-j>'] = cmp.mapping.scroll_docs(3),
+                        ['<C-k>'] = cmp.mapping.scroll_docs(-3),
+                    }),
+                })
+                lsp.setup()
+                local signs = {
+                    Error = " ",
+                    Warn  = " ",
+                    Hint  = " ",
+                    Info  = " ",
                 }
+                for type, icon in pairs(signs) do
+                    local hl = "DiagnosticSign" .. type
+                    VF.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
+                end
+                vim.diagnostic.config({
+                    virtual_text     = false,
+                    signs            = true,
+                    update_in_insert = false,
+                    underline        = false,
+                    severity_sort    = true,
+                    float = {
+                        focusable    = false,
+                        style        = 'minimal',
+                        border       = 'rounded',
+                        source       = 'always',
+                        header       = '',
+                        prefix       = '',
+                    },
+                })
             end,
         }
+        use({
+            "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+            config = function()
+                require("lsp_lines").setup()
+                VK.set("n", "<leader>vt", require("lsp_lines").toggle)
+            end,
+        })
 
         use { -- Fuzzy finder
             'nvim-telescope/telescope.nvim',
@@ -149,47 +229,43 @@ require('packer').startup(
                         },
                     },
                 }
-
                 require('telescope').load_extension('fzf')
                 require('telescope').load_extension('ultisnips')
-
-                vk.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
-                vk.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
-                vk.set('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
-                vk.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
-                vk.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
-                vk.set('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
-                vk.set('n', '<leader>fc', '<cmd>Telescope commands<cr>')
-                vk.set('n', '<leader>ft', '<cmd>Telescope tags<cr>')
-                vk.set('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
-                vk.set('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
-                vk.set('n', '<leader>f`', '<cmd>Telescope marks<cr>')
-                vk.set('n', '<leader>fq', '<cmd>Telescope quickfix<cr>')
-                vk.set('n', '<leader>fQ', '<cmd>Telescope quickfixhistory<cr>')
-                vk.set('n', '<leader>fl', '<cmd>Telescope loclist<cr>')
-                vk.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
-                vk.set('n', '<leader>fo', '<cmd>Telescope vim_options<cr>')
-                vk.set('n', '<leader>f@', '<cmd>Telescope registers<cr>')
-                vk.set('n', '<leader>f?', '<cmd>Telescope keymaps<cr>')
-                vk.set('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
-                vk.set('n', '<leader>fr', '<cmd>Telescope resume<cr>')
-                vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
-                vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
-                vk.set('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
-
-                vk.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
-                vk.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
-                vk.set('n', '<leader>td', '<cmd>Telescope lsp_definitions<cr>')
-                vk.set('n', '<leader>ti', '<cmd>Telescope lsp_incoming_calls<cr>')
-                vk.set('n', '<leader>to', '<cmd>Telescope lsp_outgoing_calls<cr>')
-                vk.set('n', '<leader>ti', '<cmd>Telescope lsp_implementations<cr>')
-                vk.set('n', '<leader>tt',
+                VK.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
+                VK.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
+                VK.set('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
+                VK.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
+                VK.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
+                VK.set('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
+                VK.set('n', '<leader>fc', '<cmd>Telescope commands<cr>')
+                VK.set('n', '<leader>ft', '<cmd>Telescope tags<cr>')
+                VK.set('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
+                VK.set('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
+                VK.set('n', '<leader>f`', '<cmd>Telescope marks<cr>')
+                VK.set('n', '<leader>fq', '<cmd>Telescope quickfix<cr>')
+                VK.set('n', '<leader>fQ', '<cmd>Telescope quickfixhistory<cr>')
+                VK.set('n', '<leader>fl', '<cmd>Telescope loclist<cr>')
+                VK.set('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
+                VK.set('n', '<leader>fo', '<cmd>Telescope vim_options<cr>')
+                VK.set('n', '<leader>f@', '<cmd>Telescope registers<cr>')
+                VK.set('n', '<leader>f?', '<cmd>Telescope keymaps<cr>')
+                VK.set('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
+                VK.set('n', '<leader>fr', '<cmd>Telescope resume<cr>')
+                VK.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+                VK.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+                VK.set('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
+                VK.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
+                VK.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
+                VK.set('n', '<leader>td', '<cmd>Telescope lsp_definitions<cr>')
+                VK.set('n', '<leader>ti', '<cmd>Telescope lsp_incoming_calls<cr>')
+                VK.set('n', '<leader>to', '<cmd>Telescope lsp_outgoing_calls<cr>')
+                VK.set('n', '<leader>ti', '<cmd>Telescope lsp_implementations<cr>')
+                VK.set('n', '<leader>tt',
                     '<cmd>Telescope lsp_type_definitions<cr>')
-                vk.set('n', '<leader>ts',
+                VK.set('n', '<leader>ts',
                     '<cmd>Telescope lsp_document_symbols<cr>')
-                vk.set('n', '<leader>tS',
+                VK.set('n', '<leader>tS',
                     '<cmd>Telescope lsp_workspace_symbols<cr>')
-
             end,
         }
         use {
@@ -210,11 +286,11 @@ require('packer').startup(
                 .update({ with_sync = true })
                 ts_update()
             end,
-            config = function ()
-                vim.api.nvim_create_autocmd(
+            config = function()
+                VA.nvim_create_autocmd(
                     {'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEnter'},
                     {
-                        group = vim.api.
+                        group = VA.
                             nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
                         callback = function()
                             vim.opt.foldmethod = 'expr'
@@ -277,7 +353,7 @@ require('packer').startup(
 
         use { -- Slime
             'hkupty/iron.nvim',
-            config = function ()
+            config = function()
                 local icore = require('iron.core')
                 local iview = require('iron.view')
                 icore.setup {
@@ -302,17 +378,17 @@ require('packer').startup(
                         exit           = '<localleader>Q',
                     },
                 }
-                vk.set('n', '<localleader>O', '<cmd>IronRepl<cr>')
-                vk.set('n', '<localleader>F', '<cmd>IronFocus<cr>')
-                vk.set('n', '<localleader>H', '<cmd>IronHide<cr>')
+                VK.set('n', '<localleader>O', '<cmd>IronRepl<cr>')
+                VK.set('n', '<localleader>F', '<cmd>IronFocus<cr>')
+                VK.set('n', '<localleader>H', '<cmd>IronHide<cr>')
             end,
         }
 
         use { -- Search in git tree
             'mileszs/ack.vim',
             config = function()
-                vg.ackprg = 'rg --vimgrep --no-heading --smart-case'
-                vc [[
+                VG.ackprg = 'rg --vimgrep --no-heading --smart-case'
+                VC [[
                     function! FindGitRoot()
                         return system(
                                     \ 'git rev-parse
@@ -323,19 +399,19 @@ require('packer').startup(
                                 \ execute 'Ack! ' .
                                 \ expand('<cword>') . ' ' . FindGitRoot()
                 ]]
-                vk.set('n', '<leader>fg', '<cmd>AckCword<cr>')
+                VK.set('n', '<leader>fg', '<cmd>AckCword<cr>')
             end,
         }
 
         use { -- Show newlines
             'lukas-reineke/indent-blankline.nvim',
-            config = function ()
-                vo.list = true
-                vo.listchars:append('lead:·')
-                vo.listchars:append('trail:⋅')
-                vo.listchars:append('nbsp:␣')
-                vo.listchars:append('eol:↴')
-                vo.listchars:append('tab:▸ ')
+            config = function()
+                VO.list = true
+                VO.listchars:append('lead:·')
+                VO.listchars:append('trail:⋅')
+                VO.listchars:append('nbsp:␣')
+                VO.listchars:append('eol:↴')
+                VO.listchars:append('tab:▸ ')
                 require('indent_blankline').setup {
                     space_char_blankline = ' ',
                     show_end_of_line = true,
@@ -348,26 +424,27 @@ require('packer').startup(
         use { -- AI
             'github/copilot.vim',
             config = function()
-                vg.copilot_enabled = 1
-                vg.copilot_no_tab_map = 1
-                vk.set('i', '<C-s>', '<Plug>(copilot-suggest)')
-                vk.set('i', '<C-d>', '<Plug>(copilot-dismiss)')
-                vk.set('i', '<C-j>', '<Plug>(copilot-next)')
-                vk.set('i', '<C-k>', '<Plug>(copilot-previous)')
-                vk.set('i', '<S-Tab>', 'copilot#Accept("")', {expr = true})
-                vk.set('n', '<leader>cs', '<cmd>Copilot<cr>')
+                VG.copilot_enabled = 1
+                VG.copilot_no_tab_map = 1
+                VK.set('i', '<C-s>', '<Plug>(copilot-suggest)')
+                VK.set('i', '<C-d>', '<Plug>(copilot-dismiss)')
+                VK.set('i', '<C-j>', '<Plug>(copilot-next)')
+                VK.set('i', '<C-k>', '<Plug>(copilot-previous)')
+                VK.set('i', '<S-Tab>', 'copilot#Accept("")', {expr = true})
+                VK.set('n', '<leader>cs', '<cmd>Copilot<cr>')
             end,
         }
 
         use { -- Snippets engine
             'SirVer/UltiSnips',
             config = function()
-                vg.UltiSnipsExpandTrigger       = "<c-e>"
-                vg.UltiSnipsListSnippets        = "<c-l>"
-                vg.UltiSnipsJumpForwardTrigger  = "<c-k>"
-                vg.UltiSnipsJumpBackwardTrigger = "<c-j>"
-                vg.UltiSnipsSnippetDirectories  = {"mysnippets", "UltiSnips"}
-                vg.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
+                VG.UltiSnipsExpandTrigger            = "<c-e>"
+                VG.UltiSnipsListSnippets             = "<c-l>"
+                VG.UltiSnipsJumpForwardTrigger       = "<c-k>"
+                VG.UltiSnipsJumpBackwardTrigger      = "<c-j>"
+                VG.UltiSnipsRemoveSelectModeMappings = 0
+                VG.UltiSnipsSnippetDirectories  = {"mysnippets", "UltiSnips"}
+                VG.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
                 "~/.vim/mysnippets"
             end
         }
@@ -376,28 +453,28 @@ require('packer').startup(
         use { -- Commenting
             'scrooloose/nerdcommenter',
             config = function()
-                vg.NERDCreateDefaultMappings = 0
-                vg.NERDRemoveExtraSpaces     = 1
-                vg.NERDSpaceDelims           = 1
-                vg.NERDToggleCheckAllLines   = 1
-                vk.set({'n', 'v'}, '<leader>c ', '<Plug>NERDCommenterToggle')
-                vk.set('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
+                VG.NERDCreateDefaultMappings = 0
+                VG.NERDRemoveExtraSpaces     = 1
+                VG.NERDSpaceDelims           = 1
+                VG.NERDToggleCheckAllLines   = 1
+                VK.set({'n', 'v'}, '<leader>c ', '<Plug>NERDCommenterToggle')
+                VK.set('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
             end,
         }
 
         use { -- Markdown TOC
             'mzlogin/vim-markdown-toc',
             config = function()
-                vg.vmt_auto_update_on_save = 1
-                vg.vmt_fence_closing_text = 'toc-marker : do-not-edit'
-                vg.vmt_fence_hidden_markdown_style = 'GFM'
-                vg.vmt_fence_text = 'toc-marker : do-not-edit'
+                VG.vmt_auto_update_on_save = 1
+                VG.vmt_fence_closing_text = 'toc-marker : do-not-edit'
+                VG.vmt_fence_hidden_markdown_style = 'GFM'
+                VG.vmt_fence_text = 'toc-marker : do-not-edit'
             end,
         }
 
         use { -- Pretty icons everywhere
             'nvim-tree/nvim-web-devicons',
-            config = function ()
+            config = function()
                 require('nvim-web-devicons').setup {
                     default = true,
                     color_icons = true,
@@ -419,7 +496,7 @@ require('packer').startup(
         use { -- Show git signs
             'airblade/vim-gitgutter',
             config = function()
-                vg.gitgutter_map_keys = 0
+                VG.gitgutter_map_keys = 0
             end,
         }
 
@@ -470,7 +547,7 @@ require('packer').startup(
 
 )
 
-vc [=[
+VC [=[
 
 "-----------------------
 " Look and feel options
@@ -794,4 +871,11 @@ augroup END
 -- Markdown preview: use iamcco/markdown-preview.nvim
 -- Debug Adaptor Protocol or Vimspector + telescope-dap
 -- yanky.nvim
--- Replicating mason setup
+-- Copilot.lua seems more configurable: zbirenbaum/copilot.lua
+-- Orgmode once again? nvim-orgmode/orgmode
+-- How to make Mason setup configurable
+-- More completions: https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
+--     quangnguyen30192/cmp-nvim-ultisnips
+--     dmitmel/cmp-digraphs
+--     amarakon/nvim-cmp-lua-latex-symbols
+--     rcarriga/cmp-dap
