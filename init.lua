@@ -39,13 +39,14 @@ require('packer').startup(
                 {'williamboman/mason-lspconfig.nvim'},
                 {'williamboman/mason.nvim'},
                 {'hrsh7th/cmp-buffer'},
-                {'hrsh7th/cmp-cmdline'},
                 {'hrsh7th/cmp-nvim-lsp'},
                 {'hrsh7th/cmp-nvim-lua'},
                 {'hrsh7th/cmp-path'},
                 {'hrsh7th/nvim-cmp'},
                 {'L3MON4D3/LuaSnip'},  -- Only to stop cmp's bitching
                 {'quangnguyen30192/cmp-nvim-ultisnips'},
+                {'dmitmel/cmp-digraphs'},
+                {'amarakon/nvim-cmp-lua-latex-symbols'},
             },
             config = function()
                 local lsp = require('lsp-zero').preset({
@@ -109,6 +110,12 @@ require('packer').startup(
                         { name = 'nvim_lua' },
                         { name = 'path' },
                         { name = 'ultisnips' },
+                        { name = 'digraphs' },
+                        {
+                            name = 'lua-latex-symbols',
+                            option = {cache = true},
+                            filetype = {'tex', 'plaintex', 'markdown'},
+                        },
                     },
                     snippet = {
                         expand = function(args)
@@ -125,7 +132,8 @@ require('packer').startup(
                         ['<c-e>'] = vim.NIL,
                         ['<C-t>'] = cmp.mapping.complete(),
                         ['<cr>'] = cmp.mapping.confirm({select = true}),
-                        ['<esc>'] = cmp.mapping.abort(),
+                        ['<C-a>'] = cmp.mapping.close(),
+                        ['<C-e>'] = cmp.mapping.abort(),
                         ['<tab>'] = cmp.mapping.select_next_item(),
                         ['<S-tab>'] = cmp.mapping.select_prev_item(),
                         ['<C-n>'] = cmp.mapping.scroll_docs(3),
@@ -465,7 +473,10 @@ require('packer').startup(
                 VK.set('i', '<C-d>', '<Plug>(copilot-dismiss)')
                 VK.set('i', '<C-j>', '<Plug>(copilot-next)')
                 VK.set('i', '<C-k>', '<Plug>(copilot-previous)')
-                VK.set('i', '<S-Tab>', 'copilot#Accept("")', {expr = true})
+                VK.set('i', '<S-Tab>', 'copilot#Accept("")', {
+                    -- https://github.com/community/community/discussions/29817
+                    expr = true, replace_keycodes = false,
+                })
                 VK.set('n', '<leader>cs', '<cmd>Copilot<cr>')
             end,
         }
@@ -905,10 +916,6 @@ augroup END
 -- TODOs:
 -- 5. Markdown preview: iamcco/markdown-preview.nvim
 -- 6. Copilot.lua seems more configurable: zbirenbaum/copilot.lua
--- 7. yanky.nvim
--- 8. More completion: https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
---     8.1. dmitmel/cmp-digraphs
---     8.2. amarakon/nvim-cmp-lua-latex-symbols
 -- 9. Debug Adaptor Protocol or Vimspector + telescope-dap
 --     9.1. rcarriga/cmp-dap
 --     9.2. bash-debug-adapter
