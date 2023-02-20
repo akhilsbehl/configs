@@ -67,7 +67,7 @@ require('packer').startup(
         }
         use 'honza/vim-snippets'                   -- Snippets library
 
-        use {
+        use { -- Fuzzy finder
             'nvim-telescope/telescope.nvim',
             branch = '0.1.x',
             requires = {{'nvim-lua/plenary.nvim'}},
@@ -142,6 +142,7 @@ require('packer').startup(
                 }
 
                 require('telescope').load_extension('fzf')
+                require('telescope').load_extension('ultisnips')
 
                 vk.set('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
                 vk.set('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
@@ -164,6 +165,8 @@ require('packer').startup(
                 vk.set('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
                 vk.set('n', '<leader>fr', '<cmd>Telescope resume<cr>')
                 vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+                vk.set('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+                vk.set('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
 
                 vk.set('n', '<leader>tD', '<cmd>Telescope diagnostics<cr>')
                 vk.set('n', '<leader>tr', '<cmd>Telescope lsp_references<cr>')
@@ -180,6 +183,11 @@ require('packer').startup(
 
             end,
         }
+        use {
+            'nvim-telescope/telescope-fzf-native.nvim',
+            run = 'make'
+        }
+        use { 'fhill2/telescope-ultisnips.nvim' }
 
         use { -- Treesitter text objects
             'nvim-treesitter/nvim-treesitter-textobjects',
@@ -289,10 +297,6 @@ require('packer').startup(
                 vk.set('n', '<localleader>F', '<cmd>IronFocus<cr>')
                 vk.set('n', '<localleader>H', '<cmd>IronHide<cr>')
             end,
-        }
-        use { -- Fuzzy finder
-            'nvim-telescope/telescope-fzf-native.nvim',
-            run = 'make'
         }
 
         use { -- Search in git tree
