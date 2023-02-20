@@ -37,6 +37,10 @@ update dircolors
 rm -rf $HOME/scripts
 ln -s $PWD/scripts $HOME/scripts
 
+mk-dir-if-not-found $HOME/.config/nvim
+[[ -f $HOME/.config/nvim/init.lua ]] && rm $HOME/.config/nvim/init.lua
+ln -s $PWD/init.lua $HOME/.config/nvim/
+
 mk-dir-if-not-found $HOME/.ssh
 sudo chown -R $USER:$USER $HOME/.ssh
 [[ -f $HOME/.ssh/config ]] && mv $HOME/.ssh/config{,.bkup}
@@ -69,8 +73,11 @@ if [[ "$1" == "--vundle" || "$2" == "--vundle" ]]; then
       $HOME/.vim/bundle/Vundle.vim
   vim -c "colorscheme default" +PluginInstall +qall
 fi
-[[ -d $HOME/.vim/mysnippets ]] && rm $HOME/.vim/mysnippets
-ln -s $PWD/snippets $HOME/.vim/mysnippets
+
+for d in $HOME/.vim/mysnippets $HOME/.config/nvim/mysnippets; do
+    [[ -d "$d" ]] && rm -rf "$d"
+    ln -s "$PWD/snippets" "$d"
+done
 
 rm -rf $HOME/.tmux/plugins/tpm
 git clone 'https://github.com/tmux-plugins/tpm' $HOME/.tmux/plugins/tpm
