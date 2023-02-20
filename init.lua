@@ -539,8 +539,6 @@ require('packer').startup(
 
         use 'akhilsbehl/md-image-paste'            -- Paste images in md files
 
-        use 'mg979/vim-visual-multi'               -- Multiple cursors
-
         use 'tpope/vim-surround'                   -- Use surround movements
 
         use 'tpope/vim-repeat'                     -- Repeat commands
@@ -884,16 +882,20 @@ augroup END
 
 ]=]
 
+
 -- TODOs:
--- Look at this for any other good ideas: rockerBOO/awesome-neovim
--- Markdown preview: use iamcco/markdown-preview.nvim
--- Debug Adaptor Protocol or Vimspector + telescope-dap
--- yanky.nvim
--- Copilot.lua seems more configurable: zbirenbaum/copilot.lua
+-- 1. Merge with changes to vimrc
+-- 2. Set up linters and formatters: jose-elias-alvarez/null-ls.nvim
+-- 3. Support for snips: quangnguyen30192/cmp-nvim-ultisnips
+-- 4. How to make Mason setup configurable (null-ls?)
+-- 5. Markdown preview: iamcco/markdown-preview.nvim
+-- 6. Copilot.lua seems more configurable: zbirenbaum/copilot.lua
+-- 7. yanky.nvim
+-- 8. More completion: https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
+--     8.1. dmitmel/cmp-digraphs
+--     8.2. amarakon/nvim-cmp-lua-latex-symbols
+-- 9. Debug Adaptor Protocol or Vimspector + telescope-dap
+--     9.1. rcarriga/cmp-dap
+-- Multiple cursors: 'mg979/vim-visual-multi'
 -- Orgmode once again? nvim-orgmode/orgmode
--- How to make Mason setup configurable
--- More completions: https://github.com/hrsh7th/nvim-cmp/wiki/List-of-sources
---     quangnguyen30192/cmp-nvim-ultisnips
---     dmitmel/cmp-digraphs
---     amarakon/nvim-cmp-lua-latex-symbols
---     rcarriga/cmp-dap
+-- Look at this for any other good ideas: rockerBOO/awesome-neovim
