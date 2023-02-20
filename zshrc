@@ -173,13 +173,13 @@ eval $(dircolors ~/.dircolors)
 
 alias bashrc='$EDITOR "$HOME"/.bashrc'
 
-alias zshrc='$EDITOR "$HOME"/.zshrc'
+alias zshrc='$EDITOR "$HOME"/configs/zshrc'
 
-alias vimrc='$EDITOR "$HOME"/.vimrc'
+alias vimrc='$EDITOR "$HOME"/configs/vimrc'
 
 alias nvimrc='$EDITOR "$HOME"/configs/init.lua'
 
-alias gvimrc='$EDITOR "$HOME"/.gvimrc'
+alias gvimrc='$EDITOR "$HOME"/configs/gvimrc'
 
 alias fstab='sudo $EDITOR /etc/fstab'
 
