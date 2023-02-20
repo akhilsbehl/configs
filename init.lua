@@ -590,7 +590,7 @@ set autochdir
 " Look and feel options.
 set cursorline cursorcolumn ruler number relativenumber numberwidth=4
 set showmode showcmd
-set mouse-=a
+set mouse-=a mousefocus
 set textwidth=79 colorcolumn=+1 laststatus=2 signcolumn=yes
 set termguicolors background=dark
 let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
@@ -658,7 +658,8 @@ nnoremap tj <C-w>j<CR>
 nnoremap tk <C-w>k<CR>
 nnoremap th <C-w>h<CR>
 nnoremap tl <C-w>l<CR>
-nnoremap tr <C-w>r<CR>
+nnoremap tr :e<CR>
+nnoremap tR <C-w>r<CR>
 nnoremap tmh <C-w>t<C-w>K<CR>
 nnoremap tmv <C-w>t<C-w>H<CR>
 nnoremap tJ :tabprevious<CR>
@@ -897,10 +898,7 @@ augroup END
 
 
 -- TODOs:
--- 1. Merge with changes to vimrc
--- 2. Set up linters and formatters: jose-elias-alvarez/null-ls.nvim
 -- 3. Support for snips: quangnguyen30192/cmp-nvim-ultisnips
--- 4. How to make Mason setup configurable (null-ls?)
 -- 5. Markdown preview: iamcco/markdown-preview.nvim
 -- 6. Copilot.lua seems more configurable: zbirenbaum/copilot.lua
 -- 7. yanky.nvim
