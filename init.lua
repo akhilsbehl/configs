@@ -98,16 +98,6 @@ require('packer').startup(
                     'remark_ls',
                     'sqlls',
                     'vimls',
-                    -- 'bash-debug-adapter',
-                    -- 'beautysh',
-                    -- 'black',
-                    -- 'flake8',
-                    -- 'markdownlint',
-                    -- 'pydocstyle',
-                    -- 'reorder-python-imports',
-                    -- 'shellcheck',
-                    -- 'shfmt',
-                    -- 'sql-formatter',
                 })
                 lsp.setup_nvim_cmp({
                     sources = {
@@ -118,7 +108,7 @@ require('packer').startup(
                         { name = 'path' },
                     },
                     expand = function(args)
-                        VF["UltiSnips#Anon"](args.body)
+                        VF['UltiSnips#Anon'](args.body)
                     end,
                     view = {
                         entries = {
@@ -128,7 +118,7 @@ require('packer').startup(
                     },
                     mapping = cmp.mapping.preset.insert({
                         ['<c-e>'] = vim.NIL,
-                        ['<localleader><tab>'] = cmp.mapping.complete(),
+                        ['<C-t>'] = cmp.mapping.complete(),
                         ['<cr>'] = cmp.mapping.confirm({select = true}),
                         ['<esc>'] = cmp.mapping.abort(),
                         ['<tab>'] = cmp.mapping.select_next_item(),
@@ -139,13 +129,13 @@ require('packer').startup(
                 })
                 lsp.setup()
                 local signs = {
-                    Error = " ",
-                    Warn  = " ",
-                    Hint  = " ",
-                    Info  = " ",
+                    Error = ' ',
+                    Warn  = ' ',
+                    Hint  = ' ',
+                    Info  = ' ',
                 }
                 for type, icon in pairs(signs) do
-                    local hl = "DiagnosticSign" .. type
+                    local hl = 'DiagnosticSign' .. type
                     VF.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
                 end
                 vim.diagnostic.config({
@@ -167,12 +157,34 @@ require('packer').startup(
             end,
         }
         use({
-            "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+            'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
             config = function()
-                require("lsp_lines").setup()
-                VK.set("n", "<leader>vt", require("lsp_lines").toggle)
+                require('lsp_lines').setup()
+                VK.set('n', '<leader>vt', require('lsp_lines').toggle)
             end,
         })
+        use {
+            'jose-elias-alvarez/null-ls.nvim',
+            config = function()
+                local nls = require('null-ls')
+                local fmt = nls.builtins.formatting
+                local lint = nls.builtins.diagnostics
+                local act = nls.builtins.code_actions
+                nls.setup({
+                    sources = {
+                        act.shellcheck,
+                        fmt.beautysh,
+                        fmt.black,
+                        fmt.reorder_python_imports,
+                        fmt.shfmt,
+                        fmt.sql_formatter,
+                        lint.flake8,
+                        lint.markdownlint,
+                        lint.pydocstyle,
+                    }
+                })
+            end,
+        }
 
         use { -- Fuzzy finder
             'nvim-telescope/telescope.nvim',
@@ -184,48 +196,48 @@ require('packer').startup(
                     defaults = {
                         mappings = {
                             i = {
-                                ["<esc>"]   = actions.close,
-                                ["<C-?>"]   = actions.which_key,
-                                ["<C-l>"]   = actions.move_selection_next,
-                                ["<C-k>"]   = actions.move_selection_previous,
-                                ["<cr>"]    = actions.select_default +
+                                ['<esc>']   = actions.close,
+                                ['<C-?>']   = actions.which_key,
+                                ['<C-l>']   = actions.move_selection_next,
+                                ['<C-k>']   = actions.move_selection_previous,
+                                ['<cr>']    = actions.select_default +
                                     actions.center,
-                                ["<C-t>"]   = actions.select_tab,
-                                ["<C-s>"]   = actions.select_horizontal,
-                                ["<C-v>"]   = actions.select_vertical,
-                                ["<C-u>"]   = actions.preview_scrolling_up,
-                                ["<C-d>"]   = actions.preview_scrolling_down,
-                                ["<C-f>"]   = actions.results_scrolling_up,
-                                ["<C-b>"]   = actions.results_scrolling_down,
-                                ["<C-q>"]   = actions.smart_send_to_qflist +
+                                ['<C-t>']   = actions.select_tab,
+                                ['<C-s>']   = actions.select_horizontal,
+                                ['<C-v>']   = actions.select_vertical,
+                                ['<C-u>']   = actions.preview_scrolling_up,
+                                ['<C-d>']   = actions.preview_scrolling_down,
+                                ['<C-f>']   = actions.results_scrolling_up,
+                                ['<C-b>']   = actions.results_scrolling_down,
+                                ['<C-q>']   = actions.smart_send_to_qflist +
                                     actions.open_qflist,
-                                ["<Tab>"]   = actions.toggle_selection +
+                                ['<Tab>']   = actions.toggle_selection +
                                     actions.move_selection_worse,
-                                ["<S-Tab>"] = actions.toggle_selection +
+                                ['<S-Tab>'] = actions.toggle_selection +
                                     actions.move_selection_better,
                             },
                             n = {
-                                ["<esc>"]   = actions.close,
-                                ["?"]       = actions.which_key,
-                                ["j"]       = actions.move_selection_next,
-                                ["k"]       = actions.move_selection_previous,
-                                ["<cr>"]    = actions.select_default +
+                                ['<esc>']   = actions.close,
+                                ['?']       = actions.which_key,
+                                ['j']       = actions.move_selection_next,
+                                ['k']       = actions.move_selection_previous,
+                                ['<cr>']    = actions.select_default +
                                     actions.center,
-                                ["t"]       = actions.select_tab,
-                                ["s"]       = actions.select_horizontal,
-                                ["v"]       = actions.select_vertical,
-                                ["u"]       = actions.preview_scrolling_up,
-                                ["d"]       = actions.preview_scrolling_down,
-                                ["f"]       = actions.results_scrolling_up,
-                                ["b"]       = actions.results_scrolling_down,
-                                ["gg"]      = actions.move_to_top,
-                                ["G"]       = actions.move_to_bottom,
-                                ["m"]       = actions.move_to_middle,
-                                ["q"]       = actions.smart_send_to_qflist +
+                                ['t']       = actions.select_tab,
+                                ['s']       = actions.select_horizontal,
+                                ['v']       = actions.select_vertical,
+                                ['u']       = actions.preview_scrolling_up,
+                                ['d']       = actions.preview_scrolling_down,
+                                ['f']       = actions.results_scrolling_up,
+                                ['b']       = actions.results_scrolling_down,
+                                ['gg']      = actions.move_to_top,
+                                ['G']       = actions.move_to_bottom,
+                                ['m']       = actions.move_to_middle,
+                                ['q']       = actions.smart_send_to_qflist +
                                     actions.open_qflist,
-                                ["<Tab>"]   = actions.toggle_selection +
+                                ['<Tab>']   = actions.toggle_selection +
                                     actions.move_selection_worse,
-                                ["<S-Tab>"] = actions.toggle_selection +
+                                ['<S-Tab>'] = actions.toggle_selection +
                                     actions.move_selection_better,
                             },
                         },
@@ -456,14 +468,14 @@ require('packer').startup(
         use { -- Snippets engine
             'SirVer/UltiSnips',
             config = function()
-                VG.UltiSnipsExpandTrigger            = "<c-e>"
-                VG.UltiSnipsListSnippets             = "<c-l>"
-                VG.UltiSnipsJumpForwardTrigger       = "<c-k>"
-                VG.UltiSnipsJumpBackwardTrigger      = "<c-j>"
+                VG.UltiSnipsExpandTrigger            = '<c-e>'
+                VG.UltiSnipsListSnippets             = '<c-l>'
+                VG.UltiSnipsJumpForwardTrigger       = '<c-k>'
+                VG.UltiSnipsJumpBackwardTrigger      = '<c-j>'
                 VG.UltiSnipsRemoveSelectModeMappings = 0
-                VG.UltiSnipsSnippetDirectories  = {"mysnippets", "UltiSnips"}
+                VG.UltiSnipsSnippetDirectories  = {'mysnippets', 'UltiSnips'}
                 VG.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
-                "~/.vim/mysnippets"
+                '~/.vim/mysnippets'
             end
         }
         use 'honza/vim-snippets'                   -- Snippets library
@@ -714,6 +726,7 @@ nnoremap <leader>fp gqipj
 "-------------------------
 " Copy to clipboard.
 "-------------------------
+
 set clipboard=unnamedplus
 
 " Copy the whole buffer to the os clipboard.
@@ -896,6 +909,7 @@ augroup END
 --     8.2. amarakon/nvim-cmp-lua-latex-symbols
 -- 9. Debug Adaptor Protocol or Vimspector + telescope-dap
 --     9.1. rcarriga/cmp-dap
+--     9.2. bash-debug-adapter
 -- Multiple cursors: 'mg979/vim-visual-multi'
 -- Orgmode once again? nvim-orgmode/orgmode
 -- Look at this for any other good ideas: rockerBOO/awesome-neovim
