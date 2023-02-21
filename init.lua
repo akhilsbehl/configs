@@ -96,7 +96,7 @@ require('packer').startup(
                     'grammarly',
                     'lua_ls',
                     'pyright',
-                    'r_language_server',
+                    -- 'r_language_server',
                     'remark_ls',
                     'sqlls',
                     'vimls',
@@ -926,5 +926,5 @@ augroup END
 --     1.1. rcarriga/cmp-dap
 --     1.2. bash-debug-adapter
 -- 3. Multiple cursors: 'mg979/vim-visual-multi'
--- 4. Orgmode once again? nvim-orgmode/orgmode
+-- 4. Orgmode once again? nvim-orgmode/orgmode (Neorg?)
 -- 5. Look at this for any other good ideas: rockerBOO/awesome-neovim
