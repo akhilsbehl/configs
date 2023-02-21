@@ -896,3 +896,6 @@ augroup END
 --     1.1. rcarriga/cmp-dap
 --     1.2. bash-debug-adapter
 -- 2. Look at this for any other good ideas: rockerBOO/awesome-neovim
+-- 3. Literate programming:
+--     3.1. zyedidia/Literate
+--     3.2. zyedidia/literate.vim
