@@ -2,7 +2,6 @@ VA = vim.api
 VC = vim.cmd
 VF = vim.fn
 VG = vim.g
-VL = vim.lsp
 VK = vim.keymap.set
 VO = vim.opt
 
@@ -11,7 +10,7 @@ VG.maplocalleader = ' '
 
 local ensure_packer = function()
     local install_path = VF.stdpath('data') ..
-    '/site/pack/packer/start/packer.nvim'
+        '/site/pack/packer/start/packer.nvim'
     if VF.empty(VF.glob(install_path)) > 0 then
         VF.system({
             'git', 'clone', '--depth', '1',
@@ -26,25 +25,24 @@ end
 local packer_bootstrap = ensure_packer()
 
 require('packer').startup(function(use)
-
-    use 'wbthomason/packer.nvim'               -- Package manager
+    use 'wbthomason/packer.nvim' -- Package manager
 
     use {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
         requires = {
-            {'neovim/nvim-lspconfig'},
-            {'williamboman/mason-lspconfig.nvim'},
-            {'williamboman/mason.nvim'},
-            {'hrsh7th/cmp-buffer'},
-            {'hrsh7th/cmp-nvim-lsp'},
-            {'hrsh7th/cmp-nvim-lua'},
-            {'hrsh7th/cmp-path'},
-            {'hrsh7th/nvim-cmp'},
-            {'L3MON4D3/LuaSnip'},  -- Only to stop cmp's bitching
-            {'quangnguyen30192/cmp-nvim-ultisnips'},
-            {'dmitmel/cmp-digraphs'},
-            {'amarakon/nvim-cmp-lua-latex-symbols'},
+            { 'neovim/nvim-lspconfig' },
+            { 'williamboman/mason-lspconfig.nvim' },
+            { 'williamboman/mason.nvim' },
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { 'hrsh7th/cmp-nvim-lua' },
+            { 'hrsh7th/cmp-path' },
+            { 'hrsh7th/nvim-cmp' },
+            { 'L3MON4D3/LuaSnip' }, -- Only to stop cmp's bitching
+            { 'quangnguyen30192/cmp-nvim-ultisnips' },
+            { 'dmitmel/cmp-digraphs' },
+            { 'amarakon/nvim-cmp-lua-latex-symbols' },
         },
         config = function()
             local lsp = require('lsp-zero').preset({
@@ -55,23 +53,23 @@ require('packer').startup(function(use)
             })
             local cmp = require('cmp')
             lsp.on_attach(function(client, bufnr)
-                local o = {buffer = bufnr}
-                VK('n', '<localleader>lD', 'lua VL.buf.declaration()<cr>', o)
-                VK('n', '<localleader>lH', 'lua VL.buf.signature_help()<cr>', o)
-                VK('n', '<localleader>lR', 'lua VL.buf.rename()<cr>', o)
-                VK('n', '<localleader>la', 'lua VL.buf.code_action()<cr>', o)
-                VK('n', '<localleader>ld', 'lua VL.buf.definition()<cr>', o)
-                VK('n', '<localleader>lh', 'lua VL.buf.hover()<cr>', o)
-                VK('n', '<localleader>li', 'lua VL.buf.implementation()<cr>', o)
-                VK('n', '<localleader>lj', 'lua VL.buf.goto_prev()<cr>', o)
-                VK('n', '<localleader>lk', 'lua VL.buf.goto_next()<cr>', o)
-                VK('n', '<localleader>lo', 'lua VL.buf.open_float()<cr>', o)
-                VK('n', '<localleader>lr', 'lua VL.buf.references()<cr>', o)
-                VK('n', '<localleader>lt', 'lua VL.buf.type_definition()<cr>', o)
-                VK('n', '<localleader>lf', '<cmd>LspZeroFormat<cr>', o)
-                VK('n', '<localleader>lW', '<cmd>LspZeroWorkspaceRemove<cr>', o)
-                VK('n', '<localleader>lw', '<cmd>LspZeroWorkspaceAdd<cr>', o)
-                VK('n', '<localleader>ll', '<cmd>LspZeroWorkspaceList<cr>', o)
+                local o = { buffer = bufnr }
+                VK('n', '<leader>lD', '<cmd>lua vim.lsp.buf.declaration()<cr>', o)
+                VK('n', '<leader>lH', '<cmd>lua vim.lsp.buf.signature_help()<cr>', o)
+                VK('n', '<leader>lR', '<cmd>lua vim.lsp.buf.rename()<cr>', o)
+                VK('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', o)
+                VK('n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<cr>', o)
+                VK('n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<cr>', o)
+                VK('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>', o)
+                VK('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', o)
+                VK('n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', o)
+                VK('n', '<leader>lj', '<cmd>lua vim.diagnostic.goto_prev()<cr>', o)
+                VK('n', '<leader>lk', '<cmd>lua vim.diagnostic.goto_next()<cr>', o)
+                VK('n', '<leader>lo', '<cmd>lua vim.diagnostic.open_float()<cr>', o)
+                VK('n', '<leader>lf', '<cmd>LspZeroFormat<cr>', o)
+                VK('n', '<leader>lW', '<cmd>LspZeroWorkspaceRemove<cr>', o)
+                VK('n', '<leader>lw', '<cmd>LspZeroWorkspaceAdd<cr>', o)
+                VK('n', '<leader>ll', '<cmd>LspZeroWorkspaceList<cr>', o)
             end)
             lsp.ensure_installed({
                 'pyright',
@@ -79,17 +77,17 @@ require('packer').startup(function(use)
             require('cmp_nvim_ultisnips').setup({})
             lsp.setup_nvim_cmp({
                 sources = {
-                    {name = 'buffer'},
-                    {name = 'cmdline'},
-                    {name = 'digraphs'},
-                    {name = 'nvim_lsp'},
-                    {name = 'nvim_lua'},
-                    {name = 'path'},
-                    {name = 'ultisnips'},
+                    { name = 'buffer' },
+                    { name = 'cmdline' },
+                    { name = 'digraphs' },
+                    { name = 'nvim_lsp' },
+                    { name = 'nvim_lua' },
+                    { name = 'path' },
+                    { name = 'ultisnips' },
                     {
                         name     = 'lua-latex-symbols',
-                        option   = {cache = true},
-                        filetype = {'tex', 'plaintex', 'markdown'},
+                        option   = { cache = true },
+                        filetype = { 'tex', 'plaintex', 'markdown' },
                     },
                 },
                 snippet = {
@@ -106,13 +104,13 @@ require('packer').startup(function(use)
                 mapping = cmp.mapping.preset.insert({
                     ['<c-e>']   = vim.NIL,
                     ['<C-t>']   = cmp.mapping.complete(),
-                    ['<cr>']    = cmp.mapping.confirm({select = true}),
+                    ['<cr>']    = cmp.mapping.confirm({ select = true }),
                     ['<C-a>']   = cmp.mapping.close(),
                     ['<C-e>']   = cmp.mapping.abort(),
                     ['<tab>']   = cmp.mapping.select_next_item(),
                     ['<S-tab>'] = cmp.mapping.select_prev_item(),
                     ['<C-n>']   = cmp.mapping.scroll_docs(3),
-                    ['<C-p>']   = cmp.mapping.scroll_docs(-3),
+                    ['<C-p>']   = cmp.mapping.scroll_docs( -3),
                 }),
             })
             lsp.setup()
@@ -124,7 +122,7 @@ require('packer').startup(function(use)
             }
             for type, icon in pairs(signs) do
                 local hl = 'DiagnosticSign' .. type
-                VF.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
+                VF.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
             end
             vim.diagnostic.config({
                 virtual_text     = false,
@@ -133,7 +131,7 @@ require('packer').startup(function(use)
                 update_in_insert = false,
                 underline        = false,
                 severity_sort    = true,
-                float = {
+                float            = {
                     focusable = false,
                     style     = 'minimal',
                     border    = 'rounded',
@@ -173,7 +171,7 @@ require('packer').startup(function(use)
     use { -- Fuzzy finder
         'nvim-telescope/telescope.nvim',
         branch = '0.1.x',
-        requires = {{'nvim-lua/plenary.nvim'}},
+        requires = { { 'nvim-lua/plenary.nvim' } },
         config = function()
             local actions = require('telescope.actions')
             local qfix = actions.smart_send_to_qflist + actions.open_qflist
@@ -212,8 +210,8 @@ require('packer').startup(function(use)
                         preview_cutoff  = 120,
                         width           = 0.9,
                         height          = 0.4,
-                        horizontal      = {mirror = false,},
-                        vertical        = {mirror = false,},
+                        horizontal      = { mirror = false, },
+                        vertical        = { mirror = false, },
                     },
                     extensions = {
                         fzf = {
@@ -227,29 +225,29 @@ require('packer').startup(function(use)
             })
             require('telescope').load_extension('fzf')
             require('telescope').load_extension('ultisnips')
-            VK('n', '<leader>ff'    , '<cmd>Telescope git_files<cr>')
-            VK('n', '<leader>fd'    , '<cmd>Telescope find_files<cr>')
-            VK('n', '<leader>fG'    , '<cmd>Telescope live_grep<cr>')
-            VK('n', '<leader>fb'    , '<cmd>Telescope buffers<cr>')
-            VK('n', '<leader>fh'    , '<cmd>Telescope help_tags<cr>')
-            VK('n', '<leader>fR'    , '<cmd>Telescope oldfiles<cr>')
-            VK('n', '<leader>fc'    , '<cmd>Telescope commands<cr>')
-            VK('n', '<leader>ft'    , '<cmd>Telescope tags<cr>')
-            VK('n', '<leader>f:'    , '<cmd>Telescope command_history<cr>')
-            VK('n', '<leader>f/'    , '<cmd>Telescope search_history<cr>')
-            VK('n', '<leader>f`'    , '<cmd>Telescope marks<cr>')
-            VK('n', '<leader>fq'    , '<cmd>Telescope quickfix<cr>')
-            VK('n', '<leader>fQ'    , '<cmd>Telescope quickfixhistory<cr>')
-            VK('n', '<leader>fl'    , '<cmd>Telescope loclist<cr>')
-            VK('n', '<leader>fj'    , '<cmd>Telescope jumplist<cr>')
-            VK('n', '<leader>fo'    , '<cmd>Telescope vim_options<cr>')
-            VK('n', '<leader>f@'    , '<cmd>Telescope registers<cr>')
-            VK('n', '<leader>f?'    , '<cmd>Telescope keymaps<cr>')
-            VK('n', '<leader>fH'    , '<cmd>Telescope highlights<cr>')
-            VK('n', '<leader>fr'    , '<cmd>Telescope resume<cr>')
-            VK('n', '<leader>fF'    , '<cmd>Telescope pickers<cr>')
-            VK('n', '<leader>fF'    , '<cmd>Telescope pickers<cr>')
-            VK('n', '<leader>fs'    , '<cmd>Telescope ultisnips<cr>')
+            VK('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
+            VK('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
+            VK('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
+            VK('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
+            VK('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
+            VK('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
+            VK('n', '<leader>fc', '<cmd>Telescope commands<cr>')
+            VK('n', '<leader>ft', '<cmd>Telescope tags<cr>')
+            VK('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
+            VK('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
+            VK('n', '<leader>f`', '<cmd>Telescope marks<cr>')
+            VK('n', '<leader>fq', '<cmd>Telescope quickfix<cr>')
+            VK('n', '<leader>fQ', '<cmd>Telescope quickfixhistory<cr>')
+            VK('n', '<leader>fl', '<cmd>Telescope loclist<cr>')
+            VK('n', '<leader>fj', '<cmd>Telescope jumplist<cr>')
+            VK('n', '<leader>fo', '<cmd>Telescope vim_options<cr>')
+            VK('n', '<leader>f@', '<cmd>Telescope registers<cr>')
+            VK('n', '<leader>f?', '<cmd>Telescope keymaps<cr>')
+            VK('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
+            VK('n', '<leader>fr', '<cmd>Telescope resume<cr>')
+            VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+            VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
+            VK('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
             VK('n', '<localleader>D', '<cmd>Telescope diagnostics<cr>')
             VK('n', '<localleader>r', '<cmd>Telescope lsp_references<cr>')
             VK('n', '<localleader>d', '<cmd>Telescope lsp_definitions<cr>')
@@ -276,12 +274,12 @@ require('packer').startup(function(use)
         'nvim-treesitter/nvim-treesitter',
         run = function()
             local ts_update = require('nvim-treesitter.install')
-            .update({with_sync = true})
+                .update({ with_sync = true })
             ts_update()
         end,
         config = function()
             VA.nvim_create_autocmd(
-                {'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEnter'},
+                { 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' },
                 {
                     group = VA.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
                     callback = function()
@@ -291,7 +289,7 @@ require('packer').startup(function(use)
                 }
             )
             require('nvim-treesitter.configs').setup({
-                ensure_installed = {'python', 'bash', 'r', 'lua'},
+                ensure_installed = { 'python', 'bash', 'r', 'lua' },
                 auto_install = true,
                 highlight = {
                     enable = true,
@@ -352,22 +350,22 @@ require('packer').startup(function(use)
                 config = {
                     scratch_repl = true,
                     repl_defintion = {
-                        sh     = {'zsh'},
-                        python = {'ipython'},
-                        r      = {'R', '--no-save'},
-                        julia  = {'julia', '--color  = yes'},
+                        sh     = { 'zsh' },
+                        python = { 'ipython' },
+                        r      = { 'R', '--no-save' },
+                        julia  = { 'julia', '--color  = yes' },
                     },
                     repl_open_cmd = iview.split.bot('40%')
                 },
                 ignore_blank_lines = true,
                 keymaps = {
-                    send_motion    = '<localleader>is',
-                    visual_send    = '<localleader>is',
-                    send_line      = '<localleader>il',
-                    send_file      = '<localleader>if',
-                    clear          = '<localleader>iL',
-                    interrupt      = '<localleader>ic',
-                    exit           = '<localleader>iq',
+                    send_motion = '<localleader>is',
+                    visual_send = '<localleader>is',
+                    send_line   = '<localleader>il',
+                    send_file   = '<localleader>if',
+                    clear       = '<localleader>iL',
+                    interrupt   = '<localleader>ic',
+                    exit        = '<localleader>iq',
                 },
             })
             VK('n', '<localleader>io', '<cmd>IronRepl<cr>')
@@ -399,9 +397,9 @@ require('packer').startup(function(use)
         "iamcco/markdown-preview.nvim",
         run = "cd app && npm install",
         setup = function()
-            VG.mkdp_filetypes = {"markdown"}
+            VG.mkdp_filetypes = { "markdown" }
         end,
-        ft = {"markdown"},
+        ft = { "markdown" },
         config = function()
             VG.mkdp_auto_start         = 0
             VG.mkdp_auto_close         = 0
@@ -409,7 +407,7 @@ require('packer').startup(function(use)
             VG.mkdp_command_for_global = 0
             VG.mkdp_open_to_the_world  = 0
             VG.mkdp_page_title         = '「${name}」'
-            VG.mkdp_filetypes          = {'markdown'}
+            VG.mkdp_filetypes          = { 'markdown' }
         end
     }
 
@@ -423,10 +421,10 @@ require('packer').startup(function(use)
             VO.listchars:append('eol:↴')
             VO.listchars:append('tab:▸ ')
             require('indent_blankline').setup({
-                space_char_blankline            = ' ',
-                show_end_of_line                = true,
-                show_current_context            = true,
-                show_current_context_start      = true,
+                space_char_blankline       = ' ',
+                show_end_of_line           = true,
+                show_current_context       = true,
+                show_current_context_start = true,
             })
         end
     }
@@ -450,14 +448,14 @@ require('packer').startup(function(use)
     use { -- Snippets engine
         'SirVer/UltiSnips',
         config = function()
-            VG.UltiSnipsExpandTrigger            = '<c-e>'
-            VG.UltiSnipsListSnippets             = '<c-l>'
-            VG.UltiSnipsJumpForwardTrigger       = '<c-k>'
-            VG.UltiSnipsJumpBackwardTrigger      = '<c-j>'
-            VG.UltiSnipsRemoveSelectModeMappings = 0
+            VG.UltiSnipsExpandTrigger                           = '<c-e>'
+            VG.UltiSnipsListSnippets                            = '<c-l>'
+            VG.UltiSnipsJumpForwardTrigger                      = '<c-k>'
+            VG.UltiSnipsJumpBackwardTrigger                     = '<c-j>'
+            VG.UltiSnipsRemoveSelectModeMappings                = 0
             VG.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
             '~/.vim/mysnippets'
-            VG.UltiSnipsSnippetDirectories  = {
+            VG.UltiSnipsSnippetDirectories                      = {
                 'mysnippets', 'UltiSnips'
             }
         end
@@ -471,7 +469,7 @@ require('packer').startup(function(use)
             VG.NERDRemoveExtraSpaces     = 1
             VG.NERDSpaceDelims           = 1
             VG.NERDToggleCheckAllLines   = 1
-            VK({'n', 'v'}, '<leader>c ', '<Plug>NERDCommenterToggle')
+            VK({ 'n', 'v' }, '<leader>c ', '<Plug>NERDCommenterToggle')
             VK('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
         end,
     }
@@ -480,8 +478,8 @@ require('packer').startup(function(use)
         'nvim-tree/nvim-web-devicons',
         config = function()
             require('nvim-web-devicons').setup({
-                default                          = true,
-                color_icons                      = true,
+                default     = true,
+                color_icons = true,
             })
         end
     }
@@ -506,7 +504,7 @@ require('packer').startup(function(use)
 
     use { -- Undo history
         'jiaoshijie/undotree',
-        requires = {'nvim-lua/plenary.nvim'},
+        requires = { 'nvim-lua/plenary.nvim' },
     }
 
     use { -- Match pairs
@@ -523,30 +521,29 @@ require('packer').startup(function(use)
         end,
     }
 
-    use 'mg979/vim-visual-multi'               -- Multiple cursors
+    use 'mg979/vim-visual-multi' -- Multiple cursors
 
-    use 'akhilsbehl/md-image-paste'            -- Paste images in md files
+    use 'akhilsbehl/md-image-paste' -- Paste images in md files
 
-    use 'tpope/vim-surround'                   -- Use surround movements
+    use 'tpope/vim-surround' -- Use surround movements
 
-    use 'tpope/vim-repeat'                     -- Repeat commands
+    use 'tpope/vim-repeat' -- Repeat commands
 
-    use 'godlygeek/tabular'                    -- Align rows
+    use 'godlygeek/tabular' -- Align rows
 
-    use 'powerman/vim-plugin-AnsiEsc'          -- Escape shell color codes
+    use 'powerman/vim-plugin-AnsiEsc' -- Escape shell color codes
 
-    use 'morhetz/gruvbox'                      -- Theme: gruvbox
+    use 'morhetz/gruvbox' -- Theme: gruvbox
 
-    use 'tomasr/molokai'                       -- Theme: molokai
+    use 'tomasr/molokai' -- Theme: molokai
 
-    use 'joshdick/onedark.vim'                 -- Theme: onedark
+    use 'joshdick/onedark.vim' -- Theme: onedark
 
-    use 'folke/tokyonight.nvim'                -- Theme: tokyonight
+    use 'folke/tokyonight.nvim' -- Theme: tokyonight
 
     if packer_bootstrap then
         require('packer').sync()
     end
-
 end)
 
 VC [=[
@@ -663,12 +660,12 @@ nnoremap ql :clast<CR>
 " Working with loclist
 "-------------------------
 
-nnoremap <leader>lo :lopen<CR>
-nnoremap <leader>lc :lclose<CR>
-nnoremap <leader>ln :lnext<CR>
-nnoremap <leader>lp :lprev<CR>
-nnoremap <leader>lf :lfirst<CR>
-nnoremap <leader>ll :llast<CR>
+nnoremap <localleader>lo :lopen<CR>
+nnoremap <localleader>lc :lclose<CR>
+nnoremap <localleader>ln :lnext<CR>
+nnoremap <localleader>lp :lprev<CR>
+nnoremap <localleader>lf :lfirst<CR>
+nnoremap <localleader>ll :llast<CR>
 
 "-------------------------
 " Working with diffs
@@ -740,7 +737,8 @@ nnoremap "sp :r!xclip -o -sel clip
 
 function! DeleteTrailingWhitespace()
   :%s/\s\+$//e
-  :%s///e
+  :%s/
+//e
   :let @/=''
 endfunction
 nnoremap <leader>dtw :silent! call DeleteTrailingWhitespace()<CR>
