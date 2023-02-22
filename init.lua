@@ -207,7 +207,6 @@ require('packer').startup(function(use)
                             ["<Tab>"]      = actions.move_selection_previous,
                             ["<Up>"]       = actions.nop
                         },
-
                         n = {
                             ["<C-/>"]      = actions.which_key,
                             ["<C-_>"]      = actions.which_key,
