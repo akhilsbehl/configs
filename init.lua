@@ -188,7 +188,7 @@ require('packer').startup(function(use)
         config = function()
             local actions = require('telescope.actions')
             local qfix = actions.smart_send_to_qflist + actions.open_qflist
-            require('telescope').setup {
+            require('telescope').setup({
                 defaults = {
                     mappings = {
                         i = {
@@ -244,7 +244,7 @@ require('packer').startup(function(use)
                         },
                     },
                 },
-            }
+            })
             require('telescope').load_extension('fzf')
             require('telescope').load_extension('ultisnips')
             VK('n', '<leader>ff'    , '<cmd>Telescope git_files<cr>')
@@ -310,7 +310,7 @@ require('packer').startup(function(use)
                     end
                 }
             )
-            require('nvim-treesitter.configs').setup {
+            require('nvim-treesitter.configs').setup({
                 ensure_installed = {'python', 'bash', 'r', 'lua'},
                 auto_install = true,
                 highlight = {
@@ -359,26 +359,8 @@ require('packer').startup(function(use)
                         },
                     },
                 },
-            }
+            })
         end,
-    }
-
-    use { -- Markdown preview
-        "iamcco/markdown-preview.nvim",
-        run = "cd app && npm install",
-        setup = function()
-            VG.mkdp_filetypes = {"markdown"}
-        end,
-        ft = {"markdown"},
-        config = function()
-            VG.mkdp_auto_start         = 0
-            VG.mkdp_auto_close         = 0
-            VG.mkdp_refresh_slow       = 1
-            VG.mkdp_command_for_global = 0
-            VG.mkdp_open_to_the_world  = 0
-            VG.mkdp_page_title         = '「${name}」'
-            VG.mkdp_filetypes          = {'markdown'}
-        end
     }
 
     use { -- Slime
@@ -386,7 +368,7 @@ require('packer').startup(function(use)
         config = function()
             local icore = require('iron.core')
             local iview = require('iron.view')
-            icore.setup {
+            icore.setup({
                 config = {
                     scratch_repl = true,
                     repl_defintion = {
@@ -407,7 +389,7 @@ require('packer').startup(function(use)
                     interrupt      = '<localleader>c',
                     exit           = '<localleader>q',
                 },
-            }
+            })
             VK('n', '<localleader>o', '<cmd>IronRepl<cr>')
             VK('n', '<localleader>F', '<cmd>IronFocus<cr>')
             VK('n', '<localleader>H', '<cmd>IronHide<cr>')
@@ -433,6 +415,24 @@ require('packer').startup(function(use)
         end,
     }
 
+    use { -- Markdown preview
+        "iamcco/markdown-preview.nvim",
+        run = "cd app && npm install",
+        setup = function()
+            VG.mkdp_filetypes = {"markdown"}
+        end,
+        ft = {"markdown"},
+        config = function()
+            VG.mkdp_auto_start         = 0
+            VG.mkdp_auto_close         = 0
+            VG.mkdp_refresh_slow       = 1
+            VG.mkdp_command_for_global = 0
+            VG.mkdp_open_to_the_world  = 0
+            VG.mkdp_page_title         = '「${name}」'
+            VG.mkdp_filetypes          = {'markdown'}
+        end
+    }
+
     use { -- Show newlines
         'lukas-reineke/indent-blankline.nvim',
         config = function()
@@ -442,12 +442,12 @@ require('packer').startup(function(use)
             VO.listchars:append('nbsp:␣')
             VO.listchars:append('eol:↴')
             VO.listchars:append('tab:▸ ')
-            require('indent_blankline').setup {
+            require('indent_blankline').setup({
                 space_char_blankline            = ' ',
                 show_end_of_line                = true,
                 show_current_context            = true,
                 show_current_context_start      = true,
-            }
+            })
         end
     }
 
@@ -496,24 +496,36 @@ require('packer').startup(function(use)
         end,
     }
 
+    use { -- Shade inactive windows
+        'sunjon/shade.nvim',
+        config = function()
+            require('shade').setup({
+                overlay_opacity = 80,
+                keys = {
+                    toggle           = 'ti',
+                }
+            })
+        end
+    }
+
     use { -- Pretty icons everywhere
         'nvim-tree/nvim-web-devicons',
         config = function()
-            require('nvim-web-devicons').setup {
+            require('nvim-web-devicons').setup({
                 default                          = true,
                 color_icons                      = true,
-            }
+            })
         end
     }
 
     use { -- Status line
         'nvim-lualine/lualine.nvim',
         config = function()
-            require('lualine').setup {
+            require('lualine').setup({
                 options = {
                     theme = 'tokyonight',
                 }
-            }
+            })
         end
     }
 
@@ -892,10 +904,10 @@ augroup END
 
 
 -- TODOs:
--- 1. Debug Adaptor Protocol or Vimspector + telescope-dap
---     1.1. rcarriga/cmp-dap
---     1.2. bash-debug-adapter
--- 2. Look at this for any other good ideas: rockerBOO/awesome-neovim
--- 3. Literate programming:
---     3.1. zyedidia/Literate
---     3.2. zyedidia/literate.vim
+-- 1. Debug Adaptor Protocol
+--     1.1. rcarriga/nvim-dap-ui
+--     1.2. mfussenegger/nvim-dap
+--     1.3. mfussenegger/nvim-dap-python
+-- 2. Literate programming:
+--     2.1. zyedidia/Literate
+--     2.2. zyedidia/literate.vim
