@@ -74,13 +74,7 @@ require('packer').startup(function(use)
                 VK('n', '<localleader>ll', '<cmd>LspZeroWorkspaceList<cr>', o)
             end)
             lsp.ensure_installed({
-                'bashls',
-                'lua_ls',
                 'pyright',
-                -- 'r_language_server',
-                'remark_ls',
-                'sqlls',
-                'vimls',
             })
             require('cmp_nvim_ultisnips').setup({})
             lsp.setup_nvim_cmp({
@@ -159,13 +153,8 @@ require('packer').startup(function(use)
             local act = nls.builtins.code_actions
             nls.setup({
                 sources = {
-                    act.shellcheck,
-                    fmt.remark,
-                    fmt.beautysh,
                     fmt.black,
                     fmt.reorder_python_imports,
-                    fmt.shfmt,
-                    fmt.sql_formatter,
                     lint.flake8,
                     lint.markdownlint,
                     lint.pydocstyle,
@@ -188,15 +177,16 @@ require('packer').startup(function(use)
         config = function()
             local actions = require('telescope.actions')
             local qfix = actions.smart_send_to_qflist + actions.open_qflist
+            local select = actions.select_default + actions.center
             require('telescope').setup({
                 defaults = {
                     mappings = {
                         i = {
                             ['<esc>']   = actions.close,
                             ['<C-?>']   = actions.which_key,
-                            ['<Tab>']   = actions.move_selection_next,
-                            ['<S-Tab>'] = actions.move_selection_previous,
-                            ['<cr>']    = actions.select_default,
+                            ['<S-Tab>'] = actions.move_selection_next,
+                            ['<Tab>']   = actions.move_selection_previous,
+                            ['<cr>']    = select,
                             ['<C-t>']   = actions.select_tab,
                             ['<C-s>']   = actions.select_horizontal,
                             ['<C-v>']   = actions.select_vertical,
@@ -494,18 +484,6 @@ require('packer').startup(function(use)
             VK({'n', 'v'}, '<leader>c ', '<Plug>NERDCommenterToggle')
             VK('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
         end,
-    }
-
-    use { -- Shade inactive windows
-        'sunjon/shade.nvim',
-        config = function()
-            require('shade').setup({
-                overlay_opacity = 80,
-                keys = {
-                    toggle           = 'ti',
-                }
-            })
-        end
     }
 
     use { -- Pretty icons everywhere
