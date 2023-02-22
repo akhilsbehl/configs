@@ -183,64 +183,28 @@ require('packer').startup(function(use)
                         i = {
                             ["<C-/>"]      = actions.which_key,
                             ["<C-_>"]      = actions.which_key,
-                            ["<C-c>"]      = actions.close,
-                            ["<C-n>"]      = actions.results_scrolling_down,
                             ["<C-e>"]      = actions.select_default,
+                            ["<C-h>"]      = actions.preview_scrolling_down,
                             ["<C-j>"]      = actions.nop,
-                            ["<C-l>"]      = actions.complete_tag,
+                            ["<C-l>"]      = actions.preview_scrolling_up,
                             ["<C-m>"]      = actions.toggle_selection,
-                            ["<C-u>"]      = actions.preview_scrolling_up,
-                            ["<C-d>"]      = actions.preview_scrolling_down,
+                            ["<C-n>"]      = actions.results_scrolling_down,
+                            ["<C-p>"]      = actions.results_scrolling_up,
                             ["<C-q>"]      = qfix,
                             ["<C-s>"]      = actions.select_horizontal,
                             ["<C-t>"]      = actions.select_tab,
-                            ["<C-p>"]      = actions.results_scrolling_up,
                             ["<C-v>"]      = actions.select_vertical,
                             ["<C-w>"]      = actions.nop,
                             ["<C-x>"]      = actions.nop,
-                            ["<CR>"]       = actions.nop,
                             ["<Down>"]     = actions.nop,
-                            ["<M-q>"]      = actions.nop,
-                            ["<PageDown>"] = actions.nop,
-                            ["<PageUp>"]   = actions.nop,
-                            ["<S-Tab>"]    = actions.move_selection_next,
-                            ["<Tab>"]      = actions.move_selection_previous,
-                            ["<Up>"]       = actions.nop
-                        },
-                        n = {
-                            ["<C-/>"]      = actions.which_key,
-                            ["<C-_>"]      = actions.which_key,
-                            ["<C-n>"]      = actions.results_scrolling_down,
-                            ["<C-e>"]      = actions.select_default,
-                            ["<C-l>"]      = actions.complete_tag,
-                            ["<C-m>"]      = actions.toggle_selection,
-                            ["<C-u>"]      = actions.preview_scrolling_up,
-                            ["<C-d>"]      = actions.preview_scrolling_down,
-                            ["<C-q>"]      = qfix,
-                            ["<C-s>"]      = actions.select_horizontal,
-                            ["<C-t>"]      = actions.select_tab,
-                            ["<C-p>"]      = actions.results_scrolling_up,
-                            ["<C-v>"]      = actions.select_vertical,
-                            ["<C-x>"]      = actions.nop,
-                            ["<CR>"]       = actions.nop,
-                            ["<Down>"]     = actions.nop,
+                            ["<Esc>"]      = actions.close,
                             ["<M-q>"]      = actions.nop,
                             ["<PageDown>"] = actions.nop,
                             ["<PageUp>"]   = actions.nop,
                             ["<S-Tab>"]    = actions.move_selection_next,
                             ["<Tab>"]      = actions.move_selection_previous,
                             ["<Up>"]       = actions.nop,
-                            ["<esc>"]      = actions.close,
-                            ["?"]          = actions.nop,
-                            ["G"]          = actions.move_to_bottom,
-                            ["H"]          = actions.nop,
-                            ["L"]          = actions.nop,
-                            ["M"]          = actions.nop,
-                            ["gg"]         = actions.move_to_top,
-                            ["gm"]         = actions.move_to_middle,
-                            ["j"]          = actions.move_selection_next,
-                            ["k"]          = actions.move_selection_previous,
-                            ["q"]          = actions.nop,
+                            ["<cr>"]       = actions.select_default,
                         },
                     },
                     layout_config = {
@@ -289,8 +253,8 @@ require('packer').startup(function(use)
             VK('n', '<localleader>D', '<cmd>Telescope diagnostics<cr>')
             VK('n', '<localleader>r', '<cmd>Telescope lsp_references<cr>')
             VK('n', '<localleader>d', '<cmd>Telescope lsp_definitions<cr>')
-            VK('n', '<localleader>i', '<cmd>Telescope lsp_incoming_calls<cr>')
-            VK('n', '<localleader>o', '<cmd>Telescope lsp_outgoing_calls<cr>')
+            VK('n', '<localleader>I', '<cmd>Telescope lsp_incoming_calls<cr>')
+            VK('n', '<localleader>O', '<cmd>Telescope lsp_outgoing_calls<cr>')
             VK('n', '<localleader>m', '<cmd>Telescope lsp_implementations<cr>')
             VK('n', '<localleader>t', '<cmd>Telescope lsp_type_definitions<cr>')
             VK('n', '<localleader>S', '<cmd>Telescope lsp_document_symbols<cr>')
@@ -397,18 +361,18 @@ require('packer').startup(function(use)
                 },
                 ignore_blank_lines = true,
                 keymaps = {
-                    send_motion    = '<localleader>s',
-                    visual_send    = '<localleader>s',
-                    send_line      = '<localleader>l',
-                    send_file      = '<localleader>f',
-                    clear          = '<localleader>L',
-                    interrupt      = '<localleader>c',
-                    exit           = '<localleader>q',
+                    send_motion    = '<localleader>is',
+                    visual_send    = '<localleader>is',
+                    send_line      = '<localleader>il',
+                    send_file      = '<localleader>if',
+                    clear          = '<localleader>iL',
+                    interrupt      = '<localleader>ic',
+                    exit           = '<localleader>iq',
                 },
             })
-            VK('n', '<localleader>o', '<cmd>IronRepl<cr>')
-            VK('n', '<localleader>F', '<cmd>IronFocus<cr>')
-            VK('n', '<localleader>H', '<cmd>IronHide<cr>')
+            VK('n', '<localleader>io', '<cmd>IronRepl<cr>')
+            VK('n', '<localleader>iF', '<cmd>IronFocus<cr>')
+            VK('n', '<localleader>iH', '<cmd>IronHide<cr>')
         end,
     }
 
