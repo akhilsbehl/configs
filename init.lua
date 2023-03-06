@@ -668,6 +668,7 @@ nnoremap tr :e<CR>
 nnoremap tR <C-w>r<CR>
 nnoremap tmh <C-w>t<C-w>K<CR>
 nnoremap tmv <C-w>t<C-w>H<CR>
+nnoremap t= <C-w>=<CR>
 nnoremap tJ :tabprevious<CR>
 nnoremap tK :tabnext<CR>
 nnoremap tH :tabfirst<CR>
@@ -757,7 +758,10 @@ inoremap <C-p> <C-x><C-f>
 
 nnoremap <leader>ve :20split $MYVIMRC<CR>
 nnoremap <leader>vg :tabnew $MYGVIMRC<CR>
-nnoremap <leader>vs :source $MYVIMRC<CR>
+nnoremap <leader>vs :call ReloadConfig()<CR>
+if has('nvim')
+    nnoremap <leader>vs :source $MYVIMRC<CR>:PackerCompile<CR>
+endif
 
 "-------------------------
 " Forward the clipboard over SSH when connected with forwarding.
@@ -772,8 +776,7 @@ nnoremap "sp :r!xclip -o -sel clip
 
 function! DeleteTrailingWhitespace()
   :%s/\s\+$//e
-  :%s/
-//e
+  :%s///e
   :let @/=''
 endfunction
 nnoremap <leader>dtw :silent! call DeleteTrailingWhitespace()<CR>
