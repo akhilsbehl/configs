@@ -41,7 +41,6 @@ require('packer').startup(function(use)
             { 'hrsh7th/nvim-cmp' },
             { 'L3MON4D3/LuaSnip' }, -- Only to stop cmp's bitching
             { 'quangnguyen30192/cmp-nvim-ultisnips' },
-            { 'dmitmel/cmp-digraphs' },
             { 'amarakon/nvim-cmp-lua-latex-symbols' },
         },
         config = function()
@@ -78,22 +77,14 @@ require('packer').startup(function(use)
             lsp.setup_nvim_cmp({
                 sources = {
                     { name = 'buffer' },
-                    { name = 'cmdline' },
-                    { name = 'digraphs' },
                     { name = 'nvim_lsp' },
                     { name = 'nvim_lua' },
                     { name = 'path' },
-                    { name = 'ultisnips' },
                     {
                         name     = 'lua-latex-symbols',
                         option   = { cache = true },
                         filetype = { 'tex', 'plaintex', 'markdown' },
                     },
-                },
-                snippet = {
-                    expand = function(args)
-                        VF['UltiSnips#Anon'](args.body)
-                    end,
                 },
                 view = {
                     entries = {
@@ -177,7 +168,7 @@ require('packer').startup(function(use)
             local qfix = actions.smart_send_to_qflist + actions.open_qflist
             require('telescope').setup({
                 defaults = {
-                    mappings = {
+                    default_mappings = {
                         i = {
                             ["<C-/>"]      = actions.which_key,
                             ["<C-_>"]      = actions.which_key,
@@ -202,7 +193,7 @@ require('packer').startup(function(use)
                             ["<S-Tab>"]    = actions.move_selection_next,
                             ["<Tab>"]      = actions.move_selection_previous,
                             ["<Up>"]       = actions.nop,
-                            ["<cr>"]       = actions.select_default,
+                            ["<cr>"]       = actions.select_default, -- buggy
                         },
                     },
                     layout_config = {
