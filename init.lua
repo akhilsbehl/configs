@@ -223,6 +223,7 @@ require('packer').startup(function(use)
             VK('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
             VK('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
             VK('n', '<leader>fc', '<cmd>Telescope commands<cr>')
+            VK('n', '<leader>fC', '<cmd>Telescope colorscheme<cr>')
             VK('n', '<leader>ft', '<cmd>Telescope tags<cr>')
             VK('n', '<leader>f:', '<cmd>Telescope command_history<cr>')
             VK('n', '<leader>f/', '<cmd>Telescope search_history<cr>')
@@ -524,17 +525,12 @@ require('packer').startup(function(use)
 
     use 'powerman/vim-plugin-AnsiEsc' -- Escape shell color codes
 
-    use 'morhetz/gruvbox' -- Theme: gruvbox
-
-    use 'tomasr/molokai' -- Theme: molokai
-
-    use 'joshdick/onedark.vim' -- Theme: onedark
-
     use 'folke/tokyonight.nvim' -- Theme: tokyonight
 
     if packer_bootstrap then
         require('packer').sync()
     end
+
 end)
 
 VC [=[
