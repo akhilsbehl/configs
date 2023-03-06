@@ -151,7 +151,7 @@ fi
 
 export PATH="$HOME/scripts:$HOME/.local/bin:$PATH"
 
-export SVN_EDITOR='vim'
+export SVN_EDITOR='nvim'
 
 # Less is more!
 export READNULLCMD='less'
@@ -353,7 +353,7 @@ function fzbin () {
 }
 
 # Simplify this
-function vif () { fzbin "vim" "$1" }
+function vif () { fzbin "nvim" "$1" }
 
 # This is possibly running on:
 # Some flavor of WSL: Use wslopen
