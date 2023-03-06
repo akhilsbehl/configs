@@ -333,6 +333,54 @@ require('packer').startup(function(use)
         end,
     }
 
+    use { -- Hoppity hop
+        'phaazon/hop.nvim',
+        branch = 'v2',
+        config = function()
+            local hop = require('hop')
+            local direcn = require('hop.hint').HintDirection
+            local _f = function()
+                hop.hint_char1({
+                    direction = direcn.AFTER_CURSOR,
+                    current_line_only = true,
+                })
+            end
+            local _F = function()
+                hop.hint_char1({
+                    direction = direcn.BEFORE_CURSOR,
+                    current_line_only = true,
+                })
+            end
+            local _t = function()
+                hop.hint_char1({
+                    direction = direcn.AFTER_CURSOR,
+                    current_line_only = true,
+                    hint_offset = -1,
+                })
+            end
+            local _T = function()
+                hop.hint_char1({
+                    direction = direcn.BEFORE_CURSOR,
+                    current_line_only = true,
+                    hint_offset = 1,
+                })
+            end
+            require('hop').setup({
+                keys = 'etovxqpdygfblzhckisuran',
+                quit_key = '<Esc>',
+                jump_on_sole_occurrence = true,
+                case_insesitive = false,
+                multi_windows = true,
+            })
+            VK('n', 's', '<cmd>HopChar2AC<CR>')
+            VK('n', 'S', '<cmd>HopChar2BC<CR>')
+            VK('n', 'f', _f)
+            VK('n', 'F', _F)
+            VK('n', 't', _t)
+            VK('n', 'T', _T)
+        end,
+    }
+
     use { -- Slime
         'hkupty/iron.nvim',
         config = function()
