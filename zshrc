@@ -197,7 +197,9 @@ alias -g G="| $GREPPER -i"
 
 alias -g l='| less'
 
-alias -g v='| vim -'
+alias -g v='nvim'
+
+alias -g V='| vim -'
 
 alias -g w='| wc -l'
 
