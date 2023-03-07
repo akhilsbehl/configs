@@ -499,20 +499,6 @@ require('packer').startup(function(use)
     }
     use 'honza/vim-snippets'
 
-    use { -- Magit for Neovim
-        'TimUntersberger/neogit',
-        requires = {
-            'nvim-lua/plenary.nvim',
-            'sindrets/diffview.nvim',
-        },
-        config = function()
-            require('neogit').setup({
-                diffview = true,
-            })
-            VK('n', '<leader>ng', '<cmd>Neogit<cr>')
-        end
-    }
-
     use { -- Commenting
         'scrooloose/nerdcommenter',
         config = function()
