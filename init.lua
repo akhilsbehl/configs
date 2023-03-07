@@ -413,31 +413,12 @@ require('packer').startup(function(use)
         end,
     }
 
-    use { -- Magit for Neovim
-        'TimUntersberger/neogit',
-        requires = {
-            'nvim-lua/plenary.nvim',
-            'sindrets/diffview.nvim',
-        },
-        config = function()
-            require('neogit').setup({
-                diffview = true,
-            })
-        end
-    }
-    use { -- Show git signs
-        'airblade/vim-gitgutter',
-        config = function()
-            VG.gitgutter_map_keys = 0
-        end
-    }
-
     use { -- Search in git tree
         'mileszs/ack.vim',
         config = function()
             VG.ackprg = 'rg --vimgrep --no-heading --smart-case'
             VC [[
-                function! FindGitRoot()
+                function! FindGitRoot() abort
                     return system(
                                 \ 'git rev-parse
                                 \ --show-toplevel
@@ -517,6 +498,20 @@ require('packer').startup(function(use)
         end
     }
     use 'honza/vim-snippets'
+
+    use { -- Magit for Neovim
+        'TimUntersberger/neogit',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'sindrets/diffview.nvim',
+        },
+        config = function()
+            require('neogit').setup({
+                diffview = true,
+            })
+            VK('n', '<leader>ng', '<cmd>Neogit<cr>')
+        end
+    }
 
     use { -- Commenting
         'scrooloose/nerdcommenter',
