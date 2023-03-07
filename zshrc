@@ -442,12 +442,6 @@ function launchpad () {
 }
 launchpad
 
-###################
-# Fortune cookies #
-###################
-
-cowsay -f milk -W 79 $(fortune)
-
 #######################
 #  Set up the prompt  #
 #######################
