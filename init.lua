@@ -887,47 +887,45 @@ function! CreateFloatingTerm() abort
                 \ 'anchor': 'NW',
                 \ 'style': 'minimal',
                 \ 'border': 'rounded',
-                \ 'noautocmd': v:true,
                 \ }
     let win = nvim_open_win(buf, v:true, opts)
     call termopen('zsh')
     startinsert!
-    call nvim_buf_set_keymap(buf, 't', '<leader>tt', '<C-\><C-n><C-w>q',
+    call nvim_buf_set_keymap(buf, 't', '<leader><leader>t', '<C-\><C-n><C-w>q',
                 \ {'nowait': v:true})
-    call nvim_buf_set_keymap(buf, 't', '<leader>n', '<C-\><C-n>',
-                \ {'nowait': v:true})
-    call nvim_buf_set_keymap(buf, 'n', '<leader>tt', '<C-\><C-n><C-w>q',
+    call nvim_buf_set_keymap(buf, 'n', '<leader><leader>t', '<C-\><C-n><C-w>q',
                 \ {'nowait': v:true})
 endfunction
 
-nnoremap <leader>tt :call CreateFloatingTerm()<CR>
+nnoremap <leader><leader>t :call CreateFloatingTerm()<CR>
+tnoremap <leader><leader>n '<C-\><C-n>'
 
 "-------------------------
 " Markdown files config.
 "-------------------------
 
 function! DecorateSelection(str) abort
-  normal gv"xy
-  let cursor_pos = getpos('.')
-  let cursor_pos[2] = cursor_pos[2] - 1
-  let @x = a:str . @x . a:str
-  normal gvd
-  call setpos('.', cursor_pos)
-  normal "xp
+    normal gv"xy
+    let cursor_pos = getpos('.')
+    let cursor_pos[2] = cursor_pos[2] - 1
+    let @x = a:str . @x . a:str
+    normal gvd
+    call setpos('.', cursor_pos)
+    normal "xp
 endfunction
 
 augroup MarkdownSetup
-  autocmd!
-  autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
-  autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
-  autocmd FileType markdown nnoremap <buffer> <localleader>p
-        \ <Plug>MarkdownPreviewToggle
-  autocmd FileType markdown vnoremap <buffer> <localleader>i
-        \ :call DecorateSelection('*')<CR>
-  autocmd FileType markdown vnoremap <buffer> <localleader>b
-        \ :call DecorateSelection('**')<CR>
-  autocmd FileType markdown vnoremap <buffer> <localleader>d
-        \ :call DecorateSelection('$')<CR>
+    autocmd!
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
+    autocmd FileType markdown nnoremap <buffer> <localleader>p
+            \ <Plug>MarkdownPreviewToggle
+    autocmd FileType markdown vnoremap <buffer> <localleader>i
+            \ :call DecorateSelection('*')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>b
+            \ :call DecorateSelection('**')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>d
+            \ :call DecorateSelection('$')<CR>
 augroup END
 
 ]=]
