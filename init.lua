@@ -409,6 +409,27 @@ require('packer').startup(function(use)
             VK('n', '<localleader>io', '<cmd>IronRepl<cr>')
             VK('n', '<localleader>iF', '<cmd>IronFocus<cr>')
             VK('n', '<localleader>iH', '<cmd>IronHide<cr>')
+            local ag = VA.nvim_create_augroup('TermSetup', { clear = true })
+            local events = {
+                'BufNew',
+                'BufEnter',
+                'BufWinEnter',
+                'BufAdd',
+                'BufNewFile'
+            }
+            VA.nvim_create_autocmd(events,
+                {
+                    desc = 'Always enter in terminal mode',
+                    group = ag,
+                    pattern = 'term://*',
+                    callback = function ()
+                        VC [[
+                            tnoremap <leader>ww <Cmd>wincmd w<cr>
+                            :startinsert!
+                        ]]
+                    end
+                }
+            )
         end,
     }
 
@@ -891,14 +912,17 @@ function! CreateFloatingTerm() abort
     let win = nvim_open_win(buf, v:true, opts)
     call termopen('zsh')
     startinsert!
-    call nvim_buf_set_keymap(buf, 't', '<leader><leader>t', '<C-\><C-n><C-w>q',
+    call nvim_buf_set_keymap(buf, 't', '<leader>tt', '<C-\><C-n><C-w>q',
                 \ {'nowait': v:true})
-    call nvim_buf_set_keymap(buf, 'n', '<leader><leader>t', '<C-\><C-n><C-w>q',
+    call nvim_buf_set_keymap(buf, 'n', '<leader>tt', '<C-\><C-n><C-w>q',
+                \ {'nowait': v:true})
+    " To over-ride the setting of this keymap in iron
+    call nvim_buf_set_keymap(buf, 't', '<leader>ww', '<Nop>',
                 \ {'nowait': v:true})
 endfunction
 
-nnoremap <leader><leader>t :call CreateFloatingTerm()<CR>
-tnoremap <leader><leader>n '<C-\><C-n>'
+nnoremap <leader>tt :call CreateFloatingTerm()<CR>
+tnoremap <leader>ee <C-\><C-n><Esc>
 
 "-------------------------
 " Markdown files config.
