@@ -218,7 +218,6 @@ require('packer').startup(function(use)
             require('telescope').load_extension('ultisnips')
             VK('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
             VK('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
-            VK('n', '<leader>fG', '<cmd>Telescope live_grep<cr>')
             VK('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
             VK('n', '<leader>fh', '<cmd>Telescope help_tags<cr>')
             VK('n', '<leader>fR', '<cmd>Telescope oldfiles<cr>')
@@ -427,8 +426,11 @@ require('packer').startup(function(use)
                 command! -nargs=0 AckCword
                             \ execute 'Ack! ' .
                             \ expand('<cword>') . ' ' . FindGitRoot()
+                command! -nargs=1 AckInput
+                            \ execute 'Ack! <args> ' . FindGitRoot()
                 ]]
             VK('n', '<leader>fg', '<cmd>AckCword<cr>')
+            VK('n', '<leader>fG', ':AckInput ')
         end,
     }
 
