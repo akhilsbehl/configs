@@ -1,102 +1,121 @@
 [user]
-  name = akhilsbehl
-  email = akhilsbehl@gmail.com
+    name = akhilsbehl
+    email = akhilsbehl@gmail.com
+
 [core]
-  editor = vim
-  excludesfile = /home/akhilsbehl/.gitignore
+    editor = nvim
+    excludesfile = /home/akhilsbehl/.gitignore
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
 [merge]
-  tool = vimdiff
-[alias]
+    conflictstyle = diff3
 
-  a = add
-  az = "!git add $(git status -s | fzf-tmux | cut -f 3 -d ' ' | tr '\n' ' ')"
-  ap = add -p
-  ai = add --interactive
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    side-by-side = true
+    diff-so-fancy = true
+    syntax-theme = gruvbox-dark
 
-  b = branch
-  ba = branch -a
-  bs = branch --show-current
-  bc = checkout -b
-  bd = branch -D
-  bl = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+[diff]
+    colorMoved = true
 
-  c = commit --verbose -m
-  cm = commit --amend --verbose --no-edit
-  cmm = commit --amend --verbose -m
-  ca = commit -a --verbose -m
-  cam = commit -a --amend --verbose --no-edit
-  camm = commit -a --amend --verbose -m
-
-  co = checkout
-  cb = !git checkout $(git ba | fzf-tmux)
-  cl = clone
-
-  d = diff
-  dw = diff --word-diff
-  dc = diff --cached
-  dl = diff --cached HEAD^
-  ds = diff --stat
-  dr = "!fff() { git diff -w "$1"^.."$1"; }; fff"
-
-  f = fetch
-  fa = fetch --all
-
-  ha = "!git config -l | grep alias | cut -c 7-"
-
-  lg = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
-  lf = log -u
-  ll = !git log --numstat -1
-  ls = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --numstat
-
-  m = merge
-  mt = mergetool
-
-  mv = mv
-
-  nn = clean -n
-  nf = clean -f
-  nd = clean -f -d
-  nX = clean -f -X
-  nx = clean -f -x
-  ni = clean -i
-
-  p = push -u origin
-  pf = push -u origin --force
-  pl = pull
-  pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
-  pr = remote prune origin
-  ps = !git push --set-upstream origin $(git bs)
-
-  r = rebase
-  ra = rebase --abort
-  rc = rebase --continue
-  re = rebase --edit
-  ri = rebase --interactive
-  rs = rebase --skip
-
-  rm = rm -r
-
-  s = status
-  ss = status -s
-
-  st = stash
-  sl = stash list
-  sp = stash pop
-  sd = stash drop
-  sc = stash clear
-
-  u = reset 
-  uh = reset --hard
-  u1 = reset HEAD^
-  u2 = reset HEAD^^
-  uh1 = reset --hard HEAD^
-  uh2 = reset --hard HEAD^^
-
-  vi = !gitk
-
-  ours = "!fff() { git co --ours $@ && git add $@; }; fff"
-  theirs = "!fff() { git co --theirs $@ && git add $@; }; fff"
 [credential]
-	helper = store
+    helper = store
+
 [init]
-	defaultBranch = main
+    defaultBranch = main
+
+[alias]
+    a = add
+    az = "!git add $(git status -s | fzf-tmux | cut -f 3 -d ' ' | tr '\n' ' ')"
+    ap = add -p
+    ai = add --interactive
+
+    b = branch
+    ba = branch -a
+    bs = branch --show-current
+    bc = checkout -b
+    bd = branch -D
+    bl = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+
+    c = commit --verbose -m
+    cm = commit --amend --verbose --no-edit
+    cmm = commit --amend --verbose -m
+    ca = commit -a --verbose -m
+    cam = commit -a --amend --verbose --no-edit
+    camm = commit -a --amend --verbose -m
+
+    co = checkout
+    cb = !git checkout $(git ba | fzf-tmux)
+    cl = clone
+
+    d = diff
+    dw = diff --word-diff
+    dc = diff --cached
+    dl = diff --cached HEAD^
+    ds = diff --stat
+    dr = "!fff() { git diff -w "$1"^.."$1"; }; fff"
+
+    f = fetch
+    fa = fetch --all
+
+    ha = "!git config -l | grep alias | cut -c 7-"
+
+    lg = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+    lf = log -u
+    ll = !git log --numstat -1
+    ls = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --numstat
+
+    m = merge
+    mt = mergetool
+
+    mv = mv
+
+    nn = clean -n
+    nf = clean -f
+    nd = clean -f -d
+    nX = clean -f -X
+    nx = clean -f -x
+    ni = clean -i
+
+    p = push -u origin
+    pf = push -u origin --force
+    pl = pull
+    pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
+    pr = remote prune origin
+    ps = !git push --set-upstream origin $(git bs)
+
+    r = rebase
+    ra = rebase --abort
+    rc = rebase --continue
+    re = rebase --edit
+    ri = rebase --interactive
+    rs = rebase --skip
+
+    rm = rm -r
+
+    s = status
+    ss = status -s
+
+    st = stash
+    sl = stash list
+    sp = stash pop
+    sd = stash drop
+    sc = stash clear
+
+    u = reset
+    uh = reset --hard
+    u1 = reset HEAD^
+    u2 = reset HEAD^^
+    uh1 = reset --hard HEAD^
+    uh2 = reset --hard HEAD^^
+
+    vi = !gitk
+
+    ours = "!fff() { git co --ours $@ && git add $@; }; fff"
+    theirs = "!fff() { git co --theirs $@ && git add $@; }; fff"
