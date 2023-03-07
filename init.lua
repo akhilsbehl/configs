@@ -372,8 +372,7 @@ require('packer').startup(function(use)
                 case_insesitive = false,
                 multi_windows = true,
             })
-            VK('n', 's', '<cmd>HopChar2AC<CR>')
-            VK('n', 'S', '<cmd>HopChar2BC<CR>')
+            VK('n', 'b', '<cmd>HopChar2<CR>')
             VK('n', 'f', _f)
             VK('n', 'F', _F)
             VK('n', 't', _t)
