@@ -603,8 +603,8 @@ set showmode showcmd
 set mouse-=a mousefocus
 set textwidth=79 colorcolumn=+1 laststatus=2 signcolumn=yes
 set termguicolors background=dark
-let &t_8f="\<Esc>[38:2:%lu:%lu:%lum"
-let &t_8b="\<Esc>[48:2:%lu:%lu:%lum"
+let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
 " Search options.
 set incsearch ignorecase smartcase hlsearch
@@ -778,10 +778,10 @@ nnoremap "sp :r!xclip -o -sel clip
 " Delete all trailing whitespace.
 "-------------------------
 
-function! DeleteTrailingWhitespace()
-  :%s/\s\+$//e
-  :%s///e
-  :let @/=''
+function! DeleteTrailingWhitespace() abort
+    %s/\s\+$//e
+    %s///e
+    let @/ = ''
 endfunction
 nnoremap <leader>dtw :silent! call DeleteTrailingWhitespace()<CR>
 
@@ -789,9 +789,9 @@ nnoremap <leader>dtw :silent! call DeleteTrailingWhitespace()<CR>
 " Delete control characters.
 "-------------------------
 
-function! DeleteCtrlChars()
-  :%s/[[:cntrl:]]//e
-  :let @/=''
+function! DeleteCtrlChars() abort
+    %s/[[:cntrl:]]//e
+    let @/ = ''
 endfunction
 nnoremap <leader>dcc :call DeleteCtrlChars<CR>
 
@@ -799,8 +799,8 @@ nnoremap <leader>dcc :call DeleteCtrlChars<CR>
 " Save when file was opened without sudo.
 "-------------------------
 
-function! SudoOnTheFly()
-  write !sudo tee % > /dev/null
+function! SudoOnTheFly() abort
+    write !sudo tee % > /dev/null
 endfunction
 nnoremap <leader>sd :call SudoOnTheFly()<CR>
 
@@ -808,25 +808,25 @@ nnoremap <leader>sd :call SudoOnTheFly()<CR>
 " Toggle search highlighting.
 "-------------------------
 
-function! ToggleHighLightsearch()
-  if &hlsearch
-    set nohlsearch
-  else
-    set hlsearch
-  endif
+function! ToggleHighLightsearch() abort
+    if &hlsearch
+        set nohlsearch
+    else
+        set hlsearch
+    endif
 endfunction
-nnoremap <leader>hs :let @/=''<CR>
+nnoremap <leader>hs :let @/ = ''<CR>
 
 "-------------------------
 " Toggle paste mode.
 "-------------------------
 
-function! TogglePasteMode()
-  if &paste
-    set nopaste
-  else
-    set paste
-  endif
+function! TogglePasteMode() abort
+    if &paste
+        set nopaste
+    else
+        set paste
+    endif
 endfunction
 nnoremap <leader>tpm :call TogglePasteMode()<CR>
 
