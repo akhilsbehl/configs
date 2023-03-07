@@ -834,57 +834,88 @@ nnoremap <leader>tpm :call TogglePasteMode()<CR>
 " Making the cursor more conspicuous so I don't keep losing it.
 "-------------------------
 
-function! HighlightCursor()
-  :normal zz
-  match PmenuSel /\k*\%#\k*/
-  let s:highlightcursor=1
+function! HighlightCursor() abort
+    normal zz
+    match PmenuSel /\k*\%#\k*/
+    let s:highlightcursor = 1
 endfunction
 
-function! NoHighlightCursor()
-  match None
-  let s:highlightcursor=0
+function! NoHighlightCursor() abort
+    match None
+    let s:highlightcursor = 0
 endfunction
 
-function! ToggleHighlightCursor()
-  if !exists("s:highlightcursor")
-    call HighlightCursor()
-  else
-    call NoHighlightCursor()
-  endif
+function! ToggleHighlightCursor() abort
+    if !exists("s:highlightcursor")
+        call HighlightCursor()
+    else
+        call NoHighlightCursor()
+    endif
 endfunction
 nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
 
 augroup FindCursor
-  autocmd!
-  autocmd WinEnter * call HighlightCursor()
-  autocmd InsertEnter * call NoHighlightCursor()
-  autocmd InsertLeave * call HighlightCursor()
-  autocmd CursorMoved * call HighlightCursor()
-  autocmd WinEnter,InsertLeave * set cursorline
-  autocmd WinLeave,InsertEnter * set nocursorline
+    autocmd!
+    autocmd WinEnter * call HighlightCursor()
+    autocmd InsertEnter * call NoHighlightCursor()
+    autocmd InsertLeave * call HighlightCursor()
+    autocmd CursorMoved * call HighlightCursor()
+    autocmd WinEnter,InsertLeave * set cursorline
+    autocmd WinLeave,InsertEnter * set nocursorline
 augroup END
 
 "-------------------------
 " Rename the current buffer's file in place and reload.
 "-------------------------
 
-function! SaveAsInPlace()
-  let l:oldname = expand('%:p')
-  let l:newname = input('New name: ', expand('%:p'))
-  if l:newname != l:oldname
-    execute 'write ' . l:newname
-    execute 'bdelete ' . l:oldname
-    execute 'edit ' . l:newname
-    execute '!rm ' . l:oldname
-  endif
+function! SaveAsInPlace() abort
+    let l:oldname = expand('%:p')
+    let l:newname = input('New name: ', expand('%:p'))
+    if l:newname != l:oldname
+        execute 'write ' . l:newname
+        execute 'bdelete ' . l:oldname
+        execute 'edit ' . l:newname
+        execute '!rm ' . l:oldname
+    endif
 endfunction
 nnoremap <leader>sr :call SaveAsInPlace()<CR>
+
+"-------------------------
+" Toggle a simple terminal buffer
+"-------------------------
+
+function! CreateFloatingTerm() abort
+    let buf = nvim_create_buf(v:false, v:true)
+    let ui = nvim_list_uis()[0]
+    let opts = {
+                \ 'relative': 'editor',
+                \ 'width': ui.width - 20,
+                \ 'height': ui.height - 10,
+                \ 'col': 10,
+                \ 'row': 5 - 1,
+                \ 'anchor': 'NW',
+                \ 'style': 'minimal',
+                \ 'border': 'rounded',
+                \ 'noautocmd': v:true,
+                \ }
+    let win = nvim_open_win(buf, v:true, opts)
+    call termopen('zsh')
+    startinsert!
+    call nvim_buf_set_keymap(buf, 't', '<leader>tt', '<C-\><C-n><C-w>q',
+                \ {'nowait': v:true})
+    call nvim_buf_set_keymap(buf, 't', '<leader>n', '<C-\><C-n>',
+                \ {'nowait': v:true})
+    call nvim_buf_set_keymap(buf, 'n', '<leader>tt', '<C-\><C-n><C-w>q',
+                \ {'nowait': v:true})
+endfunction
+
+nnoremap <leader>tt :call CreateFloatingTerm()<CR>
 
 "-------------------------
 " Markdown files config.
 "-------------------------
 
-function! DecorateSelection(str)
+function! DecorateSelection(str) abort
   normal gv"xy
   let cursor_pos = getpos('.')
   let cursor_pos[2] = cursor_pos[2] - 1
