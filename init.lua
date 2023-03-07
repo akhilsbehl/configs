@@ -414,6 +414,25 @@ require('packer').startup(function(use)
         end,
     }
 
+    use { -- Magit for Neovim
+        'TimUntersberger/neogit',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'sindrets/diffview.nvim',
+        },
+        config = function()
+            require('neogit').setup({
+                diffview = true,
+            })
+        end
+    }
+    use { -- Show git signs
+        'airblade/vim-gitgutter',
+        config = function()
+            VG.gitgutter_map_keys = 0
+        end
+    }
+
     use { -- Search in git tree
         'mileszs/ack.vim',
         config = function()
@@ -455,10 +474,8 @@ require('packer').startup(function(use)
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             VO.list = true
-            VO.listchars:append('lead:·')
-            VO.listchars:append('trail:⋅')
+            VO.listchars:append('trail:·')
             VO.listchars:append('nbsp:␣')
-            VO.listchars:append('eol:↴')
             VO.listchars:append('tab:▸ ')
             require('indent_blankline').setup({
                 space_char_blankline       = ' ',
@@ -533,13 +550,6 @@ require('packer').startup(function(use)
                 }
             })
         end
-    }
-
-    use { -- Show git signs
-        'airblade/vim-gitgutter',
-        config = function()
-            VG.gitgutter_map_keys = 0
-        end,
     }
 
     use { -- Undo history
