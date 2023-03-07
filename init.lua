@@ -450,22 +450,6 @@ require('packer').startup(function(use)
         end
     }
 
-    use { -- Show newlines
-        'lukas-reineke/indent-blankline.nvim',
-        config = function()
-            VO.list = true
-            VO.listchars:append('trail:·')
-            VO.listchars:append('nbsp:␣')
-            VO.listchars:append('tab:▸ ')
-            require('indent_blankline').setup({
-                space_char_blankline       = ' ',
-                show_end_of_line           = true,
-                show_current_context       = true,
-                show_current_context_start = true,
-            })
-        end
-    }
-
     use { -- AI
         'github/copilot.vim',
         config = function()
@@ -499,6 +483,19 @@ require('packer').startup(function(use)
     }
     use 'honza/vim-snippets'
 
+    use { -- Show newlines
+        'lukas-reineke/indent-blankline.nvim',
+        config = function()
+            VO.list = true
+            VO.listchars:append('trail:▸')
+            require('indent_blankline').setup({
+                space_char_blankline       = ' ',
+                show_current_context       = true,
+                show_current_context_start = true,
+            })
+        end
+    }
+
     use { -- Commenting
         'scrooloose/nerdcommenter',
         config = function()
@@ -509,16 +506,6 @@ require('packer').startup(function(use)
             VK({ 'n', 'v' }, '<leader>c ', '<Plug>NERDCommenterToggle')
             VK('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
         end,
-    }
-
-    use { -- Pretty icons everywhere
-        'nvim-tree/nvim-web-devicons',
-        config = function()
-            require('nvim-web-devicons').setup({
-                default     = true,
-                color_icons = true,
-            })
-        end
     }
 
     use { -- Status line
@@ -535,6 +522,22 @@ require('packer').startup(function(use)
     use { -- Undo history
         'jiaoshijie/undotree',
         requires = { 'nvim-lua/plenary.nvim' },
+        config = function()
+            require('undotree').setup({
+                window = { winblend = 0 }
+            })
+            VK('n', '<localleader>u', require('undotree').open)
+        end
+    }
+
+    use { -- Pretty icons everywhere
+        'nvim-tree/nvim-web-devicons',
+        config = function()
+            require('nvim-web-devicons').setup({
+                default     = true,
+                color_icons = true,
+            })
+        end
     }
 
     use { -- Match pairs
@@ -933,6 +936,6 @@ augroup END
 --     1.1. rcarriga/nvim-dap-ui
 --     1.2. mfussenegger/nvim-dap
 --     1.3. mfussenegger/nvim-dap-python
--- 2. Literate programming:
+-- 2. Literate programming?
 --     2.1. zyedidia/Literate
 --     2.2. zyedidia/literate.vim
