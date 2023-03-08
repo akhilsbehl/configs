@@ -409,9 +409,8 @@ require('packer').startup(function(use)
             VK('n', '<localleader>io', '<cmd>IronRepl<cr>')
             VK('n', '<localleader>iF', '<cmd>IronFocus<cr>')
             VK('n', '<localleader>iH', '<cmd>IronHide<cr>')
+            VK({'t', 'n'}, 'ty', require('nvim-window').pick)
             VC [[
-                tnoremap <leader>ww <Cmd>wincmd w<cr>
-                nnoremap <leader>ww <Cmd>wincmd w<cr>
                 augroup IronTerm
                     autocmd!
                     autocmd BufEnter term://* startinsert!
@@ -493,6 +492,22 @@ require('packer').startup(function(use)
         end
     }
     use 'honza/vim-snippets'
+
+    use {
+        'https://gitlab.com/yorickpeterse/nvim-window.git',
+        config = function()
+            require('nvim-window').setup({
+                chars = {
+                    'e', 't', 'o', 'v', 'x', 'q', 'p', 'd', 'y', 'g', 'f',
+                    'b', 'l', 'z', 'h', 'c', 'k', 'i', 's', 'u', 'r', 'a',
+                },
+                normal_hl = 'PmenuSel',
+                hint_hl = 'Bold',
+                border = 'double',
+            })
+            VK('n', 'ty', require('nvim-window').pick)
+        end
+    }
 
     use { -- Show newlines
         'lukas-reineke/indent-blankline.nvim',
