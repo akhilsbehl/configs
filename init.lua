@@ -409,27 +409,15 @@ require('packer').startup(function(use)
             VK('n', '<localleader>io', '<cmd>IronRepl<cr>')
             VK('n', '<localleader>iF', '<cmd>IronFocus<cr>')
             VK('n', '<localleader>iH', '<cmd>IronHide<cr>')
-            local ag = VA.nvim_create_augroup('TermSetup', { clear = true })
-            local events = {
-                'BufNew',
-                'BufEnter',
-                'BufWinEnter',
-                'BufAdd',
-                'BufNewFile'
-            }
-            VA.nvim_create_autocmd(events,
-                {
-                    desc = 'Always enter in terminal mode',
-                    group = ag,
-                    pattern = 'term://*',
-                    callback = function ()
-                        VC [[
-                            tnoremap <leader>ww <Cmd>wincmd w<cr>
-                            :startinsert!
-                        ]]
-                    end
-                }
-            )
+            VC [[
+                tnoremap <leader>ww <Cmd>wincmd w<cr>
+                nnoremap <leader>ww <Cmd>wincmd w<cr>
+                augroup IronTerm
+                    autocmd!
+                    autocmd BufEnter term://* startinsert!
+                    autocmd BufLeave term://* stopinsert!
+                augroup END
+            ]]
         end,
     }
 
