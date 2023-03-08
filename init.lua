@@ -787,6 +787,12 @@ vnoremap "sy :!xclip -f -sel clip
 nnoremap "sp :r!xclip -o -sel clip
 
 "-------------------------
+" Toggle search highlighting.
+"-------------------------
+
+nnoremap <leader>hs :let @/ = ''<CR>
+
+"-------------------------
 " Delete all trailing whitespace.
 "-------------------------
 
@@ -815,19 +821,6 @@ function! SudoOnTheFly() abort
     write !sudo tee % > /dev/null
 endfunction
 nnoremap <leader>sd :call SudoOnTheFly()<CR>
-
-"-------------------------
-" Toggle search highlighting.
-"-------------------------
-
-function! ToggleHighLightsearch() abort
-    if &hlsearch
-        set nohlsearch
-    else
-        set hlsearch
-    endif
-endfunction
-nnoremap <leader>hs :let @/ = ''<CR>
 
 "-------------------------
 " Toggle paste mode.
