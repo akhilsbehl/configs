@@ -27,7 +27,7 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim' -- Package manager
 
-    use {
+    use { -- LSP configurations
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
         requires = {
@@ -41,7 +41,6 @@ require('packer').startup(function(use)
             { 'hrsh7th/nvim-cmp' },
             { 'L3MON4D3/LuaSnip' }, -- Only to stop cmp's bitching
             { 'quangnguyen30192/cmp-nvim-ultisnips' },
-            { 'amarakon/nvim-cmp-lua-latex-symbols' },
         },
         config = function()
             local lsp = require('lsp-zero').preset({
@@ -80,11 +79,6 @@ require('packer').startup(function(use)
                     { name = 'nvim_lsp' },
                     { name = 'nvim_lua' },
                     { name = 'path' },
-                    {
-                        name     = 'lua-latex-symbols',
-                        option   = { cache = true },
-                        filetype = { 'tex', 'plaintex', 'markdown' },
-                    },
                 },
                 view = {
                     entries = {
@@ -239,15 +233,15 @@ require('packer').startup(function(use)
             VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
             VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
             VK('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
-            VK('n', '<localleader>D', '<cmd>Telescope diagnostics<cr>')
-            VK('n', '<localleader>r', '<cmd>Telescope lsp_references<cr>')
-            VK('n', '<localleader>d', '<cmd>Telescope lsp_definitions<cr>')
-            VK('n', '<localleader>I', '<cmd>Telescope lsp_incoming_calls<cr>')
-            VK('n', '<localleader>O', '<cmd>Telescope lsp_outgoing_calls<cr>')
-            VK('n', '<localleader>m', '<cmd>Telescope lsp_implementations<cr>')
-            VK('n', '<localleader>t', '<cmd>Telescope lsp_type_definitions<cr>')
-            VK('n', '<localleader>S', '<cmd>Telescope lsp_document_symbols<cr>')
-            VK('n', '<localleader>w', '<cmd>Telescope lsp_workspace_symbols<cr>')
+            VK('n', '<localleader>tD', '<cmd>Telescope diagnostics<cr>')
+            VK('n', '<localleader>tr', '<cmd>Telescope lsp_references<cr>')
+            VK('n', '<localleader>td', '<cmd>Telescope lsp_definitions<cr>')
+            VK('n', '<localleader>tI', '<cmd>Telescope lsp_incoming_calls<cr>')
+            VK('n', '<localleader>tO', '<cmd>Telescope lsp_outgoing_calls<cr>')
+            VK('n', '<localleader>tm', '<cmd>Telescope lsp_implementations<cr>')
+            VK('n', '<localleader>tt', '<cmd>Telescope lsp_type_definitions<cr>')
+            VK('n', '<localleader>tS', '<cmd>Telescope lsp_document_symbols<cr>')
+            VK('n', '<localleader>tw', '<cmd>Telescope lsp_workspace_symbols<cr>')
         end,
     }
     use {
@@ -397,23 +391,23 @@ require('packer').startup(function(use)
                 },
                 ignore_blank_lines = true,
                 keymaps = {
-                    send_motion = '<localleader>is',
-                    visual_send = '<localleader>is',
-                    send_line   = '<localleader>il',
-                    send_file   = '<localleader>if',
-                    clear       = '<localleader>iL',
-                    interrupt   = '<localleader>ic',
+                    send_motion = '<localleader>s',
+                    visual_send = '<localleader>s',
+                    send_line   = '<localleader>S',
+                    send_file   = '<localleader>f',
+                    clear       = '<localleader>L',
+                    interrupt   = '<localleader>c',
                     exit        = '<localleader>iq',
                 },
             })
-            VK('n', '<localleader>io', '<cmd>IronRepl<cr>')
-            VK('n', '<localleader>iF', '<cmd>IronFocus<cr>')
-            VK('n', '<localleader>iH', '<cmd>IronHide<cr>')
-            VK({'t', 'n'}, 'ty', require('nvim-window').pick)
+            VK('n', '<localleader>ir', '<cmd>IronRepl<cr>')
+            VK('n', '<localleader>io', '<cmd>IronFocus<cr>')
+            VK('n', '<localleader>ih', '<cmd>IronHide<cr>')
+            VK('t', 'ty', require('nvim-window').pick)
             VC [[
                 augroup IronTerm
                     autocmd!
-                    autocmd BufEnter term://* startinsert!
+                    autocmd BufNew,BufEnter term://* startinsert!
                     autocmd BufLeave term://* stopinsert!
                 augroup END
             ]]
@@ -493,7 +487,7 @@ require('packer').startup(function(use)
     }
     use 'honza/vim-snippets'
 
-    use {
+    use { -- Traverse windows easier
         'https://gitlab.com/yorickpeterse/nvim-window.git',
         config = function()
             require('nvim-window').setup({
@@ -578,6 +572,13 @@ require('packer').startup(function(use)
         config = function()
             require('which-key').setup({})
         end,
+    }
+
+    use {-- Dim inactive windows
+        'blueyed/vim-diminactive',
+        config = function()
+            VG.diminactive_buftype_whitelist = { 'terminal' }
+        end
     }
 
     use 'mg979/vim-visual-multi' -- Multiple cursors
@@ -843,7 +844,6 @@ nnoremap <leader>tpm :call TogglePasteMode()<CR>
 "-------------------------
 
 function! HighlightCursor() abort
-    normal zz
     match PmenuSel /\k*\%#\k*/
     let s:highlightcursor = 1
 endfunction
@@ -918,7 +918,11 @@ function! CreateFloatingTerm() abort
 endfunction
 
 nnoremap <leader>tt :call CreateFloatingTerm()<CR>
-tnoremap <leader>ee <C-\><C-n><Esc>
+tnoremap t<Esc> <C-\><C-n><Esc>
+tnoremap tj <Cmd>wincmd j<CR>
+tnoremap tk <Cmd>wincmd k<CR>
+tnoremap th <Cmd>wincmd h<CR>
+tnoremap tl <Cmd>wincmd l<CR>
 
 "-------------------------
 " Markdown files config.
@@ -949,7 +953,6 @@ augroup MarkdownSetup
 augroup END
 
 ]=]
-
 
 -- TODOs:
 -- 1. Debug Adaptor Protocol
