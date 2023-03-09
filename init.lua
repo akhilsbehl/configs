@@ -936,8 +936,6 @@ nnoremap <leader>tt :call CreateFloatingTerm()<CR>
 tnoremap t<Esc> <C-\><C-n><Esc>
 tnoremap tj <Cmd>wincmd j<CR>
 tnoremap tk <Cmd>wincmd k<CR>
-tnoremap th <Cmd>wincmd h<CR>
-tnoremap tl <Cmd>wincmd l<CR>
 
 "-------------------------
 " Markdown files config.
