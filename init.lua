@@ -464,7 +464,7 @@ require('packer').startup(function(use)
             VK('i', '<C-d>', '<Plug>(copilot-dismiss)')
             VK('i', '<C-j>', '<Plug>(copilot-next)')
             VK('i', '<C-k>', '<Plug>(copilot-previous)')
-            VK('i', '<S-Tab>', 'copilot#Accept("")', {
+            VK('i', '<C-a>', 'copilot#Accept("")', {
                 expr = true, replace_keycodes = false,
             })
         end,
