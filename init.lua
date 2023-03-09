@@ -653,7 +653,7 @@ set hidden
 
 " Always keep at least 3 lines above and below the cursor, except at the ends
 " of the file.
-set scrolloff=3
+set scrolloff=9999
 
 " Formatting options: read 'help formatoptions'.
 set formatoptions=tcqn
@@ -838,6 +838,21 @@ function! TogglePasteMode() abort
     endif
 endfunction
 nnoremap <leader>tpm :call TogglePasteMode()<CR>
+
+"-------------------------
+" Keep the cursor centered
+"-------------------------
+
+function! CenterCursor() abort
+    let pos = getpos(".")
+    normal! zz
+    call setpos(".", pos)
+endfunction
+
+augroup CenterCursor
+    autocmd!
+    autocmd CursorMoved,CursorMovedI * call CenterCursor()
+augroup END
 
 "-------------------------
 " Making the cursor more conspicuous so I don't keep losing it.
