@@ -651,10 +651,6 @@ set nobackup noswapfile
 " Set hidden: Seems like I want it afterall.
 set hidden
 
-" Always keep at least 3 lines above and below the cursor, except at the ends
-" of the file.
-set scrolloff=9999
-
 " Formatting options: read 'help formatoptions'.
 set formatoptions=tcqn
 
@@ -844,9 +840,11 @@ nnoremap <leader>tpm :call TogglePasteMode()<CR>
 "-------------------------
 
 function! CenterCursor() abort
-    let pos = getpos(".")
-    normal! zz
-    call setpos(".", pos)
+    if line('.') != line('$')
+        let pos = getpos(".")
+        normal! zz
+        call setpos(".", pos)
+    endif
 endfunction
 
 augroup CenterCursor
