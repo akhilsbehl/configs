@@ -859,16 +859,16 @@ augroup END
 
 function! HighlightCursor() abort
     match PmenuSel /\k*\%#\k*/
-    let s:highlightcursor = 1
+    let g:myrc_highlight_cursor = 1
 endfunction
 
 function! NoHighlightCursor() abort
     match None
-    let s:highlightcursor = 0
+    let g:myrc_highlight_cursor = 0
 endfunction
 
 function! ToggleHighlightCursor() abort
-    if !exists("s:highlightcursor")
+    if !exists("g:myrc_highlight_cursor")
         call HighlightCursor()
     else
         call NoHighlightCursor()
