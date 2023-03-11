@@ -680,6 +680,7 @@ nnoremap tj <C-w>j<CR>
 nnoremap tk <C-w>k<CR>
 nnoremap th <C-w>h<CR>
 nnoremap tl <C-w>l<CR>
+nnoremap tx <C-w>x<CR>
 nnoremap tr :e<CR>
 nnoremap tR <C-w>r<CR>
 nnoremap tmh <C-w>t<C-w>K<CR>
