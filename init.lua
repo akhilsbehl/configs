@@ -906,8 +906,7 @@ nnoremap <leader>sr :call SaveAsInPlace()<CR>
 " Toggle a simple terminal buffer
 "-------------------------
 
-function! CreateFloatingTerm() abort
-    let buf = nvim_create_buf(v:false, v:true)
+function! DisplayBufInFloatingWin(buf) abort
     let ui = nvim_list_uis()[0]
     let opts = {
                 \ 'relative': 'editor',
@@ -919,19 +918,29 @@ function! CreateFloatingTerm() abort
                 \ 'style': 'minimal',
                 \ 'border': 'rounded',
                 \ }
-    let win = nvim_open_win(buf, v:true, opts)
-    call termopen('zsh')
-    startinsert!
-    call nvim_buf_set_keymap(buf, 't', '<leader>tt', '<C-\><C-n><C-w>q',
-                \ {'nowait': v:true})
-    call nvim_buf_set_keymap(buf, 'n', '<leader>tt', '<C-\><C-n><C-w>q',
-                \ {'nowait': v:true})
-    " To over-ride the setting of this keymap in iron
-    call nvim_buf_set_keymap(buf, 't', '<leader>ww', '<Nop>',
-                \ {'nowait': v:true})
+    let win = nvim_open_win(a:buf, v:true, opts)
 endfunction
 
-nnoremap <leader>tt :call CreateFloatingTerm()<CR>
+function! OpenFloatingTerm() abort
+    if !exists('g:myrc_fterm_buf')
+        let g:myrc_fterm_buf = nvim_create_buf(v:false, v:true)
+        call DisplayBufInFloatingWin(g:myrc_fterm_buf)
+        call termopen('zsh')
+        " call nvim_open_term(g:myrc_fterm_buf, 'zsh')
+        startinsert!
+        call nvim_buf_set_keymap(g:myrc_fterm_buf, 't', '<leader>tt', '<C-\><C-n><C-w>q',
+                    \ {'nowait': v:true})
+        call nvim_buf_set_keymap(g:myrc_fterm_buf, 'n', '<leader>tt', '<C-\><C-n><C-w>q',
+                    \ {'nowait': v:true})
+        " To over-ride the setting of this keymap in iron
+        call nvim_buf_set_keymap(g:myrc_fterm_buf, 't', '<leader>ww', '<Nop>',
+                    \ {'nowait': v:true})
+    else
+        call DisplayBufInFloatingWin(g:myrc_fterm_buf)
+    endif
+endfunction
+
+nnoremap <leader>tt :call OpenFloatingTerm()<CR>
 tnoremap t<Esc> <C-\><C-n><Esc>
 tnoremap tj <Cmd>wincmd j<CR>
 tnoremap tk <Cmd>wincmd k<CR>
