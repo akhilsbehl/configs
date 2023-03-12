@@ -177,7 +177,7 @@ alias zshrc='$EDITOR "$HOME"/configs/zshrc'
 
 alias vimrc='$EDITOR "$HOME"/configs/vimrc'
 
-alias nvimrc='$EDITOR "$HOME"/configs/init.lua'
+alias vrc='$EDITOR "$HOME"/configs/init.lua'
 
 alias gvimrc='$EDITOR "$HOME"/configs/gvimrc'
 
@@ -337,12 +337,12 @@ function fzbin () {
   if [[ -z "$1" ]]; then
     echo 'I need at least a program to start with.'
   elif [[ -z "$2" ]]; then
-    file=$(fzf-tmux --select-1 --exit-0)
+    file=$(fzf-tmux -1 --exit-0 | tr '\n' ' ')
   elif [[ -f "$2" ]]; then
     file="$2"
   elif [[ -d "$2" ]]; then
     cd "$2"
-    file=$(fzf-tmux --query="$3" --select-1 --exit-0)
+    file=$(fzf-tmux --query="$3" -1 --exit-0 | tr '\n' ' ')
   else
     echo "$2 is not a file or directory."
     return 0
@@ -353,7 +353,7 @@ function fzbin () {
 }
 
 # Simplify this
-function vif () { fzbin "nvim" "$1" }
+function vif () { fzbin "nvim -O" "$1" }
 
 # This is possibly running on:
 # Some flavor of WSL: Use wslopen
