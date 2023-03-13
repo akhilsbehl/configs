@@ -383,7 +383,7 @@ require('packer').startup(function(use)
                     scratch_repl = true,
                     repl_defintion = {
                         sh     = { 'zsh' },
-                        python = { 'ipython' },
+                        python = { 'python', '-m', 'IPython' },
                         r      = { 'R', '--no-save' },
                         julia  = { 'julia', '--color  = yes' },
                     },
