@@ -841,11 +841,15 @@ nnoremap <leader>tpm :call TogglePasteMode()<CR>
 "-------------------------
 
 function! CenterCursor() abort
-    if line('.') != line('$')
-        let pos = getpos(".")
-        normal! zz
-        call setpos(".", pos)
+    if &buftype == 'terminal'
+        return
     endif
+    if line('.') == line('$')
+        return
+    endif
+    let pos = getpos(".")
+    normal! zz
+    call setpos(".", pos)
 endfunction
 
 augroup CenterCursor
