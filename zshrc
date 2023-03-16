@@ -448,7 +448,7 @@ function forever() {
 function launchpad-tmux () {
   test $TMUX ||
     tmux attach-session -t launchPad ||
-    tmux new-session -s launchPad -n push-the-tempo
+    tmux new-session -s launchPad
 }
 
 function launchpad-zellij () {
