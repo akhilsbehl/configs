@@ -67,6 +67,16 @@ function get_first_available() {
   done
 }
 
+function cdl {
+    if [[ -n "$1" ]]; then
+        cd "$1" || return 1
+        ls -shHF --group-directories-first
+    else
+        echo "Error: no directory specified."
+        return 1
+    fi
+}
+
 alias ls='ls --color=auto'
 
 alias ll='ls -l'
