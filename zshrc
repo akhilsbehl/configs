@@ -101,9 +101,15 @@ alias grep='grep --color=auto'
 
 alias rmd='rm -rv'
 
+alias rmfn='rm -rvf > /dev/null'
+
 alias dus='du -sh'
 
 alias zip='zip -r1v'
+
+alias untar='tar -xvzf'
+
+alias mktar='tar -cvzf'
 
 alias now='date +%Y-%m-%d-%H-%M'
 
@@ -142,6 +148,8 @@ alias freeze='sudo systemctl hibernate && lock'
 alias die='sudo systemctl poweroff'
 
 alias respawn='sudo systemctl reboot'
+
+alias csay='cowsay -f milk -W 79 $(fortune)'
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 if [[ "$OS" == "Ubuntu" ]]; then
