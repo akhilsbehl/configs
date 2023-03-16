@@ -247,6 +247,10 @@ setopt pushdminus
 #  Modules  #
 #############
 
+# Remove the conflicting aliases
+unalias \t &> /dev/null
+unalias \T &> /dev/null
+
 source $HOME/configs/zshmodules/opp.zsh/opp.zsh
 source $HOME/configs/zshmodules/opp.zsh/opp/*
 
@@ -258,6 +262,16 @@ bindkey -M vicmd 'j' history-substring-search-down
 source $HOME/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #############################
+#  Redirect to a temp file  #
+#############################
+
+# Keep these after modules being loaded
+
+alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
+
+alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
+
+#############################
 #  up n to go up n folders  #
 #############################
 
@@ -267,14 +281,6 @@ function up() {
   [[ -z "$n" ]] && n=1
   repeat $n ..
 }
-
-#############################
-#  Redirect to a temp file  #
-#############################
-
-alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
-
-alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
 
 ###############
 #  Bookmarks  #
