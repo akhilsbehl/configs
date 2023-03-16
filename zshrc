@@ -445,11 +445,22 @@ function forever() {
 # Start tmux session #
 ######################
 
-function launchpad () {
+function launchpad-tmux () {
   test $TMUX ||
     tmux attach-session -t launchPad ||
     tmux new-session -s launchPad -n push-the-tempo
 }
+
+function launchpad-zellij () {
+  zellij list-sessions | grep -q "launchPad" && zellij attach launchPad
+}
+
+function launchpad () {
+    exists_command tmux && launchpad-tmux && return 0
+    exists_command zellij && launchpad-zellij && return 0
+    return 1
+}
+
 launchpad
 
 #######################
