@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function fix_files {
+    find "$1" -type f | while read f; do
+        fixname "$f"
+    done
+}
+
+function fix_dirs {
+    find "$1" -mindepth 0 -type d | sort -r | while read d; do
+        if [[ "$d" != "." ]]; then
+            fixname "$d"
+        fi
+    done
+}
+
+if [[ -n "$1" ]]; then
+    fix_files "$1"
+    fix_dirs "$1"
+else
+    fix_files "."
+    fix_dirs "."
+fi
