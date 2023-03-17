@@ -151,6 +151,10 @@ alias respawn='sudo systemctl reboot'
 
 alias csay='cowsay -f milk -W 79 $(fortune)'
 
+alias remux='tmux source-file ~/configs/tmux.conf'
+
+alias rez='. ~/.zshrc'
+
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 if [[ "$OS" == "Ubuntu" ]]; then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'

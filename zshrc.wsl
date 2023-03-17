@@ -25,7 +25,6 @@ else
   export WSLG=0
   export DISPLAY=:0
 fi
-# export LIBGL_ALWAYS_INDIRECT=1
 
 export BROWSER=wslopen
 export WINUSER=$(whoami.exe | cut -f 2 -d '\' | tr -d '')
