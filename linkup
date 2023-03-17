@@ -40,6 +40,8 @@ ln -s $PWD/scripts $HOME/scripts
 mk-dir-if-not-found $HOME/.config/nvim
 [[ -f $HOME/.config/nvim/init.lua ]] && rm $HOME/.config/nvim/init.lua
 ln -s $PWD/init.lua $HOME/.config/nvim/
+[[ -f $HOME/.config/nvim/vimrc ]] && rm $HOME/.config/nvim/vimrc
+ln -s $PWD/init.vim $HOME/.config/nvim/vimrc
 
 mk-dir-if-not-found $HOME/.ssh
 sudo chown -R $USER:$USER $HOME/.ssh
