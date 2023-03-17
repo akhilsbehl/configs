@@ -1,5 +1,6 @@
 VA = vim.api
 VC = vim.cmd
+VD = vim.diagnostic
 VF = vim.fn
 VG = vim.g
 VK = vim.keymap.set
@@ -109,50 +110,52 @@ require('packer').startup(function(use)
                 local hl = 'DiagnosticSign' .. type
                 VF.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
             end
-            VG.myrc_diagnostics_toggle_is_on = false
-            toggle_diagnostics = function()
-                local config_to_toggle_off = {
-                    virtual_text     = false,
-                    virtual_lines    = false,
-                    signs            = false,
-                    update_in_insert = false,
-                    underline        = false,
-                    severity_sort    = false,
-                    float            = {
-                        focusable = false,
-                        style     = 'minimal',
-                        border    = 'rounded',
-                        source    = 'always',
-                        header    = '',
-                        prefix    = '',
-                    },
-                }
-                local config_to_toggle_on = {
-                    virtual_text     = false,
-                    virtual_lines    = true,
-                    signs            = true,
-                    update_in_insert = false,
-                    underline        = false,
-                    severity_sort    = true,
-                    float            = {
-                        focusable = false,
-                        style     = 'minimal',
-                        border    = 'rounded',
-                        source    = 'always',
-                        header    = '',
-                        prefix    = '',
-                    },
-                }
-                if VG.myrc_diagnostics_toggle_is_on then
-                    config_to_use = config_to_toggle_off
-                else
-                    config_to_use = config_to_toggle_on
+            local diagnostic_config = {
+                virtual_text     = false,
+                signs            = false,
+                update_in_insert = false,
+                underline        = false,
+                severity_sort    = true,
+                float            = {
+                    focusable = false,
+                    style     = 'minimal',
+                    border    = 'rounded',
+                    source    = 'always',
+                    header    = '',
+                    prefix    = '',
+                },
+            }
+            local switch_diagnostics = function(option, state)
+                if option == 'signs' then
+                    VG.myrc_diagnostics = state
+                    diagnostic_config[option] = VG.myrc_diagnostics
+                    if state == false then
+                        diagnostic_config['virtual_text'] = false
+                    else
+                        diagnostic_config['virtual_text'] =
+                            VG.myrc_diagnostics_vtext
+                    end
+                    VD.config(diagnostic_config)
+                elseif option == 'virtual_text' then
+                    VG.myrc_diagnostics_vtext = state
+                    diagnostic_config[option] = VG.myrc_diagnostics_vtext
+                    if VG.myrc_diagnostics then
+                        VD.config(diagnostic_config)
+                    end
                 end
-                vim.diagnostic.config(config_to_use)
-                VG.myrc_diagnostics_toggle_is_on =
-                    not VG.myrc_diagnostics_toggle_is_on
             end
-            VK('n', '<leader>vt', toggle_diagnostics)
+            local toggle_diagnostics = function()
+                switch_diagnostics('signs', not VG.myrc_diagnostics)
+            end
+            local toggle_diagnostics_vtext = function()
+                switch_diagnostics('virtual_text',
+                    not VG.myrc_diagnostics_vtext)
+            end
+            VG.myrc_diagnostics = false
+            VG.myrc_diagnostics_vtext = true
+            switch_diagnostics('signs', VG.myrc_diagnostics)
+            VK('n', '<leader>vd', toggle_diagnostics)
+            VK('n', '<leader>vv', toggle_diagnostics_vtext)
         end,
     }
     use {
@@ -161,7 +164,7 @@ require('packer').startup(function(use)
             local nls = require('null-ls')
             local fmt = nls.builtins.formatting
             local lint = nls.builtins.diagnostics
-            local act = nls.builtins.code_actions
+            -- local act = nls.builtins.code_actions
             nls.setup({
                 sources = {
                     fmt.black,
