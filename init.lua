@@ -998,7 +998,8 @@ endfunction
 augroup MarkdownSetup
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
-    autocmd BufNewFile,BufRead *.md,*.markdown setlocal textwidth=0
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal 
+            \ textwidth=0 softtabstop=2 shiftwidth=2
     autocmd FileType markdown nnoremap <buffer> <localleader>p
             \ <Plug>MarkdownPreviewToggle
     autocmd FileType markdown vnoremap <buffer> <localleader>i
