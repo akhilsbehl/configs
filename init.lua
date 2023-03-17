@@ -27,7 +27,7 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim' -- Package manager
 
-    use { -- LSP configurations
+    use {                        -- LSP & CMP
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
         requires = {
@@ -87,15 +87,15 @@ require('packer').startup(function(use)
                     }
                 },
                 mapping = cmp.mapping.preset.insert({
-                    ['<c-e>']   = vim.NIL,
-                    ['<C-t>']   = cmp.mapping.complete(),
-                    ['<cr>']    = cmp.mapping.confirm({ select = true }),
-                    ['<C-a>']   = cmp.mapping.close(),
-                    ['<C-e>']   = cmp.mapping.abort(),
-                    ['<tab>']   = cmp.mapping.select_next_item(),
-                    ['<S-tab>'] = cmp.mapping.select_prev_item(),
-                    ['<C-n>']   = cmp.mapping.scroll_docs(3),
-                    ['<C-p>']   = cmp.mapping.scroll_docs( -3),
+                        ['<c-e>'] = vim.NIL,
+                        ['<C-t>'] = cmp.mapping.complete(),
+                        ['<cr>'] = cmp.mapping.confirm({ select = true }),
+                        ['<C-a>'] = cmp.mapping.close(),
+                        ['<C-e>'] = cmp.mapping.abort(),
+                        ['<tab>'] = cmp.mapping.select_next_item(),
+                        ['<S-tab>'] = cmp.mapping.select_prev_item(),
+                        ['<C-n>'] = cmp.mapping.scroll_docs(3),
+                        ['<C-p>'] = cmp.mapping.scroll_docs(-3),
                 }),
             })
             lsp.setup()
@@ -109,22 +109,50 @@ require('packer').startup(function(use)
                 local hl = 'DiagnosticSign' .. type
                 VF.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
             end
-            vim.diagnostic.config({
-                virtual_text     = false,
-                virtual_lines    = false,
-                signs            = true,
-                update_in_insert = false,
-                underline        = false,
-                severity_sort    = true,
-                float            = {
-                    focusable = false,
-                    style     = 'minimal',
-                    border    = 'rounded',
-                    source    = 'always',
-                    header    = '',
-                    prefix    = '',
-                },
-            })
+            VG.myrc_diagnostics_toggle_is_on = false
+            toggle_diagnostics = function()
+                local config_to_toggle_off = {
+                    virtual_text     = false,
+                    virtual_lines    = false,
+                    signs            = false,
+                    update_in_insert = false,
+                    underline        = false,
+                    severity_sort    = false,
+                    float            = {
+                        focusable = false,
+                        style     = 'minimal',
+                        border    = 'rounded',
+                        source    = 'always',
+                        header    = '',
+                        prefix    = '',
+                    },
+                }
+                local config_to_toggle_on = {
+                    virtual_text     = false,
+                    virtual_lines    = true,
+                    signs            = true,
+                    update_in_insert = false,
+                    underline        = false,
+                    severity_sort    = true,
+                    float            = {
+                        focusable = false,
+                        style     = 'minimal',
+                        border    = 'rounded',
+                        source    = 'always',
+                        header    = '',
+                        prefix    = '',
+                    },
+                }
+                if VG.myrc_diagnostics_toggle_is_on then
+                    config_to_use = config_to_toggle_off
+                else
+                    config_to_use = config_to_toggle_on
+                end
+                vim.diagnostic.config(config_to_use)
+                VG.myrc_diagnostics_toggle_is_on =
+                    not VG.myrc_diagnostics_toggle_is_on
+            end
+            VK('n', '<leader>vt', toggle_diagnostics)
         end,
     }
     use {
@@ -145,13 +173,6 @@ require('packer').startup(function(use)
             })
         end,
     }
-    use({
-        'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
-        config = function()
-            require('lsp_lines').setup()
-            VK('n', '<leader>vt', require('lsp_lines').toggle)
-        end,
-    })
 
     use { -- Fuzzy finder
         'nvim-telescope/telescope.nvim',
@@ -164,30 +185,30 @@ require('packer').startup(function(use)
                 defaults = {
                     default_mappings = {
                         i = {
-                            ["<C-/>"]      = actions.which_key,
-                            ["<C-_>"]      = actions.which_key,
-                            ["<C-e>"]      = actions.select_default,
-                            ["<C-h>"]      = actions.preview_scrolling_down,
-                            ["<C-j>"]      = actions.nop,
-                            ["<C-l>"]      = actions.preview_scrolling_up,
-                            ["<C-m>"]      = actions.toggle_selection,
-                            ["<C-n>"]      = actions.results_scrolling_down,
-                            ["<C-p>"]      = actions.results_scrolling_up,
-                            ["<C-q>"]      = qfix,
-                            ["<C-s>"]      = actions.select_horizontal,
-                            ["<C-t>"]      = actions.select_tab,
-                            ["<C-v>"]      = actions.select_vertical,
-                            ["<C-w>"]      = actions.nop,
-                            ["<C-x>"]      = actions.nop,
-                            ["<Down>"]     = actions.nop,
-                            ["<Esc>"]      = actions.close,
-                            ["<M-q>"]      = actions.nop,
-                            ["<PageDown>"] = actions.nop,
-                            ["<PageUp>"]   = actions.nop,
-                            ["<S-Tab>"]    = actions.move_selection_next,
-                            ["<Tab>"]      = actions.move_selection_previous,
-                            ["<Up>"]       = actions.nop,
-                            ["<cr>"]       = actions.select_default, -- buggy
+                                ["<C-/>"]  = actions.which_key,
+                                ["<C-_>"]  = actions.which_key,
+                                ["<C-e>"]  = actions.select_default,
+                                ["<C-h>"]  = actions.preview_scrolling_down,
+                                ["<C-j>"]  = actions.nop,
+                                ["<C-l>"]  = actions.preview_scrolling_up,
+                                ["<C-m>"]  = actions.toggle_selection,
+                                ["<C-n>"]  = actions.results_scrolling_down,
+                                ["<C-p>"]  = actions.results_scrolling_up,
+                                ["<C-q>"]  = qfix,
+                                ["<C-s>"]  = actions.select_horizontal,
+                                ["<C-t>"]  = actions.select_tab,
+                                ["<C-v>"]  = actions.select_vertical,
+                                ["<C-w>"]  = actions.nop,
+                                ["<C-x>"]  = actions.nop,
+                                ["<Down>"] = actions.nop,
+                                ["<Esc>"]  = actions.close,
+                                ["<M-q>"]  = actions.nop,
+                                ["<PageDown>"] = actions.nop,
+                                ["<PageUp>"] = actions.nop,
+                                ["<S-Tab>"] = actions.move_selection_next,
+                                ["<Tab>"]  = actions.move_selection_previous,
+                                ["<Up>"]   = actions.nop,
+                                ["<cr>"]   = actions.select_default, -- buggy
                         },
                     },
                     layout_config = {
@@ -295,30 +316,30 @@ require('packer').startup(function(use)
                     select = {
                         enable = true,
                         keymaps = {
-                            ['af'] = '@function.outer',
-                            ['if'] = '@function.inner',
-                            ['ac'] = '@class.outer',
-                            ['ic'] = '@class.inner',
+                                ['af'] = '@function.outer',
+                                ['if'] = '@function.inner',
+                                ['ac'] = '@class.outer',
+                                ['ic'] = '@class.inner',
                         },
                     },
                     move = {
                         enable = true,
                         set_jumps = true,
                         goto_next_start = {
-                            ['<leader>nf'] = '@function.outer',
-                            ['<leader>nc'] = '@class.outer',
+                                ['<leader>nf'] = '@function.outer',
+                                ['<leader>nc'] = '@class.outer',
                         },
                         goto_next_end = {
-                            ['<leader>nF'] = '@function.outer',
-                            ['<leader>nC'] = '@class.outer',
+                                ['<leader>nF'] = '@function.outer',
+                                ['<leader>nC'] = '@class.outer',
                         },
                         goto_previous_start = {
-                            ['<leader>pf'] = '@function.outer',
-                            ['<leader>pc'] = '@class.outer',
+                                ['<leader>pf'] = '@function.outer',
+                                ['<leader>pc'] = '@class.outer',
                         },
                         goto_previous_end = {
-                            ['<leader>pF'] = '@function.outer',
-                            ['<leader>pC'] = '@class.outer',
+                                ['<leader>pF'] = '@function.outer',
+                                ['<leader>pC'] = '@class.outer',
                         },
                     },
                 },
@@ -365,11 +386,11 @@ require('packer').startup(function(use)
                 case_insesitive = false,
                 multi_windows = true,
             })
-            VK({'n', 'o', 'v'}, 'b', '<cmd>HopChar2<CR>')
-            VK({'n', 'o', 'v'}, 'f', _f)
-            VK({'n', 'o', 'v'}, 'F', _F)
-            VK({'n', 'o', 'v'}, 't', _t)
-            VK({'n', 'o', 'v'}, 'T', _T)
+            VK({ 'n', 'o', 'v' }, 'b', '<cmd>HopChar2<CR>')
+            VK({ 'n', 'o', 'v' }, 'f', _f)
+            VK({ 'n', 'o', 'v' }, 'F', _F)
+            VK({ 'n', 'o', 'v' }, 't', _t)
+            VK({ 'n', 'o', 'v' }, 'T', _T)
         end,
     }
 
@@ -574,31 +595,30 @@ require('packer').startup(function(use)
         end,
     }
 
-    use {-- Dim inactive windows
+    use { -- Dim inactive windows
         'blueyed/vim-diminactive',
         config = function()
             VG.diminactive_buftype_whitelist = { 'terminal' }
         end
     }
 
-    use 'mg979/vim-visual-multi' -- Multiple cursors
+    use 'mg979/vim-visual-multi'      -- Multiple cursors
 
-    use 'akhilsbehl/md-image-paste' -- Paste images in md files
+    use 'akhilsbehl/md-image-paste'   -- Paste images in md files
 
-    use 'tpope/vim-surround' -- Use surround movements
+    use 'tpope/vim-surround'          -- Use surround movements
 
-    use 'tpope/vim-repeat' -- Repeat commands
+    use 'tpope/vim-repeat'            -- Repeat commands
 
-    use 'godlygeek/tabular' -- Align rows
+    use 'godlygeek/tabular'           -- Align rows
 
     use 'powerman/vim-plugin-AnsiEsc' -- Escape shell color codes
 
-    use 'folke/tokyonight.nvim' -- Theme: tokyonight
+    use 'folke/tokyonight.nvim'       -- Theme: tokyonight
 
     if packer_bootstrap then
         require('packer').sync()
     end
-
 end)
 
 VC [=[
