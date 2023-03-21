@@ -199,7 +199,7 @@ alias zshrc='$EDITOR "$HOME"/configs/zshrc'
 
 alias vimrc='$EDITOR "$HOME"/configs/vimrc'
 
-alias vrc='$EDITOR "$HOME"/configs/init.lua'
+alias vrc='$EDITOR -O "$HOME"/configs/init.lua "$HOME"/configs/init.vim'
 
 alias gvimrc='$EDITOR "$HOME"/configs/gvimrc'
 
