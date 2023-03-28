@@ -55,11 +55,11 @@ stty -ixon
 # Command Aliases #
 ###################
 
-function exists_command() {
+function exists_command {
   command -v "$1" > /dev/null
 }
 
-function get_first_available() {
+function get_first_available {
   local first
   for candidate in "$@"; do
     exists_command "$candidate" && first="$candidate"
@@ -337,7 +337,7 @@ export FZF_TMUX_HEIGHT='20%'
 export FZF_COMPLETION_TRIGGER=';;'
 export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi'
 
-function fzbin () {
+function fzbin {
   local orig_dir=$PWD
   local file
   if [[ -z "$1" ]]; then
@@ -359,15 +359,15 @@ function fzbin () {
 }
 
 # Simplify this
-function vif () { fzbin "nvim -O" "$1" }
+function vif { fzbin "nvim -O" "$1" }
 
 # This is possibly running on:
 # Some flavor of WSL: Use wslopen
 # Some flavor of Cygwin: Use start
 # Some flavor of Linux: Use xdg-open
-function open () { fzbin $(get_first_available wslopen start xdg-open) "$@" }
+function open { fzbin $(get_first_available wslopen start xdg-open) "$@" }
 
-function fzp () {
+function fzp {
   local mode prefix search_cmd search_args install_cmd install_args
   mode="$1"
   prefix=""
@@ -400,10 +400,10 @@ function fzp () {
   fi
 }
 
-function install () { fzp "install" "$@" }
-function uninstall () { fzp "uninstall" "$@" }
+function install { fzp "install" "$@" }
+function uninstall { fzp "uninstall" "$@" }
 
-function gloc () {
+function gloc {
   local file handler
   file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
   handler=$(get_first_available wslopen start xdg-open)
@@ -427,7 +427,7 @@ fi
 # Do something forever #
 ########################
 
-function forever() {
+function forever {
     echo 'This will loop the command forever.'
     echo 'You will need to kill the shell to exit.'
     echo '<Enter> now to proceed. <Ctrl-C> to interrupt.'
@@ -437,21 +437,36 @@ function forever() {
     done
 }
 
+####################
+#  Pandoc aliases  #
+####################
+
+function md2x {
+    [[ $# -ne 2 ]] && echo "Usage: md2x <input> <output-extension>" && return 1
+    [[ ! -r "$1" ]] && echo "Cannot read $1" && return 2
+    if [[ ! exists_command ]]; then
+        echo "pandoc not found."
+        return 3
+    fi
+    pandoc "$1" -o "$(basename $1 $(getext $1)).$2"
+    return $?
+}
+
 ######################
 # Start tmux session #
 ######################
 
-function launchpad-tmux () {
+function launchpad-tmux {
   test $TMUX ||
     tmux attach-session -t launchPad ||
     tmux new-session -s launchPad
 }
 
-function launchpad-zellij () {
+function launchpad-zellij {
   zellij list-sessions | grep -q "launchPad" && zellij attach launchPad
 }
 
-function launchpad () {
+function launchpad {
     exists_command tmux && launchpad-tmux && return 0
     exists_command zellij && launchpad-zellij && return 0
     return 1
