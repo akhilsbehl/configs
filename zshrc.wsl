@@ -6,6 +6,7 @@ alias start=wslopen
 alias winsu='runas.exe /user:admin'
 alias cmd='cmd.exe'
 alias psh='powershell.exe'
+alias pwsh='pwsh.exe'
 
 alias susp='rundll32.exe powrprof.dll, SetSuspendState Sleep'
 alias freeze='rundll32.exe powrprof.dll, SetSuspendState Hibernate'
