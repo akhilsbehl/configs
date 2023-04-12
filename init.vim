@@ -206,10 +206,10 @@ nnoremap <leader>dtw :silent! call DeleteTrailingWhitespace()<CR>
 "-------------------------
 
 function! DeleteCtrlChars() abort
-    %s/[[:cntrl:]]//e
+    %s/[[:cntrl:]]//eg
     let @/ = ''
 endfunction
-nnoremap <leader>dcc :call DeleteCtrlChars<CR>
+nnoremap <leader>dcc :call DeleteCtrlChars()<CR>
 
 "-------------------------
 " Save when file was opened without sudo.
