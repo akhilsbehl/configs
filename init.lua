@@ -92,7 +92,7 @@ require('packer').startup(function(use)
                         ['<C-t>'] = cmp.mapping.complete(),
                         ['<cr>'] = cmp.mapping.confirm({ select = true }),
                         ['<C-a>'] = cmp.mapping.close(),
-                        ['<C-e>'] = cmp.mapping.abort(),
+                        ['<C-c>'] = cmp.mapping.abort(),
                         ['<tab>'] = cmp.mapping.select_next_item(),
                         ['<S-tab>'] = cmp.mapping.select_prev_item(),
                         ['<C-n>'] = cmp.mapping.scroll_docs(3),
@@ -497,10 +497,10 @@ require('packer').startup(function(use)
     use { -- Snippets engine
         'SirVer/UltiSnips',
         config = function()
-            VG.UltiSnipsExpandTrigger                           = '<c-e>'
-            VG.UltiSnipsListSnippets                            = '<c-l>'
-            VG.UltiSnipsJumpForwardTrigger                      = '<c-k>'
-            VG.UltiSnipsJumpBackwardTrigger                     = '<c-j>'
+            VG.UltiSnipsExpandTrigger                           = '<C-e>'
+            VG.UltiSnipsListSnippets                            = '<C-l>'
+            VG.UltiSnipsJumpForwardTrigger                      = '<C-k>'
+            VG.UltiSnipsJumpBackwardTrigger                     = '<C-j>'
             VG.UltiSnipsRemoveSelectModeMappings                = 0
             VG.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
             '~/.vim/mysnippets'
