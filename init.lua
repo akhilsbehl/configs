@@ -557,7 +557,7 @@ require('packer').startup(function(use)
         config = function()
             require('lualine').setup({
                 options = {
-                    theme = 'tokyonight',
+                    theme = 'catppuccin',
                 }
             })
         end
@@ -603,6 +603,12 @@ require('packer').startup(function(use)
         config = function()
             VG.diminactive_buftype_whitelist = { 'terminal' }
         end
+    }
+
+    use { -- Theme: catppuccin
+        'catppuccin/nvim',
+        as = 'catppuccin',
+        flavour = "mocha"
     }
 
     use 'mg979/vim-visual-multi'      -- Multiple cursors
