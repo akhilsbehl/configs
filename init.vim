@@ -389,6 +389,6 @@ augroup END
 
 augroup Catppuccin
     autocmd!
-    autocmd VimEnter * colorscheme catppuccin-latte
-    autocmd VimEnter * lua require('lualine').setup()
+    autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-latte
+    autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
