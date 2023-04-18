@@ -386,3 +386,9 @@ augroup MarkdownSetup
     autocmd FileType markdown vnoremap <buffer> <localleader>d
             \ :call DecorateSelection('$')<CR>
 augroup END
+
+augroup Catppuccin
+    autocmd!
+    autocmd VimEnter * colorscheme catppuccin-latte
+    autocmd VimEnter * lua require('lualine').setup()
+augroup END
