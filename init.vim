@@ -9,7 +9,7 @@ colorscheme catppuccin
 set autochdir
 
 " Look and feel options.
-set cursorline cursorcolumn ruler number relativenumber numberwidth=4
+set cursorline ruler number relativenumber numberwidth=4
 set showmode showcmd
 set mouse-=a mousefocus
 set textwidth=79 colorcolumn=+1 laststatus=2 signcolumn=yes

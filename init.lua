@@ -607,8 +607,7 @@ require('packer').startup(function(use)
 
     use { -- Theme: catppuccin
         'catppuccin/nvim',
-        as = 'catppuccin',
-        flavour = "mocha"
+        flavour = 'latte'
     }
 
     use 'mg979/vim-visual-multi'      -- Multiple cursors
