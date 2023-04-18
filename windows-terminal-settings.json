@@ -73,7 +73,7 @@
         {
             "bellStyle": "window",
             "closeOnExit": "always",
-            "colorScheme": "Treehouse",
+            "colorScheme": "Catppuccin Latte",
             "cursorColor": "#FFA500",
             "cursorShape": "bar",
             "font":
@@ -107,19 +107,19 @@
                 "name": "archWizard"
             },
             {
-                "colorScheme": "Builtin Solarized Dark",
+                "colorScheme": "Catppuccin Mocha",
                 "commandline": "wsl.exe --distribution Ubuntu",
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "name": "playground"
             },
             {
-                "colorScheme": "Belafonte Day",
+                "colorScheme": "Solarized Dark",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "name": "PowerShell",
                 "commandline": "pwsh.exe"
             },
             {
-                "colorScheme": "3024 Day",
+                "colorScheme": "Solarized Light",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "name": "cmd"
             }
@@ -127,6 +127,52 @@
     },
     "schemes":
     [
+        {
+            "name": "Catppuccin Latte",
+            "black": "#5C5F77",
+            "red": "#D20F39",
+            "green": "#40A02B",
+            "yellow": "#DF8E1D",
+            "blue": "#1E66F5",
+            "purple": "#EA76CB",
+            "cyan": "#179299",
+            "white": "#ACB0BE",
+            "brightBlack": "#ACB0BE",
+            "brightRed": "#D20F39",
+            "brightGreen": "#40A02B",
+            "brightYellow": "#DF8E1D",
+            "brightBlue": "#1E66F5",
+            "brightPurple": "#EA76CB",
+            "brightCyan": "#179299",
+            "brightWhite": "#BCC0CC",
+            "background": "#EFF1F5",
+            "foreground": "#4C4F69",
+            "cursorColor": "#DC8A78",
+            "selectionBackground": "#ACB0BE"
+        },
+        {
+            "name": "Catppuccin Mocha",
+            "black": "#45475A",
+            "red": "#F38BA8",
+            "green": "#A6E3A1",
+            "yellow": "#F9E2AF",
+            "blue": "#89B4FA",
+            "purple": "#F5C2E7",
+            "cyan": "#94E2D5",
+            "white": "#BAC2DE",
+            "brightBlack": "#585B70",
+            "brightRed": "#F38BA8",
+            "brightGreen": "#A6E3A1",
+            "brightYellow": "#F9E2AF",
+            "brightBlue": "#89B4FA",
+            "brightPurple": "#F5C2E7",
+            "brightCyan": "#94E2D5",
+            "brightWhite": "#A6ADC8",
+            "background": "#1E1E2E",
+            "foreground": "#CDD6F4",
+            "cursorColor": "#F5E0DC",
+            "selectionBackground": "#585B70",
+        },
         {
             "name": "3024 Day",
             "black": "#090300",
@@ -6957,6 +7003,38 @@
             "foreground": "#353535",
             "cursorColor": "#353535",
             "selectionBackground": "#d7d7d7"
+        }
+    ],
+    "themes": [
+        {
+            "name": "Catppuccin Latte",
+            "tab": {
+                "background": "#CCD0DAFF",
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "tabRow": {
+                "background": "#EFF1F5FF",
+                "unfocusedBackground": "#E6E9EFFF"
+            },
+            "window": {
+                "applicationTheme": "light"
+            }
+        },
+        {
+            "name": "Catppuccin Macchiato",
+            "tab": {
+                "background": "#363A4FFF",
+                "showCloseButton": "always",
+                "unfocusedBackground": null
+            },
+            "tabRow": {
+                "background": "#24273AFF",
+                "unfocusedBackground": "#181926FF"
+            },
+            "window": {
+                "applicationTheme": "dark"
+            }
         }
     ],
     "showTabsInTitlebar": true,
