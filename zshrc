@@ -70,7 +70,7 @@ function get_first_available {
 function cdl {
     if [[ -n "$1" ]]; then
         cd "$1" || return 1
-        ls -shHF --group-directories-first
+        ls --color=auto -shHF --group-directories-first
     else
         echo "Error: no directory specified."
         return 1
