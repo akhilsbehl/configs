@@ -91,7 +91,7 @@ require('packer').startup(function(use)
                         ['<c-e>'] = vim.NIL,
                         ['<C-t>'] = cmp.mapping.complete(),
                         ['<cr>'] = cmp.mapping.confirm({ select = true }),
-                        ['<C-a>'] = cmp.mapping.close(),
+                        ['<C-c>'] = cmp.mapping.close(),
                         ['<C-c>'] = cmp.mapping.abort(),
                         ['<tab>'] = cmp.mapping.select_next_item(),
                         ['<S-tab>'] = cmp.mapping.select_prev_item(),
