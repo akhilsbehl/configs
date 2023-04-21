@@ -28,7 +28,7 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim' -- Package manager
 
-    use {                        -- LSP & CMP
+    use { -- LSP & CMP
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
         requires = {
@@ -158,7 +158,7 @@ require('packer').startup(function(use)
             VK('n', '<leader>vv', toggle_diagnostics_vtext)
         end,
     }
-    use {
+    use { -- LSP integrations
         'jose-elias-alvarez/null-ls.nvim',
         config = function()
             local nls = require('null-ls')
@@ -268,7 +268,7 @@ require('packer').startup(function(use)
             VK('n', '<localleader>tw', '<cmd>Telescope lsp_workspace_symbols<cr>')
         end,
     }
-    use {
+    use { -- Telescope FZF
         'nvim-telescope/telescope-fzf-native.nvim',
         run = 'make'
     }
@@ -527,7 +527,7 @@ require('packer').startup(function(use)
         end
     }
 
-    use { -- Show newlines
+    use { -- Show special characters
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             VO.list = true
@@ -596,13 +596,6 @@ require('packer').startup(function(use)
         config = function()
             require('which-key').setup({})
         end,
-    }
-
-    use { -- Dim inactive windows
-        'blueyed/vim-diminactive',
-        config = function()
-            VG.diminactive_buftype_whitelist = { 'terminal' }
-        end
     }
 
     use { -- Theme: catppuccin
