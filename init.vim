@@ -294,10 +294,22 @@ augroup END
 function! SaveAsInPlace() abort
     let l:oldname = expand('%:p')
     let l:newname = input('New name: ', expand('%:p'))
+    if empty(l:newname)
+        echo "Need a name for the new file"
+        return
+    endif
     if l:newname != l:oldname
-        execute 'write ' . l:newname
+        try
+            execute 'write ' . l:newname
+            execute 'edit ' . l:newname
+        catch /^Vim\%((\a\+)\)\=:/
+            echomsg ' '
+            echohl ErrorMsg
+            echomsg substitute(v:exception, '^\CVim\%((\a\+)\)\=:', '', '')
+            echohl None
+            return
+        endtry
         execute 'bdelete ' . l:oldname
-        execute 'edit ' . l:newname
         execute '!rm ' . l:oldname
     endif
 endfunction
