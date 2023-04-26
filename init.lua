@@ -420,44 +420,27 @@ require('packer').startup(function(use)
         end,
     }
 
-    use { -- Slime
-        'hkupty/iron.nvim',
+    use { -- REPLs
+        'jalvesaq/vimcmdline',
         config = function()
-            local icore = require('iron.core')
-            local iview = require('iron.view')
-            icore.setup({
-                config = {
-                    scratch_repl = true,
-                    repl_defintion = {
-                        sh     = { 'zsh' },
-                        python = { 'python', '-m', 'IPython' },
-                        r      = { 'R', '--no-save' },
-                        julia  = { 'julia', '--color  = yes' },
-                    },
-                    repl_open_cmd = iview.split.bot('40%')
-                },
-                ignore_blank_lines = true,
-                keymaps = {
-                    send_motion = '<localleader>s',
-                    visual_send = '<localleader>s',
-                    send_line   = '<localleader>S',
-                    send_file   = '<localleader>f',
-                    clear       = '<localleader>L',
-                    interrupt   = '<localleader>c',
-                    exit        = '<localleader>iq',
-                },
-            })
-            VK('n', '<localleader>ir', '<cmd>IronRepl<cr>')
-            VK('n', '<localleader>io', '<cmd>IronFocus<cr>')
-            VK('n', '<localleader>ih', '<cmd>IronHide<cr>')
-            VK('t', 'ty', require('nvim-window').pick)
-            VC [[
-                augroup IronTerm
-                    autocmd!
-                    autocmd BufNew,BufEnter term://* startinsert!
-                    autocmd BufLeave term://* stopinsert!
-                augroup END
-            ]]
+            VG.cmdline_app = {
+                sh = 'zsh',
+                python = 'ipy',
+                r = 'R --no-save',
+                julia = 'julia --color=yes',
+            }
+            VG.cmdline_vsplit             = 1
+            VG.cmdline_term_height        = 50
+            VG.cmdline_term_width         = 120
+            VG.cmdline_in_buffer          = 0
+            VG.cmdline_map_start          = '<LocalLeader>io'
+            VG.cmdline_map_send           = '<LocalLeader>il'
+            VG.cmdline_map_send_and_stay  = '<LocalLeader>is'
+            VG.cmdline_map_source_fun     = '<LocalLeader>if'
+            VG.cmdline_map_send_paragraph = '<LocalLeader>ip'
+            VG.cmdline_map_send_block     = '<LocalLeader>ib'
+            VG.cmdline_map_send_motion    = '<LocalLeader>im'
+            VG.cmdline_map_quit           = '<LocalLeader>iq'
         end,
     }
 
