@@ -53,18 +53,30 @@ require('packer').startup(function(use)
             local cmp = require('cmp')
             lsp.on_attach(function(client, bufnr)
                 local o = { buffer = bufnr }
-                VK('n', '<leader>lD', '<cmd>lua vim.lsp.buf.declaration()<cr>', o)
-                VK('n', '<leader>lH', '<cmd>lua vim.lsp.buf.signature_help()<cr>', o)
-                VK('n', '<leader>lR', '<cmd>lua vim.lsp.buf.rename()<cr>', o)
-                VK('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', o)
-                VK('n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<cr>', o)
-                VK('n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<cr>', o)
-                VK('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>', o)
-                VK('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', o)
-                VK('n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', o)
-                VK('n', '<leader>lk', '<cmd>lua vim.diagnostic.goto_prev()<cr>', o)
-                VK('n', '<leader>lj', '<cmd>lua vim.diagnostic.goto_next()<cr>', o)
-                VK('n', '<leader>lo', '<cmd>lua vim.diagnostic.open_float()<cr>', o)
+                VK('n', '<leader>lD',
+                    '<cmd>lua vim.lsp.buf.declaration()<cr>', o)
+                VK('n', '<leader>lH',
+                    '<cmd>lua vim.lsp.buf.signature_help()<cr>', o)
+                VK('n', '<leader>lR',
+                    '<cmd>lua vim.lsp.buf.rename()<cr>', o)
+                VK('n', '<leader>la',
+                    '<cmd>lua vim.lsp.buf.code_action()<cr>', o)
+                VK('n', '<leader>ld',
+                    '<cmd>lua vim.lsp.buf.definition()<cr>', o)
+                VK('n', '<leader>lh',
+                    '<cmd>lua vim.lsp.buf.hover()<cr>', o)
+                VK('n', '<leader>li',
+                    '<cmd>lua vim.lsp.buf.implementation()<cr>', o)
+                VK('n', '<leader>lr',
+                    '<cmd>lua vim.lsp.buf.references()<cr>', o)
+                VK('n', '<leader>lt',
+                    '<cmd>lua vim.lsp.buf.type_definition()<cr>', o)
+                VK('n', '<leader>lk',
+                    '<cmd>lua vim.diagnostic.goto_prev()<cr>', o)
+                VK('n', '<leader>lj',
+                    '<cmd>lua vim.diagnostic.goto_next()<cr>', o)
+                VK('n', '<leader>lo',
+                    '<cmd>lua vim.diagnostic.open_float()<cr>', o)
                 VK('n', '<leader>lf', '<cmd>LspZeroFormat<cr>', o)
                 VK('n', '<leader>lW', '<cmd>LspZeroWorkspaceRemove<cr>', o)
                 VK('n', '<leader>lw', '<cmd>LspZeroWorkspaceAdd<cr>', o)
@@ -88,15 +100,15 @@ require('packer').startup(function(use)
                     }
                 },
                 mapping = cmp.mapping.preset.insert({
-                        ['<c-e>'] = vim.NIL,
-                        ['<C-t>'] = cmp.mapping.complete(),
-                        ['<cr>'] = cmp.mapping.confirm({ select = true }),
-                        ['<C-c>'] = cmp.mapping.close(),
-                        ['<C-c>'] = cmp.mapping.abort(),
-                        ['<tab>'] = cmp.mapping.select_next_item(),
-                        ['<S-tab>'] = cmp.mapping.select_prev_item(),
-                        ['<C-n>'] = cmp.mapping.scroll_docs(3),
-                        ['<C-p>'] = cmp.mapping.scroll_docs(-3),
+                    ['<c-e>'] = vim.NIL,
+                    ['<C-t>'] = cmp.mapping.complete(),
+                    ['<cr>'] = cmp.mapping.confirm({ select = true }),
+                    ['<C-c>'] = cmp.mapping.close(),
+                    ['<C-c>'] = cmp.mapping.abort(),
+                    ['<tab>'] = cmp.mapping.select_next_item(),
+                    ['<S-tab>'] = cmp.mapping.select_prev_item(),
+                    ['<C-n>'] = cmp.mapping.scroll_docs(3),
+                    ['<C-p>'] = cmp.mapping.scroll_docs(-3),
                 }),
             })
             lsp.setup()
@@ -188,30 +200,30 @@ require('packer').startup(function(use)
                 defaults = {
                     default_mappings = {
                         i = {
-                                ["<C-/>"]  = actions.which_key,
-                                ["<C-_>"]  = actions.which_key,
-                                ["<C-e>"]  = actions.select_default,
-                                ["<C-h>"]  = actions.preview_scrolling_down,
-                                ["<C-j>"]  = actions.nop,
-                                ["<C-l>"]  = actions.preview_scrolling_up,
-                                ["<C-m>"]  = actions.toggle_selection,
-                                ["<C-n>"]  = actions.results_scrolling_down,
-                                ["<C-p>"]  = actions.results_scrolling_up,
-                                ["<C-q>"]  = qfix,
-                                ["<C-s>"]  = actions.select_horizontal,
-                                ["<C-t>"]  = actions.select_tab,
-                                ["<C-v>"]  = actions.select_vertical,
-                                ["<C-w>"]  = actions.nop,
-                                ["<C-x>"]  = actions.nop,
-                                ["<Down>"] = actions.nop,
-                                ["<Esc>"]  = actions.close,
-                                ["<M-q>"]  = actions.nop,
-                                ["<PageDown>"] = actions.nop,
-                                ["<PageUp>"] = actions.nop,
-                                ["<S-Tab>"] = actions.move_selection_next,
-                                ["<Tab>"]  = actions.move_selection_previous,
-                                ["<Up>"]   = actions.nop,
-                                ["<cr>"]   = actions.select_default, -- buggy
+                            ["<C-/>"]      = actions.which_key,
+                            ["<C-_>"]      = actions.which_key,
+                            ["<C-e>"]      = actions.select_default,
+                            ["<C-h>"]      = actions.preview_scrolling_down,
+                            ["<C-j>"]      = actions.nop,
+                            ["<C-l>"]      = actions.preview_scrolling_up,
+                            ["<C-m>"]      = actions.toggle_selection,
+                            ["<C-n>"]      = actions.results_scrolling_down,
+                            ["<C-p>"]      = actions.results_scrolling_up,
+                            ["<C-q>"]      = qfix,
+                            ["<C-s>"]      = actions.select_horizontal,
+                            ["<C-t>"]      = actions.select_tab,
+                            ["<C-v>"]      = actions.select_vertical,
+                            ["<C-w>"]      = actions.nop,
+                            ["<C-x>"]      = actions.nop,
+                            ["<Down>"]     = actions.nop,
+                            ["<Esc>"]      = actions.close,
+                            ["<M-q>"]      = actions.nop,
+                            ["<PageDown>"] = actions.nop,
+                            ["<PageUp>"]   = actions.nop,
+                            ["<S-Tab>"]    = actions.move_selection_next,
+                            ["<Tab>"]      = actions.move_selection_previous,
+                            ["<Up>"]       = actions.nop,
+                            ["<cr>"]       = actions.select_default, -- buggy
                         },
                     },
                     layout_config = {
@@ -256,15 +268,24 @@ require('packer').startup(function(use)
             VK('n', '<leader>fr', '<cmd>Telescope resume<cr>')
             VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
             VK('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
-            VK('n', '<localleader>tD', '<cmd>Telescope diagnostics<cr>')
-            VK('n', '<localleader>tr', '<cmd>Telescope lsp_references<cr>')
-            VK('n', '<localleader>td', '<cmd>Telescope lsp_definitions<cr>')
-            VK('n', '<localleader>tI', '<cmd>Telescope lsp_incoming_calls<cr>')
-            VK('n', '<localleader>tO', '<cmd>Telescope lsp_outgoing_calls<cr>')
-            VK('n', '<localleader>tm', '<cmd>Telescope lsp_implementations<cr>')
-            VK('n', '<localleader>tt', '<cmd>Telescope lsp_type_definitions<cr>')
-            VK('n', '<localleader>tS', '<cmd>Telescope lsp_document_symbols<cr>')
-            VK('n', '<localleader>tw', '<cmd>Telescope lsp_workspace_symbols<cr>')
+            VK('n', '<localleader>tD',
+                '<cmd>Telescope diagnostics<cr>')
+            VK('n', '<localleader>tr',
+                '<cmd>Telescope lsp_references<cr>')
+            VK('n', '<localleader>td',
+                '<cmd>Telescope lsp_definitions<cr>')
+            VK('n', '<localleader>tI',
+                '<cmd>Telescope lsp_incoming_calls<cr>')
+            VK('n', '<localleader>tO',
+                '<cmd>Telescope lsp_outgoing_calls<cr>')
+            VK('n', '<localleader>tm',
+                '<cmd>Telescope lsp_implementations<cr>')
+            VK('n', '<localleader>tt',
+                '<cmd>Telescope lsp_type_definitions<cr>')
+            VK('n', '<localleader>tS',
+                '<cmd>Telescope lsp_document_symbols<cr>')
+            VK('n', '<localleader>tw',
+                '<cmd>Telescope lsp_workspace_symbols<cr>')
         end,
     }
     use { -- Telescope FZF
@@ -287,7 +308,10 @@ require('packer').startup(function(use)
         end,
         config = function()
             VA.nvim_create_autocmd(
-                { 'BufEnter', 'BufAdd', 'BufNew', 'BufNewFile', 'BufWinEnter' },
+                {
+                    'BufEnter', 'BufAdd', 'BufNew',
+                    'BufNewFile', 'BufWinEnter',
+                },
                 {
                     group = VA.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
                     callback = function()
@@ -318,30 +342,30 @@ require('packer').startup(function(use)
                     select = {
                         enable = true,
                         keymaps = {
-                                ['af'] = '@function.outer',
-                                ['if'] = '@function.inner',
-                                ['ac'] = '@class.outer',
-                                ['ic'] = '@class.inner',
+                            ['af'] = '@function.outer',
+                            ['if'] = '@function.inner',
+                            ['ac'] = '@class.outer',
+                            ['ic'] = '@class.inner',
                         },
                     },
                     move = {
                         enable = true,
                         set_jumps = true,
                         goto_next_start = {
-                                ['<leader>nf'] = '@function.outer',
-                                ['<leader>nc'] = '@class.outer',
+                            ['<leader>nf'] = '@function.outer',
+                            ['<leader>nc'] = '@class.outer',
                         },
                         goto_next_end = {
-                                ['<leader>nF'] = '@function.outer',
-                                ['<leader>nC'] = '@class.outer',
+                            ['<leader>nF'] = '@function.outer',
+                            ['<leader>nC'] = '@class.outer',
                         },
                         goto_previous_start = {
-                                ['<leader>pf'] = '@function.outer',
-                                ['<leader>pc'] = '@class.outer',
+                            ['<leader>pf'] = '@function.outer',
+                            ['<leader>pc'] = '@class.outer',
                         },
                         goto_previous_end = {
-                                ['<leader>pF'] = '@function.outer',
-                                ['<leader>pC'] = '@class.outer',
+                            ['<leader>pF'] = '@function.outer',
+                            ['<leader>pC'] = '@class.outer',
                         },
                     },
                 },

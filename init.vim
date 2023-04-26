@@ -334,34 +334,30 @@ function! DisplayBufInFloatingWin(buf) abort
     let win = nvim_open_win(a:buf, v:true, opts)
 endfunction
 
+function! QuitFloatingTerm() abort
+    if exists('g:myrc_fterm_buf')
+        execute 'bwipeout! ' . g:myrc_fterm_buf
+        unlet g:myrc_fterm_buf
+    endif
+endfunction
+
 function! OpenFloatingTerm() abort
     if !exists('g:myrc_fterm_buf')
         let g:myrc_fterm_buf = nvim_create_buf(v:false, v:true)
         call DisplayBufInFloatingWin(g:myrc_fterm_buf)
         call termopen('zsh')
-        " call nvim_open_term(g:myrc_fterm_buf, 'zsh')
         startinsert!
-        call nvim_buf_set_keymap(g:myrc_fterm_buf, 't', '<leader>tt', '<C-\><C-n><C-w>q',
-                    \ {'nowait': v:true})
-        call nvim_buf_set_keymap(g:myrc_fterm_buf, 'n', '<leader>tt', '<C-\><C-n><C-w>q',
-                    \ {'nowait': v:true})
+        call nvim_buf_set_keymap(g:myrc_fterm_buf, 't', '<leader>tt',
+                    \ '<C-\><C-n><C-w>q', {'nowait': v:true})
+        call nvim_buf_set_keymap(g:myrc_fterm_buf, 'n', '<leader>tt',
+                    \ '<C-\><C-n><C-w>q', {'nowait': v:true})
         call nvim_buf_set_keymap(g:myrc_fterm_buf, 't', '<leader>tq',
                     \ '<C-\><C-n>:call QuitFloatingTerm()<cr>',
                     \ {'nowait': v:true})
         call nvim_buf_set_keymap(g:myrc_fterm_buf, 'n', '<leader>tq',
                     \ ':call QuitFloatingTerm()<cr>', {'nowait': v:true})
-        " To over-ride the setting of this keymap in iron
-        call nvim_buf_set_keymap(g:myrc_fterm_buf, 't', '<leader>ww', '<Nop>',
-                    \ {'nowait': v:true})
     else
         call DisplayBufInFloatingWin(g:myrc_fterm_buf)
-    endif
-endfunction
-
-function! QuitFloatingTerm() abort
-    if exists('g:myrc_fterm_buf')
-        execute 'bwipeout! ' . g:myrc_fterm_buf
-        unlet g:myrc_fterm_buf
     endif
 endfunction
 
