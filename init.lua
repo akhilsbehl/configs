@@ -426,7 +426,6 @@ require('packer').startup(function(use)
             VG.cmdline_app = {
                 sh = 'zsh',
                 python = 'ipy',
-                r = 'R --no-save',
                 julia = 'julia --color=yes',
             }
             VG.cmdline_vsplit             = 1
@@ -441,6 +440,33 @@ require('packer').startup(function(use)
             VG.cmdline_map_send_block     = '<LocalLeader>ib'
             VG.cmdline_map_send_motion    = '<LocalLeader>im'
             VG.cmdline_map_quit           = '<LocalLeader>iq'
+        end,
+    }
+    use { -- R REPL :/
+        'jalvesaq/Nvim-R',
+        config = function()
+            VG.R_args = {'--no-save', '--no-restore-data'}
+            VG.R_source = '~/configs/nvim-r-tmux-split.vim'
+            VG.R_notmux_conf = 1
+            VG.R_rconsole_width = 120
+            VG.R_rconsole_height = 0
+            VG.R_user_maps_only = 1
+            VC [[
+                function! s:CustomNvimRMappings()
+                    nmap <buffer> <LocalLeader>io <Plug>RStart
+                    nmap <buffer> <LocalLeader>il <Plug>RSendLine
+                    vmap <buffer> <LocalLeader>is <Plug>RSendSelection
+                    nmap <buffer> <LocalLeader>if <Plug>RSendFunction
+                    nmap <buffer> <LocalLeader>ip <Plug>RSendParagraph
+                    nmap <buffer> <LocalLeader>ib <Plug>RSendBlock
+                    nmap <buffer> <LocalLeader>im <Plug>RSendMotion
+                    nmap <buffer> <LocalLeader>iq <Plug>RClose
+                endfunction
+                augroup MyNvimR
+                    autocmd!
+                    autocmd FileType r call s:CustomNvimRMappings()
+                augroup end
+            ]]
         end,
     }
 
