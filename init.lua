@@ -9,29 +9,25 @@ VO = vim.opt
 VG.mapleader = ','
 VG.maplocalleader = ' '
 
-local ensure_packer = function()
-    local install_path = VF.stdpath('data') ..
-        '/site/pack/packer/start/packer.nvim'
-    if VF.empty(VF.glob(install_path)) > 0 then
-        VF.system({
-            'git', 'clone', '--depth', '1',
-            'https://github.com/wbthomason/packer.nvim', install_path
-        })
-        VC [[packadd packer.nvim]]
-        return true
-    end
-    return false
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local packer_bootstrap = ensure_packer()
+require('lazy').setup({
 
-require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim' -- Package manager
-
-    use { -- LSP & CMP
+    { -- LSP & CMP
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v1.x',
-        requires = {
+        dependencies = {
             { 'neovim/nvim-lspconfig' },
             { 'williamboman/mason-lspconfig.nvim' },
             { 'williamboman/mason.nvim' },
@@ -169,8 +165,8 @@ require('packer').startup(function(use)
             VK('n', '<leader>vd', toggle_diagnostics)
             VK('n', '<leader>vv', toggle_diagnostics_vtext)
         end,
-    }
-    use { -- LSP integrations
+    },
+    { -- LSP integrations
         'jose-elias-alvarez/null-ls.nvim',
         config = function()
             local nls = require('null-ls')
@@ -187,12 +183,12 @@ require('packer').startup(function(use)
                 }
             })
         end,
-    }
+    },
 
-    use { -- Fuzzy finder
+    { -- Fuzzy finder
         'nvim-telescope/telescope.nvim',
         branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } },
+        dependencies = { { 'nvim-lua/plenary.nvim' } },
         config = function()
             local actions = require('telescope.actions')
             local qfix = actions.smart_send_to_qflist + actions.open_qflist
@@ -287,25 +283,21 @@ require('packer').startup(function(use)
             VK('n', '<localleader>tw',
                 '<cmd>Telescope lsp_workspace_symbols<cr>')
         end,
-    }
-    use { -- Telescope FZF
+    },
+    { -- Telescope FZF
         'nvim-telescope/telescope-fzf-native.nvim',
-        run = 'make'
-    }
-    use 'fhill2/telescope-ultisnips.nvim'
+        build = 'make'
+    },
+    'fhill2/telescope-ultisnips.nvim',
 
-    use { -- Treesitter text objects
-        'nvim-treesitter/nvim-treesitter-textobjects',
-        after = 'nvim-treesitter',
-        requires = 'nvim-treesitter/nvim-treesitter',
-    }
-    use { -- Treesitter
+    { -- Treesitter
         'nvim-treesitter/nvim-treesitter',
-        run = function()
+        build = function()
             local ts_update = require('nvim-treesitter.install')
                 .update({ with_sync = true })
             ts_update()
         end,
+        dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
         config = function()
             VA.nvim_create_autocmd(
                 {
@@ -371,9 +363,9 @@ require('packer').startup(function(use)
                 },
             })
         end,
-    }
+    },
 
-    use { -- Hoppity hop
+    { -- Hoppity hop
         'phaazon/hop.nvim',
         branch = 'v2',
         config = function()
@@ -418,9 +410,9 @@ require('packer').startup(function(use)
             VK({ 'n', 'o', 'v' }, 't', _t)
             VK({ 'n', 'o', 'v' }, 'T', _T)
         end,
-    }
+    },
 
-    use { -- REPLs
+    { -- REPLs
         'jalvesaq/vimcmdline',
         config = function()
             VG.cmdline_app = {
@@ -441,8 +433,8 @@ require('packer').startup(function(use)
             VG.cmdline_map_send_motion    = '<LocalLeader>im'
             VG.cmdline_map_quit           = '<LocalLeader>iq'
         end,
-    }
-    use { -- R REPL :/
+    },
+    { -- R REPL :/
         'jalvesaq/Nvim-R',
         config = function()
             VG.R_args = {'--no-save', '--no-restore-data'}
@@ -468,9 +460,9 @@ require('packer').startup(function(use)
                 augroup end
             ]]
         end,
-    }
+    },
 
-    use { -- Search in git tree
+    { -- Search in git tree
         'mileszs/ack.vim',
         config = function()
             VG.ackprg = 'rg --vimgrep --no-heading --smart-case'
@@ -490,14 +482,11 @@ require('packer').startup(function(use)
             VK('n', '<leader>fg', '<cmd>AckCword<cr>')
             VK('n', '<leader>fG', ':AckInput ')
         end,
-    }
+    },
 
-    use { -- Markdown preview
+    { -- Markdown preview
         "iamcco/markdown-preview.nvim",
-        run = "cd app && npm install",
-        setup = function()
-            VG.mkdp_filetypes = { "markdown" }
-        end,
+        build = "cd app && npm install",
         ft = { "markdown" },
         config = function()
             VG.mkdp_auto_start         = 0
@@ -508,9 +497,9 @@ require('packer').startup(function(use)
             VG.mkdp_page_title         = '「${name}」'
             VG.mkdp_filetypes          = { 'markdown' }
         end
-    }
+    },
 
-    use { -- AI
+    { -- AI
         'github/copilot.vim',
         config = function()
             VG.copilot_enabled = 1
@@ -524,9 +513,9 @@ require('packer').startup(function(use)
                 expr = true, replace_keycodes = false,
             })
         end,
-    }
+    },
 
-    use { -- Snippets engine
+    { -- Snippets engine
         'SirVer/UltiSnips',
         config = function()
             VG.UltiSnipsExpandTrigger                           = '<C-e>'
@@ -540,10 +529,10 @@ require('packer').startup(function(use)
                 'mysnippets', 'UltiSnips'
             }
         end
-    }
-    use 'honza/vim-snippets'
+    },
+    'honza/vim-snippets',
 
-    use { -- Traverse windows easier
+    { -- Traverse windows easier
         'https://gitlab.com/yorickpeterse/nvim-window.git',
         config = function()
             require('nvim-window').setup({
@@ -557,9 +546,9 @@ require('packer').startup(function(use)
             })
             VK('n', 'ty', require('nvim-window').pick)
         end
-    }
+    },
 
-    use { -- Show special characters
+    { -- Show special characters
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             VO.list = true
@@ -570,9 +559,9 @@ require('packer').startup(function(use)
                 show_current_context_start = true,
             })
         end
-    }
+    },
 
-    use { -- Commenting
+    { -- Commenting
         'scrooloose/nerdcommenter',
         config = function()
             VG.NERDCreateDefaultMappings = 0
@@ -582,9 +571,9 @@ require('packer').startup(function(use)
             VK({ 'n', 'v' }, '<leader>c ', '<Plug>NERDCommenterToggle')
             VK('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
         end,
-    }
+    },
 
-    use { -- Status line
+    { -- Status line
         'nvim-lualine/lualine.nvim',
         config = function()
             require('lualine').setup({
@@ -593,20 +582,20 @@ require('packer').startup(function(use)
                 }
             })
         end
-    }
+    },
 
-    use { -- Undo history
+    { -- Undo history
         'jiaoshijie/undotree',
-        requires = { 'nvim-lua/plenary.nvim' },
+        dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             require('undotree').setup({
                 window = { winblend = 0 }
             })
             VK('n', '<localleader>u', require('undotree').open)
         end
-    }
+    },
 
-    use { -- Pretty icons everywhere
+    { -- Pretty icons everywhere
         'nvim-tree/nvim-web-devicons',
         config = function()
             require('nvim-web-devicons').setup({
@@ -614,45 +603,39 @@ require('packer').startup(function(use)
                 color_icons = true,
             })
         end
-    }
+    },
 
-    use { -- Match pairs
+    { -- Match pairs
         'windwp/nvim-autopairs',
         config = function()
             require('nvim-autopairs').setup({})
         end,
-    }
+    },
 
-    use { -- Show keybindings
+    { -- Show keybindings
         'folke/which-key.nvim',
         config = function()
             require('which-key').setup({})
         end,
-    }
+    },
 
-    use { -- Theme: catppuccin
-        'catppuccin/nvim',
-        flavour = 'latte'
-    }
+    'catppuccin/nvim',
 
-    use 'mg979/vim-visual-multi'      -- Multiple cursors
+    'mg979/vim-visual-multi',      -- Multiple cursors
 
-    use 'akhilsbehl/md-image-paste'   -- Paste images in md files
+    'akhilsbehl/md-image-paste',   -- Paste images in md files
 
-    use 'tpope/vim-surround'          -- Use surround movements
+    'tpope/vim-surround',          -- Use surround movements
 
-    use 'tpope/vim-repeat'            -- Repeat commands
+    'tpope/vim-repeat',            -- Repeat commands
 
-    use 'godlygeek/tabular'           -- Align rows
+    'godlygeek/tabular',           -- Align rows
 
-    use 'powerman/vim-plugin-AnsiEsc' -- Escape shell color codes
+    'powerman/vim-plugin-AnsiEsc', -- Escape shell color codes
 
-    use 'folke/tokyonight.nvim'       -- Theme: tokyonight
+    'folke/tokyonight.nvim',       -- Theme: tokyonight
 
-    if packer_bootstrap then
-        require('packer').sync()
-    end
-end)
+})
 
 VC [[ source ~/.config/nvim/vimrc ]]
 

@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme catppuccin
+colorscheme catppuccin-latte
 
 " Auto-switch to dir of the file.
 set autochdir
