@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme catppuccin-latte
+colorscheme catppuccin
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -126,13 +126,6 @@ nnoremap <leader>dpr :diffput RE<CR>
 nnoremap <leader>dpl :diffput LO<CR>
 
 "-------------------------
-" Move by display lines in place of actual lines.
-"-----------------------
-
-nnoremap j gj
-nnoremap k gk
-
-"-------------------------
 " Start a new paragraph.
 "-------------------------
 
@@ -175,7 +168,7 @@ function! EditRC() abort
 endfunction
 
 nnoremap <leader>ve :call EditRC()<CR>
-nnoremap <leader>vs :source $MYVIMRC<CR>:PackerCompile<CR>
+nnoremap <leader>vs :source $MYVIMRC<CR>
 
 "-------------------------
 " Forward the clipboard over SSH when connected with forwarding.
