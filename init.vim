@@ -358,6 +358,7 @@ function! OpenFloatingTerm() abort
                     \ ':call QuitFloatingTerm()<cr>', {'nowait': v:true})
     else
         call DisplayBufInFloatingWin(g:myrc_fterm_buf)
+        startinsert!
     endif
 endfunction
 
