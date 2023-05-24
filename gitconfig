@@ -41,6 +41,7 @@
     bs = branch --show-current
     bc = checkout -b
     bd = branch -D
+    brd = "!fff() { git push origin :$1; }; fff"
     bl = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
 
     c = commit --verbose -m
@@ -59,7 +60,7 @@
     dc = diff --cached
     dl = diff --cached HEAD^
     ds = diff --stat
-    dr = "!fff() { git diff -w "$1"^.."$1"; }; fff"
+    dr = "!fff() { git diff -w $1^..$1; }; fff"
 
     f = fetch
     fa = fetch --all
@@ -109,6 +110,7 @@
     sc = stash clear
 
     u = reset
+    ur = "!fff() { git restore $*; }; fff"
     uh = reset --hard
     u1 = reset HEAD^
     u2 = reset HEAD^^
