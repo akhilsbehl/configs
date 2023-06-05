@@ -4,11 +4,66 @@ marp: true
 theme: gaia
 class: invert
 style: |
-  .columns {
+  .two-columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
+    padding: 1rem;
   },
+  .two-columns-inner {
+    border: solid #fff8e1;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .two-columns-inner h1 {
+    font-size: 30px;
+  }
+  .two-columns-inner p {
+    font-size: 18px;
+  }
+  .two-columns-inner li {
+    font-size: 18px;
+  }
+  .three-columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  },
+  .three-columns-inner {
+    border: solid #fff8e1;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .three-columns-inner h1 {
+    font-size: 26px;
+  }
+  .three-columns-inner p {
+    font-size: 16px;
+  }
+  .three-columns-inner li {
+    font-size: 16px;
+  }
+  .four-columns {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  },
+  .four-columns-inner {
+    border: solid #fff8e1;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .four-columns-inner h1 {
+    font-size: 22px;
+  }
+  .four-columns-inner p {
+    font-size: 14px;
+  }
+  .four-columns-inner li {
+    font-size: 14px;
+  }
   p { font-size: 20px; }
   li { font-size: 20px; }
   img[alt~="center"] {
@@ -17,23 +72,93 @@ style: |
   }
 ---
 
+
 $0
 endsnippet
 
-snippet mcols "Put the front matter for a Marp slide with columns" b
-<div class="columns">
-<div>
+snippet twocols "Put the front matter for a Marp slide with two columns" b
+<div class="two-columns">
+<div class="two-columns-inner">
 
 $1
 
 </div>
 
-<div>
+<div class="two-columns-inner">
 
 $2
 
 </div>
 </div>
+
+---
+
+$0
+endsnippet
+
+snippet threecol "Put the front matter for a Marp slide with three columns" b
+<div class="three-columns">
+<div class="three-columns-inner">
+
+$1
+
+</div>
+
+<div class="three-columns-inner">
+
+$2
+
+</div>
+
+<div class="three-columns-inner">
+
+$3
+
+</div>
+</div>
+
+---
+
+$0
+endsnippet
+
+snippet fourcols "Put the front matter for a Marp slide with four columns" b
+<div class="four-columns">
+<div class="four-columns-inner">
+
+$1
+
+</div>
+
+<div class="four-columns-inner">
+
+$2
+
+</div>
+
+<div class="four-columns-inner">
+
+$3
+
+</div>
+
+<div class="four-columns-inner">
+
+$4
+
+</div>
+</div>
+
+---
+
+$0
+endsnippet
+
+snippet section "Put a section divider" b
+---
+
+<!-- _class: invert lead -->
+# $1
 
 ---
 
