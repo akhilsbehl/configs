@@ -179,17 +179,28 @@ require('lazy').setup(
                 local nls = require('null-ls')
                 local fmt = nls.builtins.formatting
                 local lint = nls.builtins.diagnostics
-                -- local act = nls.builtins.code_actions
+                local act = nls.builtins.code_actions
                 nls.setup({
                     sources = {
-                        fmt.black,
+                        fmt.black.with(
+                            {
+                                extra_args = {
+                                    '--line-length', '79'
+                                }
+                            }
+                        ),
                         fmt.reorder_python_imports,
+                        fmt.stylua,
+                        fmt.spell,
                         lint.flake8,
                         lint.markdownlint,
                         lint.pydocstyle,
+                        act.refactoring,
+                        act.shellcheck,
                     }
                 })
             end,
+            requires = { 'nvim-lua/plenary.vim' },
         },
 
         {
