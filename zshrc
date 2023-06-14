@@ -482,6 +482,7 @@ launchpad
 autoload -U promptinit
 promptinit
 prompt pure
+export RPROMPT='%F{magenta}%D{%L:%M:%S}'
 
 ####################################
 #  Source stuff local to each box  #
