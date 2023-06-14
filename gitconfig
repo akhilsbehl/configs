@@ -71,6 +71,7 @@
     lf = log -u
     ll = !git log --numstat -1
     ls = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --numstat
+    la = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short --all --graph
 
     m = merge
     mt = mergetool
@@ -110,7 +111,7 @@
     sc = stash clear
 
     u = reset
-    ur = "!fff() { git restore $*; }; fff"
+    ur = restore
     uh = reset --hard
     u1 = reset HEAD^
     u2 = reset HEAD^^
