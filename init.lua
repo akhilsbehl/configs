@@ -191,7 +191,6 @@ require('lazy').setup(
                         ),
                         fmt.reorder_python_imports,
                         fmt.stylua,
-                        fmt.spell,
                         lint.flake8,
                         lint.markdownlint,
                         lint.pydocstyle,
@@ -613,7 +612,10 @@ require('lazy').setup(
                 require('lualine').setup({
                     options = {
                         theme = 'nightfly',
-                    }
+                    },
+                    sections = {
+                        lualine_b = {},
+                    },
                 })
             end
         },
