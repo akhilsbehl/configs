@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme catppuccin
+colorscheme catppuccin-frappe
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -270,16 +270,6 @@ function! ToggleHighlightCursor() abort
 endfunction
 nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
 
-augroup FindCursor
-    autocmd!
-    autocmd WinEnter * call HighlightCursor()
-    autocmd InsertEnter * call NoHighlightCursor()
-    autocmd InsertLeave * call HighlightCursor()
-    autocmd CursorMoved * call HighlightCursor()
-    autocmd WinEnter,InsertLeave * set cursorline
-    autocmd WinLeave,InsertEnter * set nocursorline
-augroup END
-
 "-------------------------
 " Rename the current buffer's file in place and reload.
 "-------------------------
@@ -391,6 +381,6 @@ augroup END
 
 augroup Catppuccin
     autocmd!
-    autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-latte
+    autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-frappe
     autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
