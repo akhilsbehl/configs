@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# All but the last argument is input files
+INPUTS=${@:1:$(($#-1))}
+
+# The last argument is the output file
+OUTPUT=${@:$#}
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$OUTPUT" $INPUTS
+
+exit 0
