@@ -659,7 +659,13 @@ require('lazy').setup(
             end,
         },
 
-        'catppuccin/nvim',
+        {
+            -- Wrap arguments
+            'FooSoft/vim-argwrap',
+            config = function()
+                VK('n', '<localleader>w', ':ArgWrap<cr>')
+            end,
+        },
 
         'mg979/vim-visual-multi',      -- Multiple cursors
 
@@ -674,6 +680,8 @@ require('lazy').setup(
         'powerman/vim-plugin-AnsiEsc', -- Escape shell color codes
 
         'folke/tokyonight.nvim',       -- Theme: tokyonight
+
+        'catppuccin/nvim',             -- Themes
 
     },
     {
