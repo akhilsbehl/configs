@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cat ~/.git-credentials \
+    | grep "$1" \
+    | cut -f 3 -d ':' \
+    | cut -f 1 -d '@' \
+    | clip.exe
+
+exit 0
