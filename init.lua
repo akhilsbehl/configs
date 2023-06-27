@@ -532,7 +532,7 @@ require('lazy').setup(
             config = function()
                 VG.copilot_enabled = 1
                 VG.copilot_no_tab_map = 1
-                VK('n', '<leader>cs', '<cmd>Copilot<cr>')
+                VK('n', '<leader>cS', '<cmd>Copilot<cr>')
                 VK('i', '<C-s>', '<Plug>(copilot-suggest)')
                 VK('i', '<C-d>', '<Plug>(copilot-dismiss)')
                 VK('i', '<C-j>', '<Plug>(copilot-next)')
@@ -609,9 +609,10 @@ require('lazy').setup(
             -- Status line
             'nvim-lualine/lualine.nvim',
             config = function()
+                custom_theme = require('lualine.themes.catppuccin')
                 require('lualine').setup({
                     options = {
-                        theme = 'nightfly',
+                        theme = custom_theme,
                     },
                     sections = {
                         lualine_b = {},
@@ -664,6 +665,22 @@ require('lazy').setup(
             'FooSoft/vim-argwrap',
             config = function()
                 VK('n', '<localleader>w', ':ArgWrap<cr>')
+            end,
+        },
+
+        {
+            -- Wrap arguments and lists
+            'Wansmer/treesj',
+            dependencies = { 'nvim-treesitter/nvim-treesitter' },
+            config = function()
+                require('treesj').setup({
+                    use_default_keymaps = true,
+                    check_syntax_error = true,
+                    max_join_length = 79,
+                    cursor_behavior = 'hold',
+                    notify = true,
+                    dot_repeat = true,
+                })
             end,
         },
 
