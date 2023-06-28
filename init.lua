@@ -579,6 +579,22 @@ require('lazy').setup(
         },
 
         {
+            -- Wrap arguments and lists
+            'Wansmer/treesj',
+            dependencies = { 'nvim-treesitter/nvim-treesitter' },
+            config = function()
+                require('treesj').setup({
+                    use_default_keymaps = true,
+                    check_syntax_error = true,
+                    max_join_length = 79,
+                    cursor_behavior = 'hold',
+                    notify = true,
+                    dot_repeat = true,
+                })
+            end,
+        },
+
+        {
             -- Show special characters
             'lukas-reineke/indent-blankline.nvim',
             config = function()
@@ -657,30 +673,6 @@ require('lazy').setup(
             'folke/which-key.nvim',
             config = function()
                 require('which-key').setup({})
-            end,
-        },
-
-        {
-            -- Wrap arguments
-            'FooSoft/vim-argwrap',
-            config = function()
-                VK('n', '<localleader>w', ':ArgWrap<cr>')
-            end,
-        },
-
-        {
-            -- Wrap arguments and lists
-            'Wansmer/treesj',
-            dependencies = { 'nvim-treesitter/nvim-treesitter' },
-            config = function()
-                require('treesj').setup({
-                    use_default_keymaps = true,
-                    check_syntax_error = true,
-                    max_join_length = 79,
-                    cursor_behavior = 'hold',
-                    notify = true,
-                    dot_repeat = true,
-                })
             end,
         },
 
