@@ -167,6 +167,11 @@ else
   alias autorm='echo Unknown OS!'
 fi
 
+if exists_command bat; then
+  alias less='bat --paging always'
+  alias page='bat --paging always'
+fi
+
 #########################
 # Variables and Exports #
 #########################
