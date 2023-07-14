@@ -385,3 +385,8 @@ augroup Catppuccin
     autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-latte
     autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
+
+augroup Python
+    autocmd!
+    autocmd BufNewFile,BufRead *.py setlocal foldmethod=indent
+augroup END
