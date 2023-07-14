@@ -70,6 +70,7 @@ set backspace=indent,eol,start
 nnoremap tt <C-w><S-t><CR>
 nnoremap te :e<Space>
 nnoremap tE :tabnew<Space>
+nnoremap tz :tabnew %<CR><C-o><CR>
 nnoremap to :only<CR>
 nnoremap tj <C-w>j<CR>
 nnoremap tk <C-w>k<CR>
