@@ -435,6 +435,40 @@ require('lazy').setup(
             end,
         },
 
+        { -- Search and replace
+            "roobert/search-replace.nvim",
+            config = function()
+                require("search-replace").setup({
+                    default_replace_single_buffer_options = "gcI",
+                    default_replace_multi_buffer_options = "egcI",
+                })
+                VK(
+                    "v",
+                    "<leader>rs",
+                    "<CMD>SearchReplaceWithinVisualSelection<CR>",
+                    opts
+                )
+                VK(
+                    "v",
+                    "<leader>ro",
+                    "<CMD>SearchReplaceSingleBufferVisualSelection<CR>",
+                    opts
+                )
+                VK(
+                    "n",
+                    "<leader>ro",
+                    "<CMD>SearchReplaceSingleBufferSelections<CR>",
+                    opts
+                )
+                VK(
+                    "n",
+                    "<leader>rO",
+                    "<CMD>SearchReplaceMultiBufferSelections<CR>",
+                    opts
+                )
+            end,
+        },
+
         {
             -- REPLs
             'jalvesaq/vimcmdline',
