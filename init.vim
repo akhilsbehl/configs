@@ -206,6 +206,17 @@ endfunction
 nnoremap <leader>dcc :call DeleteCtrlChars()<CR>
 
 "-------------------------
+" Squeeze multiple blank lines
+"-------------------------
+
+function! SqueezeMultipleBlankLines()
+    let current_position = getpos(".")
+    execute ":%!cat -s"
+    call setpos('.', current_position)
+endfunction
+nnoremap <leader>dmb :call SqueezeMultipleBlankLines()<CR>
+
+"-------------------------
 " Save when file was opened without sudo.
 "-------------------------
 
