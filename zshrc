@@ -83,7 +83,9 @@ alias ll='ls -l'
 
 alias lsg='ls -shHF --group-directories-first'
 
-alias lsm='ls -shHFltr'
+alias lst='ls -shHFltr'
+
+alias lss='ls -SshHF --group-directories-first'
 
 alias lsa='lsg -A'
 
