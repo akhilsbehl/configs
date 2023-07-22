@@ -79,7 +79,7 @@
             "font":
             {
                 "face": "FiraCode Nerd Font Mono Retina",
-                "size": 11
+                "size": 8
             },
             "hidden": false,
             "historySize": 100000,
@@ -98,7 +98,7 @@
                 "font": 
                 {
                     "face": "CaskaydiaCove NFM",
-                    "size": 11,
+                    "size": 8,
                     "axes": {
                         "ital": 1
                     }
