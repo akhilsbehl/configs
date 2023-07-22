@@ -139,7 +139,7 @@ nnoremap <leader>oo <Esc>O<CR>
 nnoremap <leader>fp gqipj
 
 "-------------------------
-" Copy to clipboard.
+" Copy-paste behavior
 "-------------------------
 
 set clipboard=unnamedplus
@@ -152,6 +152,8 @@ nnoremap <leader>yf mzyG`z
 nnoremap <leader>yp mzyip`z
 " Copy up to point to the os clipboard.
 nnoremap <leader>yu mzygg`z
+" When pasting do not clobber the original yank
+vnoremap p "_dP
 
 "-------------------------
 " Remap file path completion bindings.
