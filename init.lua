@@ -446,25 +446,37 @@ require('lazy').setup(
                     "v",
                     "<leader>rs",
                     "<CMD>SearchReplaceWithinVisualSelection<CR>",
-                    opts
+                    {}
                 )
                 VK(
                     "v",
                     "<leader>ro",
                     "<CMD>SearchReplaceSingleBufferVisualSelection<CR>",
-                    opts
+                    {}
+                )
+                VK(
+                    "n",
+                    "<leader>rs",
+                    "<CMD>SearchReplaceSingleBufferOpen<CR>",
+                    {}
                 )
                 VK(
                     "n",
                     "<leader>ro",
                     "<CMD>SearchReplaceSingleBufferSelections<CR>",
-                    opts
+                    {}
                 )
                 VK(
                     "n",
                     "<leader>rO",
                     "<CMD>SearchReplaceMultiBufferSelections<CR>",
-                    opts
+                    {}
+                )
+                VK(
+                    "n",
+                    "<leader>rS",
+                    "<CMD>SearchReplaceMultiBufferOpen<CR>",
+                    {}
                 )
             end,
         },
