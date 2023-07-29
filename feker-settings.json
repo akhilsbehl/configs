@@ -178,7 +178,7 @@
                "DefaultAssignment" : 2097226
             },
             {
-               "Assignment" : 2097414,
+               "Assignment" : 2097453,
                "DefaultAssignment" : 2097227
             },
             {
@@ -262,7 +262,7 @@
                "DefaultAssignment" : 2097229
             },
             {
-               "Assignment" : 2097433,
+               "Assignment" : 2097454,
                "DefaultAssignment" : 2097230
             },
             {
@@ -543,17 +543,17 @@
             }
          ],
          "LightInfo" : {
-            "Blue" : 255,
+            "Blue" : 0,
             "CustomGroup" : 0,
             "Fx" : 0,
             "Green" : 0,
             "Light" : 4,
-            "MultiColor" : 0,
+            "MultiColor" : 255,
             "OldLedmode" : 1,
-            "Red" : 128,
-            "SelectItem" : 7,
+            "Red" : 0,
+            "SelectItem" : 17,
             "Speed" : 2,
-            "ZZCCLedMode" : 2
+            "ZZCCLedMode" : 1
          },
          "LightList" : null,
          "MacroInfo" : null,
