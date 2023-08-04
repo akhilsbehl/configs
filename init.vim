@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme catppuccin-latte
+colorscheme catppuccin-frappe
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -395,7 +395,7 @@ augroup END
 
 augroup Catppuccin
     autocmd!
-    autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-latte
+    autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-frappe
     autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
 

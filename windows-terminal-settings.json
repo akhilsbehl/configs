@@ -73,7 +73,7 @@
         {
             "bellStyle": "window",
             "closeOnExit": "always",
-            "colorScheme": "Catppuccin Latte",
+            "colorScheme": "DotGov",
             "cursorColor": "#FFA500",
             "cursorShape": "bar",
             "font":
