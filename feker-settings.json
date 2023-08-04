@@ -10,13 +10,1037 @@
             "BkColorB" : 0,
             "BkColorG" : 0,
             "BkColorR" : 0,
-            "ColorTypeFlags" : 1,
+            "ColorTypeFlags" : 0,
             "FgColorB" : 255,
             "FgColorG" : 255,
             "FgColorR" : 255
          },
          "CustomLightMode" : {
-            "CustomLightModeGroupIndex" : 0
+            "CustomLightModeGroupIndex" : 0,
+            "LightColorInfo" : [
+               [
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  },
+                  {
+                     "Alpha" : 255,
+                     "Blue" : 0,
+                     "Green" : 0,
+                     "Red" : 0
+                  }
+               ]
+            ]
          },
          "DPIStages" : null,
          "DeviceBasicInfo" : {
@@ -543,17 +1567,17 @@
             }
          ],
          "LightInfo" : {
-            "Blue" : 0,
+            "Blue" : 141,
             "CustomGroup" : 0,
             "Fx" : 0,
-            "Green" : 0,
+            "Green" : 255,
             "Light" : 4,
-            "MultiColor" : 255,
+            "MultiColor" : 0,
             "OldLedmode" : 1,
-            "Red" : 0,
-            "SelectItem" : 17,
-            "Speed" : 2,
-            "ZZCCLedMode" : 1
+            "Red" : 141,
+            "SelectItem" : 9,
+            "Speed" : 4,
+            "ZZCCLedMode" : 3
          },
          "LightList" : null,
          "MacroInfo" : null,
@@ -598,7 +1622,7 @@
          }
       ]
    },
-   "profileUUID" : "2023_07_25_20_52_58_635",
-   "profilename" : "profile1"
+   "profileUUID" : "2023_08_04_06_13_05_291",
+   "profilename" : "feker-settings"
 }
 
