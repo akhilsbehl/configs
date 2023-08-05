@@ -73,7 +73,7 @@
         {
             "bellStyle": "window",
             "closeOnExit": "always",
-            "colorScheme": "DotGov",
+            "colorScheme": "GruvboxDarkHard",
             "cursorColor": "#FFA500",
             "cursorShape": "bar",
             "font":
