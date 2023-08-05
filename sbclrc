@@ -1,4 +1,3 @@
-
 ;;; The following lines added by ql:add-to-init-file:
 #-quicklisp
 (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp"
@@ -6,3 +5,11 @@
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
 
+;;; Edit the linedit package config to allow arrow keys in the repl
+(if (member "--no-linedit" sb-ext:*posix-argv* :test 'equal)
+    (setf sb-ext:*posix-argv*
+      (remove "--no-linedit" sb-ext:*posix-argv* :test 'equal))
+    (when (interactive-stream-p *terminal-io*)
+      (require :sb-aclrepl)
+      (require :linedit)
+      (funcall (intern "INSTALL-REPL" :linedit) :wrap-current t)))
