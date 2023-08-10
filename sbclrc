@@ -13,3 +13,12 @@
       (require :sb-aclrepl)
       (require :linedit)
       (funcall (intern "INSTALL-REPL" :linedit) :wrap-current t)))
+
+(setf sb-impl::*default-external-format* :utf-8)
+
+(setf asdf:*central-registry*
+      (list* *default-pathname-defaults*
+             #p"/usr/share/common-lisp/systems/"
+             #p"~/.quicklisp/quicklisp/"
+             #p"~/.lispinstalls/"
+             asdf:*central-registry*))
