@@ -722,6 +722,8 @@ require('lazy').setup(
             end,
         },
 
+        'gpanders/nvim-parinfer',      -- Auto indent parantheses for lisp
+
         'mg979/vim-visual-multi',      -- Multiple cursors
 
         'akhilsbehl/md-image-paste',   -- Paste images in md files
