@@ -28,27 +28,21 @@ require('lazy').setup(
         {
             -- LSP & CMP
             'VonHeikemen/lsp-zero.nvim',
-            branch = 'v1.x',
+            branch = 'v2.x',
             dependencies = {
                 { 'neovim/nvim-lspconfig' },
-                { 'williamboman/mason-lspconfig.nvim' },
                 { 'williamboman/mason.nvim' },
+                { 'williamboman/mason-lspconfig.nvim' },
+                { 'hrsh7th/nvim-cmp' },
                 { 'hrsh7th/cmp-buffer' },
                 { 'hrsh7th/cmp-nvim-lsp' },
                 { 'hrsh7th/cmp-nvim-lua' },
                 { 'hrsh7th/cmp-path' },
-                { 'hrsh7th/nvim-cmp' },
                 { 'L3MON4D3/LuaSnip' }, -- Only to stop cmp's bitching
                 { 'quangnguyen30192/cmp-nvim-ultisnips' },
             },
             config = function()
-                local lsp = require('lsp-zero').preset({
-                    name                = 'recommended',
-                    set_lsp_keymaps     = false,
-                    manage_nvim_cmp     = true,
-                    suggest_lsp_servers = true,
-                })
-                local cmp = require('cmp')
+                local lsp = require('lsp-zero').preset({})
                 lsp.on_attach(function(client, bufnr)
                     local o = { buffer = bufnr }
                     VK('n', '<leader>lD',
@@ -80,9 +74,7 @@ require('lazy').setup(
                     VK('n', '<leader>lw', '<cmd>LspZeroWorkspaceAdd<cr>', o)
                     VK('n', '<leader>ll', '<cmd>LspZeroWorkspaceList<cr>', o)
                 end)
-                lsp.ensure_installed({
-                    'pyright',
-                })
+                local cmp = require('cmp')
                 require('cmp_nvim_ultisnips').setup({})
                 lsp.setup_nvim_cmp({
                     sources = {
@@ -109,7 +101,6 @@ require('lazy').setup(
                         ['<C-p>'] = cmp.mapping.scroll_docs(-3),
                     }),
                 })
-                lsp.setup()
                 local signs = {
                     Error = ' ',
                     Warn  = ' ',
@@ -170,43 +161,15 @@ require('lazy').setup(
                 switch_diagnostics('signs', VG.myrc_diagnostics)
                 VK('n', '<leader>vd', toggle_diagnostics)
                 VK('n', '<leader>vv', toggle_diagnostics_vtext)
+                lsp.setup()
             end,
-        },
-        {
-            -- LSP integrations
-            'jose-elias-alvarez/null-ls.nvim',
-            config = function()
-                local nls = require('null-ls')
-                local fmt = nls.builtins.formatting
-                local lint = nls.builtins.diagnostics
-                local act = nls.builtins.code_actions
-                nls.setup({
-                    sources = {
-                        fmt.black.with(
-                            {
-                                extra_args = {
-                                    '--line-length', '79'
-                                }
-                            }
-                        ),
-                        fmt.reorder_python_imports,
-                        fmt.stylua,
-                        lint.flake8,
-                        lint.markdownlint,
-                        lint.pydocstyle,
-                        act.refactoring,
-                        act.shellcheck,
-                    }
-                })
-            end,
-            requires = { 'nvim-lua/plenary.vim' },
         },
 
         {
             -- Fuzzy finder
             'nvim-telescope/telescope.nvim',
-            branch = '0.1.x',
-            dependencies = { { 'nvim-lua/plenary.nvim' } },
+            tag = '0.1.2',
+            dependencies = { 'nvim-lua/plenary.nvim' },
             config = function()
                 local ac = require('telescope.actions')
                 local qfix = ac.smart_send_to_qflist + ac.open_qflist
@@ -242,16 +205,16 @@ require('lazy').setup(
                         },
                         layout_config = {
                             prompt_position = 'top',
-                            preview_cutoff  = 120,
+                            preview_cutoff  = 32,
                             width           = 0.9,
-                            height          = 0.4,
+                            height          = 0.9,
                             horizontal      = { mirror = false, },
                             vertical        = { mirror = false, },
                         },
                         extensions = {
                             fzf = {
                                 fuzzy                   = false,
-                                override_generic_sorter = false,
+                                override_generic_sorter = true,
                                 override_file_sorter    = true,
                                 case_mode               = 'smart_case',
                             },
@@ -282,6 +245,12 @@ require('lazy').setup(
                 VK('n', '<leader>fr', '<cmd>Telescope resume<cr>')
                 VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
                 VK('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
+                VK('n', '<leader>gc', '<cmd>Telescope git_commits<cr>')
+                VK('n', '<leader>gC', '<cmd>Telescope git_bcommits<cr>')
+                VK('n', '<leader>gv', '<cmd>Telescope git_bcommits_range<cr>')
+                VK('n', '<leader>gb', '<cmd>Telescope git_branches<cr>')
+                VK('n', '<leader>gs', '<cmd>Telescope git_status<cr>')
+                VK('n', '<leader>gS', '<cmd>Telescope git_stash<cr>')
                 VK('n', '<localleader>tD',
                     '<cmd>Telescope diagnostics<cr>')
                 VK('n', '<localleader>tr',
@@ -335,7 +304,16 @@ require('lazy').setup(
                     }
                 )
                 require('nvim-treesitter.configs').setup({
-                    ensure_installed = { 'python', 'bash', 'r', 'lua' },
+                    ensure_installed = {
+                        'python',
+                        'bash',
+                        'r',
+                        'lua',
+                        'ocaml',
+                        'javascript',
+                        'typescript',
+                        'commonlisp',
+                    },
                     auto_install = true,
                     highlight = {
                         enable = true,
