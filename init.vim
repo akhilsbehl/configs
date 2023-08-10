@@ -403,11 +403,3 @@ augroup Python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal foldmethod=indent
 augroup END
-
-"-------------------------
-" OCaml setup
-"-------------------------
-
-let g:opamshare = substitute(system('opam var share'),'\n$','','''')
-execute "set rtp+=" . g:opamshare . "/merlin/vim"
-execute "helptags " . g:opamshare . "/merlin/vim/doc"
