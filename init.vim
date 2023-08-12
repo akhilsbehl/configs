@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme catppuccin-frappe
+colorscheme gruvbox-material
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -393,11 +393,11 @@ augroup MarkdownSetup
             \ :call DecorateSelection('$')<CR>
 augroup END
 
-augroup Catppuccin
-    autocmd!
-    autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-frappe
-    autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
-augroup END
+" augroup Catppuccin
+    " autocmd!
+    " autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-frappe
+    " autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
+" augroup END
 
 augroup Python
     autocmd!

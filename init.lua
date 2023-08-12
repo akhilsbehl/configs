@@ -649,7 +649,7 @@ require('lazy').setup(
             -- Status line
             'nvim-lualine/lualine.nvim',
             config = function()
-                custom_theme = require('lualine.themes.catppuccin')
+                custom_theme = require('lualine.themes.gruvbox-material')
                 require('lualine').setup({
                     options = {
                         theme = custom_theme,
@@ -716,7 +716,15 @@ require('lazy').setup(
 
         'folke/tokyonight.nvim',       -- Theme: tokyonight
 
-        'catppuccin/nvim',             -- Themes
+        'catppuccin/nvim',             -- Themes: catppuccin
+
+        'sainnhe/sonokai',             -- Themes: sonokai
+
+        'sainnhe/gruvbox-material',    -- Themes: gruvbox-material
+
+        'navarasu/onedark.nvim',       -- Themes: onedark
+
+        'rebelot/kanagawa.nvim',       -- Themes: kanagawa
 
     },
     {
