@@ -119,6 +119,8 @@ alias today='date +%Y-%m-%d'
 
 alias mkdir='mkdir -v'
 
+alias shfmt='shfmt -s -i 2 -ci -sr'
+
 alias pdflatex='pdflatex -interaction=nonstopmode'
 
 alias wget='wget -c --directory-prefix="$HOME"/tmp'
