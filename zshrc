@@ -160,6 +160,7 @@ alias remux='tmux source-file ~/configs/tmux.conf'
 alias rez='. ~/.zshrc'
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
+
 if [[ "$OS" == "Ubuntu" ]]; then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
   alias autorm='sudo apt-get autoremove'
@@ -459,6 +460,42 @@ function md2x {
     fi
     pandoc "$1" -o "$(basename $1 $(getext $1)).$2"
     return $?
+}
+
+################################
+#  Colorschemes & backgrounds  #
+################################
+
+function list-colorschemes {
+    SCHEMES=(
+        $(grep -B 1 "black" $WIN_TERM_SETTINGS |
+        grep "name" |
+        cut -f 2- -d ':')
+    )
+    echo $SCHEMES | sed -e 's/, /\n/g' -e 's/"//g'
+}
+
+function apply-colorscheme {
+    SED_CMD="0,/"colorScheme"/s/\"colorScheme\": \".*\",/\"colorScheme\": \"$1\"\,/"
+    sed -i -e "$SED_CMD" "$WIN_TERM_SETTINGS"
+}
+
+function randomize-colorscheme {
+    SCHEMES=($(list-colorschemes))
+    apply-colorscheme ${SCHEMES[$RANDOM % ${#SCHEMES[@]}]}
+}
+
+function zapply-colorscheme {
+    SCHEMES=(
+        $(grep -B 1 "black" $WIN_TERM_SETTINGS |
+        grep "name" |
+        cut -f 2- -d ':')
+    )
+    scheme=$(
+    echo $SCHEMES | sed -e 's/, /\n/g' -e 's/"//g' |
+        fzf --query="$1" --select-1 --exit-0
+    )
+    [[ -n "$scheme" ]] && apply-colorscheme "$scheme"
 }
 
 ######################

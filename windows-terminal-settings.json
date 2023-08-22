@@ -107,19 +107,19 @@
                 "name": "archWizard"
             },
             {
-                "colorScheme": "Catppuccin Mocha",
+                "colorScheme": "CatppuccinMocha",
                 "commandline": "wsl.exe --distribution Ubuntu",
                 "guid": "{07b52e3e-de2c-5db4-bd2d-ba144ed6c273}",
                 "name": "playground"
             },
             {
-                "colorScheme": "Solarized Dark",
+                "colorScheme": "BuiltinSolarizedDark",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "name": "PowerShell",
                 "commandline": "pwsh.exe"
             },
             {
-                "colorScheme": "Solarized Light",
+                "colorScheme": "BuiltinSolarizedLight",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "name": "cmd"
             }
@@ -128,7 +128,7 @@
     "schemes":
     [
         {
-            "name": "Catppuccin Latte",
+            "name": "CatppuccinLatte",
             "black": "#5C5F77",
             "red": "#D20F39",
             "green": "#40A02B",
@@ -151,7 +151,7 @@
             "selectionBackground": "#ACB0BE"
         },
         {
-            "name": "Catppuccin Mocha",
+            "name": "CatppuccinMocha",
             "black": "#45475A",
             "red": "#F38BA8",
             "green": "#A6E3A1",
@@ -174,7 +174,7 @@
             "selectionBackground": "#585B70",
         },
         {
-            "name": "3024 Day",
+            "name": "3024Day",
             "black": "#090300",
             "red": "#db2d20",
             "green": "#01a252",
@@ -197,7 +197,7 @@
             "selectionBackground": "#a5a2a2"
         },
         {
-            "name": "3024 Night",
+            "name": "3024Night",
             "black": "#090300",
             "red": "#db2d20",
             "green": "#01a252",
@@ -381,7 +381,7 @@
             "selectionBackground": "#5a5c62"
         },
         {
-            "name": "Apple Classic",
+            "name": "AppleClassic",
             "black": "#000000",
             "red": "#c91b00",
             "green": "#00c200",
@@ -611,7 +611,7 @@
             "selectionBackground": "#f0eee4"
         },
         {
-            "name": "Ayu Mirage",
+            "name": "AyuMirage",
             "black": "#191e2a",
             "red": "#ed8274",
             "green": "#a6cc70",
@@ -634,7 +634,7 @@
             "selectionBackground": "#33415e"
         },
         {
-            "name": "Banana Blueberry",
+            "name": "BananaBlueberry",
             "black": "#17141f",
             "red": "#ff6b7f",
             "green": "#00bd9c",
@@ -680,7 +680,7 @@
             "selectionBackground": "#4d504c"
         },
         {
-            "name": "Belafonte Day",
+            "name": "BelafonteDay",
             "black": "#20111b",
             "red": "#be100e",
             "green": "#858162",
@@ -703,7 +703,7 @@
             "selectionBackground": "#968c83"
         },
         {
-            "name": "Belafonte Night",
+            "name": "BelafonteNight",
             "black": "#20111b",
             "red": "#be100e",
             "green": "#858162",
@@ -818,7 +818,7 @@
             "selectionBackground": "#2baeca"
         },
         {
-            "name": "Blue Matrix",
+            "name": "BlueMatrix",
             "black": "#101116",
             "red": "#ff5680",
             "green": "#00ff9c",
@@ -933,7 +933,7 @@
             "selectionBackground": "#eff0f1"
         },
         {
-            "name": "Bright Lights",
+            "name": "BrightLights",
             "black": "#191919",
             "red": "#ff355b",
             "green": "#b7e876",
@@ -1002,7 +1002,7 @@
             "selectionBackground": "#1f1f1f"
         },
         {
-            "name": "Builtin Dark",
+            "name": "BuiltinDark",
             "black": "#000000",
             "red": "#bb0000",
             "green": "#00bb00",
@@ -1025,7 +1025,7 @@
             "selectionBackground": "#b5d5ff"
         },
         {
-            "name": "Builtin Light",
+            "name": "BuiltinLight",
             "black": "#000000",
             "red": "#bb0000",
             "green": "#00bb00",
@@ -1048,7 +1048,7 @@
             "selectionBackground": "#b5d5ff"
         },
         {
-            "name": "Builtin Pastel Dark",
+            "name": "BuiltinPastelDark",
             "black": "#4f4f4f",
             "red": "#ff6c60",
             "green": "#a8ff60",
@@ -1071,7 +1071,7 @@
             "selectionBackground": "#363983"
         },
         {
-            "name": "Builtin Solarized Dark",
+            "name": "BuiltinSolarizedDark",
             "black": "#073642",
             "red": "#dc322f",
             "green": "#859900",
@@ -1094,7 +1094,7 @@
             "selectionBackground": "#073642"
         },
         {
-            "name": "Builtin Solarized Light",
+            "name": "BuiltinSolarizedLight",
             "black": "#073642",
             "red": "#dc322f",
             "green": "#859900",
@@ -1117,7 +1117,7 @@
             "selectionBackground": "#eee8d5"
         },
         {
-            "name": "Builtin Tango Dark",
+            "name": "BuiltinTangoDark",
             "black": "#000000",
             "red": "#cc0000",
             "green": "#4e9a06",
@@ -1140,7 +1140,7 @@
             "selectionBackground": "#b5d5ff"
         },
         {
-            "name": "Builtin Tango Light",
+            "name": "BuiltinTangoLight",
             "black": "#000000",
             "red": "#cc0000",
             "green": "#4e9a06",
@@ -1485,7 +1485,7 @@
             "selectionBackground": "#18354f"
         },
         {
-            "name": "Cobalt Neon",
+            "name": "CobaltNeon",
             "black": "#142631",
             "red": "#ff2320",
             "green": "#3ba5ff",
@@ -1669,7 +1669,7 @@
             "selectionBackground": "#0f191c"
         },
         {
-            "name": "Dark Pastel",
+            "name": "DarkPastel",
             "black": "#000000",
             "red": "#ff5555",
             "green": "#55ff55",
@@ -1876,7 +1876,7 @@
             "selectionBackground": "#42444b"
         },
         {
-            "name": "Doom Peacock",
+            "name": "DoomPeacock",
             "black": "#1c1f24",
             "red": "#cb4b16",
             "green": "#26a6a6",
@@ -1991,7 +1991,7 @@
             "selectionBackground": "#37382d"
         },
         {
-            "name": "Duotone Dark",
+            "name": "DuotoneDark",
             "black": "#1f1d27",
             "red": "#d9393e",
             "green": "#2dcd73",
@@ -2129,7 +2129,7 @@
             "selectionBackground": "#5b5b5b"
         },
         {
-            "name": "Espresso Libre",
+            "name": "EspressoLibre",
             "black": "#000000",
             "red": "#cc0000",
             "green": "#1a921c",
@@ -2520,7 +2520,7 @@
             "selectionBackground": "#071317"
         },
         {
-            "name": "GitHub Dark",
+            "name": "GitHubDark",
             "black": "#000000",
             "red": "#f78166",
             "green": "#56d364",
@@ -2704,7 +2704,7 @@
             "selectionBackground": "#665c54"
         },
         {
-            "name": "Gruvbox Light",
+            "name": "GruvboxLight",
             "black": "#fbf1c7",
             "red": "#9d0006",
             "green": "#79740e",
@@ -2911,7 +2911,7 @@
             "selectionBackground": "#384564"
         },
         {
-            "name": "Hipster Green",
+            "name": "HipsterGreen",
             "black": "#000000",
             "red": "#b6214a",
             "green": "#00a600",
@@ -3233,7 +3233,7 @@
             "selectionBackground": "#b5d5ff"
         },
         {
-            "name": "Jackie Brown",
+            "name": "JackieBrown",
             "black": "#2c1d16",
             "red": "#ef5734",
             "green": "#2baf2b",
@@ -3302,7 +3302,7 @@
             "selectionBackground": "#474e91"
         },
         {
-            "name": "JetBrains Darcula",
+            "name": "JetBrainsDarcula",
             "black": "#000000",
             "red": "#fa5355",
             "green": "#126e00",
@@ -3440,7 +3440,7 @@
             "selectionBackground": "#060606"
         },
         {
-            "name": "Lab Fox",
+            "name": "LabFox",
             "black": "#2e2e2e",
             "red": "#fc6d26",
             "green": "#3eb383",
@@ -3486,7 +3486,7 @@
             "selectionBackground": "#2e206a"
         },
         {
-            "name": "Later This Evening",
+            "name": "LaterThisEvening",
             "black": "#2b2b2b",
             "red": "#d45a60",
             "green": "#afba67",
@@ -3624,7 +3624,7 @@
             "selectionBackground": "#c1deff"
         },
         {
-            "name": "Man Page",
+            "name": "ManPage",
             "black": "#000000",
             "red": "#cc0000",
             "green": "#00a600",
@@ -3969,7 +3969,7 @@
             "selectionBackground": "#f7d66a"
         },
         {
-            "name": "Monokai Remastered",
+            "name": "MonokaiRemastered",
             "black": "#1a1a1a",
             "red": "#f4005f",
             "green": "#98e024",
@@ -3992,7 +3992,7 @@
             "selectionBackground": "#343434"
         },
         {
-            "name": "Monokai Soda",
+            "name": "MonokaiSoda",
             "black": "#1a1a1a",
             "red": "#f4005f",
             "green": "#98e024",
@@ -4015,7 +4015,7 @@
             "selectionBackground": "#343434"
         },
         {
-            "name": "Monokai Vivid",
+            "name": "MonokaiVivid",
             "black": "#121212",
             "red": "#fa2934",
             "green": "#98e123",
@@ -4176,7 +4176,7 @@
             "selectionBackground": "#2f363e"
         },
         {
-            "name": "NightLion v1",
+            "name": "NightLionv1",
             "black": "#4c4c4c",
             "red": "#bb0000",
             "green": "#5fde8f",
@@ -4199,7 +4199,7 @@
             "selectionBackground": "#b5d5ff"
         },
         {
-            "name": "NightLion v2",
+            "name": "NightLionv2",
             "black": "#4c4c4c",
             "red": "#bb0000",
             "green": "#04f623",
@@ -4222,7 +4222,7 @@
             "selectionBackground": "#b5d5ff"
         },
         {
-            "name": "Night Owlish Light",
+            "name": "NightOwlishLight",
             "black": "#011627",
             "red": "#d3423e",
             "green": "#2aa298",
@@ -4245,7 +4245,7 @@
             "selectionBackground": "#f2f2f2"
         },
         {
-            "name": "Nocturnal Winter",
+            "name": "NocturnalWinter",
             "black": "#4d4d4d",
             "red": "#f12d52",
             "green": "#09cd7e",
@@ -4498,7 +4498,7 @@
             "selectionBackground": "#bfceff"
         },
         {
-            "name": "Operator Mono Dark",
+            "name": "OperatorMonoDark",
             "black": "#5a5a5a",
             "red": "#ca372d",
             "green": "#4d7b3a",
@@ -4521,7 +4521,7 @@
             "selectionBackground": "#19273b"
         },
         {
-            "name": "Overnight Slumber",
+            "name": "OvernightSlumber",
             "black": "#0a1222",
             "red": "#ffa7c4",
             "green": "#85cc95",
@@ -4590,7 +4590,7 @@
             "selectionBackground": "#2d37ff"
         },
         {
-            "name": "Paraiso Dark",
+            "name": "ParaisoDark",
             "black": "#2f1e2e",
             "red": "#ef6155",
             "green": "#48b685",
@@ -4705,7 +4705,7 @@
             "selectionBackground": "#e6e6e6"
         },
         {
-            "name": "Piatto Light",
+            "name": "PiattoLight",
             "black": "#414141",
             "red": "#b23771",
             "green": "#66781e",
@@ -4751,7 +4751,7 @@
             "selectionBackground": "#4d4d4d"
         },
         {
-            "name": "Popping and Locking",
+            "name": "Popping_and_Locking",
             "black": "#1d2021",
             "red": "#cc241d",
             "green": "#98971a",
@@ -4820,7 +4820,7 @@
             "selectionBackground": "#414141"
         },
         {
-            "name": "Pro Light",
+            "name": "ProLight",
             "black": "#000000",
             "red": "#e5492b",
             "green": "#50d148",
@@ -4866,7 +4866,7 @@
             "selectionBackground": "#8689c2"
         },
         {
-            "name": "Purple Rain",
+            "name": "PurpleRain",
             "black": "#000000",
             "red": "#ff260e",
             "green": "#9be205",
@@ -4981,7 +4981,7 @@
             "selectionBackground": "#663399"
         },
         {
-            "name": "Red Alert",
+            "name": "RedAlert",
             "black": "#000000",
             "red": "#d62e4e",
             "green": "#71be6b",
@@ -5004,7 +5004,7 @@
             "selectionBackground": "#073642"
         },
         {
-            "name": "Red Planet",
+            "name": "RedPlanet",
             "black": "#202020",
             "red": "#8c3432",
             "green": "#728271",
@@ -5027,7 +5027,7 @@
             "selectionBackground": "#1b324a"
         },
         {
-            "name": "Red Sands",
+            "name": "RedSands",
             "black": "#000000",
             "red": "#ff3f00",
             "green": "#00bb00",
@@ -5188,7 +5188,7 @@
             "selectionBackground": "#232136"
         },
         {
-            "name": "Rouge 2",
+            "name": "Rouge2",
             "black": "#5d5d6b",
             "red": "#c6797e",
             "green": "#969e92",
@@ -5280,7 +5280,7 @@
             "selectionBackground": "#c05cbf"
         },
         {
-            "name": "Scarlet Protocol",
+            "name": "ScarletProtocol",
             "black": "#101116",
             "red": "#ff0051",
             "green": "#00dc84",
@@ -5303,7 +5303,7 @@
             "selectionBackground": "#c1deff"
         },
         {
-            "name": "Seafoam Pastel",
+            "name": "SeafoamPastel",
             "black": "#757575",
             "red": "#825d4d",
             "green": "#728c62",
@@ -5579,7 +5579,7 @@
             "selectionBackground": "#7f8786"
         },
         {
-            "name": "Solarized Darcula",
+            "name": "SolarizedDarcula",
             "black": "#25292a",
             "red": "#f24840",
             "green": "#629655",
@@ -5602,7 +5602,7 @@
             "selectionBackground": "#214283"
         },
         {
-            "name": "Solarized Dark Higher Contrast",
+            "name": "SolarizedDarkHigherContrast",
             "black": "#002831",
             "red": "#d11c24",
             "green": "#6cbe6c",
@@ -5625,7 +5625,7 @@
             "selectionBackground": "#003748"
         },
         {
-            "name": "Solarized Dark - Patched",
+            "name": "SolarizedDark-Patched",
             "black": "#002831",
             "red": "#d11c24",
             "green": "#738a05",
@@ -5671,7 +5671,7 @@
             "selectionBackground": "#0a385c"
         },
         {
-            "name": "SpaceGray Eighties Dull",
+            "name": "SpaceGrayEightiesDull",
             "black": "#15171c",
             "red": "#b24a56",
             "green": "#92b477",
@@ -5694,7 +5694,7 @@
             "selectionBackground": "#272e36"
         },
         {
-            "name": "SpaceGray Eighties",
+            "name": "SpaceGrayEighties",
             "black": "#15171c",
             "red": "#ec5f67",
             "green": "#81a764",
@@ -5970,7 +5970,7 @@
             "selectionBackground": "#19cde6"
         },
         {
-            "name": "Tango Adapted",
+            "name": "TangoAdapted",
             "black": "#000000",
             "red": "#ff0000",
             "green": "#59d600",
@@ -5993,7 +5993,7 @@
             "selectionBackground": "#c1deff"
         },
         {
-            "name": "Tango Half Adapted",
+            "name": "TangoHalfAdapted",
             "black": "#000000",
             "red": "#ff0000",
             "green": "#4cc300",
@@ -6039,7 +6039,7 @@
             "selectionBackground": "#4d4d4d"
         },
         {
-            "name": "Terminal Basic",
+            "name": "TerminalBasic",
             "black": "#000000",
             "red": "#990000",
             "green": "#00a600",
@@ -6062,7 +6062,7 @@
             "selectionBackground": "#a4c9ff"
         },
         {
-            "name": "Thayer Bright",
+            "name": "ThayerBright",
             "black": "#1b1d1e",
             "red": "#f92672",
             "green": "#4df840",
@@ -6085,7 +6085,7 @@
             "selectionBackground": "#4d4d4d"
         },
         {
-            "name": "The Hulk",
+            "name": "TheHulk",
             "black": "#1b1d1e",
             "red": "#269d1b",
             "green": "#13ce30",
@@ -6108,7 +6108,7 @@
             "selectionBackground": "#4d504c"
         },
         {
-            "name": "Tinacious Design (Dark)",
+            "name": "TinaciousDesignDark",
             "black": "#1d1d26",
             "red": "#ff3399",
             "green": "#00d364",
@@ -6131,7 +6131,7 @@
             "selectionBackground": "#ff3399"
         },
         {
-            "name": "Tinacious Design (Light)",
+            "name": "TinaciousDesignLight",
             "black": "#1d1d26",
             "red": "#ff3399",
             "green": "#00d364",
@@ -6246,7 +6246,7 @@
             "selectionBackground": "#d6d6d6"
         },
         {
-            "name": "Tomorrow Night Blue",
+            "name": "TomorrowNightBlue",
             "black": "#000000",
             "red": "#ff9da4",
             "green": "#d1f1a9",
@@ -6269,7 +6269,7 @@
             "selectionBackground": "#003f8e"
         },
         {
-            "name": "Tomorrow Night Bright",
+            "name": "TomorrowNightBright",
             "black": "#000000",
             "red": "#d54e53",
             "green": "#b9ca4a",
@@ -6292,7 +6292,7 @@
             "selectionBackground": "#424242"
         },
         {
-            "name": "Tomorrow Night Burns",
+            "name": "TomorrowNightBurns",
             "black": "#252525",
             "red": "#832e31",
             "green": "#a63c40",
@@ -6315,7 +6315,7 @@
             "selectionBackground": "#b0bec5"
         },
         {
-            "name": "Tomorrow Night Eighties",
+            "name": "TomorrowNightEighties",
             "black": "#000000",
             "red": "#f2777a",
             "green": "#99cc99",
@@ -6338,7 +6338,7 @@
             "selectionBackground": "#515151"
         },
         {
-            "name": "Tomorrow Night",
+            "name": "TomorrowNight",
             "black": "#000000",
             "red": "#cc6666",
             "green": "#b5bd68",
@@ -6637,7 +6637,7 @@
             "selectionBackground": "#d7d7d7"
         },
         {
-            "name": "Violet Dark",
+            "name": "VioletDark",
             "black": "#56595c",
             "red": "#c94c22",
             "green": "#85981c",
@@ -6660,7 +6660,7 @@
             "selectionBackground": "#595ab7"
         },
         {
-            "name": "Violet Light",
+            "name": "VioletLight",
             "black": "#56595c",
             "red": "#c94c22",
             "green": "#85981c",
@@ -7007,7 +7007,7 @@
     ],
     "themes": [
         {
-            "name": "Catppuccin Latte",
+            "name": "CatppuccinLatte",
             "tab": {
                 "background": "#CCD0DAFF",
                 "showCloseButton": "always",
@@ -7022,7 +7022,7 @@
             }
         },
         {
-            "name": "Catppuccin Macchiato",
+            "name": "CatppuccinMacchiato",
             "tab": {
                 "background": "#363A4FFF",
                 "showCloseButton": "always",

@@ -215,7 +215,7 @@ endfunction
 nnoremap <leader>dcc :call DeleteCtrlChars()<CR>
 
 "-------------------------
-" Squeeze multiple blank lines
+" Squeeze multiple blank lines.
 "-------------------------
 
 function! SqueezeMultipleBlankLines()
@@ -248,7 +248,7 @@ endfunction
 nnoremap <leader>tpm :call TogglePasteMode()<CR>
 
 "-------------------------
-" Keep the cursor centered
+" Keep the cursor centered.
 "-------------------------
 
 function! CenterCursor() abort
@@ -320,7 +320,7 @@ endfunction
 nnoremap <leader>sr :call SaveAsInPlace()<CR>
 
 "-------------------------
-" Toggle a simple terminal buffer
+" Toggle a simple terminal buffer.
 "-------------------------
 
 function! DisplayBufInFloatingWin(buf) abort
@@ -400,13 +400,28 @@ augroup MarkdownSetup
             \ :call DecorateSelection('$')<CR>
 augroup END
 
+"-------------------------
+" Catppuccin related configs.
+"-------------------------
+
 " augroup Catppuccin
     " autocmd!
     " autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-frappe
     " autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 " augroup END
 
+"-------------------------
+" Python file config.
+"-------------------------
+
 augroup Python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal foldmethod=indent
 augroup END
+
+"-------------------------
+" Colorscheme backgournd
+"-------------------------
+
+nnoremap <localleader>cd :set background=dark<CR>
+nnoremap <localleader>cl :set background=light<CR>
