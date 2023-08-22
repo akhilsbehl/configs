@@ -460,6 +460,36 @@ require('lazy').setup(
         },
 
         {
+            -- Zettelkasten
+            'renerocksai/telekasten.nvim',
+            config = function ()
+                require('telekasten').setup({
+                    home = VF.expand('~/zettelkasten'),
+                })
+                VK("n", "<leader>z", "<cmd>Telekasten panel<CR>")
+                VK("n", "<leader>z.", "<cmd>Telekasten toggle_todo<CR>")
+                VK("n", "<leader>zb", "<cmd>Telekasten show_backlinks<CR>")
+                VK("n", "<leader>zc", "<cmd>Telekasten show_calendar<CR>")
+                VK("n", "<leader>zf", "<cmd>Telekasten find_notes<CR>")
+                VK("n", "<leader>zg", "<cmd>Telekasten search_notes<CR>")
+                VK("n", "<leader>zh", "<cmd>Telekasten show_tags<CR>")
+                VK("n", "<leader>zi", "<cmd>Telekasten insert_img_link<CR>")
+                VK("n", "<leader>zl", "<cmd>Telekasten follow_link<CR>")
+                VK("n", "<leader>zn", "<cmd>Telekasten new_note<CR>")
+                VK("n", "<leader>zp", "<cmd>Telekasten preview_image<CR>")
+                VK("n", "<leader>zr", "<cmd>Telekasten rename_note<CR>")
+                VK("n", "<leader>zt", "<cmd>Telekasten goto_today<CR>")
+                VK("n", "<leader>zw", "<cmd>Telekasten goto_thisweek<CR>")
+                VK("n", "<leader>zy", "<cmd>Telekasten yank_notelink<CR>")
+                VK("i", "[[", "<cmd>Telekasten insert_link<CR>")
+            end,
+            dependencies = {
+                'nvim-telescope/telescope.nvim',
+                'renerocksai/calendar-vim',
+            },
+        },
+
+        {
             -- REPLs
             'jalvesaq/vimcmdline',
             config = function()
@@ -487,6 +517,7 @@ require('lazy').setup(
             'jalvesaq/Nvim-R',
             config = function()
                 VG.R_args = { '--no-save', '--no-restore-data' }
+                VG.R_assign = 0
                 VG.R_source = '~/configs/nvim-r-tmux-split.vim'
                 VG.R_notmux_conf = 1
                 VG.R_rconsole_width = 120
@@ -744,3 +775,4 @@ VC [[ source ~/.config/nvim/vimrc ]]
 -- 2. Literate programming?
 --     2.1. zyedidia/Literate
 --     2.2. zyedidia/literate.vim
+-- 3. Telekasten
