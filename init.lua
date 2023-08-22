@@ -543,6 +543,32 @@ require('lazy').setup(
         },
 
         {
+            -- Commenting
+            'scrooloose/nerdcommenter',
+            config = function()
+                VG.NERDRemoveExtraSpaces     = 1
+                VG.NERDSpaceDelims           = 1
+                VG.NERDToggleCheckAllLines   = 1
+                VK({ 'n', 'v' }, '<leader>c ', '<Plug>NERDCommenterToggle')
+                VK('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
+                VG.NERDCreateDefaultMappings = 0  -- Doesn't work >.<
+                VC [[
+                    unmap <leader>c$
+                    unmap <leader>ca
+                    unmap <leader>cb
+                    unmap <leader>cc
+                    unmap <leader>ci
+                    unmap <leader>cl
+                    unmap <leader>cm
+                    unmap <leader>cn
+                    unmap <leader>cs
+                    unmap <leader>cu
+                    unmap <leader>cy
+                ]]
+            end,
+        },
+
+        {
             -- Search in git tree
             'mileszs/ack.vim',
             config = function()
@@ -661,19 +687,6 @@ require('lazy').setup(
                     show_current_context_start = true,
                 })
             end
-        },
-
-        {
-            -- Commenting
-            'scrooloose/nerdcommenter',
-            config = function()
-                VG.NERDCreateDefaultMappings = 0
-                VG.NERDRemoveExtraSpaces     = 1
-                VG.NERDSpaceDelims           = 1
-                VG.NERDToggleCheckAllLines   = 1
-                VK({ 'n', 'v' }, '<leader>c ', '<Plug>NERDCommenterToggle')
-                VK('n', '<leader>cA', '<Plug>NERDCommenterAppend<cr>')
-            end,
         },
 
         {
