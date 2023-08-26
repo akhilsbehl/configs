@@ -474,14 +474,14 @@ require('lazy').setup(
                 VK("n", "<leader>zg", "<cmd>Telekasten search_notes<CR>")
                 VK("n", "<leader>zh", "<cmd>Telekasten show_tags<CR>")
                 VK("n", "<leader>zi", "<cmd>Telekasten insert_img_link<CR>")
-                VK("n", "<leader>zl", "<cmd>Telekasten follow_link<CR>")
+                VK("n", "<leader>zl", "<cmd>Telekasten insert_link<CR>")
+                VK("n", "<leader>zL", "<cmd>Telekasten follow_link<CR>")
                 VK("n", "<leader>zn", "<cmd>Telekasten new_note<CR>")
                 VK("n", "<leader>zp", "<cmd>Telekasten preview_image<CR>")
                 VK("n", "<leader>zr", "<cmd>Telekasten rename_note<CR>")
                 VK("n", "<leader>zt", "<cmd>Telekasten goto_today<CR>")
                 VK("n", "<leader>zw", "<cmd>Telekasten goto_thisweek<CR>")
                 VK("n", "<leader>zy", "<cmd>Telekasten yank_notelink<CR>")
-                VK("i", "[[", "<cmd>Telekasten insert_link<CR>")
             end,
             dependencies = {
                 'nvim-telescope/telescope.nvim',
