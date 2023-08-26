@@ -613,7 +613,9 @@ require('lazy').setup(
             config = function()
                 VG.copilot_enabled = 1
                 VG.copilot_no_tab_map = 1
-                VK('n', '<leader>cS', '<cmd>Copilot<cr>')
+                VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
+                VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
+                VK('n', '<leader>cs', '<cmd>Copilot<cr>')
                 VK('i', '<C-s>', '<Plug>(copilot-suggest)')
                 VK('i', '<C-d>', '<Plug>(copilot-dismiss)')
                 VK('i', '<C-j>', '<Plug>(copilot-next)')
