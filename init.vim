@@ -419,6 +419,11 @@ augroup Python
     autocmd BufNewFile,BufRead *.py setlocal foldmethod=indent
 augroup END
 
+augroup Ocaml
+    autocmd!
+    autocmd BufNewFile,BufRead *.ml setlocal shiftwidth=2
+augroup END
+
 "-------------------------
 " Colorscheme backgournd
 "-------------------------
