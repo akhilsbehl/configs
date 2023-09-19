@@ -112,6 +112,7 @@
 
     u = reset
     ur = restore
+    urs = restore --staged
     uh = reset --hard
     u1 = reset HEAD^
     u2 = reset HEAD^^
