@@ -320,7 +320,7 @@ endfunction
 nnoremap <leader>sr :call SaveAsInPlace()<CR>
 
 "-------------------------
-" Toggle a simple terminal buffer.
+" Toggle a simple terminal and scratch buffer.
 "-------------------------
 
 function! DisplayBufInFloatingWin(buf) abort
@@ -366,7 +366,28 @@ function! OpenFloatingTerm() abort
     endif
 endfunction
 
+function! QuitScratch() abort
+    if exists('g:myrc_scratch')
+        execute 'bwipeout! ' . g:myrc_scratch
+        unlet g:myrc_scratch
+    endif
+endfunction
+
+function! OpenScratch() abort
+    if !exists('g:myrc_scratch')
+        let g:myrc_scratch = nvim_create_buf(v:false, v:true)
+        call DisplayBufInFloatingWin(g:myrc_scratch)
+        call nvim_buf_set_keymap(g:myrc_scratch, 'n', '<leader>ss',
+                    \ '<C-\><C-n><C-w>q', {'nowait': v:true})
+        call nvim_buf_set_keymap(g:myrc_scratch, 'n', '<leader>sq',
+                    \ ':call QuitScratch()<cr>', {'nowait': v:true})
+    else
+        call DisplayBufInFloatingWin(g:myrc_scratch)
+    endif
+endfunction
+
 nnoremap <leader>tt :call OpenFloatingTerm()<CR>
+nnoremap <leader>ss :call OpenScratch()<CR>
 tnoremap t<Esc> <C-\><C-n><Esc>
 tnoremap tj <Cmd>wincmd j<CR>
 tnoremap tk <Cmd>wincmd k<CR>
