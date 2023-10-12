@@ -291,6 +291,7 @@ alias vv='cd "$HOME"/video'
 alias tt='cd "$HOME"/tmp'
 alias cc='cd "$HOME"/configs'
 alias ww='cd "$HOME"/warchives'
+alias zz='cd "$HOME"/zettelkasten'
 
 #####################
 #  Aliases for Git  #
