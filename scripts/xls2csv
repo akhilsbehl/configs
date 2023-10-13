@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Check if the user provided an argument
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <path_to_excel_file.xlsx>"
+    exit 1
+fi
+
+# Check if the provided file exists
+if [ ! -f "$1" ]; then
+    echo "Error: File $1 not found!"
+    exit 2
+fi
+
+# Check if pandas is installed
+if ! python -c "import pandas" &> /dev/null; then
+    echo "Error: pandas library is not installed. Install it using pip install pandas"
+    exit 3
+fi
+
+# Python script to convert each sheet to CSV
+python << END
+import pandas as pd
+input_file = "$1"
+xls = pd.ExcelFile(input_file)
+for sheet_name in xls.sheet_names:
+    df = xls.parse(sheet_name)
+    csv_filename = sheet_name.replace(" ", "_") + ".csv"
+    df.to_csv(csv_filename, index=False)
+    print(f"Saved {csv_filename}")
+END
