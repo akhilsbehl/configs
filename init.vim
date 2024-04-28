@@ -13,7 +13,7 @@ set cursorline ruler number relativenumber numberwidth=4
 set showmode showcmd
 set mouse-=a mousefocus
 set textwidth=79 colorcolumn=+1 laststatus=2 signcolumn=yes
-set termguicolors background=dark
+set termguicolors background=light
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
