@@ -9,7 +9,6 @@ from colorama import Fore, Style
 from colorama import init as colorama_init
 from openai import AzureOpenAI
 
-
 def main():
     colorama_init(autoreset=True)
 
@@ -41,6 +40,14 @@ def main():
         default=512,
         help='Maximum number of tokens to generate (default: 512)'
     )
+
+    parser.add_argument(
+        '-b',
+        '--non-interactive',
+        action='store_true',
+        help='Run in non-interactive mode (no user input)'
+    )
+
     args = parser.parse_args()
 
     # Model and API setup based on arguments
@@ -65,10 +72,33 @@ def main():
         azure_endpoint=api_base,
     )
 
+    if args.non_interactive:
+        user_input = sys.stdin.read()
+        messages = [
+            {
+                "role": "user",
+                "content": user_input,
+            }
+        ]
+
+        chat_completion = client.chat.completions.create(
+            model=deployment_id,
+            messages=messages,
+            temperature=args.temperature,
+            max_tokens=args.max_tokens,
+            stream=True,
+        )
+
+        for chunk in chat_completion:
+            delta = chunk.choices[0].delta.content or ""
+            print(delta, end="")
+        print("\n", end="")
+        return
+
     # Conversation state
     messages = []
 
-    msg = "NB: Type ,,, to finish your input and let the AI start."
+    msg = "NB: Type single line directly or start with '<<<<' for multiline input and end with '>>>>'."
     print(f"{Fore.RED}{msg}{Style.RESET_ALL}")
 
     try:
@@ -77,10 +107,13 @@ def main():
             user_input_lines = []
 
             print(f"\n{Fore.BLUE}You: {Style.RESET_ALL}", end="")
-            while True:
-                line = input()
-                if line.strip().lower() == ',,,':
-                    break
+            line = input()
+            if line.startswith('<<<<'):
+                while not line.endswith('>>>>'):
+                    user_input_lines.append(line)
+                    line = input()
+                user_input_lines.append(line[:-4])  # Append the final line without the end token
+            else:
                 user_input_lines.append(line)
 
             user_input = "\n".join(user_input_lines)
@@ -121,6 +154,6 @@ def main():
     except KeyboardInterrupt:
         print("\nSession interrupted by user.")
 
-
 if __name__ == "__main__":
     main()
+
