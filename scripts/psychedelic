@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Stream stdin to figlet and lolcat
+# Usage psychedelic /path/to/file
+# Usage: echo "Hello, World!" | psychedelic
+
+# If there are file arguments, concatenate them all and pass through to figlet
+# and lolcat
+
+if [ "$#" -gt 0 ]; then
+  cat "$@" | figlet | lolcat
+  exit 0
+fi
+
+while IFS= read -r line; do
+  echo "$line" | figlet | lolcat
+  exit 0
+done
