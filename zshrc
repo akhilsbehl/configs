@@ -167,6 +167,7 @@ if [[ "$OS" == "Ubuntu" ]]; then
 elif [[ "$OS" == "Arch Linux" ]]; then
   alias upgrade='paru -Syu --noconfirm'
   alias autorm='sudo pacman -Rns $(pacman -Qqdt)'
+  alias explicit-packages='paru -Qqent'
 else
   alias upgrade='echo Unknown OS!'
   alias autorm='echo Unknown OS!'
