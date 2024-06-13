@@ -30,3 +30,7 @@ fi
 export BROWSER=wslopen
 export WINUSER=$(whoami.exe | cut -f 2 -d '\' | tr -d '')
 export WIN_TERM_SETTINGS="/mnt/c/Users/$WINUSER/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+
+function cpf() {
+  cat "$1" | clip.exe
+}
