@@ -3,11 +3,11 @@
 import sys
 import os
 import argparse
-import openai
 
 from colorama import Fore, Style
 from colorama import init as colorama_init
 from openai import AzureOpenAI
+
 
 def main():
     colorama_init(autoreset=True)
@@ -20,7 +20,7 @@ def main():
     parser.add_argument(
         '-m',
         '--model',
-        choices=['3', '4'],
+        choices=['3', '4', 'o'],
         default='3',
         help='Select the model version: 3 for GPT-3.5, 4 for GPT-4'
     )
@@ -53,18 +53,24 @@ def main():
     # Model and API setup based on arguments
     deployment_id = {
         '3': 'avalok-turbo-16k-test',
-        '4': 'avalok-turbo-gpt4turbo'
+        '4': 'avalok-turbo-gpt4turbo',
+        'o': 'avalok-gpt4-o',
     }[args.model]
 
     api_key = {
         "3": os.getenv("GPT3_TEST_API_KEY"),
-        "4": os.getenv("GPT4_API_KEY")
+        "4": os.getenv("GPT4_API_KEY"),
+        "o": os.getenv("GPT4O_API_KEY"),
     }[args.model]
 
     api_base = {
         "3": os.getenv("GPT3_TEST_API_BASE"),
-        "4": os.getenv("GPT4_API_BASE")
+        "4": os.getenv("GPT4_API_BASE"),
+        "o": os.getenv("GPT4O_API_BASE"),
     }[args.model]
+
+    assert api_key, f"API key not found for model {args.model}"
+    assert api_base, f"API base not found for model {args.model}"
 
     client = AzureOpenAI(
         api_version="2023-05-15",
@@ -83,7 +89,7 @@ def main():
 
         chat_completion = client.chat.completions.create(
             model=deployment_id,
-            messages=messages,
+            messages=messages,  # pyright:ignore
             temperature=args.temperature,
             max_tokens=args.max_tokens,
             stream=True,
@@ -98,7 +104,8 @@ def main():
     # Conversation state
     messages = []
 
-    msg = "NB: Type single line directly or start with '<<<<' for multiline input and end with '>>>>'."
+    msg = "NB: Type single line directly or start with" + \
+        " '<<<<' for multiline input and end with '>>>>'."
     print(f"{Fore.RED}{msg}{Style.RESET_ALL}")
 
     try:
@@ -112,7 +119,8 @@ def main():
                 while not line.endswith('>>>>'):
                     user_input_lines.append(line)
                     line = input()
-                user_input_lines.append(line[:-4])  # Append the final line without the end token
+                # Append the final line without the end token
+                user_input_lines.append(line[:-4])
             else:
                 user_input_lines.append(line)
 
@@ -154,6 +162,6 @@ def main():
     except KeyboardInterrupt:
         print("\nSession interrupted by user.")
 
+
 if __name__ == "__main__":
     main()
-
