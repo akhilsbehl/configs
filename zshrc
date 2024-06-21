@@ -72,8 +72,8 @@ function cdl {
         cd "$1" || return 1
         ls --color=auto -shHF --group-directories-first
     else
-        echo "Error: no directory specified."
-        return 1
+        cd "$HOME" || return 1
+        ls --color=auto -shHF --group-directories-first
     fi
 }
 
