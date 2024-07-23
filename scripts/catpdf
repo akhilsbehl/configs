@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
 
-# All but the last argument is input files
-INPUTS=${@:1:$(($#-1))}
+# Read all but the last argument as input files
+# Make sure to check for file names with spaces and deal with them properly
+OIFS=$IFS
+IFS=$'\n'
 
-# The last argument is the output file
-OUTPUT=${@:$#}
+CMD_STRING="pdftk"
 
-gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$OUTPUT" $INPUTS
+for d in "$@"; do
+    # Check if this is the last argument
+    if [ "$d" == "${@: -1}" ]; then
+        # If it is, then it is the output file
+        CMD_STRING="$CMD_STRING cat output '$d'"
+    else
+        # Otherwise, it is an input file
+        CMD_STRING="$CMD_STRING '$d'"
+    fi
+done
+
+eval $CMD_STRING
+
+IFS=$OIFS
+unset OIFS
 
 exit 0
