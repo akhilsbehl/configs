@@ -706,7 +706,8 @@ if not VG.vscode then
                     custom_theme = require('lualine.themes.gruvbox-material')
                     require('lualine').setup({
                         options = {
-                            theme = custom_theme,
+                            -- theme = custom_theme,
+                            theme = 'iceberg_light'
                         },
                         sections = {
                             lualine_b = {},
