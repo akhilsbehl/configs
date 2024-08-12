@@ -755,6 +755,8 @@ if not VG.vscode then
                 end,
             },
 
+            'echasnovski/mini.icons',      -- Icons provider for nvim
+
             'gpanders/nvim-parinfer',      -- Auto indent parantheses for lisp
 
             'mg979/vim-visual-multi',      -- Multiple cursors
