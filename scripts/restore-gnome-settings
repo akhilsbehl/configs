@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Try to get everything and then throw a hail mary
+# gsettings list-recursively > ~/configs/gsettings.bkup
+# This is not as easy as set-recursively - needs more work
+dconf load -f / < ~/configs/dconf.bkup
+
+exit 0
