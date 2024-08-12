@@ -289,7 +289,9 @@ function up() {
 
 alias aa='cd "$HOME"/audio'
 alias vv='cd "$HOME"/video'
+alias ii='cd "$HOME"/images'
 alias tt='cd "$HOME"/tmp'
+alias tt='cd "$HOME"/public'
 alias cc='cd "$HOME"/configs'
 alias ww='cd "$HOME"/warchives'
 alias zz='cd "$HOME"/zettelkasten'
