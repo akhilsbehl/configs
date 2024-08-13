@@ -123,8 +123,9 @@
 
     ours = "!fff() { git co --ours $@ && git add $@; }; fff"
     theirs = "!fff() { git co --theirs $@ && git add $@; }; fff"
+
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
