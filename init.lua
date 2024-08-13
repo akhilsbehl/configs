@@ -139,7 +139,7 @@ if not VG.vscode then
                                 diagnostic_config['virtual_text'] = false
                             else
                                 diagnostic_config['virtual_text'] =
-                                    VG.myrc_diagnostics_vtext
+                                VG.myrc_diagnostics_vtext
                             end
                             VD.config(diagnostic_config)
                         elseif option == 'virtual_text' then
@@ -284,7 +284,7 @@ if not VG.vscode then
                 'nvim-treesitter/nvim-treesitter',
                 build = function()
                     local ts_update = require('nvim-treesitter.install')
-                        .update({ with_sync = true })
+                    .update({ with_sync = true })
                     ts_update()
                 end,
                 dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
@@ -630,6 +630,40 @@ if not VG.vscode then
                     VK('i', '<C-a>', 'copilot#Accept("")', {
                         expr = true, replace_keycodes = false,
                     })
+                end,
+            },
+
+            {
+                -- Free AI
+                'Exafunction/codeium.vim',
+                event = 'BufEnter',
+                config = function ()
+                    VG.codeium_enabled = 0
+                    VG.codeium_disable_bindings = 1
+                    VG.codeium_no_map_tab = 1
+                    VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
+                    VK('n', '<leader>ce', '<cmd>let codeium_enabled=1<cr>')
+                    VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
+                    VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
+                    VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
+                    VK(
+                        'i',
+                        '<C-j>',
+                        '<cmd>call codeium#CycleCompletions(1)<CR>'
+                    )
+                    VK(
+                        'i',
+                        '<C-k>',
+                        '<cmd>call codeium#CycleCompletions(-1)<cr>'
+                    )
+                    VK(
+                        'i',
+                        '<C-a>',
+                        function ()
+                            return vim.fn['codeium#Accept']()
+                        end,
+                        { expr = true, silent = true }
+                    )
                 end,
             },
 
