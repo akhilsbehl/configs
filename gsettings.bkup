@@ -51,6 +51,70 @@ ca.desrt.dconf-editor.Settings show-warning true
 ca.desrt.dconf-editor.Settings small-keys-list-rows false
 ca.desrt.dconf-editor.Settings sort-case-sensitive false
 ca.desrt.dconf-editor.Settings use-shortpaths false
+io.github.realmazharhussain.GdmSettings never-applied false
+io.github.realmazharhussain.GdmSettings no-donation-dialog true
+io.github.realmazharhussain.GdmSettings.accessibility always-show-accessibility-menu false
+io.github.realmazharhussain.GdmSettings.appearance background-color 'rgb(40,40,40)'
+io.github.realmazharhussain.GdmSettings.appearance background-image '/home/alchemist/images/multicolored-gradient-tie-dye-fabric-texture.jpg'
+io.github.realmazharhussain.GdmSettings.appearance background-type 'image'
+io.github.realmazharhussain.GdmSettings.appearance bg-adjustment 'zoom'
+io.github.realmazharhussain.GdmSettings.appearance cursor-theme 'Bibata-Modern-Classic'
+io.github.realmazharhussain.GdmSettings.appearance icon-theme 'Tela-circle'
+io.github.realmazharhussain.GdmSettings.appearance shell-theme ''
+io.github.realmazharhussain.GdmSettings.fonts antialiasing 'rgba'
+io.github.realmazharhussain.GdmSettings.fonts font 'Noto Sans Brahmi 12'
+io.github.realmazharhussain.GdmSettings.fonts hinting 'slight'
+io.github.realmazharhussain.GdmSettings.fonts scaling-factor 1.0
+io.github.realmazharhussain.GdmSettings.misc disable-restart-buttons false
+io.github.realmazharhussain.GdmSettings.misc disable-user-list false
+io.github.realmazharhussain.GdmSettings.misc enable-logo false
+io.github.realmazharhussain.GdmSettings.misc enable-welcome-message false
+io.github.realmazharhussain.GdmSettings.misc enlarge-welcome-message false
+io.github.realmazharhussain.GdmSettings.misc logo '/usr/share/pixmaps/archlinux-logo-text-dark.svg'
+io.github.realmazharhussain.GdmSettings.misc welcome-message "Pandora's rule: Do not open a box you did not close!"
+io.github.realmazharhussain.GdmSettings.mouse natural-scrolling true
+io.github.realmazharhussain.GdmSettings.mouse pointer-acceleration 'default'
+io.github.realmazharhussain.GdmSettings.mouse speed 0.0
+io.github.realmazharhussain.GdmSettings.night-light enabled true
+io.github.realmazharhussain.GdmSettings.night-light end-hour 6
+io.github.realmazharhussain.GdmSettings.night-light end-minute 0
+io.github.realmazharhussain.GdmSettings.night-light schedule-automatic true
+io.github.realmazharhussain.GdmSettings.night-light start-hour 20
+io.github.realmazharhussain.GdmSettings.night-light start-minute 0
+io.github.realmazharhussain.GdmSettings.night-light temperature uint32 2700
+io.github.realmazharhussain.GdmSettings.pointing cursor-size 24
+io.github.realmazharhussain.GdmSettings.power auto-power-saver true
+io.github.realmazharhussain.GdmSettings.power blank-screen true
+io.github.realmazharhussain.GdmSettings.power dim-screen true
+io.github.realmazharhussain.GdmSettings.power idle-delay 3.0
+io.github.realmazharhussain.GdmSettings.power power-button-action 'interactive'
+io.github.realmazharhussain.GdmSettings.power suspend-on-ac true
+io.github.realmazharhussain.GdmSettings.power suspend-on-ac-delay 15.0
+io.github.realmazharhussain.GdmSettings.power suspend-on-battery true
+io.github.realmazharhussain.GdmSettings.power suspend-on-battery-delay 15.0
+io.github.realmazharhussain.GdmSettings.sound event-sounds true
+io.github.realmazharhussain.GdmSettings.sound feedback-sounds true
+io.github.realmazharhussain.GdmSettings.sound over-amplification false
+io.github.realmazharhussain.GdmSettings.sound theme '__custom'
+io.github.realmazharhussain.GdmSettings.tools top-bar-tweaks true
+io.github.realmazharhussain.GdmSettings.top-bar background-color 'rgb(36,31,49)'
+io.github.realmazharhussain.GdmSettings.top-bar change-background-color true
+io.github.realmazharhussain.GdmSettings.top-bar change-text-color true
+io.github.realmazharhussain.GdmSettings.top-bar disable-arrows false
+io.github.realmazharhussain.GdmSettings.top-bar disable-rounded-corners false
+io.github.realmazharhussain.GdmSettings.top-bar show-battery-percentage true
+io.github.realmazharhussain.GdmSettings.top-bar show-seconds true
+io.github.realmazharhussain.GdmSettings.top-bar show-weekday true
+io.github.realmazharhussain.GdmSettings.top-bar text-color 'rgb(255,255,255)'
+io.github.realmazharhussain.GdmSettings.top-bar time-format '12h'
+io.github.realmazharhussain.GdmSettings.touchpad disable-while-typing true
+io.github.realmazharhussain.GdmSettings.touchpad natural-scrolling true
+io.github.realmazharhussain.GdmSettings.touchpad speed 0.0
+io.github.realmazharhussain.GdmSettings.touchpad tap-to-click true
+io.github.realmazharhussain.GdmSettings.touchpad two-finger-scrolling true
+io.github.realmazharhussain.GdmSettings.window-state height uint32 530
+io.github.realmazharhussain.GdmSettings.window-state last-visited-page 'top_bar'
+io.github.realmazharhussain.GdmSettings.window-state width uint32 950
 io.missioncenter.MissionCenter app-update-interval 20
 io.missioncenter.MissionCenter app-update-interval-u64 uint64 20
 io.missioncenter.MissionCenter apps-page-core-count-affects-percentages false
@@ -259,92 +323,6 @@ org.gnome.Disks.benchmark do-write true
 org.gnome.Disks.benchmark num-access-samples 1000
 org.gnome.Disks.benchmark num-samples 100
 org.gnome.Disks.benchmark sample-size-mib 10
-org.gnome.Epiphany active-clear-data-items 5
-org.gnome.Epiphany ask-for-default true
-org.gnome.Epiphany content-filters ['https://easylist-downloads.adblockplus.org/easylist_min_content_blocker.json']
-org.gnome.Epiphany default-search-engine 'DuckDuckGo'
-org.gnome.Epiphany enable-caret-browsing false
-org.gnome.Epiphany homepage-url ''
-org.gnome.Epiphany new-windows-in-tabs true
-org.gnome.Epiphany restore-session-delaying-loads true
-org.gnome.Epiphany restore-session-policy 'always'
-org.gnome.Epiphany search-engine-providers [{'name': <'DuckDuckGo'>, 'url': <'https://duckduckgo.com/?q=%s&t=epiphany'>, 'bang': <'!ddg'>}, {'name': <'Google'>, 'url': <'https://www.google.com/search?q=%s'>, 'bang': <'!g'>}, {'name': <'Bing'>, 'url': <'https://www.bing.com/search?q=%s'>, 'bang': <'!b'>}]
-org.gnome.Epiphany search-engines @a(sss) []
-org.gnome.Epiphany start-in-incognito-mode false
-org.gnome.Epiphany use-google-search-suggestions false
-org.gnome.Epiphany warn-on-close-unsubmitted-data true
-org.gnome.Epiphany.permissions advertisement-permission 'undecided'
-org.gnome.Epiphany.permissions audio-device-permission 'undecided'
-org.gnome.Epiphany.permissions autoplay-permission 'undecided'
-org.gnome.Epiphany.permissions geolocation-permission 'undecided'
-org.gnome.Epiphany.permissions notifications-permission 'undecided'
-org.gnome.Epiphany.permissions save-password-permission 'undecided'
-org.gnome.Epiphany.permissions video-device-permission 'undecided'
-org.gnome.Epiphany.state download-dir 'Downloads'
-org.gnome.Epiphany.state is-maximized false
-org.gnome.Epiphany.state recent-encodings ['']
-org.gnome.Epiphany.state window-position (-1, -1)
-org.gnome.Epiphany.state window-size (1024, 768)
-org.gnome.Epiphany.web ask-on-download false
-org.gnome.Epiphany.web default-encoding 'iso-8859-1'
-org.gnome.Epiphany.web default-zoom-level 1.0
-org.gnome.Epiphany.web enable-adblock true
-org.gnome.Epiphany.web enable-autosearch true
-org.gnome.Epiphany.web enable-itp true
-org.gnome.Epiphany.web enable-mouse-gestures false
-org.gnome.Epiphany.web enable-popups false
-org.gnome.Epiphany.web enable-site-specific-quirks true
-org.gnome.Epiphany.web enable-spell-checking true
-org.gnome.Epiphany.web enable-user-css false
-org.gnome.Epiphany.web enable-user-js false
-org.gnome.Epiphany.web enable-webextensions false
-org.gnome.Epiphany.web enable-website-data-storage true
-org.gnome.Epiphany.web hardware-acceleration-policy 'always'
-org.gnome.Epiphany.web language ['system']
-org.gnome.Epiphany.web last-download-directory ''
-org.gnome.Epiphany.web last-upload-directory ''
-org.gnome.Epiphany.web min-font-size 0
-org.gnome.Epiphany.web monospace-font 'Monospace 12'
-org.gnome.Epiphany.web remember-passwords true
-org.gnome.Epiphany.web sans-serif-font 'Sans 12'
-org.gnome.Epiphany.web serif-font 'Serif 12'
-org.gnome.Epiphany.web show-developer-actions false
-org.gnome.Epiphany.web switch-to-new-tab false
-org.gnome.Epiphany.web use-gnome-fonts true
-org.gnome.Epiphany.web user-agent ''
-org.gnome.Epiphany.web webextensions-active @as []
-org.gnome.Epiphany.lockdown disable-arbitrary-url false
-org.gnome.Epiphany.lockdown disable-bookmark-editing false
-org.gnome.Epiphany.lockdown disable-context-menu false
-org.gnome.Epiphany.lockdown disable-fullscreen false
-org.gnome.Epiphany.lockdown disable-history false
-org.gnome.Epiphany.lockdown disable-printing false
-org.gnome.Epiphany.lockdown disable-quit false
-org.gnome.Epiphany.lockdown disable-save-to-disk false
-org.gnome.Epiphany.reader color-scheme 'light'
-org.gnome.Epiphany.reader font-style 'sans'
-org.gnome.Epiphany.sync sync-accounts-server 'https://api.accounts.firefox.com/v1'
-org.gnome.Epiphany.sync sync-bookmarks-enabled false
-org.gnome.Epiphany.sync sync-bookmarks-initial true
-org.gnome.Epiphany.sync sync-bookmarks-time int64 0
-org.gnome.Epiphany.sync sync-device-id ''
-org.gnome.Epiphany.sync sync-device-name ''
-org.gnome.Epiphany.sync sync-frequency uint32 30
-org.gnome.Epiphany.sync sync-history-enabled false
-org.gnome.Epiphany.sync sync-history-initial true
-org.gnome.Epiphany.sync sync-history-time int64 0
-org.gnome.Epiphany.sync sync-open-tabs-enabled false
-org.gnome.Epiphany.sync sync-open-tabs-time int64 0
-org.gnome.Epiphany.sync sync-passwords-enabled false
-org.gnome.Epiphany.sync sync-passwords-initial true
-org.gnome.Epiphany.sync sync-passwords-time int64 0
-org.gnome.Epiphany.sync sync-time int64 0
-org.gnome.Epiphany.sync sync-token-server 'https://token.services.mozilla.com/1.0/sync/1.5'
-org.gnome.Epiphany.sync sync-user ''
-org.gnome.Epiphany.sync sync-with-firefox true
-org.gnome.Epiphany.ui expand-tabs-bar true
-org.gnome.Epiphany.ui keep-window-open false
-org.gnome.Epiphany.ui tabs-bar-visibility-policy 'more-than-one'
 org.gnome.Evince allow-links-change-zoom true
 org.gnome.Evince auto-reload true
 org.gnome.Evince document-directory @ms nothing
@@ -359,10 +337,10 @@ org.gnome.Evince.Default enable-spellchecking true
 org.gnome.Evince.Default fullscreen false
 org.gnome.Evince.Default inverted-colors false
 org.gnome.Evince.Default show-sidebar true
-org.gnome.Evince.Default sidebar-page 'links'
+org.gnome.Evince.Default sidebar-page 'thumbnails'
 org.gnome.Evince.Default sidebar-size 132
 org.gnome.Evince.Default sizing-mode 'automatic'
-org.gnome.Evince.Default window-ratio (0.0, 0.0)
+org.gnome.Evince.Default window-ratio (0.25, 0.35294117647058826)
 org.gnome.Evince.Default zoom 1.0
 org.gnome.Evolution.DefaultSources default-address-book 'system'
 org.gnome.Evolution.DefaultSources default-calendar 'system'
@@ -385,7 +363,7 @@ org.gnome.FileRoller.Dialogs.Add selected-files @as []
 org.gnome.FileRoller.Dialogs.Add update false
 org.gnome.FileRoller.Dialogs.Add width 1000
 org.gnome.FileRoller.Dialogs.Extract height 800
-org.gnome.FileRoller.Dialogs.Extract recreate-folders true
+org.gnome.FileRoller.Dialogs.Extract recreate-folders false
 org.gnome.FileRoller.Dialogs.Extract skip-newer false
 org.gnome.FileRoller.Dialogs.Extract width 1000
 org.gnome.FileRoller.Dialogs.LastOutput height 500
@@ -396,14 +374,14 @@ org.gnome.FileRoller.Dialogs.New expand-options false
 org.gnome.FileRoller.Dialogs.New other-options false
 org.gnome.FileRoller.Dialogs.New volume-size 0
 org.gnome.FileRoller.FileSelector show-hidden false
-org.gnome.FileRoller.FileSelector sidebar-size -1
+org.gnome.FileRoller.FileSelector sidebar-size 300
 org.gnome.FileRoller.FileSelector window-size (-1, -1)
 org.gnome.FileRoller.General compression-level 'normal'
 org.gnome.FileRoller.General editors @as []
 org.gnome.FileRoller.General encrypt-header false
 org.gnome.FileRoller.Listing list-mode 'as-folder'
-org.gnome.FileRoller.Listing name-column-width 250
-org.gnome.FileRoller.Listing show-path true
+org.gnome.FileRoller.Listing name-column-width 68
+org.gnome.FileRoller.Listing show-path false
 org.gnome.FileRoller.Listing show-size true
 org.gnome.FileRoller.Listing show-time true
 org.gnome.FileRoller.Listing show-type true
@@ -446,7 +424,7 @@ org.gnome.SessionManager auto-save-session false
 org.gnome.SessionManager auto-save-session-one-shot false
 org.gnome.SessionManager logout-prompt true
 org.gnome.SessionManager show-fallback-warning true
-org.gnome.Settings last-panel 'system'
+org.gnome.Settings last-panel 'applications'
 org.gnome.Settings show-development-warning true
 org.gnome.Settings window-state (980, 640, false)
 org.gnome.SimpleScan brightness 0
@@ -485,7 +463,7 @@ org.gnome.Terminal.Legacy.Settings confirm-close true
 org.gnome.Terminal.Legacy.Settings context-info ['numbers']
 org.gnome.Terminal.Legacy.Settings default-show-menubar true
 org.gnome.Terminal.Legacy.Settings headerbar @mb nothing
-org.gnome.Terminal.Legacy.Settings menu-accelerator-enabled true
+org.gnome.Terminal.Legacy.Settings menu-accelerator-enabled false
 org.gnome.Terminal.Legacy.Settings mnemonics-enabled false
 org.gnome.Terminal.Legacy.Settings new-tab-position 'last'
 org.gnome.Terminal.Legacy.Settings new-terminal-mode 'window'
@@ -560,10 +538,10 @@ org.gnome.Terminal.Legacy.Keybindings switch-to-tab-8 '<Alt>8'
 org.gnome.Terminal.Legacy.Keybindings switch-to-tab-9 '<Alt>9'
 org.gnome.Terminal.Legacy.Keybindings switch-to-tab-last 'disabled'
 org.gnome.Terminal.Legacy.Keybindings toggle-menubar 'disabled'
-org.gnome.Terminal.Legacy.Keybindings zoom-in '<Control>plus'
+org.gnome.Terminal.Legacy.Keybindings zoom-in '<Primary>equal'
 org.gnome.Terminal.Legacy.Keybindings zoom-normal '<Control>0'
-org.gnome.Terminal.Legacy.Keybindings zoom-out '<Control>minus'
-org.gnome.Terminal.ProfilesList default 'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'
+org.gnome.Terminal.Legacy.Keybindings zoom-out '<Primary>minus'
+org.gnome.Terminal.ProfilesList default '298103db-c81a-4ec9-adf0-129fa535ea3b'
 org.gnome.Terminal.ProfilesList list ['67385d7d-e0f7-4ccc-8fd0-2810a9147dbd', '9e3da51e-0123-4863-b644-145730642348', 'c89548e4-c8bb-4912-873c-854cd11ed756', 'ab26620d-8388-4f48-a99b-8e423e6f471c', '3754c9cc-bb8e-4d53-a7a8-51501604ef32', 'bf7ddbf5-382b-4198-8d57-4c5fc87319d5', '2f006893-a08a-436d-a25e-a23f8fd4c298', '3f07577d-aee6-4529-bec7-d45e5ae24de0', 'f754162f-cea8-4012-b794-c16da90b2798', '718bfa0a-e87c-430e-a66c-a30637789308', '298103db-c81a-4ec9-adf0-129fa535ea3b', '20b247a3-2285-4610-868b-685119d315c1', '19f369e0-cb3c-4953-bb1e-a73534354504', '9c9aeb96-01de-4a6f-ac1e-fdf29dbdb6b3', '2c52f2ae-7fa0-4107-8cd9-a1b5aa5b2d3d', 'ed1fb482-a402-45ac-90d1-28d0060453db', 'bf9d92e2-9d18-430b-a446-8ea5cb4fe03e', 'cdbe4279-2825-450b-91a4-ff0d78c187c5', 'a8c371b7-8881-4c0f-971e-feb6d410cee6', 'e2944c86-b7cf-409d-8338-81f93b6d336c', '2ced3afb-634f-4dbf-8315-098d1e007d96', 'b6d38f6c-ca89-4299-9bdf-c12eb36775bb', '49cee464-f31e-4387-ae45-ce562bd171c8', '63703db4-c219-4553-8e38-9eaf2eb777b3', '0feb871e-a3eb-4537-b2f9-c84e1a1717af', 'ac08c9a1-acca-4a7e-8afb-7f02753db159', '6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d', '287420d9-16ef-4252-bcbe-15cdf94a1808', '72a04a8d-4107-4d21-acbf-5aef12d206cf', 'e4010ae4-18c5-4ca0-8ccc-c9effa98fd5b', 'e7f56185-a2ce-4e5e-afdf-20d6f998117b', '5d6a9007-a4a0-4702-a02f-5667f71993b0', '634c33b8-f138-4953-9fcc-95a4ccb6ac78', '24b228ce-f3c1-43df-9d50-a7414a42b5b1', '3244f2fd-b8cf-480d-9c41-d1e1c80d823e', '59ee3791-f01b-4c93-8ae9-f86ac2af00d6', 'e023ef30-fcd0-4784-bf60-51c94d52f7d1', '56895a67-d4b2-41da-bc57-af3ee585d919', '48ed55be-0bab-4687-a01d-eeeb765f6e60', 'ff02e333-93bb-4261-8df1-af176216c512', '4bb03aac-cb20-4d67-bbfb-1f1e817e78c7', '1cd66fc4-f85b-46b0-87b8-9528129d3c86']
 org.gnome.Weather locations [<(uint32 2, <('London', 'EGWU', false, [(0.89971722940307675, -0.007272211034407213)], [(0.89971722940307675, -0.007272211034407213)])>)>]
 org.gnome.Weather window-height 496
@@ -676,9 +654,9 @@ org.gnome.desktop.app-folders folder-children ['Utilities', 'YaST', 'Pardus']
 org.gnome.desktop.background color-shading-type 'solid'
 org.gnome.desktop.background picture-opacity 100
 org.gnome.desktop.background picture-options 'zoom'
-org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/gnome/neogeo-l.jxl'
-org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/gnome/neogeo-d.jxl'
-org.gnome.desktop.background primary-color '#e18477'
+org.gnome.desktop.background picture-uri 'file:///home/alchemist/.config/background'
+org.gnome.desktop.background picture-uri-dark 'file:///home/alchemist/.config/background'
+org.gnome.desktop.background primary-color '#e1e184847777'
 org.gnome.desktop.background secondary-color '#000000'
 org.gnome.desktop.background show-desktop-icons false
 org.gnome.desktop.calendar show-weekdate false
@@ -757,7 +735,7 @@ org.gnome.desktop.media-handling autorun-never false
 org.gnome.desktop.media-handling autorun-x-content-ignore @as []
 org.gnome.desktop.media-handling autorun-x-content-open-folder ['x-content/audio-player', 'x-content/image-dcf']
 org.gnome.desktop.media-handling autorun-x-content-start-app ['x-content/ostree-repository', 'x-content/audio-cdda', 'x-content/video-dvd']
-org.gnome.desktop.notifications application-children ['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences']
+org.gnome.desktop.notifications application-children ['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus']
 org.gnome.desktop.notifications show-banners true
 org.gnome.desktop.notifications show-in-lock-screen true
 org.gnome.desktop.peripherals.tablet area [0.0, 0.0, 0.0, 0.0]
@@ -1939,7 +1917,7 @@ org.gnome.shell.extensions.system-monitor show-download true
 org.gnome.shell.extensions.system-monitor show-memory true
 org.gnome.shell.extensions.system-monitor show-swap true
 org.gnome.shell.extensions.system-monitor show-upload true
-org.gnome.shell.extensions.user-theme name ''
+org.gnome.shell.extensions.user-theme name 'default-pure'
 org.gnome.shell.extensions.window-list display-all-workspaces false
 org.gnome.shell.extensions.window-list grouping-mode 'never'
 org.gnome.shell.extensions.window-list show-on-all-monitors false
@@ -1978,7 +1956,7 @@ org.gnome.shell.window-switcher app-icon-mode 'both'
 org.gnome.shell.window-switcher current-workspace-only true
 org.gnome.shell.world-clocks locations [<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>, <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>, <(uint32 2, <('Singapore', 'WSAP', true, [(0.023852838928353343, 1.8136879868485383)], [(0.022568084612667797, 1.8126262332513803)])>)>]
 org.gnome.software allow-updates true
-org.gnome.software check-timestamp int64 1723572349
+org.gnome.software check-timestamp int64 1723699538
 org.gnome.software compatible-projects ['GNOME', 'KDE', 'XFCE']
 org.gnome.software download-updates true
 org.gnome.software download-updates-notify true
@@ -1987,7 +1965,7 @@ org.gnome.software external-appstream-system-wide false
 org.gnome.software external-appstream-urls @as []
 org.gnome.software filter-default-branch true
 org.gnome.software first-run false
-org.gnome.software flatpak-purge-timestamp int64 1723583606
+org.gnome.software flatpak-purge-timestamp int64 1723692539
 org.gnome.software free-repos @as []
 org.gnome.software free-repos-url ''
 org.gnome.software install-bundles-system-wide true
@@ -2087,7 +2065,7 @@ org.gtk.Settings.FileChooser type-format 'category'
 org.gtk.Settings.FileChooser window-position (26, 23)
 org.gtk.Settings.FileChooser window-size (1231, 902)
 org.gtk.gtk4.Settings.ColorChooser custom-colors [(0.27058824896812439, 0.40392157435417175, 0.5372549295425415, 1.0)]
-org.gtk.gtk4.Settings.ColorChooser selected-color (true, 1.0, 1.0, 1.0, 1.0)
+org.gtk.gtk4.Settings.ColorChooser selected-color (true, 0.14117647707462311, 0.12156862765550613, 0.19215686619281769, 1.0)
 org.gtk.gtk4.Settings.Debug enable-inspector-keybinding true
 org.gtk.gtk4.Settings.Debug inspector-warning true
 org.gtk.gtk4.Settings.EmojiChooser recently-used-emoji @a((aussasasu)u) []
@@ -2098,7 +2076,7 @@ org.gtk.gtk4.Settings.FileChooser location-mode 'path-bar'
 org.gtk.gtk4.Settings.FileChooser show-hidden false
 org.gtk.gtk4.Settings.FileChooser show-size-column true
 org.gtk.gtk4.Settings.FileChooser show-type-column true
-org.gtk.gtk4.Settings.FileChooser sidebar-width -1
+org.gtk.gtk4.Settings.FileChooser sidebar-width 140
 org.gtk.gtk4.Settings.FileChooser sort-column 'name'
 org.gtk.gtk4.Settings.FileChooser sort-directories-first false
 org.gtk.gtk4.Settings.FileChooser sort-order 'ascending'
@@ -2106,7 +2084,7 @@ org.gtk.gtk4.Settings.FileChooser startup-mode 'recent'
 org.gtk.gtk4.Settings.FileChooser type-format 'category'
 org.gtk.gtk4.Settings.FileChooser view-type 'list'
 org.gtk.gtk4.Settings.FileChooser window-position (-1, -1)
-org.gtk.gtk4.Settings.FileChooser window-size (-1, -1)
+org.gtk.gtk4.Settings.FileChooser window-size (1031, 372)
 org.x.apps.favorites list @as []
 org.x.apps.favorites root-metadata @as []
 org.x.apps.mate-panel-applet color-icon-offset 8

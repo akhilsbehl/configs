@@ -1,6 +1,89 @@
 [com/ftpix/transparentbar]
 dark-full-screen=false
 
+[io/github/realmazharhussain/GdmSettings]
+never-applied=false
+no-donation-dialog=true
+
+[io/github/realmazharhussain/GdmSettings/accessibility]
+always-show-accessibility-menu=false
+
+[io/github/realmazharhussain/GdmSettings/appearance]
+background-image='/home/alchemist/images/multicolored-gradient-tie-dye-fabric-texture.jpg'
+background-type='image'
+cursor-theme='Bibata-Modern-Classic'
+icon-theme='Tela-circle'
+shell-theme=''
+
+[io/github/realmazharhussain/GdmSettings/fonts]
+antialiasing='rgba'
+font='Noto Sans Brahmi 12'
+hinting='slight'
+scaling-factor=1.0
+
+[io/github/realmazharhussain/GdmSettings/misc]
+disable-restart-buttons=false
+disable-user-list=false
+enable-logo=false
+enable-welcome-message=false
+enlarge-welcome-message=false
+logo='/usr/share/pixmaps/archlinux-logo-text-dark.svg'
+welcome-message="Pandora's rule: Do not open a box you did not close!"
+
+[io/github/realmazharhussain/GdmSettings/mouse]
+natural-scrolling=true
+pointer-acceleration='default'
+speed=0.0
+
+[io/github/realmazharhussain/GdmSettings/night-light]
+enabled=true
+end-hour=6
+end-minute=0
+schedule-automatic=true
+start-hour=20
+start-minute=0
+temperature=uint32 2700
+
+[io/github/realmazharhussain/GdmSettings/pointing]
+cursor-size=24
+
+[io/github/realmazharhussain/GdmSettings/power]
+auto-power-saver=true
+blank-screen=true
+dim-screen=true
+idle-delay=3.0
+power-button-action='interactive'
+suspend-on-ac=true
+suspend-on-ac-delay=15.0
+suspend-on-battery=true
+suspend-on-battery-delay=15.0
+
+[io/github/realmazharhussain/GdmSettings/sound]
+event-sounds=true
+feedback-sounds=true
+over-amplification=false
+theme='__custom'
+
+[io/github/realmazharhussain/GdmSettings/top-bar]
+background-color='rgb(36,31,49)'
+change-background-color=true
+change-text-color=true
+show-battery-percentage=true
+show-seconds=true
+show-weekday=true
+text-color='rgb(255,255,255)'
+time-format='12h'
+
+[io/github/realmazharhussain/GdmSettings/touchpad]
+disable-while-typing=true
+natural-scrolling=true
+speed=0.0
+tap-to-click=true
+two-finger-scrolling=true
+
+[io/github/realmazharhussain/GdmSettings/window-state]
+last-visited-page='top_bar'
+
 [io/missioncenter/MissionCenter]
 performance-selected-page='0000:01:00.0'
 window-height=400
@@ -237,7 +320,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='system'
+last-panel='applications'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/a11y]
@@ -271,9 +354,9 @@ translate=true
 [org/gnome/desktop/background]
 color-shading-type='solid'
 picture-options='zoom'
-picture-uri='file:///usr/share/backgrounds/gnome/neogeo-l.jxl'
-picture-uri-dark='file:///usr/share/backgrounds/gnome/neogeo-d.jxl'
-primary-color='#e18477'
+picture-uri='file:///home/alchemist/.config/background'
+picture-uri-dark='file:///home/alchemist/.config/background'
+primary-color='#e1e184847777'
 secondary-color='#000000'
 
 [org/gnome/desktop/input-sources]
@@ -301,7 +384,7 @@ autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf']
 autorun-x-content-start-app=['x-content/ostree-repository', 'x-content/audio-cdda', 'x-content/video-dvd']
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences']
+application-children=['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus']
 
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
@@ -317,6 +400,9 @@ application-id='org.gnome.Console.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-evolution]
 enable=false
+
+[org/gnome/desktop/notifications/application/org-gnome-nautilus]
+application-id='org.gnome.Nautilus.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-settings]
 application-id='org.gnome.Settings.desktop'
@@ -392,11 +478,47 @@ strategy='exact'
 is-maximized=false
 window-size=(1024, 768)
 
+[org/gnome/evince/default]
+continuous=true
+dual-page=false
+dual-page-odd-left=false
+enable-spellchecking=true
+fullscreen=false
+inverted-colors=false
+show-sidebar=true
+sidebar-page='thumbnails'
+sidebar-size=132
+sizing-mode='automatic'
+window-ratio=(0.25, 0.35294117647058826)
+
 [org/gnome/evolution-data-server]
 migrated=true
 
 [org/gnome/evolution]
 default-task-list='system-task-list'
+
+[org/gnome/file-roller/dialogs/extract]
+height=800
+recreate-folders=false
+skip-newer=false
+width=1000
+
+[org/gnome/file-roller/file-selector]
+show-hidden=false
+sidebar-size=300
+window-size=(-1, -1)
+
+[org/gnome/file-roller/listing]
+list-mode='as-folder'
+name-column-width=68
+show-path=false
+sort-method='name'
+sort-type='ascending'
+
+[org/gnome/file-roller/ui]
+sidebar-width=200
+window-height=480
+window-width=600
 
 [org/gnome/gitg/preferences/interface]
 enable-monitoring=true
@@ -485,12 +607,12 @@ welcome-dialog-last-shown-version='46.4'
 current-workspace-only=true
 
 [org/gnome/shell/extensions/caffeine]
-indicator-position-max=1
+indicator-position-max=2
 toggle-state=true
 
 [org/gnome/shell/extensions/control-blur-effect-on-lockscreen]
 brightness=1.0
-sigma=0
+sigma=32
 
 [org/gnome/shell/extensions/customize-clock-on-lockscreen]
 custom-date-text='%A, %B %e, %Y'
@@ -500,6 +622,7 @@ date-color='#ffffff'
 date-size=48
 hint-color='#ffffff'
 hint-size=24
+remove-hint=true
 time-color='#ffffff'
 time-size=96
 
@@ -512,6 +635,9 @@ hot-corner=false
 mouse-sensitive=true
 pressure-threshold=10
 pressure-timeout=100
+
+[org/gnome/shell/extensions/user-theme]
+name='default-pure'
 
 [org/gnome/shell/extensions/vitals]
 battery-slot=1
@@ -542,9 +668,9 @@ locations=[<(uint32 2, <('London', 'EGWU', false, [(0.89971722940307675, -0.0072
 locations=[<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>, <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>, <(uint32 2, <('Singapore', 'WSAP', true, [(0.023852838928353343, 1.8136879868485383)], [(0.022568084612667797, 1.8126262332513803)])>)>]
 
 [org/gnome/software]
-check-timestamp=int64 1723572349
+check-timestamp=int64 1723699538
 first-run=false
-flatpak-purge-timestamp=int64 1723583606
+flatpak-purge-timestamp=int64 1723692539
 
 [org/gnome/taquin]
 theme='cats'
@@ -553,13 +679,20 @@ window-is-maximized=false
 window-width=540
 
 [org/gnome/terminal/legacy]
+menu-accelerator-enabled=false
 new-terminal-mode='window'
 
+[org/gnome/terminal/legacy/keybindings]
+zoom-in='<Primary>equal'
+zoom-out='<Primary>minus'
+
 [org/gnome/terminal/legacy/profiles:]
+default='298103db-c81a-4ec9-adf0-129fa535ea3b'
 list=['67385d7d-e0f7-4ccc-8fd0-2810a9147dbd', '9e3da51e-0123-4863-b644-145730642348', 'c89548e4-c8bb-4912-873c-854cd11ed756', 'ab26620d-8388-4f48-a99b-8e423e6f471c', '3754c9cc-bb8e-4d53-a7a8-51501604ef32', 'bf7ddbf5-382b-4198-8d57-4c5fc87319d5', '2f006893-a08a-436d-a25e-a23f8fd4c298', '3f07577d-aee6-4529-bec7-d45e5ae24de0', 'f754162f-cea8-4012-b794-c16da90b2798', '718bfa0a-e87c-430e-a66c-a30637789308', '298103db-c81a-4ec9-adf0-129fa535ea3b', '20b247a3-2285-4610-868b-685119d315c1', '19f369e0-cb3c-4953-bb1e-a73534354504', '9c9aeb96-01de-4a6f-ac1e-fdf29dbdb6b3', '2c52f2ae-7fa0-4107-8cd9-a1b5aa5b2d3d', 'ed1fb482-a402-45ac-90d1-28d0060453db', 'bf9d92e2-9d18-430b-a446-8ea5cb4fe03e', 'cdbe4279-2825-450b-91a4-ff0d78c187c5', 'a8c371b7-8881-4c0f-971e-feb6d410cee6', 'e2944c86-b7cf-409d-8338-81f93b6d336c', '2ced3afb-634f-4dbf-8315-098d1e007d96', 'b6d38f6c-ca89-4299-9bdf-c12eb36775bb', '49cee464-f31e-4387-ae45-ce562bd171c8', '63703db4-c219-4553-8e38-9eaf2eb777b3', '0feb871e-a3eb-4537-b2f9-c84e1a1717af', 'ac08c9a1-acca-4a7e-8afb-7f02753db159', '6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d', '287420d9-16ef-4252-bcbe-15cdf94a1808', '72a04a8d-4107-4d21-acbf-5aef12d206cf', 'e4010ae4-18c5-4ca0-8ccc-c9effa98fd5b', 'e7f56185-a2ce-4e5e-afdf-20d6f998117b', '5d6a9007-a4a0-4702-a02f-5667f71993b0', '634c33b8-f138-4953-9fcc-95a4ccb6ac78', '24b228ce-f3c1-43df-9d50-a7414a42b5b1', '3244f2fd-b8cf-480d-9c41-d1e1c80d823e', '59ee3791-f01b-4c93-8ae9-f86ac2af00d6', 'e023ef30-fcd0-4784-bf60-51c94d52f7d1', '56895a67-d4b2-41da-bc57-af3ee585d919', '48ed55be-0bab-4687-a01d-eeeb765f6e60', 'ff02e333-93bb-4261-8df1-af176216c512', '4bb03aac-cb20-4d67-bbfb-1f1e817e78c7', '1cd66fc4-f85b-46b0-87b8-9528129d3c86']
 
 [org/gnome/terminal/legacy/profiles:/:0feb871e-a3eb-4537-b2f9-c84e1a1717af]
 allow-bold=true
+audible-bell=false
 background-color='#FBFBF1F1C7C7'
 bold-color='#3C3C38383636'
 bold-color-same-as-fg=true
@@ -568,6 +701,8 @@ cursor-colors-set=true
 cursor-foreground-color='#FBFBF1F1C7C7'
 foreground-color='#3C3C38383636'
 palette=['#FBFBF1F1C7C7', '#CCCC24241D1D', '#989897971A1A', '#D7D799992121', '#454585858888', '#B1B162628686', '#68689D9D6A6A', '#7C7C6F6F6464', '#929283837474', '#9D9D00000606', '#797974740E0E', '#B5B576761414', '#070766667878', '#8F8F3F3F7171', '#42427B7B5858', '#3C3C38383636']
+scrollbar-policy='never'
+scrollbar-position='hidden'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -575,6 +710,7 @@ visible-name='Gruvbox'
 
 [org/gnome/terminal/legacy/profiles:/:19f369e0-cb3c-4953-bb1e-a73534354504]
 allow-bold=true
+audible-bell=false
 background-color='#19191C1C2727'
 bold-color='#AEAEA4A47A7A'
 bold-color-same-as-fg=true
@@ -583,6 +719,7 @@ cursor-colors-set=true
 cursor-foreground-color='#19191C1C2727'
 foreground-color='#AEAEA4A47A7A'
 palette=['#181818181818', '#818100000909', '#484851513B3B', '#CCCC8B8B3F3F', '#57576D6D8C8C', '#72724D4D7C7C', '#5C5C4F4F4B4B', '#AEAEA4A47F7F', '#555555555555', '#ACAC38383535', '#A6A6A7A75D5D', '#DCDCDFDF7C7C', '#30309797C6C6', '#D3D330306161', '#F3F3DBDBB2B2', '#F4F4F4F4F4F4']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -590,6 +727,7 @@ visible-name='Ciapre'
 
 [org/gnome/terminal/legacy/profiles:/:1cd66fc4-f85b-46b0-87b8-9528129d3c86]
 allow-bold=true
+audible-bell=false
 background-color='#262626262626'
 bold-color='#D0D0D0D0D0D0'
 bold-color-same-as-fg=true
@@ -598,6 +736,7 @@ cursor-colors-set=true
 cursor-foreground-color='#262626262626'
 foreground-color='#D0D0D0D0D0D0'
 palette=['#1C1C1C1C1C1C', '#D6D686868686', '#AEAED6D68686', '#D7D7AFAF8787', '#8686AEAED6D6', '#D6D6AEAED6D6', '#8A8ADBDBB4B4', '#D0D0D0D0D0D0', '#1C1C1C1C1C1C', '#D6D686868686', '#AEAED6D68686', '#E4E4C9C9AFAF', '#8686AEAED6D6', '#D6D6AEAED6D6', '#B1B1E7E7DDDD', '#EFEFEFEFEFEF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -605,6 +744,7 @@ visible-name='Teerb'
 
 [org/gnome/terminal/legacy/profiles:/:20b247a3-2285-4610-868b-685119d315c1]
 allow-bold=true
+audible-bell=false
 background-color='#292926262F2F'
 bold-color='#D9D9E6E6F2F2'
 bold-color-same-as-fg=true
@@ -613,6 +753,7 @@ cursor-colors-set=true
 cursor-foreground-color='#292926262F2F'
 foreground-color='#D9D9E6E6F2F2'
 palette=['#000000000000', '#C3C373737272', '#7272C3C37373', '#C2C2C3C37272', '#73737272C3C3', '#C3C37272C2C2', '#7272C2C2C3C3', '#D9D9D9D9D9D9', '#323232323232', '#DBDBAAAAAAAA', '#AAAADBDBAAAA', '#DADADBDBAAAA', '#AAAAAAAADBDB', '#DBDBAAAADADA', '#AAAADADADBDB', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -620,6 +761,7 @@ visible-name='Chalkboard'
 
 [org/gnome/terminal/legacy/profiles:/:24b228ce-f3c1-43df-9d50-a7414a42b5b1]
 allow-bold=true
+audible-bell=false
 background-color='#2E2E34344040'
 bold-color='#D8D8DEDEE9E9'
 bold-color-same-as-fg=true
@@ -628,6 +770,7 @@ cursor-colors-set=true
 cursor-foreground-color='#2E2E34344040'
 foreground-color='#D8D8DEDEE9E9'
 palette=['#3B3B42425252', '#BFBF61616A6A', '#A3A3BEBE8C8C', '#EBEBCBCB8B8B', '#8181A1A1C1C1', '#B4B48E8EADAD', '#8888C0C0D0D0', '#E5E5E9E9F0F0', '#4C4C56566A6A', '#BFBF61616A6A', '#A3A3BEBE8C8C', '#EBEBCBCB8B8B', '#8181A1A1C1C1', '#B4B48E8EADAD', '#8F8FBCBCBBBB', '#ECECEFEFF4F4']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -635,6 +778,7 @@ visible-name='Nord'
 
 [org/gnome/terminal/legacy/profiles:/:287420d9-16ef-4252-bcbe-15cdf94a1808]
 allow-bold=true
+audible-bell=false
 background-color='#141414141414'
 bold-color='#9494A3A3A5A5'
 bold-color-same-as-fg=true
@@ -643,6 +787,7 @@ cursor-colors-set=true
 cursor-foreground-color='#141414141414'
 foreground-color='#9494A3A3A5A5'
 palette=['#28282A2A2E2E', '#A5A542424242', '#8C8C94944040', '#DEDE93935F5F', '#5F5F81819D9D', '#858567678F8F', '#5E5E8D8D8787', '#969698989696', '#37373B3B4141', '#CCCC66666666', '#B5B5BDBD6868', '#F0F0C6C67474', '#8181A2A2BEBE', '#B2B29494BBBB', '#8A8ABEBEB7B7', '#C5C5C8C8C6C6']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -650,6 +795,7 @@ visible-name='Hybrid'
 
 [org/gnome/terminal/legacy/profiles:/:298103db-c81a-4ec9-adf0-129fa535ea3b]
 allow-bold=true
+audible-bell=false
 background-color='#1E1E1E1E2E2E'
 bold-color='#CDCDD6D6F4F4'
 bold-color-same-as-fg=true
@@ -658,6 +804,7 @@ cursor-colors-set=true
 cursor-foreground-color='#1E1E1E1E2E2E'
 foreground-color='#CDCDD6D6F4F4'
 palette=['#454547475A5A', '#F3F38B8BA8A8', '#A6A6E3E3A1A1', '#F9F9E2E2AFAF', '#8989B4B4FAFA', '#F5F5C2C2E7E7', '#9494E2E2D5D5', '#BABAC2C2DEDE', '#58585B5B7070', '#F3F38B8BA8A8', '#A6A6E3E3A1A1', '#F9F9E2E2AFAF', '#8989B4B4FAFA', '#F5F5C2C2E7E7', '#9494E2E2D5D5', '#A6A6ADADC8C8']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -665,6 +812,7 @@ visible-name='Catppuccin Mocha'
 
 [org/gnome/terminal/legacy/profiles:/:2c52f2ae-7fa0-4107-8cd9-a1b5aa5b2d3d]
 allow-bold=true
+audible-bell=false
 background-color='#222223232424'
 bold-color='#BABABABABABA'
 bold-color-same-as-fg=true
@@ -673,6 +821,7 @@ cursor-colors-set=true
 cursor-foreground-color='#222223232424'
 foreground-color='#BABABABABABA'
 palette=['#000000000000', '#E8E834341C1C', '#6868C2C25656', '#F2F2D4D42C2C', '#1C1C9898E8E8', '#8E8E6969C9C9', '#1C1C9898E8E8', '#BABABABABABA', '#000000000000', '#E0E05A5A4F4F', '#7777B8B86969', '#EFEFD6D64B4B', '#38387C7CD3D3', '#95957B7BBEBE', '#3D3D9797E2E2', '#BABABABABABA']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -680,6 +829,7 @@ visible-name='Darkside'
 
 [org/gnome/terminal/legacy/profiles:/:2ced3afb-634f-4dbf-8315-098d1e007d96]
 allow-bold=true
+audible-bell=false
 background-color='#FFFFFCFCF0F0'
 bold-color='#10100F0F0F0F'
 bold-color-same-as-fg=true
@@ -688,6 +838,7 @@ cursor-colors-set=true
 cursor-foreground-color='#FFFFFCFCF0F0'
 foreground-color='#10100F0F0F0F'
 palette=['#282827272626', '#AFAF30302929', '#666680800B0B', '#ADAD83830101', '#20205E5EA6A6', '#A0A02F2F6F6F', '#242483837B7B', '#878785858080', '#1C1C1B1B1A1A', '#D1D14D4D4141', '#87879A9A3939', '#D0D0A2A21515', '#43438585BEBE', '#CECE5D5D9797', '#3A3AA9A99F9F', '#6F6F6E6E6969']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -695,6 +846,7 @@ visible-name='Flexoki Light'
 
 [org/gnome/terminal/legacy/profiles:/:2f006893-a08a-436d-a25e-a23f8fd4c298]
 allow-bold=true
+audible-bell=false
 background-color='#2B2B2B2B2B2B'
 bold-color='#E6E6E1E1DCDC'
 bold-color-same-as-fg=true
@@ -703,6 +855,7 @@ cursor-colors-set=true
 cursor-foreground-color='#2B2B2B2B2B2B'
 foreground-color='#E6E6E1E1DCDC'
 palette=['#000000000000', '#DADA49493939', '#51519F9F5050', '#FFFFD2D24A4A', '#6D6D9C9CBEBE', '#D0D0D0D0FFFF', '#6E6E9C9CBEBE', '#FFFFFFFFFFFF', '#323232323232', '#FFFF7B7B6B6B', '#8383D1D18282', '#FFFFFFFF7C7C', '#9F9FCECEF0F0', '#FFFFFFFFFFFF', '#A0A0CECEF0F0', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -710,6 +863,7 @@ visible-name='Broadcast'
 
 [org/gnome/terminal/legacy/profiles:/:3244f2fd-b8cf-480d-9c41-d1e1c80d823e]
 allow-bold=true
+audible-bell=false
 background-color='#282830303333'
 bold-color='#CDCDCDCDCDCD'
 bold-color-same-as-fg=true
@@ -718,6 +872,7 @@ cursor-colors-set=true
 cursor-foreground-color='#282830303333'
 foreground-color='#CDCDCDCDCDCD'
 palette=['#000000000000', '#A6A600000101', '#0000BBBB0000', '#FEFECDCD2222', '#3A3A9B9BDBDB', '#BBBB0000BBBB', '#0000BBBBBBBB', '#BBBBBBBBBBBB', '#555555555555', '#FFFF00000303', '#9393C8C86363', '#FEFEF8F87474', '#A1A1D7D7FFFF', '#FFFF5555FFFF', '#5555FFFFFFFF', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -725,6 +880,7 @@ visible-name='Obsidian'
 
 [org/gnome/terminal/legacy/profiles:/:3754c9cc-bb8e-4d53-a7a8-51501604ef32]
 allow-bold=true
+audible-bell=false
 background-color='#F1F1EBEBE6E6'
 bold-color='#36362C2C2424'
 bold-color-same-as-fg=true
@@ -733,6 +889,7 @@ cursor-colors-set=true
 cursor-foreground-color='#F1F1EBEBE6E6'
 foreground-color='#36362C2C2424'
 palette=['#36362C2C2424', '#B1B10B0B0000', '#000072723232', '#8B8B4C4C0000', '#00005C5CB4B4', '#9B9B00009797', '#00006A6A7878', '#D4D4C3C3B7B7', '#515143433737', '#DEDE11110000', '#00008F8F4040', '#AEAE60600000', '#00007474E1E1', '#C3C30000BDBD', '#000086869797', '#EAEAE1E1DADA']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -740,6 +897,7 @@ visible-name='Breadog'
 
 [org/gnome/terminal/legacy/profiles:/:3f07577d-aee6-4529-bec7-d45e5ae24de0]
 allow-bold=true
+audible-bell=false
 background-color='#303034344646'
 bold-color='#C6C6D0D0F5F5'
 bold-color-same-as-fg=true
@@ -748,6 +906,7 @@ cursor-colors-set=true
 cursor-foreground-color='#303034344646'
 foreground-color='#C6C6D0D0F5F5'
 palette=['#515157576D6D', '#E7E782828484', '#A6A6D1D18989', '#E5E5C8C89090', '#8C8CAAAAEEEE', '#F4F4B8B8E4E4', '#8181C8C8BEBE', '#B5B5BFBFE2E2', '#626268688080', '#E7E782828484', '#A6A6D1D18989', '#E5E5C8C89090', '#8C8CAAAAEEEE', '#F4F4B8B8E4E4', '#8181C8C8BEBE', '#A5A5ADADCECE']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -755,6 +914,7 @@ visible-name='Catppuccin Frappé'
 
 [org/gnome/terminal/legacy/profiles:/:48ed55be-0bab-4687-a01d-eeeb765f6e60]
 allow-bold=true
+audible-bell=false
 background-color='#242434343535'
 bold-color='#D4D4E7E7D4D4'
 bold-color-same-as-fg=true
@@ -763,6 +923,7 @@ cursor-colors-set=true
 cursor-foreground-color='#242434343535'
 foreground-color='#D4D4E7E7D4D4'
 palette=['#757575757575', '#82825D5D4D4D', '#72728C8C6262', '#ADADA1A16D6D', '#4D4D7B7B8282', '#8A8A72726767', '#727294949494', '#E0E0E0E0E0E0', '#8A8A8A8A8A8A', '#CFCF93937A7A', '#9898D9D9AAAA', '#FAFAE7E79D9D', '#7A7AC3C3CFCF', '#D6D6B2B2A1A1', '#ADADE0E0E0E0', '#E0E0E0E0E0E0']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -770,6 +931,7 @@ visible-name='Seafoam Pastel'
 
 [org/gnome/terminal/legacy/profiles:/:49cee464-f31e-4387-ae45-ce562bd171c8]
 allow-bold=true
+audible-bell=false
 background-color='#29292D2D3E3E'
 bold-color='#BFBFC7C7D5D5'
 bold-color-same-as-fg=true
@@ -778,6 +940,7 @@ cursor-colors-set=true
 cursor-foreground-color='#29292D2D3E3E'
 foreground-color='#BFBFC7C7D5D5'
 palette=['#29292D2D3E3E', '#F0F071717878', '#6262DEDE8484', '#FFFFCBCB6B6B', '#7575A1A1FFFF', '#F5F58080FFFF', '#6060BABAECEC', '#ABABB2B2BFBF', '#95959D9DCBCB', '#F0F071717878', '#C3C3E8E88D8D', '#FFFF55557272', '#8282AAAAFFFF', '#FFFFCBCB6B6B', '#67676E6E9595', '#FFFFFEFEFEFE']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -785,6 +948,7 @@ visible-name='Gogh'
 
 [org/gnome/terminal/legacy/profiles:/:4bb03aac-cb20-4d67-bbfb-1f1e817e78c7]
 allow-bold=true
+audible-bell=false
 background-color='#222222223535'
 bold-color='#FFFFFFFFFFFF'
 bold-color-same-as-fg=true
@@ -793,6 +957,7 @@ cursor-colors-set=true
 cursor-foreground-color='#222222223535'
 foreground-color='#FFFFFFFFFFFF'
 palette=['#3F3F3F3F5454', '#F6F600005555', '#0606C9C99393', '#97970000BEBE', '#F6F691915454', '#ECEC8989CBCB', '#6060ADADECEC', '#ABABB2B2BFBF', '#95959D9DCBCB', '#F6F600005555', '#0606C9C99393', '#97970000BEBE', '#F6F691915454', '#ECEC8989CBCB', '#0000DDDDEDED', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -800,6 +965,7 @@ visible-name='Sweet Terminal'
 
 [org/gnome/terminal/legacy/profiles:/:56895a67-d4b2-41da-bc57-af3ee585d919]
 allow-bold=true
+audible-bell=false
 background-color='#232321213636'
 bold-color='#E0E0DEDEF4F4'
 bold-color-same-as-fg=true
@@ -808,6 +974,7 @@ cursor-colors-set=true
 cursor-foreground-color='#232321213636'
 foreground-color='#E0E0DEDEF4F4'
 palette=['#393935355252', '#EBEB6F6F9292', '#9C9CCFCFD8D8', '#F6F6C1C17777', '#3E3E8F8FB0B0', '#C4C4A7A7E7E7', '#EAEA9A9A9797', '#E0E0DEDEF4F4', '#6E6E6A6A8686', '#EBEB6F6F9292', '#9C9CCFCFD8D8', '#F6F6C1C17777', '#3E3E8F8FB0B0', '#C4C4A7A7E7E7', '#EAEA9A9A9797', '#E0E0DEDEF4F4']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -815,6 +982,7 @@ visible-name='Rosé Pine Moon'
 
 [org/gnome/terminal/legacy/profiles:/:59ee3791-f01b-4c93-8ae9-f86ac2af00d6]
 allow-bold=true
+audible-bell=false
 background-color='#F1F1F1F1F1F1'
 bold-color='#424242424242'
 bold-color-same-as-fg=true
@@ -823,6 +991,7 @@ cursor-colors-set=true
 cursor-foreground-color='#F1F1F1F1F1F1'
 foreground-color='#424242424242'
 palette=['#212121212121', '#C3C307077171', '#1010A7A77878', '#A8A89C9C1414', '#00008E8EC4C4', '#52523C3C7979', '#2020A5A5BABA', '#D9D9D9D9D9D9', '#424242424242', '#FBFB00007A7A', '#5F5FD7D7AFAF', '#F3F3E4E43030', '#2020BBBBFCFC', '#68685555DEDE', '#4F4FB8B8CCCC', '#F1F1F1F1F1F1']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -830,6 +999,7 @@ visible-name='Pencil Light'
 
 [org/gnome/terminal/legacy/profiles:/:5d6a9007-a4a0-4702-a02f-5667f71993b0]
 allow-bold=true
+audible-bell=false
 background-color='#fbfbf7f7f0f0'
 bold-color='#000000000000'
 bold-color-same-as-fg=true
@@ -838,6 +1008,7 @@ cursor-colors-set=true
 cursor-foreground-color='#fbfbf7f7f0f0'
 foreground-color='#000000000000'
 palette=['#fbfbf7f7f0f0', '#a6a600000000', '#000068680000', '#6f6f55550000', '#00003131a9a9', '#727210104545', '#00005e5e8b8b', '#000000000000', '#efefe9e9dddd', '#d0d000000000', '#000089890000', '#808080800000', '#00000000ffff', '#dddd2222dddd', '#000088889999', '#595959595959']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -845,6 +1016,7 @@ visible-name='Modus Operandi Tinted'
 
 [org/gnome/terminal/legacy/profiles:/:634c33b8-f138-4953-9fcc-95a4ccb6ac78]
 allow-bold=true
+audible-bell=false
 background-color='#EBEBEAEAF2F2'
 bold-color='#00004F4F7C7C'
 bold-color-same-as-fg=true
@@ -853,6 +1025,7 @@ cursor-colors-set=true
 cursor-foreground-color='#EBEBEAEAF2F2'
 foreground-color='#00004F4F7C7C'
 palette=['#00003B3B4E4E', '#E6E645456969', '#06069F9F5F5F', '#DADAB7B75252', '#43439E9ECFCF', '#D9D96161DCDC', '#0000B1B1BEBE', '#B3B3B3B3B3B3', '#3E3E8989A1A1', '#E4E485859A9A', '#A2A2CCCCA1A1', '#E1E1E3E38787', '#6F6FBBBBE2E2', '#E5E58686E7E7', '#9696DCDCDADA', '#DEDEDEDEDEDE']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -860,6 +1033,7 @@ visible-name='Nord Light'
 
 [org/gnome/terminal/legacy/profiles:/:63703db4-c219-4553-8e38-9eaf2eb777b3]
 allow-bold=true
+audible-bell=false
 background-color='#282828282828'
 bold-color='#EBEBDBDBB2B2'
 bold-color-same-as-fg=true
@@ -868,6 +1042,7 @@ cursor-colors-set=true
 cursor-foreground-color='#282828282828'
 foreground-color='#EBEBDBDBB2B2'
 palette=['#282828282828', '#CCCC24241D1D', '#989897971A1A', '#D7D799992121', '#454585858888', '#B1B162628686', '#68689D9D6A6A', '#A8A899998484', '#929283837474', '#FBFB49493434', '#B8B8BBBB2626', '#FAFABDBD2F2F', '#8383A5A59898', '#D3D386869B9B', '#8E8EC0C07C7C', '#EBEBDBDBB2B2']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -875,6 +1050,7 @@ visible-name='Gruvbox Dark'
 
 [org/gnome/terminal/legacy/profiles:/:67385d7d-e0f7-4ccc-8fd0-2810a9147dbd]
 allow-bold=true
+audible-bell=false
 background-color='#F7F7F7F7F7F7'
 bold-color='#4A4A45454343'
 bold-color-same-as-fg=true
@@ -883,6 +1059,7 @@ cursor-colors-set=true
 cursor-foreground-color='#F7F7F7F7F7F7'
 foreground-color='#4A4A45454343'
 palette=['#090903030000', '#DBDB2D2D2020', '#0101A2A25252', '#FDFDEDED0202', '#0101A0A0E4E4', '#A1A16A6A9494', '#B5B5E4E4F4F4', '#A5A5A2A2A2A2', '#5C5C58585555', '#E8E8BBBBD0D0', '#3A3A34343232', '#4A4A45454343', '#80807D7D7C7C', '#D6D6D5D5D4D4', '#CDCDABAB5353', '#F7F7F7F7F7F7']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -890,6 +1067,7 @@ visible-name='3024 Day'
 
 [org/gnome/terminal/legacy/profiles:/:6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d]
 allow-bold=true
+audible-bell=false
 background-color='#FDFDF0F0EDED'
 bold-color='#1C1C1E1E2626'
 bold-color-same-as-fg=true
@@ -898,6 +1076,7 @@ cursor-colors-set=true
 cursor-foreground-color='#FDFDF0F0EDED'
 foreground-color='#1C1C1E1E2626'
 palette=['#161616161C1C', '#DADA10103F3F', '#1E1EB9B98080', '#F6F666661E1E', '#2626BBBBD9D9', '#EEEE6464AEAE', '#1D1D89899191', '#FAFADADAD1D1', '#1A1A1C1C2323', '#F4F43E3E5C5C', '#0707DADA8C8C', '#F7F77D7D2626', '#3F3FC6C6DEDE', '#F0F07575B7B7', '#1E1EAEAEAEAE', '#FDFDF0F0EDED']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -905,6 +1084,7 @@ visible-name='Horizon Bright'
 
 [org/gnome/terminal/legacy/profiles:/:718bfa0a-e87c-430e-a66c-a30637789308]
 allow-bold=true
+audible-bell=false
 background-color='#242427273A3A'
 bold-color='#CACAD3D3F5F5'
 bold-color-same-as-fg=true
@@ -913,6 +1093,7 @@ cursor-colors-set=true
 cursor-foreground-color='#242427273A3A'
 foreground-color='#CACAD3D3F5F5'
 palette=['#49494D4D6464', '#EDED87879696', '#A6A6DADA9595', '#EEEED4D49F9F', '#8A8AADADF4F4', '#F5F5BDBDE6E6', '#8B8BD5D5CACA', '#B8B8C0C0E0E0', '#5B5B60607878', '#EDED87879696', '#A6A6DADA9595', '#EEEED4D49F9F', '#8A8AADADF4F4', '#F5F5BDBDE6E6', '#8B8BD5D5CACA', '#A5A5ADADCBCB']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -920,6 +1101,7 @@ visible-name='Catppuccin Macchiato'
 
 [org/gnome/terminal/legacy/profiles:/:72a04a8d-4107-4d21-acbf-5aef12d206cf]
 allow-bold=true
+audible-bell=false
 background-color='#323232323232'
 bold-color='#FFFFFFFFFFFF'
 bold-color-same-as-fg=true
@@ -928,6 +1110,7 @@ cursor-colors-set=true
 cursor-foreground-color='#323232323232'
 foreground-color='#FFFFFFFFFFFF'
 palette=['#323232323232', '#D2D252525252', '#7F7FE1E17373', '#FFFFC6C66D6D', '#40409999FFFF', '#F6F68080FFFF', '#BEBED6D6FFFF', '#EEEEEEEEECEC', '#535353535353', '#F0F070707070', '#9D9DFFFF9191', '#FFFFE4E48B8B', '#5E5EB7B7F7F7', '#FFFF9D9DFFFF', '#DCDCF4F4FFFF', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -935,6 +1118,7 @@ visible-name='Idle Toes'
 
 [org/gnome/terminal/legacy/profiles:/:9c9aeb96-01de-4a6f-ac1e-fdf29dbdb6b3]
 allow-bold=true
+audible-bell=false
 background-color='#FFFFFFFFFFFF'
 bold-color='#262626262626'
 bold-color-same-as-fg=true
@@ -943,6 +1127,7 @@ cursor-colors-set=true
 cursor-foreground-color='#FFFFFFFFFFFF'
 foreground-color='#262626262626'
 palette=['#000000000000', '#F8F828282A2A', '#32328A8A5D5D', '#FAFA70701D1D', '#13135C5CD0D0', '#9F9F0000BDBD', '#3333C3C3C1C1', '#B3B3B3B3B3B3', '#555557575353', '#FBFB04041616', '#2C2CC6C63131', '#FDFDD7D72727', '#16167070FFFF', '#E9E90000B0B0', '#3A3AD5D5CECE', '#EEEEEEEEECEC']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -950,6 +1135,7 @@ visible-name='Clrs'
 
 [org/gnome/terminal/legacy/profiles:/:9e3da51e-0123-4863-b644-145730642348]
 allow-bold=true
+audible-bell=false
 background-color='#222222222222'
 bold-color='#D0D0D0D0D0D0'
 bold-color-same-as-fg=true
@@ -958,6 +1144,7 @@ cursor-colors-set=true
 cursor-foreground-color='#222222222222'
 foreground-color='#D0D0D0D0D0D0'
 palette=['#151515151515', '#A5A53C3C2323', '#7B7B92924646', '#D3D3A0A04D4D', '#6C6C9999BBBB', '#9F9F4E4E8585', '#7D7DD6D6CFCF', '#D0D0D0D0D0D0', '#505050505050', '#A5A53C3C2323', '#7B7B92924646', '#D3D3A0A04D4D', '#54547C7C9999', '#9F9F4E4E8585', '#7D7DD6D6CFCF', '#F5F5F5F5F5F5']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -965,6 +1152,7 @@ visible-name='Afterglow'
 
 [org/gnome/terminal/legacy/profiles:/:a8c371b7-8881-4c0f-971e-feb6d410cee6]
 allow-bold=true
+audible-bell=false
 background-color='#F3F3EAEAD3D3'
 bold-color='#5C5C6A6A7272'
 bold-color-same-as-fg=true
@@ -973,6 +1161,7 @@ cursor-colors-set=true
 cursor-foreground-color='#F3F3EAEAD3D3'
 foreground-color='#5C5C6A6A7272'
 palette=['#5C5C6A6A7272', '#F8F855555252', '#8D8DA1A10101', '#DFDFA0A00000', '#3A3A9494C5C5', '#DFDF6969BABA', '#3535A7A77C7C', '#DFDFDDDDC8C8', '#3A3A46464C4C', '#E6E67E7E8080', '#A7A7C0C08080', '#DBDBBCBC7F7F', '#7F7FBBBBB3B3', '#D6D69999B6B6', '#8383C0C09292', '#D3D3C6C6AAAA']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -980,6 +1169,7 @@ visible-name='Everforest Light Soft'
 
 [org/gnome/terminal/legacy/profiles:/:ab26620d-8388-4f48-a99b-8e423e6f471c]
 allow-bold=true
+audible-bell=false
 background-color='#262626262626'
 bold-color='#BCBCBCBCBCBC'
 bold-color-same-as-fg=true
@@ -988,6 +1178,7 @@ cursor-colors-set=true
 cursor-foreground-color='#262626262626'
 foreground-color='#BCBCBCBCBCBC'
 palette=['#1C1C1C1C1C1C', '#AFAF5F5F5F5F', '#5F5F87875F5F', '#878787875F5F', '#5F5F8787AFAF', '#5F5F5F5F8787', '#5F5F87878787', '#6C6C6C6C6C6C', '#444444444444', '#FFFF87870000', '#8787AFAF8787', '#FFFFFFFFAFAF', '#8F8FAFAFD7D7', '#87878787AFAF', '#5F5FAFAFAFAF', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -995,6 +1186,7 @@ visible-name='Apprentice'
 
 [org/gnome/terminal/legacy/profiles:/:ac08c9a1-acca-4a7e-8afb-7f02753db159]
 allow-bold=true
+audible-bell=false
 background-color='#EFEFEFEFEFEF'
 bold-color='#444444444444'
 bold-color-same-as-fg=true
@@ -1003,6 +1195,7 @@ cursor-colors-set=true
 cursor-foreground-color='#EFEFEFEFEFEF'
 foreground-color='#444444444444'
 palette=['#777777777777', '#FFFF00005555', '#737391910000', '#50503D3D1515', '#535380809191', '#5B5B34345E5E', '#535380809191', '#999999999999', '#999999999999', '#D6D65E5E7676', '#9C9CC7C70000', '#949475755555', '#9D9DB3B3CDCD', '#A1A18484A4A4', '#8585B2B2AAAA', '#BABABABABABA']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1023,6 +1216,7 @@ visible-name='Default'
 
 [org/gnome/terminal/legacy/profiles:/:b6d38f6c-ca89-4299-9bdf-c12eb36775bb]
 allow-bold=true
+audible-bell=false
 background-color='#2A2A2A2A2E2E'
 bold-color='#D7D7D7D7DBDB'
 bold-color-same-as-fg=true
@@ -1031,6 +1225,7 @@ cursor-colors-set=true
 cursor-foreground-color='#2A2A2A2A2E2E'
 foreground-color='#D7D7D7D7DBDB'
 palette=['#2A2A2A2A2E2E', '#B9B98E8EFFFF', '#FFFF7D7DE9E9', '#72729F9FCFCF', '#6666A0A05B5B', '#757550507B7B', '#ACACACACAEAE', '#FFFFFFFFFFFF', '#A4A400000000', '#BFBF40404040', '#6666A0A05B5B', '#FFFFB8B86C6C', '#72729F9FCFCF', '#8F8F59590202', '#C4C4A0A00000', '#5C5C35356666']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1038,6 +1233,7 @@ visible-name='Foxnightly'
 
 [org/gnome/terminal/legacy/profiles:/:bf7ddbf5-382b-4198-8d57-4c5fc87319d5]
 allow-bold=true
+audible-bell=false
 background-color='#E8E8E8E8E8E8'
 bold-color='#29292F2F3434'
 bold-color-same-as-fg=true
@@ -1046,6 +1242,7 @@ cursor-colors-set=true
 cursor-foreground-color='#E8E8E8E8E8E8'
 foreground-color='#29292F2F3434'
 palette=['#E8E8E8E8E8E8', '#EDED15151515', '#C0C039392B2B', '#F6F674740000', '#1D1D9999F3F3', '#9B9B5959B6B6', '#1A1ABCBC9C9C', '#FCFCFCFCFCFC', '#7F7F8C8C8D8D', '#C0C039392B2B', '#5555A6A64949', '#FDFDBCBC4B4B', '#3D3DAEAEE9E9', '#8E8E4444ADAD', '#1616A0A08585', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1053,6 +1250,7 @@ visible-name='Breath Light'
 
 [org/gnome/terminal/legacy/profiles:/:bf9d92e2-9d18-430b-a446-8ea5cb4fe03e]
 allow-bold=true
+audible-bell=false
 background-color='#323232323232'
 bold-color='#FFFFFFFFFFFF'
 bold-color-same-as-fg=true
@@ -1061,6 +1259,7 @@ cursor-colors-set=true
 cursor-foreground-color='#323232323232'
 foreground-color='#FFFFFFFFFFFF'
 palette=['#353535353535', '#D2D252525252', '#A5A5C2C26161', '#FFFFC6C66D6D', '#6C6C9999BBBB', '#D1D19797D9D9', '#BEBED6D6FFFF', '#EEEEEEEEECEC', '#535353535353', '#F0F00C0C0C0C', '#C2C2E0E07575', '#E1E1E4E48B8B', '#8A8AB7B7D9D9', '#EFEFB5B5F7F7', '#DCDCF4F4FFFF', '#FFFFFFFFFFFF']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1068,6 +1267,7 @@ visible-name='Espresso'
 
 [org/gnome/terminal/legacy/profiles:/:c89548e4-c8bb-4912-873c-854cd11ed756]
 allow-bold=true
+audible-bell=false
 background-color='#1F1F1D1D4545'
 bold-color='#F8F8DCDCC0C0'
 bold-color-same-as-fg=true
@@ -1076,6 +1276,7 @@ cursor-colors-set=true
 cursor-foreground-color='#1F1F1D1D4545'
 foreground-color='#F8F8DCDCC0C0'
 palette=['#050504040404', '#BDBD00001313', '#4A4AB1B11818', '#E7E774741E1E', '#0F0F4A4AC6C6', '#666659599393', '#7070A5A59898', '#F8F8DCDCC0C0', '#4E4E7C7CBFBF', '#FCFC5F5F5A5A', '#9E9EFFFF6E6E', '#EFEFC1C11A1A', '#19199797C6C6', '#9B9B59595353', '#C8C8FAFAF4F4', '#F6F6F5F5FBFB']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1083,6 +1284,7 @@ visible-name='Adventure Time'
 
 [org/gnome/terminal/legacy/profiles:/:cdbe4279-2825-450b-91a4-ff0d78c187c5]
 allow-bold=true
+audible-bell=false
 background-color='#FFFFFBFBEFEF'
 bold-color='#5C5C6A6A7272'
 bold-color-same-as-fg=true
@@ -1091,6 +1293,7 @@ cursor-colors-set=true
 cursor-foreground-color='#FFFFFBFBEFEF'
 foreground-color='#5C5C6A6A7272'
 palette=['#5C5C6A6A7272', '#F8F855555252', '#8D8DA1A10101', '#DFDFA0A00000', '#3A3A9494C5C5', '#DFDF6969BABA', '#3535A7A77C7C', '#DFDFDDDDC8C8', '#2E2E38383C3C', '#E6E67E7E8080', '#A7A7C0C08080', '#DBDBBCBC7F7F', '#7F7FBBBBB3B3', '#D6D69999B6B6', '#8383C0C09292', '#D3D3C6C6AAAA']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1098,6 +1301,7 @@ visible-name='Everforest Light Hard'
 
 [org/gnome/terminal/legacy/profiles:/:e023ef30-fcd0-4784-bf60-51c94d52f7d1]
 allow-bold=true
+audible-bell=false
 background-color='#FAFAF4F4EDED'
 bold-color='#575752527979'
 bold-color-same-as-fg=true
@@ -1106,6 +1310,7 @@ cursor-colors-set=true
 cursor-foreground-color='#FAFAF4F4EDED'
 foreground-color='#575752527979'
 palette=['#F2F2E9E9E1E1', '#B4B463637A7A', '#565694949F9F', '#EAEA9D9D3434', '#282869698383', '#90907A7AA9A9', '#D7D782827E7E', '#575752527979', '#98989393A5A5', '#B4B463637A7A', '#565694949F9F', '#EAEA9D9D3434', '#282869698383', '#90907A7AA9A9', '#D7D782827E7E', '#575752527979']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1113,6 +1318,7 @@ visible-name='Rosé Pine Dawn'
 
 [org/gnome/terminal/legacy/profiles:/:e2944c86-b7cf-409d-8338-81f93b6d336c]
 allow-bold=true
+audible-bell=false
 background-color='#5A5A54547575'
 bold-color='#C2C2FFFFDFDF'
 bold-color-same-as-fg=true
@@ -1121,6 +1327,7 @@ cursor-colors-set=true
 cursor-foreground-color='#5A5A54547575'
 foreground-color='#C2C2FFFFDFDF'
 palette=['#424239395D5D', '#A8A875757B7B', '#FFFF85857F7F', '#E6E6C0C00000', '#AEAE8181FFFF', '#717167679999', '#C2C2FFFFDFDF', '#F8F8F8F8F2F2', '#757550507B7B', '#FFFFB8B8D1D1', '#F1F156568E8E', '#D5D5A4A42525', '#C5C5A3A3FFFF', '#80807777A8A8', '#C2C2FFFFFFFF', '#F8F8F8F8F0F0']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1128,6 +1335,7 @@ visible-name='Fairy Floss'
 
 [org/gnome/terminal/legacy/profiles:/:e4010ae4-18c5-4ca0-8ccc-c9effa98fd5b]
 allow-bold=true
+audible-bell=false
 background-color='#1E1E1E1E1E1E'
 bold-color='#F7F7F6F6ECEC'
 bold-color-same-as-fg=true
@@ -1136,6 +1344,7 @@ cursor-colors-set=true
 cursor-foreground-color='#1E1E1E1E1E1E'
 foreground-color='#F7F7F6F6ECEC'
 palette=['#343439393535', '#CFCF3F3F6161', '#7B7BB7B75B5B', '#E9E9B3B32A2A', '#4C4C9A9AD4D4', '#A5A57F7FC4C4', '#38389A9AADAD', '#FAFAFAFAF6F6', '#59595B5B5959', '#D1D18F8FA6A6', '#76767F7F2C2C', '#787859592F2F', '#131359597979', '#606042429191', '#7676BBBBCACA', '#B2B2B5B5AEAE']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1143,6 +1352,7 @@ visible-name='Japanesque'
 
 [org/gnome/terminal/legacy/profiles:/:e7f56185-a2ce-4e5e-afdf-20d6f998117b]
 allow-bold=true
+audible-bell=false
 background-color='#1F1F1F1F2828'
 bold-color='#DCDCD7D7BABA'
 bold-color-same-as-fg=true
@@ -1151,6 +1361,7 @@ cursor-colors-set=true
 cursor-foreground-color='#1F1F1F1F2828'
 foreground-color='#DCDCD7D7BABA'
 palette=['#090906061818', '#C3C340404343', '#767694946A6A', '#C0C0A3A36E6E', '#7E7E9C9CD8D8', '#95957F7FB8B8', '#6A6A95958989', '#DCDCD7D7BABA', '#727271716969', '#E8E824242424', '#9898BBBB6C6C', '#E6E6C3C38484', '#7F7FB4B4CACA', '#93938A8AA9A9', '#7A7AA8A89F9F', '#C8C8C0C09393']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1158,6 +1369,7 @@ visible-name='Kanagawa'
 
 [org/gnome/terminal/legacy/profiles:/:ed1fb482-a402-45ac-90d1-28d0060453db]
 allow-bold=true
+audible-bell=false
 background-color='#292925252020'
 bold-color='#E5E5C7C7A9A9'
 bold-color-same-as-fg=true
@@ -1166,6 +1378,7 @@ cursor-colors-set=true
 cursor-foreground-color='#292925252020'
 foreground-color='#E5E5C7C7A9A9'
 palette=['#121214141818', '#C9C942423434', '#8585C5C54C4C', '#F5F5AEAE2E2E', '#13139898B9B9', '#D0D063633D3D', '#505095955252', '#E5E5C6C6AAAA', '#67675F5F5454', '#FFFF64645A5A', '#9898E0E03636', '#E0E0D5D56161', '#5F5FDADAFFFF', '#FFFF92926969', '#8484F0F08888', '#F6F6F7F7ECEC']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1173,6 +1386,7 @@ visible-name='Earthsong'
 
 [org/gnome/terminal/legacy/profiles:/:f754162f-cea8-4012-b794-c16da90b2798]
 allow-bold=true
+audible-bell=false
 background-color='#EFEFF1F1F5F5'
 bold-color='#4C4C4F4F6969'
 bold-color-same-as-fg=true
@@ -1181,6 +1395,7 @@ cursor-colors-set=true
 cursor-foreground-color='#EFEFF1F1F5F5'
 foreground-color='#4C4C4F4F6969'
 palette=['#5C5C5F5F7777', '#D2D20F0F3939', '#4040A0A02B2B', '#DFDF8E8E1D1D', '#1E1E6666F5F5', '#EAEA7676CBCB', '#171792929999', '#ACACB0B0BEBE', '#6C6C6F6F8585', '#D2D20F0F3939', '#4040A0A02B2B', '#DFDF8E8E1D1D', '#1E1E6666F5F5', '#EAEA7676CBCB', '#171792929999', '#BCBCC0C0CCCC']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1188,6 +1403,7 @@ visible-name='Catppuccin Latte'
 
 [org/gnome/terminal/legacy/profiles:/:ff02e333-93bb-4261-8df1-af176216c512]
 allow-bold=true
+audible-bell=false
 background-color='#dadadadadada'
 bold-color='#4e4e4e4e4e4e'
 bold-color-same-as-fg=true
@@ -1196,6 +1412,7 @@ cursor-colors-set=true
 cursor-foreground-color='#dadadadadada'
 foreground-color='#4e4e4e4e4e4e'
 palette=['#4e4e4e4e4e4e', '#afaf5f5f5f5f', '#5f5f88885f5f', '#afaf87876060', '#5f5f8787aeae', '#87875f5f8787', '#5f5f87878787', '#e4e4e4e4e4e4', '#3a3a3a3a3a3a', '#878701010000', '#00005f5f0000', '#d8d886865f5f', '#00008787afaf', '#878702025f5f', '#000087878787', '#eeeeeeeeeeee']
+scrollbar-policy='never'
 use-theme-background=false
 use-theme-colors=false
 use-theme-transparency=false
@@ -1210,11 +1427,19 @@ show-extensions-notice=false
 
 [org/gtk/gtk4/settings/color-chooser]
 custom-colors=[(0.27058824896812439, 0.40392157435417175, 0.5372549295425415, 1.0)]
-selected-color=(true, 1.0, 1.0, 1.0, 1.0)
+selected-color=(true, 0.14117647707462311, 0.12156862765550613, 0.19215686619281769, 1.0)
 
 [org/gtk/gtk4/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
 show-hidden=false
+sidebar-width=140
+sort-column='name'
 sort-directories-first=false
+sort-order='ascending'
+type-format='category'
+view-type='list'
+window-size=(1031, 372)
 
 [org/gtk/settings/file-chooser]
 date-format='regular'
