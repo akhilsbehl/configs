@@ -329,8 +329,8 @@ RG_IGNORE_PATHS="-g '!.git/*' -g '!.virtualenv/*' -g '!__pycache__'"
 if [[ $(get_first_available rg grep) == "rg" ]]; then
   FZF_IGNORE_PATHS=$RG_IGNORE_PATHS
   export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow '
-elif [[ $(get_first_available rg ag grep) == "grep" ]]; then
-  FZF_IGNORE_PATHS=$RG_IGNORE_PATHS
+elif [[ $(get_first_available rg grep) == "grep" ]]; then
+  FZF_IGNORE_PATHS=$GREP_IGNORE_PATHS
   export FZF_DEFAULT_COMMAND='find . -type f | grep -v '
 fi
 
@@ -373,10 +373,10 @@ function fzbin {
 function vif { fzbin "nvim -O" "$1" }
 
 # This is possibly running on:
+# Some flavor of Linux: Use xdg-open
 # Some flavor of WSL: Use wslopen
 # Some flavor of Cygwin: Use start
-# Some flavor of Linux: Use xdg-open
-function open { fzbin $(get_first_available wslopen start xdg-open) "$@" }
+function open { fzbin $(get_first_available start xdg-open wslopen) "$@" }
 
 function fzp {
   local mode prefix search_cmd search_args install_cmd install_args
@@ -417,7 +417,7 @@ function uninstall { fzp "uninstall" "$@" }
 function gloc {
   local file handler
   file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
-  handler=$(get_first_available wslopen start xdg-open)
+  handler=$(get_first_available xdg-open start wslopen)
   [[ -n "$file" ]] && echo "$handler" "$file"
   [[ -n "$file" ]] && "$handler" "$file"
 }
