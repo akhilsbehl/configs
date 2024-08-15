@@ -1,8 +1,45 @@
 #!/usr/bin/env bash
 
-# Try to get everything and then throw a hail mary
-# gsettings list-recursively > ~/configs/gsettings.bkup
-# This is not as easy as set-recursively - needs more work
-dconf load -f / < ~/configs/dconf.bkup
+# WARNING: This is an untested script because I'm not going to risk damaging an
+# install just to test a restore script. The restoration logic should be
+# evaluated carefully, and it's recommended to test this script in a VM or a
+# safe environment first. Please make sure that the backup files are valid and
+# that you fully understand the implications of running this script. If you're
+# absolutely sure about proceeding, type YESIAMSUREABOUTTHIS when prompted.
+
+# User confirmation prompt
+echo "This script will restore system-wide and application-specific settings, "
+echo "which could potentially disrupt your current environment."
+echo "Make sure you have verified the backup files and understand the "
+echo "consequences of running this script."
+read -p "Type 'YESIAMSUREABOUTTHIS' to proceed: " confirmation
+
+if [ "$confirmation" != "YESIAMSUREABOUTTHIS" ]; then
+    echo "Operation canceled. No changes were made."
+    exit 1
+fi
+
+# Restore dconf settings
+if [ -f ~/configs/dconf.bkup ]; then
+    dconf load / < ~/configs/dconf.bkup
+    echo "dconf settings restored successfully."
+else
+    echo "dconf backup file not found!"
+fi
+
+# Restore gsettings settings (No direct command for bulk restore, but using a
+# while loop to restore each setting)
+if [ -f ~/configs/gsettings.bkup ]; then
+    while IFS= read -r line; do
+        # Splitting the line into schema, key, and value
+        schema=$(echo $line | cut -d ' ' -f1)
+        key=$(echo $line | cut -d ' ' -f2)
+        value=$(echo $line | cut -d ' ' -f3-)
+        gsettings set "$schema" "$key" "$value"
+    done < ~/configs/gsettings.bkup
+    echo "gsettings restored successfully."
+else
+    echo "gsettings backup file not found!"
+fi
 
 exit 0

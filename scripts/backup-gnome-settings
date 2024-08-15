@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# Try to get everything and then throw a hail mary
-gsettings list-recursively > ~/configs/gsettings.bkup
-dconf dump / > ~/configs/dconf.bkup
+# Backup gsettings (for applications and GNOME desktop environment)
+# Backup dconf (for system-wide settings including GNOME Terminal)
+
+gsettings list-recursively > ~/configs/gsettings.bkup &&
+    dconf dump / > ~/configs/dconf.bkup &&
+    echo "Backup completed successfully."
 
 exit 0
