@@ -618,7 +618,7 @@ if not VG.vscode then
                 -- AI
                 'github/copilot.vim',
                 config = function()
-                    VG.copilot_enabled = 1
+                    VG.copilot_enabled = 0
                     VG.copilot_no_tab_map = 1
                     VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
                     VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
@@ -741,7 +741,7 @@ if not VG.vscode then
                     require('lualine').setup({
                         options = {
                             -- theme = custom_theme,
-                            theme = 'iceberg_light'
+                            theme = 'auto'
                         },
                         sections = {
                             lualine_b = {},

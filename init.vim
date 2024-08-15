@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme tokyonight-day
+colorscheme kanagawa-wave
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -422,14 +422,14 @@ augroup MarkdownSetup
 augroup END
 
 "-------------------------
-" Catppuccin related configs.
+" Some themes need to be reapplied. Unclear why
 "-------------------------
 
-" augroup Catppuccin
-    " autocmd!
-    " autocmd VimEnter,SourcePost $MYVIMRC colorscheme catppuccin-latte
-    " autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
-" augroup END
+augroup Catppuccin
+    autocmd!
+    autocmd VimEnter,SourcePost $MYVIMRC colorscheme kanagawa-wave
+    autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
+augroup END
 
 "-------------------------
 " Python file config.
