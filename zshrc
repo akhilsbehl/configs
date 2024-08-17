@@ -157,6 +157,10 @@ alias remux='tmux source-file ~/configs/tmux.conf'
 
 alias rez='. ~/.zshrc'
 
+alias sc='sudo systemctl'
+
+alias sj='sudo journalctl'
+
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
 if [[ "$OS" == "Ubuntu" ]]; then
@@ -165,7 +169,7 @@ if [[ "$OS" == "Ubuntu" ]]; then
 elif [[ "$OS" == "Arch Linux" ]]; then
   alias upgrade='paru -Syu --noconfirm'
   alias autorm='sudo pacman -Rns $(pacman -Qqdt)'
-  alias explicit-packages='paru -Qqent'
+  alias explicit-packages='(paru -Qqent; paru -Qqemt) | cat'
 else
   alias upgrade='echo Unknown OS!'
   alias autorm='echo Unknown OS!'
