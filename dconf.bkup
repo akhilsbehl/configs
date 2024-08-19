@@ -1,3 +1,10 @@
+[apps/seahorse/listing]
+keyrings-selected=['secret-service:///org/freedesktop/secrets/collection/login']
+
+[apps/seahorse/windows/key-manager]
+height=476
+width=600
+
 [com/ftpix/transparentbar]
 dark-full-screen=false
 
@@ -9,7 +16,7 @@ no-donation-dialog=true
 always-show-accessibility-menu=false
 
 [io/github/realmazharhussain/GdmSettings/appearance]
-background-image='/home/alchemist/images/multicolored-gradient-tie-dye-fabric-texture.jpg'
+background-image='/home/alchemist/images/Untitled_Artwork(2).jpg'
 background-type='image'
 cursor-theme='Bibata-Modern-Classic'
 icon-theme='Tela-circle'
@@ -66,8 +73,8 @@ theme='__custom'
 
 [io/github/realmazharhussain/GdmSettings/top-bar]
 background-color='rgb(36,31,49)'
-change-background-color=true
-change-text-color=true
+change-background-color=false
+change-text-color=false
 show-battery-percentage=true
 show-seconds=true
 show-weekday=true
@@ -82,7 +89,7 @@ tap-to-click=true
 two-finger-scrolling=true
 
 [io/github/realmazharhussain/GdmSettings/window-state]
-last-visited-page='top_bar'
+last-visited-page='appearance'
 
 [io/missioncenter/MissionCenter]
 performance-selected-page='0000:01:00.0'
@@ -125,6 +132,9 @@ window-height=600
 window-is-maximized=false
 window-width=800
 
+[org/gnome/Loupe]
+show-properties=false
+
 [org/gnome/Music]
 window-maximized=true
 
@@ -152,6 +162,10 @@ locations=[<(uint32 2, <('London', 'EGWU', false, [(0.89971722940307675, -0.0072
 window-height=496
 window-maximized=false
 window-width=992
+
+[org/gnome/baobab/ui]
+is-maximized=false
+window-size=(960, 600)
 
 [org/gnome/boxes]
 first-run=false
@@ -320,7 +334,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='applications'
+last-panel='power'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/a11y]
@@ -375,7 +389,7 @@ icon-theme='Tela-circle'
 monospace-font-name='Fira Code Bold 10'
 show-battery-percentage=true
 text-scaling-factor=1.0
-toolkit-accessibility=false
+toolkit-accessibility=true
 
 [org/gnome/desktop/media-handling]
 autorun-never=false
@@ -384,7 +398,7 @@ autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf']
 autorun-x-content-start-app=['x-content/ostree-repository', 'x-content/audio-cdda', 'x-content/video-dvd']
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus']
+application-children=['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus', 'steam', 'org-gnome-software', 'org-qbittorrent-qbittorrent']
 
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
@@ -407,11 +421,20 @@ application-id='org.gnome.Nautilus.desktop'
 [org/gnome/desktop/notifications/application/org-gnome-settings]
 application-id='org.gnome.Settings.desktop'
 
+[org/gnome/desktop/notifications/application/org-gnome-software]
+application-id='org.gnome.Software.desktop'
+
 [org/gnome/desktop/notifications/application/org-gnome-terminal-preferences]
 application-id='org.gnome.Terminal.Preferences.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-terminal]
 application-id='org.gnome.Terminal.desktop'
+
+[org/gnome/desktop/notifications/application/org-qbittorrent-qbittorrent]
+application-id='org.qbittorrent.qBittorrent.desktop'
+
+[org/gnome/desktop/notifications/application/steam]
+application-id='steam.desktop'
 
 [org/gnome/desktop/peripherals/mouse]
 natural-scroll=true
@@ -528,7 +551,7 @@ size=(650, 500)
 state=87168
 
 [org/gnome/gnome-system-monitor]
-current-tab='disks'
+current-tab='processes'
 show-dependencies=false
 show-whose-processes='user'
 
@@ -558,9 +581,12 @@ initial-size=(890, 550)
 [org/gnome/photos]
 window-maximized=true
 
+[org/gnome/portal/filechooser/steam]
+last-folder-path='/home/alchemist/images'
+
 [org/gnome/power-manager]
 info-history-type='charge'
-info-last-device='/org/freedesktop/UPower/devices/battery_BAT1'
+info-last-device='/org/freedesktop/UPower/devices/line_power_ACAD'
 info-page-number=0
 info-stats-type='discharge-accuracy'
 
@@ -586,7 +612,7 @@ volume-mute=['AudioMute']
 volume-up=['AudioRaiseVolume']
 
 [org/gnome/settings-daemon/plugins/power]
-sleep-inactive-ac-type='suspend'
+sleep-inactive-ac-type='nothing'
 
 [org/gnome/settings-daemon/plugins/sharing/gnome-user-share-webdav]
 enabled-connections=['f43ae6ca-acbe-4ec1-86ab-ab060776225c']
@@ -596,8 +622,8 @@ enabled-connections=['f43ae6ca-acbe-4ec1-86ab-ab060776225c']
 
 [org/gnome/shell]
 command-history=['lg']
-disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com']
-enabled-extensions=['drive-menu@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'light-style@gnome-shell-extensions.gcampax.github.com', 'transparent-top-bar@ftpix.com', 'run-or-raise@edvard.cz']
+disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com']
+enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'transparent-top-bar@ftpix.com', 'run-or-raise@edvard.cz', 'light-style@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info']
 favorite-apps=@as []
 last-selected-power-profile='performance'
 looking-glass-history=['windows']
@@ -607,8 +633,18 @@ welcome-dialog-last-shown-version='46.4'
 current-workspace-only=true
 
 [org/gnome/shell/extensions/caffeine]
-indicator-position-max=2
-toggle-state=true
+enable-fullscreen=false
+indicator-position-max=3
+restore-state=true
+screen-blank='always'
+toggle-state=false
+user-enabled=false
+
+[org/gnome/shell/extensions/clipboard-indicator]
+display-mode=3
+enable-keybindings=true
+move-item-first=true
+toggle-menu=['<Shift><Super>c']
 
 [org/gnome/shell/extensions/control-blur-effect-on-lockscreen]
 brightness=1.0
@@ -667,10 +703,13 @@ locations=[<(uint32 2, <('London', 'EGWU', false, [(0.89971722940307675, -0.0072
 [org/gnome/shell/world-clocks]
 locations=[<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>, <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>, <(uint32 2, <('Singapore', 'WSAP', true, [(0.023852838928353343, 1.8136879868485383)], [(0.022568084612667797, 1.8126262332513803)])>)>]
 
+[org/gnome/simple-scan]
+contrast=0
+
 [org/gnome/software]
-check-timestamp=int64 1723699538
+check-timestamp=int64 1724045384
 first-run=false
-flatpak-purge-timestamp=int64 1723692539
+flatpak-purge-timestamp=int64 1724034523
 
 [org/gnome/taquin]
 theme='cats'
@@ -1438,7 +1477,7 @@ sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-view-type='list'
+view-type='grid'
 window-size=(1031, 372)
 
 [org/gtk/settings/file-chooser]
@@ -1447,12 +1486,12 @@ location-mode='path-bar'
 show-hidden=false
 show-size-column=true
 show-type-column=true
-sidebar-width=157
+sidebar-width=163
 sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-window-position=(26, 23)
+window-position=(345, 47)
 window-size=(1231, 902)
 
 [system/locale]

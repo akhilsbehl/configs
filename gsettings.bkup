@@ -55,7 +55,7 @@ io.github.realmazharhussain.GdmSettings never-applied false
 io.github.realmazharhussain.GdmSettings no-donation-dialog true
 io.github.realmazharhussain.GdmSettings.accessibility always-show-accessibility-menu false
 io.github.realmazharhussain.GdmSettings.appearance background-color 'rgb(40,40,40)'
-io.github.realmazharhussain.GdmSettings.appearance background-image '/home/alchemist/images/multicolored-gradient-tie-dye-fabric-texture.jpg'
+io.github.realmazharhussain.GdmSettings.appearance background-image '/home/alchemist/images/Untitled_Artwork(2).jpg'
 io.github.realmazharhussain.GdmSettings.appearance background-type 'image'
 io.github.realmazharhussain.GdmSettings.appearance bg-adjustment 'zoom'
 io.github.realmazharhussain.GdmSettings.appearance cursor-theme 'Bibata-Modern-Classic'
@@ -98,8 +98,8 @@ io.github.realmazharhussain.GdmSettings.sound over-amplification false
 io.github.realmazharhussain.GdmSettings.sound theme '__custom'
 io.github.realmazharhussain.GdmSettings.tools top-bar-tweaks true
 io.github.realmazharhussain.GdmSettings.top-bar background-color 'rgb(36,31,49)'
-io.github.realmazharhussain.GdmSettings.top-bar change-background-color true
-io.github.realmazharhussain.GdmSettings.top-bar change-text-color true
+io.github.realmazharhussain.GdmSettings.top-bar change-background-color false
+io.github.realmazharhussain.GdmSettings.top-bar change-text-color false
 io.github.realmazharhussain.GdmSettings.top-bar disable-arrows false
 io.github.realmazharhussain.GdmSettings.top-bar disable-rounded-corners false
 io.github.realmazharhussain.GdmSettings.top-bar show-battery-percentage true
@@ -113,7 +113,7 @@ io.github.realmazharhussain.GdmSettings.touchpad speed 0.0
 io.github.realmazharhussain.GdmSettings.touchpad tap-to-click true
 io.github.realmazharhussain.GdmSettings.touchpad two-finger-scrolling true
 io.github.realmazharhussain.GdmSettings.window-state height uint32 530
-io.github.realmazharhussain.GdmSettings.window-state last-visited-page 'top_bar'
+io.github.realmazharhussain.GdmSettings.window-state last-visited-page 'appearance'
 io.github.realmazharhussain.GdmSettings.window-state width uint32 950
 io.missioncenter.MissionCenter app-update-interval 20
 io.missioncenter.MissionCenter app-update-interval-u64 uint64 20
@@ -424,7 +424,7 @@ org.gnome.SessionManager auto-save-session false
 org.gnome.SessionManager auto-save-session-one-shot false
 org.gnome.SessionManager logout-prompt true
 org.gnome.SessionManager show-fallback-warning true
-org.gnome.Settings last-panel 'applications'
+org.gnome.Settings last-panel 'power'
 org.gnome.Settings show-development-warning true
 org.gnome.Settings window-state (980, 640, false)
 org.gnome.SimpleScan brightness 0
@@ -717,7 +717,7 @@ org.gnome.desktop.interface text-scaling-factor 1.0
 org.gnome.desktop.interface toolbar-detachable false
 org.gnome.desktop.interface toolbar-icons-size 'large'
 org.gnome.desktop.interface toolbar-style 'both-horiz'
-org.gnome.desktop.interface toolkit-accessibility false
+org.gnome.desktop.interface toolkit-accessibility true
 org.gnome.desktop.lockdown disable-application-handlers false
 org.gnome.desktop.lockdown disable-command-line false
 org.gnome.desktop.lockdown disable-lock-screen false
@@ -735,7 +735,7 @@ org.gnome.desktop.media-handling autorun-never false
 org.gnome.desktop.media-handling autorun-x-content-ignore @as []
 org.gnome.desktop.media-handling autorun-x-content-open-folder ['x-content/audio-player', 'x-content/image-dcf']
 org.gnome.desktop.media-handling autorun-x-content-start-app ['x-content/ostree-repository', 'x-content/audio-cdda', 'x-content/video-dvd']
-org.gnome.desktop.notifications application-children ['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus']
+org.gnome.desktop.notifications application-children ['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus', 'steam', 'org-gnome-software', 'org-qbittorrent-qbittorrent']
 org.gnome.desktop.notifications show-banners true
 org.gnome.desktop.notifications show-in-lock-screen true
 org.gnome.desktop.peripherals.tablet area [0.0, 0.0, 0.0, 0.0]
@@ -1538,7 +1538,7 @@ org.gnome.gedit.state.window state 0
 org.gnome.gnome-system-monitor cpu-colors [(uint32 0, '#e01b24'), (1, '#ff7800'), (2, '#f6d32d'), (3, '#33d17a'), (4, '#26a269'), (5, '#62a0ea'), (6, '#1c71d8'), (7, '#613583'), (8, '#9141ac'), (9, '#c061cb'), (10, '#ffbe6f'), (11, '#f9f06b'), (12, '#8ff0a4'), (13, '#2ec27e'), (14, '#1a5fb4'), (15, '#c061cb')]
 org.gnome.gnome-system-monitor cpu-smooth-graph true
 org.gnome.gnome-system-monitor cpu-stacked-area-chart false
-org.gnome.gnome-system-monitor current-tab 'disks'
+org.gnome.gnome-system-monitor current-tab 'processes'
 org.gnome.gnome-system-monitor disk-read-color '#3584e4'
 org.gnome.gnome-system-monitor disk-write-color '#e66100'
 org.gnome.gnome-system-monitor disks-interval 5000
@@ -1733,13 +1733,21 @@ org.gnome.nautilus.preferences show-image-thumbnails 'local-only'
 org.gnome.nautilus.preferences thumbnail-limit uint64 50
 org.gnome.nautilus.window-state initial-size (890, 550)
 org.gnome.nautilus.window-state maximized false
+org.gnome.nm-applet disable-connected-notifications false
+org.gnome.nm-applet disable-disconnected-notifications false
+org.gnome.nm-applet disable-vpn-notifications false
+org.gnome.nm-applet disable-wifi-create false
+org.gnome.nm-applet show-applet true
+org.gnome.nm-applet stamp 0
+org.gnome.nm-applet suppress-broadband-unlock-prompt false
+org.gnome.nm-applet suppress-wireless-networks-available false
 org.gnome.online-accounts whitelisted-providers ['all']
 org.gnome.portal.filechooser last-folder-path ''
 org.gnome.power-manager info-history-graph-points true
 org.gnome.power-manager info-history-graph-smooth true
 org.gnome.power-manager info-history-time 21600
 org.gnome.power-manager info-history-type 'charge'
-org.gnome.power-manager info-last-device '/org/freedesktop/UPower/devices/battery_BAT1'
+org.gnome.power-manager info-last-device '/org/freedesktop/UPower/devices/line_power_ACAD'
 org.gnome.power-manager info-page-number 0
 org.gnome.power-manager info-stats-graph-points true
 org.gnome.power-manager info-stats-graph-smooth true
@@ -1750,7 +1758,7 @@ org.gnome.seahorse server-auto-publish false
 org.gnome.seahorse server-auto-retrieve false
 org.gnome.seahorse server-publish-to ''
 org.gnome.seahorse.manager item-filter 'personal'
-org.gnome.seahorse.manager keyrings-selected ['secret-service://login']
+org.gnome.seahorse.manager keyrings-selected ['secret-service:///org/freedesktop/secrets/collection/login']
 org.gnome.seahorse.manager show-expiry false
 org.gnome.seahorse.manager show-trust false
 org.gnome.seahorse.manager show-type false
@@ -1884,7 +1892,7 @@ org.gnome.settings-daemon.plugins.power idle-dim true
 org.gnome.settings-daemon.plugins.power power-button-action 'suspend'
 org.gnome.settings-daemon.plugins.power power-saver-profile-on-low-battery true
 org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 900
-org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'suspend'
+org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
 org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 900
 org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'suspend'
 org.gnome.settings-daemon.plugins.wwan unlock-sim false
@@ -1898,8 +1906,8 @@ org.gnome.shell command-history ['lg']
 org.gnome.shell development-tools true
 org.gnome.shell disable-extension-version-validation false
 org.gnome.shell disable-user-extensions false
-org.gnome.shell disabled-extensions ['window-list@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com']
-org.gnome.shell enabled-extensions ['drive-menu@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'light-style@gnome-shell-extensions.gcampax.github.com', 'transparent-top-bar@ftpix.com', 'run-or-raise@edvard.cz']
+org.gnome.shell disabled-extensions ['window-list@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com']
+org.gnome.shell enabled-extensions ['user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'transparent-top-bar@ftpix.com', 'run-or-raise@edvard.cz', 'light-style@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info']
 org.gnome.shell favorite-apps @as []
 org.gnome.shell last-selected-power-profile 'performance'
 org.gnome.shell looking-glass-history ['windows']
@@ -1956,7 +1964,7 @@ org.gnome.shell.window-switcher app-icon-mode 'both'
 org.gnome.shell.window-switcher current-workspace-only true
 org.gnome.shell.world-clocks locations [<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>, <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>, <(uint32 2, <('Singapore', 'WSAP', true, [(0.023852838928353343, 1.8136879868485383)], [(0.022568084612667797, 1.8126262332513803)])>)>]
 org.gnome.software allow-updates true
-org.gnome.software check-timestamp int64 1723699538
+org.gnome.software check-timestamp int64 1724045384
 org.gnome.software compatible-projects ['GNOME', 'KDE', 'XFCE']
 org.gnome.software download-updates true
 org.gnome.software download-updates-notify true
@@ -1965,7 +1973,7 @@ org.gnome.software external-appstream-system-wide false
 org.gnome.software external-appstream-urls @as []
 org.gnome.software filter-default-branch true
 org.gnome.software first-run false
-org.gnome.software flatpak-purge-timestamp int64 1723692539
+org.gnome.software flatpak-purge-timestamp int64 1724034523
 org.gnome.software free-repos @as []
 org.gnome.software free-repos-url ''
 org.gnome.software install-bundles-system-wide true
@@ -2020,26 +2028,6 @@ org.gnome.todo first-run true
 org.gnome.todo sidebar-revealed true
 org.gnome.todo window-maximized true
 org.gnome.todo window-size (800, 600)
-org.gnome.totem active-plugins ['recent', 'skipto', 'screenshot', 'rotation', 'screensaver', 'mpris', 'save-file', 'apple-trailers', 'open-directory', 'variable-rate', 'autoload-subtitles', 'vimeo', 'movie-properties']
-org.gnome.totem audio-output-type 'stereo'
-org.gnome.totem autoload-subtitles true
-org.gnome.totem brightness 32767
-org.gnome.totem contrast 32767
-org.gnome.totem disable-deinterlacing false
-org.gnome.totem disable-keyboard-shortcuts false
-org.gnome.totem disable-user-plugins false
-org.gnome.totem filesystem-paths @as []
-org.gnome.totem force-software-decoders false
-org.gnome.totem hue 32767
-org.gnome.totem network-buffer-threshold 2.0
-org.gnome.totem open-uri ''
-org.gnome.totem repeat false
-org.gnome.totem saturation 32767
-org.gnome.totem screenshot-save-uri ''
-org.gnome.totem subtitle-encoding 'UTF-8'
-org.gnome.totem subtitle-font 'Sans Bold 20'
-org.gnome.totem.plugins.opensubtitles language ''
-org.gnome.totem.plugins.pythonconsole rpdb2-password ''
 org.gnome.tweaks show-extensions-notice false
 org.gnome.yelp font-adjustment 0
 org.gnome.yelp show-cursor false
@@ -2056,13 +2044,13 @@ org.gtk.Settings.FileChooser location-mode 'path-bar'
 org.gtk.Settings.FileChooser show-hidden false
 org.gtk.Settings.FileChooser show-size-column true
 org.gtk.Settings.FileChooser show-type-column true
-org.gtk.Settings.FileChooser sidebar-width 157
+org.gtk.Settings.FileChooser sidebar-width 163
 org.gtk.Settings.FileChooser sort-column 'name'
 org.gtk.Settings.FileChooser sort-directories-first false
 org.gtk.Settings.FileChooser sort-order 'ascending'
 org.gtk.Settings.FileChooser startup-mode 'recent'
 org.gtk.Settings.FileChooser type-format 'category'
-org.gtk.Settings.FileChooser window-position (26, 23)
+org.gtk.Settings.FileChooser window-position (345, 47)
 org.gtk.Settings.FileChooser window-size (1231, 902)
 org.gtk.gtk4.Settings.ColorChooser custom-colors [(0.27058824896812439, 0.40392157435417175, 0.5372549295425415, 1.0)]
 org.gtk.gtk4.Settings.ColorChooser selected-color (true, 0.14117647707462311, 0.12156862765550613, 0.19215686619281769, 1.0)
@@ -2082,7 +2070,7 @@ org.gtk.gtk4.Settings.FileChooser sort-directories-first false
 org.gtk.gtk4.Settings.FileChooser sort-order 'ascending'
 org.gtk.gtk4.Settings.FileChooser startup-mode 'recent'
 org.gtk.gtk4.Settings.FileChooser type-format 'category'
-org.gtk.gtk4.Settings.FileChooser view-type 'list'
+org.gtk.gtk4.Settings.FileChooser view-type 'grid'
 org.gtk.gtk4.Settings.FileChooser window-position (-1, -1)
 org.gtk.gtk4.Settings.FileChooser window-size (1031, 372)
 org.x.apps.favorites list @as []
