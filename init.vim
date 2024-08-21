@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme kanagawa-wave
+colorscheme kanagawa-lotus
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -427,7 +427,7 @@ augroup END
 
 augroup Catppuccin
     autocmd!
-    autocmd VimEnter,SourcePost $MYVIMRC colorscheme kanagawa-wave
+    autocmd VimEnter,SourcePost $MYVIMRC colorscheme kanagawa-lotus
     autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
 

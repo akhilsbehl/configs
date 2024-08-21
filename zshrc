@@ -77,6 +77,11 @@ function cdl {
     fi
 }
 
+function cpf() {
+    copier=$(get_first_available wl-copy xclip clip.exe)
+    [[ -n "$copier" ]] && "$copier" < "$1"
+}
+
 alias ls='ls --color=auto'
 
 alias ll='ls -l'

@@ -18,3 +18,10 @@ Host github.com-asb
 	User git
 	IdentityFile ~/.ssh/id_rsa_asb
 	IdentitiesOnly yes
+
+# HLS Patient Jarvis
+Host jarvis
+	HostName 10.7.232.68
+	User ubuntu
+	IdentityFile ~/.ssh/jarvis.pem
+	IdentitiesOnly yes

@@ -618,7 +618,7 @@ if not VG.vscode then
                 -- AI
                 'github/copilot.vim',
                 config = function()
-                    VG.copilot_enabled = 0
+                    VG.copilot_enabled = 1
                     VG.copilot_no_tab_map = 1
                     VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
                     VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
@@ -633,39 +633,39 @@ if not VG.vscode then
                 end,
             },
 
-            {
-                -- Free AI
-                'Exafunction/codeium.vim',
-                event = 'BufEnter',
-                config = function ()
-                    VG.codeium_enabled = 0
-                    VG.codeium_disable_bindings = 1
-                    VG.codeium_no_map_tab = 1
-                    VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
-                    VK('n', '<leader>ce', '<cmd>let codeium_enabled=1<cr>')
-                    VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
-                    VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
-                    VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
-                    VK(
-                        'i',
-                        '<C-j>',
-                        '<cmd>call codeium#CycleCompletions(1)<CR>'
-                    )
-                    VK(
-                        'i',
-                        '<C-k>',
-                        '<cmd>call codeium#CycleCompletions(-1)<cr>'
-                    )
-                    VK(
-                        'i',
-                        '<C-a>',
-                        function ()
-                            return vim.fn['codeium#Accept']()
-                        end,
-                        { expr = true, silent = true }
-                    )
-                end,
-            },
+            -- {
+                -- -- Free AI
+                -- 'Exafunction/codeium.vim',
+                -- event = 'BufEnter',
+                -- config = function ()
+                    -- VG.codeium_enabled = 1
+                    -- VG.codeium_disable_bindings = 1
+                    -- VG.codeium_no_map_tab = 1
+                    -- VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
+                    -- VK('n', '<leader>ce', '<cmd>let codeium_enabled=1<cr>')
+                    -- VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
+                    -- VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
+                    -- VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
+                    -- VK(
+                        -- 'i',
+                        -- '<C-j>',
+                        -- '<cmd>call codeium#CycleCompletions(1)<CR>'
+                    -- )
+                    -- VK(
+                        -- 'i',
+                        -- '<C-k>',
+                        -- '<cmd>call codeium#CycleCompletions(-1)<cr>'
+                    -- )
+                    -- VK(
+                        -- 'i',
+                        -- '<C-a>',
+                        -- function ()
+                            -- return vim.fn['codeium#Accept']()
+                        -- end,
+                        -- { expr = true, silent = true }
+                    -- )
+                -- end,
+            -- },
 
             {
                 -- Snippets engine
