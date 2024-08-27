@@ -457,18 +457,44 @@ function forever {
     done
 }
 
-####################
-#  Pandoc aliases  #
-####################
+######################
+#  Simple converters #
+######################
+
+# Markdown to other formats
 
 function md2x {
     [[ $# -ne 2 ]] && echo "Usage: md2x <input> <output-extension>" && return 1
     [[ ! -r "$1" ]] && echo "Cannot read $1" && return 2
-    if [[ ! exists_command ]]; then
+    if ! exists_command pandoc; then
         echo "pandoc not found."
         return 3
     fi
     pandoc "$1" -o "$(basename $1 $(getext $1)).$2"
+    return $?
+}
+
+# Image conversion using magick
+
+function img2x {
+    [[ $# -ne 2 ]] && echo "Usage: img2x <input> <output-ext>" && return 1
+    [[ ! -r "$1" ]] && echo "Cannot read $1" && return 2
+    if ! exists_command magick; then
+        echo "magick not found."
+        return 3
+    fi
+    magick "$1" "$(basename $1 $(getext $1)).$2"
+    return $?
+}
+
+function vid2mp3 {
+    [[ $# -ne 1 ]] && echo "Usage: vid2mp3 <input>" && return 1
+    [[ ! -r "$1" ]] && echo "Cannot read $1" && return 2
+    if ! exists_command ffmpeg; then
+        echo "ffmpeg not found."
+        return 3
+    fi
+    ffmpeg -i "$1" -ab 192k -ar 44100 -ac 2 "$(basename $1 $(getext $1)).mp3"
     return $?
 }
 

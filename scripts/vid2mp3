@@ -1,8 +1,0 @@
-#!/bin/bash
-
-for d in "$@"; do
-    FILE=$(basename "$d" "$(getext "$d")")
-    ffmpeg -i "$d" -ab 192k -ar 44100 -ac 2 "$FILE".mp3
-done
-
-exit 0
