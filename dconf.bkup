@@ -334,7 +334,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='power'
+last-panel='sound'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/a11y]
@@ -379,7 +379,7 @@ xkb-options=['caps:escape_shifted_capslock']
 
 [org/gnome/desktop/interface]
 color-scheme='default'
-cursor-theme='Bibata-Modern-Classic'
+cursor-theme='oreo_teal_cursors'
 document-font-name='Noto Sans 11'
 enable-hot-corners=false
 font-antialiasing='rgba'
@@ -634,11 +634,9 @@ current-workspace-only=true
 
 [org/gnome/shell/extensions/caffeine]
 enable-fullscreen=false
-indicator-position-max=3
+indicator-position-max=1
 restore-state=true
 screen-blank='always'
-toggle-state=false
-user-enabled=false
 
 [org/gnome/shell/extensions/clipboard-indicator]
 display-mode=3
@@ -707,7 +705,7 @@ locations=[<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.290
 contrast=0
 
 [org/gnome/software]
-check-timestamp=int64 1724045384
+check-timestamp=int64 1724876374
 first-run=false
 flatpak-purge-timestamp=int64 1724034523
 

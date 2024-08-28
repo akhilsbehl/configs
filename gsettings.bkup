@@ -424,7 +424,7 @@ org.gnome.SessionManager auto-save-session false
 org.gnome.SessionManager auto-save-session-one-shot false
 org.gnome.SessionManager logout-prompt true
 org.gnome.SessionManager show-fallback-warning true
-org.gnome.Settings last-panel 'power'
+org.gnome.Settings last-panel 'sound'
 org.gnome.Settings show-development-warning true
 org.gnome.Settings window-state (980, 640, false)
 org.gnome.SimpleScan brightness 0
@@ -686,7 +686,7 @@ org.gnome.desktop.interface cursor-blink true
 org.gnome.desktop.interface cursor-blink-time 1200
 org.gnome.desktop.interface cursor-blink-timeout 10
 org.gnome.desktop.interface cursor-size 24
-org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'
+org.gnome.desktop.interface cursor-theme 'oreo_teal_cursors'
 org.gnome.desktop.interface document-font-name 'Noto Sans 11'
 org.gnome.desktop.interface enable-animations true
 org.gnome.desktop.interface enable-hot-corners false
@@ -1964,7 +1964,7 @@ org.gnome.shell.window-switcher app-icon-mode 'both'
 org.gnome.shell.window-switcher current-workspace-only true
 org.gnome.shell.world-clocks locations [<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>, <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>, <(uint32 2, <('Singapore', 'WSAP', true, [(0.023852838928353343, 1.8136879868485383)], [(0.022568084612667797, 1.8126262332513803)])>)>]
 org.gnome.software allow-updates true
-org.gnome.software check-timestamp int64 1724045384
+org.gnome.software check-timestamp int64 1724876374
 org.gnome.software compatible-projects ['GNOME', 'KDE', 'XFCE']
 org.gnome.software download-updates true
 org.gnome.software download-updates-notify true
