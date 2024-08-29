@@ -461,8 +461,6 @@ function forever {
 #  Simple converters #
 ######################
 
-# Markdown to other formats
-
 function md2x {
     [[ $# -ne 2 ]] && echo "Usage: md2x <input> <output-extension>" && return 1
     [[ ! -r "$1" ]] && echo "Cannot read $1" && return 2
@@ -495,6 +493,24 @@ function vid2mp3 {
         return 3
     fi
     ffmpeg -i "$1" -ab 192k -ar 44100 -ac 2 "$(basename $1 $(getext $1)).mp3"
+    return $?
+}
+
+function compress-pdf {
+    [[ $# -ne 1 ]] && echo "Usage: compress-pdf <input>" && return 1
+    [[ ! -r "$1" ]] && echo "Cannot read $1" && return 2
+    if ! exists_command gs; then
+        echo "gs not found."
+        return 3
+    fi
+    /usr/bin/gs \
+        -sDEVICE=pdfwrite \
+        -dCompatibilityLevel=1.5 \
+        -dPDFSETTINGS=/ebook \
+        -dNOPAUSE \
+        -dQUIET \
+        -dBATCH \
+        -sOutputFile="$(basename $1 $(getext $1))"-compressed.pdf "$1"
     return $?
 }
 
