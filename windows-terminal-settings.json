@@ -165,7 +165,7 @@
             "background": "#1E1E2E",
             "foreground": "#CDD6F4",
             "cursorColor": "#F5E0DC",
-            "selectionBackground": "#585B70",
+            "selectionBackground": "#585B70"
         },
         {
             "name": "3024Day",

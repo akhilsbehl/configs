@@ -519,17 +519,13 @@ function compress-pdf {
 ################################
 
 function list-colorschemes {
-    SCHEMES=(
-        $(grep -B 1 "black" $WIN_TERM_SETTINGS |
-        grep "name" |
-        cut -f 2- -d ':')
-    )
-    echo $SCHEMES | sed -e 's/, /\n/g' -e 's/"//g'
+    jq '.schemes | .[] | .name' $WIN_TERM_SETTINGS | sed -e 's/"//g'
 }
 
 function apply-colorscheme {
-    SED_CMD="0,/"colorScheme"/s/\"colorScheme\": \".*\",/\"colorScheme\": \"$1\"\,/"
-    sed -i -e "$SED_CMD" "$WIN_TERM_SETTINGS"
+    TMPF="$(mktemp)"
+    jq --arg cs "$1" '.profiles.defaults.colorScheme = $cs' $WIN_TERM_SETTINGS >! $TMPF
+    mv $TMPF $WIN_TERM_SETTINGS
 }
 
 function randomize-colorscheme {
