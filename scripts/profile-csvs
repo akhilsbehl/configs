@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# Function to check if a given directory is valid
+check_directory() {
+    if [ ! -d "$1" ]; then
+        echo "Error: Directory '$1' does not exist."
+        exit 1
+    fi
+}
+
+# Function to process CSV files and generate a markdown table
+process_csv_files() {
+    dir=$1
+
+    # Print the markdown table header
+    echo "| File Path | Size (MB) | Rows (Thousands) | Columns |"
+    echo "|-----------|------------|----------------|---------|"
+
+    # Find CSV files and process them
+    find "$dir" -type f -name "*.csv" 2>/dev/null | while read -r file; do
+        # Get file size in bytes and convert to MB
+        size=$(stat --format="%s" "$file" 2>/dev/null)
+        if [ -z "$size" ]; then
+            echo "Error: Unable to get size for '$file'. Skipping."
+            continue
+        fi
+        size_mb=$(echo "scale=2; $size / 1024 / 1024" | bc)
+
+        # Count rows and convert to millions
+        rows=$(wc -l < "$file" 2>/dev/null)
+        if [ -z "$rows" ]; then
+            echo "Error: Unable to get row count for '$file'. Skipping."
+            continue
+        fi
+        rows_k=$(echo "scale=2; $rows / 1000" | bc)
+
+        # Count columns
+        cols=$(head -n 1 "$file" | awk -F, "{print NF}" 2>/dev/null)
+        if [ -z "$cols" ]; then
+            echo "Error: Unable to get column count for '$file'. Skipping."
+            continue
+        fi
+
+        # Print row in markdown table format
+        echo "| $file | $size_mb | $rows_k | $cols |"
+    done
+}
+
+# Main script logic
+main() {
+    if [ $# -ne 1 ]; then
+        echo "Usage: $0 <directory>"
+        exit 1
+    fi
+
+    directory=$1
+
+    # Check if the directory exists
+    check_directory "$directory"
+
+    if [ -x "$(command -v mdp)" ]; then
+         process_csv_files "$directory" | mdp
+    else
+       process_csv_files "$directory"
+    fi
+}
+
+# Execute main function with provided arguments
+main "$@"
