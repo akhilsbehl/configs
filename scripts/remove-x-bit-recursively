@@ -1,6 +1,8 @@
 #!/bin/bash
 
 extensions=(
+    csv
+    tsv
     txt
     jpg
     jpeg
