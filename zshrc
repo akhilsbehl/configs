@@ -520,32 +520,77 @@ function compress-pdf {
 #  Colorschemes & backgrounds  #
 ################################
 
-function list-colorschemes {
+function list-colorschemes-wt {
     jq '.schemes | .[] | .name' $WIN_TERM_SETTINGS | sed -e 's/"//g'
 }
 
-function apply-colorscheme {
+function list-colorschemes-gnome-terminal {
+    local profile
+    for profile in $(dconf list /org/gnome/terminal/legacy/profiles:/); do
+        dconf read /org/gnome/terminal/legacy/profiles:/"$profile"visible-name
+    done
+}
+
+function wt-or-gt {
+    if [[ -n "$WIN_TERM_SETTINGS" ]]; then
+        "$1" "${@:3}"
+    elif exists_command gnome-terminal; then
+        "$2" "${@:3}"
+    else
+        echo "Unknown terminal emulator."
+    fi
+}
+
+function apply-colorscheme-wt {
+    local TMPF
     TMPF="$(mktemp)"
     jq --arg cs "$1" '.profiles.defaults.colorScheme = $cs' $WIN_TERM_SETTINGS >! $TMPF
     mv $TMPF $WIN_TERM_SETTINGS
 }
 
+function apply-colorscheme-gnome-terminal {
+    local profile pname changed
+    for profile in $(dconf list /org/gnome/terminal/legacy/profiles:/); do
+        pname=$(dconf read /org/gnome/terminal/legacy/profiles:/"$profile"visible-name)
+        if [[ "$pname" == "'$1'" ]]; then
+            profile=$(echo "'$profile'" | tr -d '[:/]')
+            dconf write /org/gnome/terminal/legacy/profiles:/default "$profile" && changed=1
+            echo "Gnome Terminal can not change colorschemes mid-session."
+            echo "Please restart your terminal for the change to take effect."
+            break
+        fi
+    done
+    if [[ "$changed" != "1" ]]; then
+        echo "$1 was not found as an available Gnome Terminal colorscheme."
+    fi
+}
+
+function list-colorschemes {
+    wt-or-gt list-colorschemes-wt list-colorschemes-gnome-terminal | sort -u
+}
+
+function apply-colorscheme {
+    [[ -z "$1" ]] && echo "Usage: apply-colorscheme <colorscheme>" && return 1
+    wt-or-gt apply-colorscheme-wt apply-colorscheme-gnome-terminal "$1"
+}
+
 function randomize-colorscheme {
-    SCHEMES=($(list-colorschemes))
-    apply-colorscheme ${SCHEMES[$RANDOM % ${#SCHEMES[@]}]}
+    local schemes line scheme randi
+    schemes=()
+    while IFS= read -r line; do
+        schemes+=("$line")
+    done < <(list-colorschemes)
+    randi=$(od -An -N1 -i /dev/urandom | tr -d ' ')
+    randi=$((randi % ${#schemes[@]}))
+    scheme="${schemes[$randi]}"
+    echo "Selected colorscheme: $scheme"
+    apply-colorscheme "$(echo $scheme | tr -d "'")"
 }
 
 function zapply-colorscheme {
-    SCHEMES=(
-        $(grep -B 1 "black" $WIN_TERM_SETTINGS |
-        grep "name" |
-        cut -f 2- -d ':')
-    )
-    scheme=$(
-    echo $SCHEMES | sed -e 's/, /\n/g' -e 's/"//g' |
-        fzf --query="$1" --select-1 --exit-0
-    )
-    [[ -n "$scheme" ]] && apply-colorscheme "$scheme"
+    local scheme
+    scheme=$(list-colorschemes | sort -u | fzf --query="$1" --select-1 --exit-0)
+    [[ -n "$scheme" ]] && apply-colorscheme "$(echo "$scheme" | tr -d "'")"
 }
 
 ######################
