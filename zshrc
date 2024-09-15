@@ -166,6 +166,8 @@ alias sc='sudo systemctl'
 
 alias sj='sudo journalctl'
 
+alias wch='watch -n 1 '
+
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
 if [[ "$OS" == "Ubuntu" ]]; then
