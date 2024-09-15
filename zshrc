@@ -422,8 +422,8 @@ function fzp {
   fi
 }
 
-function install { fzp "install" "$@" }
-function uninstall { fzp "uninstall" "$@" }
+function zin { fzp "install" "$@" }
+function zun { fzp "uninstall" "$@" }
 
 function gloc {
   local file handler
