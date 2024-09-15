@@ -3,7 +3,7 @@
 "-----------------------
 
 " Set colorscheme.
-colorscheme kanagawa
+colorscheme tokyonight
 
 " Auto-switch to dir of the file.
 set autochdir
@@ -427,7 +427,7 @@ augroup END
 
 augroup ChangeTheme
     autocmd!
-    autocmd VimEnter,SourcePost $MYVIMRC colorscheme kanagawa
+    autocmd VimEnter,SourcePost $MYVIMRC colorscheme tokyonight
     autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
 
