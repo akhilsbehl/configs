@@ -393,8 +393,17 @@ function fzp {
   local mode prefix search_cmd search_args install_cmd install_args
   mode="$1"
   prefix=""
-  install_cmd=$(get_first_available pacman apt-get)
-  if [[ "$install_cmd" == "pacman" ]]; then
+  install_cmd=$(get_first_available paru pacman apt-get)
+  if [[ "$install_cmd" == "paru" ]]; then
+    search_cmd="$install_cmd"
+    if [[ "$mode" == "install" ]]; then
+      search_args="-Sslq"
+      install_args="-S --needed"
+    elif [[ "$mode" == "uninstall" ]]; then
+      search_args="-Qq"
+      install_args="-Rns"
+    fi
+  elif [[ "$install_cmd" == "pacman" ]]; then
     search_cmd="$install_cmd"
     if [[ "$mode" == "install" ]]; then
       search_args="-Slq"
@@ -417,6 +426,9 @@ function fzp {
   pkgs=$(eval "$search_cmd $search_args" | fzf-tmux --query="$2" | tr '\n' ' ')
   if [[ -n "$pkgs" ]]; then
     exists_command sudo && prefix="sudo"
+    if [[ "$install_cmd" == "paru" ]]; then
+        prefix=""
+    fi
     echo "$prefix $install_cmd $install_args $pkgs"
     eval "$prefix $install_cmd $install_args $pkgs"
   fi
