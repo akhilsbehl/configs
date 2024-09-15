@@ -397,7 +397,7 @@ function fzp {
   if [[ "$install_cmd" == "paru" ]]; then
     search_cmd="$install_cmd"
     if [[ "$mode" == "install" ]]; then
-      search_args="-Sslq"
+      search_args="-Slq"
       install_args="-S --needed"
     elif [[ "$mode" == "uninstall" ]]; then
       search_args="-Qq"
