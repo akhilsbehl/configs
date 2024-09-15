@@ -625,7 +625,7 @@ function launchpad {
     return 1
 }
 
-launchpad
+# launchpad
 
 #######################
 #  Set up the prompt  #
