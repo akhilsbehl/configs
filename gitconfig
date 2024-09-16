@@ -54,6 +54,7 @@
     co = checkout
     cb = !git checkout $(git ba | fzf-tmux)
     cl = clone
+    clb = "!fff() { git clone --single-branch --branch $2 $1; }; fff"
 
     d = diff
     dw = diff --word-diff
