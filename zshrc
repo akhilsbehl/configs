@@ -170,21 +170,21 @@ alias wch='watch -n 1 '
 
 OS=$(grep -w NAME /etc/os-release | cut -f 2 -d '=' | tr -d '"')
 
+if exists_command bat; then
+  alias less='bat --paging always'
+  alias page='bat --paging always'
+fi
+
 if [[ "$OS" == "Ubuntu" ]]; then
   alias upgrade='sudo apt-get update && sudo apt-get upgrade'
   alias autorm='sudo apt-get autoremove'
 elif [[ "$OS" == "Arch Linux" ]]; then
   alias upgrade='paru -Syu --noconfirm'
   alias autorm='sudo pacman -Rns $(pacman -Qqdt)'
-  alias explicit-packages='(paru -Qqent; paru -Qqemt) | cat'
+  alias explicit-packages='(paru -Qqent; paru -Qqemt) | less'
 else
   alias upgrade='echo Unknown OS!'
   alias autorm='echo Unknown OS!'
-fi
-
-if exists_command bat; then
-  alias less='bat --paging always'
-  alias page='bat --paging always'
 fi
 
 #########################
