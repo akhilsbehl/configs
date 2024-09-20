@@ -33,7 +33,7 @@ if not VG.vscode then
             {
                 -- LSP & CMP
                 'VonHeikemen/lsp-zero.nvim',
-                branch = 'v2.x',
+                branch = 'v4.x',
                 dependencies = {
                     { 'neovim/nvim-lspconfig' },
                     { 'williamboman/mason.nvim' },
@@ -47,8 +47,8 @@ if not VG.vscode then
                     { 'quangnguyen30192/cmp-nvim-ultisnips' },
                 },
                 config = function()
-                    local lsp = require('lsp-zero').preset({})
-                    lsp.on_attach(function(client, bufnr)
+                    local lsp = require('lsp-zero')
+                    local lsp_attach = function(client, bufnr)
                         local o = { buffer = bufnr }
                         VK('n', '<leader>lD',
                             '<cmd>lua vim.lsp.buf.declaration()<cr>', o)
@@ -78,10 +78,30 @@ if not VG.vscode then
                         VK('n', '<leader>lW', '<cmd>LspZeroWorkspaceRemove<cr>', o)
                         VK('n', '<leader>lw', '<cmd>LspZeroWorkspaceAdd<cr>', o)
                         VK('n', '<leader>ll', '<cmd>LspZeroWorkspaceList<cr>', o)
-                    end)
+                    end
+                    lsp.extend_lspconfig({
+                        capabilities = require(
+                            'cmp_nvim_lsp'
+                        ).default_capabilities(),
+                        lsp_attach = lsp_attach,
+                        float_border = 'rounded',
+                        sign_text = true,
+                    })
+                    require('mason').setup({})
+                    require('mason-lspconfig').setup({
+                        ensure_installed = {
+                            'pyright',
+                        },
+                        handlers = {
+                            function(server_name)
+                                require('lspconfig')[server_name].setup({})
+                            end,
+			    }
+                    })
                     local cmp = require('cmp')
-                    require('cmp_nvim_ultisnips').setup({})
-                    lsp.setup_nvim_cmp({
+                    local cmp_format = require('lsp-zero').cmp_format()
+                    cmp.setup({
+                        formatting = cmp_format,
                         sources = {
                             { name = 'buffer' },
                             { name = 'nvim_lsp' },
@@ -106,10 +126,11 @@ if not VG.vscode then
                             ['<C-p>'] = cmp.mapping.scroll_docs(-3),
                         }),
                     })
+                    require('cmp_nvim_ultisnips').setup({})
                     local signs = {
-                        Error = ' ',
-                        Warn  = ' ',
-                        Hint  = ' ',
+                        Error = '✖',
+                        Warn = '⚠',
+                        Hint = '➤',
                         Info  = ' ',
                     }
                     for type, icon in pairs(signs) do
@@ -143,7 +164,7 @@ if not VG.vscode then
                                 diagnostic_config['virtual_text'] = false
                             else
                                 diagnostic_config['virtual_text'] =
-                                VG.myrc_diagnostics_vtext
+                                    VG.myrc_diagnostics_vtext
                             end
                             VD.config(diagnostic_config)
                         elseif option == 'virtual_text' then
@@ -173,7 +194,7 @@ if not VG.vscode then
             {
                 -- Fuzzy finder
                 'nvim-telescope/telescope.nvim',
-                tag = '0.1.2',
+                branch = '0.1.x',
                 dependencies = { 'nvim-lua/plenary.nvim' },
                 config = function()
                     local ac = require('telescope.actions')
@@ -288,7 +309,7 @@ if not VG.vscode then
                 'nvim-treesitter/nvim-treesitter',
                 build = function()
                     local ts_update = require('nvim-treesitter.install')
-                    .update({ with_sync = true })
+                        .update({ with_sync = true })
                     ts_update()
                 end,
                 dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
@@ -371,7 +392,9 @@ if not VG.vscode then
             },
 
             {
-                -- Hoppity hop
+                -- Hoppity hop; The package is unmaintained now but we'll
+                -- continue using it as it still works. Until we find an
+                -- alternative. TODO
                 'phaazon/hop.nvim',
                 branch = 'v2',
                 config = function()
@@ -618,58 +641,58 @@ if not VG.vscode then
                 end
             },
 
-            -- {
-                -- -- AI
-                -- 'github/copilot.vim',
-                -- config = function()
-                    -- VG.copilot_enabled = 1
-                    -- VG.copilot_no_tab_map = 1
-                    -- VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
-                    -- VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
-                    -- VK('n', '<leader>cs', '<cmd>Copilot<cr>')
-                    -- VK('i', '<C-s>', '<Plug>(copilot-suggest)')
-                    -- VK('i', '<C-d>', '<Plug>(copilot-dismiss)')
-                    -- VK('i', '<C-j>', '<Plug>(copilot-next)')
-                    -- VK('i', '<C-k>', '<Plug>(copilot-previous)')
-                    -- VK('i', '<C-a>', 'copilot#Accept("")', {
-                        -- expr = true, replace_keycodes = false,
-                    -- })
-                -- end,
-            -- },
-
             {
-                -- Free AI
-                'Exafunction/codeium.vim',
-                event = 'BufEnter',
-                config = function ()
-                    VG.codeium_enabled = 1
-                    VG.codeium_disable_bindings = 1
-                    VG.codeium_no_map_tab = 1
-                    VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
-                    VK('n', '<leader>ce', '<cmd>let codeium_enabled=1<cr>')
-                    VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
-                    VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
-                    VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
-                    VK(
-                        'i',
-                        '<C-j>',
-                        '<cmd>call codeium#CycleCompletions(1)<CR>'
-                    )
-                    VK(
-                        'i',
-                        '<C-k>',
-                        '<cmd>call codeium#CycleCompletions(-1)<cr>'
-                    )
-                    VK(
-                        'i',
-                        '<C-a>',
-                        function ()
-                            return vim.fn['codeium#Accept']()
-                        end,
-                        { expr = true, silent = true }
-                    )
+                -- AI
+                'github/copilot.vim',
+                config = function()
+                    VG.copilot_enabled = 1
+                    VG.copilot_no_tab_map = 1
+                    VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
+                    VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
+                    VK('n', '<leader>cs', '<cmd>Copilot<cr>')
+                    VK('i', '<C-s>', '<Plug>(copilot-suggest)')
+                    VK('i', '<C-d>', '<Plug>(copilot-dismiss)')
+                    VK('i', '<C-j>', '<Plug>(copilot-next)')
+                    VK('i', '<C-k>', '<Plug>(copilot-previous)')
+                    VK('i', '<C-a>', 'copilot#Accept("")', {
+                        expr = true, replace_keycodes = false,
+                    })
                 end,
             },
+
+            -- {
+                -- -- Free AI
+                -- 'Exafunction/codeium.vim',
+                -- event = 'BufEnter',
+                -- config = function ()
+                    -- VG.codeium_enabled = 1
+                    -- VG.codeium_disable_bindings = 1
+                    -- VG.codeium_no_map_tab = 1
+                    -- VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
+                    -- VK('n', '<leader>ce', '<cmd>let codeium_enabled=1<cr>')
+                    -- VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
+                    -- VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
+                    -- VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
+                    -- VK(
+                        -- 'i',
+                        -- '<C-j>',
+                        -- '<cmd>call codeium#CycleCompletions(1)<CR>'
+                    -- )
+                    -- VK(
+                        -- 'i',
+                        -- '<C-k>',
+                        -- '<cmd>call codeium#CycleCompletions(-1)<cr>'
+                    -- )
+                    -- VK(
+                        -- 'i',
+                        -- '<C-a>',
+                        -- function ()
+                            -- return vim.fn['codeium#Accept']()
+                        -- end,
+                        -- { expr = true, silent = true }
+                    -- )
+                -- end,
+            -- },
 
             {
                 -- Snippets engine
@@ -741,10 +764,8 @@ if not VG.vscode then
                 -- Status line
                 'nvim-lualine/lualine.nvim',
                 config = function()
-                    custom_theme = require('lualine.themes.gruvbox-material')
                     require('lualine').setup({
                         options = {
-                            -- theme = custom_theme,
                             theme = 'auto'
                         },
                         sections = {

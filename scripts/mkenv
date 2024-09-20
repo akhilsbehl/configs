@@ -23,4 +23,4 @@ fi
 source "$PWD/.virtualenv/bin/activate" && \
     test -f "$PWD/requirements.txt" && \
         "$PWD/.virtualenv/bin/pip" install -r "$PWD/requirements.txt"
-    "$PWD/.virtualenv/bin/pip" install neovim ipython
+    "$PWD/.virtualenv/bin/pip" install neovim ipython reorder-python-imports
