@@ -16,15 +16,15 @@ no-donation-dialog=true
 always-show-accessibility-menu=false
 
 [io/github/realmazharhussain/GdmSettings/appearance]
-background-image='/home/alchemist/images/Untitled_Artwork(2).jpg'
+background-image='/run/media/alchemist/Titan/pre-wedding-photoshoot/highlights/0051.jpg'
 background-type='image'
-cursor-theme='Bibata-Modern-Classic'
+cursor-theme='Bibata-Modern-Ice-Right'
 icon-theme='Tela-circle'
 shell-theme=''
 
 [io/github/realmazharhussain/GdmSettings/fonts]
 antialiasing='rgba'
-font='Noto Sans Brahmi 12'
+font='Noto Sans Bold 12'
 hinting='slight'
 scaling-factor=1.0
 
@@ -43,7 +43,7 @@ pointer-acceleration='default'
 speed=0.0
 
 [io/github/realmazharhussain/GdmSettings/night-light]
-enabled=true
+enabled=false
 end-hour=6
 end-minute=0
 schedule-automatic=true
@@ -59,16 +59,16 @@ auto-power-saver=true
 blank-screen=true
 dim-screen=true
 idle-delay=3.0
-power-button-action='interactive'
+power-button-action='suspend'
 suspend-on-ac=true
 suspend-on-ac-delay=15.0
 suspend-on-battery=true
-suspend-on-battery-delay=15.0
+suspend-on-battery-delay=5.0
 
 [io/github/realmazharhussain/GdmSettings/sound]
 event-sounds=true
 feedback-sounds=true
-over-amplification=false
+over-amplification=true
 theme='__custom'
 
 [io/github/realmazharhussain/GdmSettings/top-bar]
@@ -92,8 +92,11 @@ two-finger-scrolling=true
 last-visited-page='appearance'
 
 [io/missioncenter/MissionCenter]
-performance-selected-page='0000:01:00.0'
+apps-page-sorting-column='Cpu'
+apps-page-sorting-order='Ascending'
+performance-selected-page='0000:00:02.0'
 window-height=400
+window-selected-page='performance-page'
 window-width=600
 
 [org/a11y/accerciser]
@@ -334,7 +337,7 @@ panel-id='world'
 size=(870, 690)
 
 [org/gnome/control-center]
-last-panel='sound'
+last-panel='universal-access'
 window-state=(980, 640, false)
 
 [org/gnome/desktop/a11y]
@@ -345,6 +348,7 @@ screen-magnifier-enabled=false
 
 [org/gnome/desktop/a11y/magnifier]
 mag-factor=1.0
+show-cross-hairs=true
 
 [org/gnome/desktop/app-folders]
 folder-children=['Utilities', 'YaST', 'Pardus']
@@ -370,26 +374,28 @@ color-shading-type='solid'
 picture-options='zoom'
 picture-uri='file:///home/alchemist/.config/background'
 picture-uri-dark='file:///home/alchemist/.config/background'
-primary-color='#e1e184847777'
-secondary-color='#000000'
+primary-color='#000000000000'
+secondary-color='#000000000000'
 
 [org/gnome/desktop/input-sources]
 sources=[('xkb', 'us')]
 xkb-options=['caps:escape_shifted_capslock']
 
 [org/gnome/desktop/interface]
+accent-color='pink'
 color-scheme='default'
-cursor-theme='oreo_teal_cursors'
+cursor-size=24
+cursor-theme='oreo_pink_cursors'
 document-font-name='Noto Sans 11'
 enable-hot-corners=false
 font-antialiasing='rgba'
-font-hinting='slight'
+font-hinting='medium'
 font-name='Noto Sans 11'
-icon-theme='Tela-circle'
-monospace-font-name='Fira Code Bold 10'
+icon-theme='Tela-circle-pink'
+monospace-font-name='Cascadia Mono NF Bold 10 @wght=700'
 show-battery-percentage=true
 text-scaling-factor=1.0
-toolkit-accessibility=true
+toolkit-accessibility=false
 
 [org/gnome/desktop/media-handling]
 autorun-never=false
@@ -398,7 +404,10 @@ autorun-x-content-open-folder=['x-content/audio-player', 'x-content/image-dcf']
 autorun-x-content-start-app=['x-content/ostree-repository', 'x-content/audio-cdda', 'x-content/video-dvd']
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus', 'steam', 'org-gnome-software', 'org-qbittorrent-qbittorrent']
+application-children=['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus', 'steam', 'org-gnome-software', 'org-qbittorrent-qbittorrent', 'org-gnome-extensions', 'dev-warp-warp']
+
+[org/gnome/desktop/notifications/application/dev-warp-warp]
+application-id='dev.warp.Warp.desktop'
 
 [org/gnome/desktop/notifications/application/firefox]
 application-id='firefox.desktop'
@@ -414,6 +423,9 @@ application-id='org.gnome.Console.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-evolution]
 enable=false
+
+[org/gnome/desktop/notifications/application/org-gnome-extensions]
+application-id='org.gnome.Extensions.desktop'
 
 [org/gnome/desktop/notifications/application/org-gnome-nautilus]
 application-id='org.gnome.Nautilus.desktop'
@@ -450,13 +462,19 @@ remember-recent-files=false
 remove-old-temp-files=true
 remove-old-trash-files=true
 
+[org/gnome/desktop/remote-desktop/rdp]
+enable=false
+tls-cert='/home/alchemist/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt'
+tls-key='/home/alchemist/.local/share/gnome-remote-desktop/certificates/rdp-tls.key'
+view-only=true
+
 [org/gnome/desktop/screensaver]
 color-shading-type='solid'
 lock-delay=uint32 30
 picture-options='zoom'
-picture-uri='file:///usr/share/backgrounds/gnome/neogeo-l.jxl'
-primary-color='#e18477'
-secondary-color='#000000'
+picture-uri='file:///home/alchemist/.local/share/backgrounds/2024-09-20-01-14-24-0195.jpg'
+primary-color='#000000000000'
+secondary-color='#000000000000'
 
 [org/gnome/desktop/search-providers]
 sort-order=['org.gnome.Contacts.desktop', 'org.gnome.Documents.desktop', 'org.gnome.Nautilus.desktop']
@@ -465,8 +483,9 @@ sort-order=['org.gnome.Contacts.desktop', 'org.gnome.Documents.desktop', 'org.gn
 idle-delay=uint32 180
 
 [org/gnome/desktop/sound]
+allow-volume-above-100-percent=true
 event-sounds=true
-theme-name='__custom'
+theme-name='freedesktop'
 
 [org/gnome/desktop/wm/keybindings]
 cycle-windows=['<Super>Tab']
@@ -504,15 +523,15 @@ window-size=(1024, 768)
 [org/gnome/evince/default]
 continuous=true
 dual-page=false
-dual-page-odd-left=false
+dual-page-odd-left=true
 enable-spellchecking=true
 fullscreen=false
 inverted-colors=false
 show-sidebar=true
 sidebar-page='thumbnails'
 sidebar-size=132
-sizing-mode='automatic'
-window-ratio=(0.25, 0.35294117647058826)
+sizing-mode='fit-page'
+window-ratio=(0.96470588235294119, 0.30997624703087884)
 
 [org/gnome/evolution-data-server]
 migrated=true
@@ -533,7 +552,7 @@ window-size=(-1, -1)
 
 [org/gnome/file-roller/listing]
 list-mode='as-folder'
-name-column-width=68
+name-column-width=71
 show-path=false
 sort-method='name'
 sort-type='ascending'
@@ -551,13 +570,13 @@ size=(650, 500)
 state=87168
 
 [org/gnome/gnome-system-monitor]
-current-tab='processes'
+current-tab='resources'
 show-dependencies=false
 show-whose-processes='user'
 
 [org/gnome/gnome-system-monitor/disktreenew]
 col-6-visible=true
-col-6-width=290
+col-6-width=0
 
 [org/gnome/iagno]
 window-height=500
@@ -570,31 +589,43 @@ workspaces-only-on-primary=false
 [org/gnome/mutter/wayland/keybindings]
 restore-shortcuts=@as []
 
+[org/gnome/nautilus/icon-view]
+captions=['size', 'detailed_type', 'date_accessed']
+default-zoom-level='extra-large'
+
 [org/gnome/nautilus/preferences]
-default-folder-viewer='icon-view'
+date-time-format='detailed'
+default-folder-viewer='list-view'
 migrated-gtk-settings=true
 search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
-initial-size=(890, 550)
+initial-size=(953, 575)
+initial-size-file-chooser=(890, 550)
+maximized=false
 
 [org/gnome/photos]
 window-maximized=true
+
+[org/gnome/portal/filechooser/org.gnome.Settings]
+last-folder-path='/run/media/alchemist/Titan/pre-wedding-photoshoot/highlights'
 
 [org/gnome/portal/filechooser/steam]
 last-folder-path='/home/alchemist/images'
 
 [org/gnome/power-manager]
+info-history-time=28800
 info-history-type='charge'
-info-last-device='/org/freedesktop/UPower/devices/line_power_ACAD'
-info-page-number=0
+info-last-device='/org/freedesktop/UPower/devices/battery_BAT1'
+info-page-number=1
 info-stats-type='discharge-accuracy'
 
 [org/gnome/recipes]
 user='alchemist'
 
 [org/gnome/settings-daemon/plugins/color]
-night-light-enabled=true
+night-light-enabled=false
+night-light-schedule-automatic=false
 
 [org/gnome/settings-daemon/plugins/media-keys]
 help=@as []
@@ -622,8 +653,8 @@ enabled-connections=['f43ae6ca-acbe-4ec1-86ab-ab060776225c']
 
 [org/gnome/shell]
 command-history=['lg']
-disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com']
-enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'transparent-top-bar@ftpix.com', 'run-or-raise@edvard.cz', 'light-style@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info']
+disabled-extensions=['window-list@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'light-style@gnome-shell-extensions.gcampax.github.com']
+enabled-extensions=['user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'transparent-top-bar@ftpix.com', 'caffeine@patapon.info', 'blur-my-shell@aunetx', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'run-or-raise@edvard.cz']
 favorite-apps=@as []
 last-selected-power-profile='performance'
 looking-glass-history=['windows']
@@ -632,9 +663,45 @@ welcome-dialog-last-shown-version='46.4'
 [org/gnome/shell/app-switcher]
 current-workspace-only=true
 
+[org/gnome/shell/extensions/blur-my-shell]
+settings-version=2
+
+[org/gnome/shell/extensions/blur-my-shell/appfolder]
+brightness=0.59999999999999998
+sigma=30
+
+[org/gnome/shell/extensions/blur-my-shell/coverflow-alt-tab]
+pipeline='pipeline_default'
+
+[org/gnome/shell/extensions/blur-my-shell/dash-to-dock]
+blur=true
+brightness=0.59999999999999998
+pipeline='pipeline_default_rounded'
+sigma=30
+static-blur=true
+style-dash-to-dock=0
+
+[org/gnome/shell/extensions/blur-my-shell/lockscreen]
+pipeline='pipeline_default'
+
+[org/gnome/shell/extensions/blur-my-shell/overview]
+pipeline='pipeline_default'
+
+[org/gnome/shell/extensions/blur-my-shell/panel]
+brightness=0.59999999999999998
+pipeline='pipeline_default'
+sigma=30
+
+[org/gnome/shell/extensions/blur-my-shell/screenshot]
+pipeline='pipeline_default'
+
+[org/gnome/shell/extensions/blur-my-shell/window-list]
+brightness=0.59999999999999998
+sigma=30
+
 [org/gnome/shell/extensions/caffeine]
 enable-fullscreen=false
-indicator-position-max=1
+indicator-position-max=2
 restore-state=true
 screen-blank='always'
 
@@ -666,7 +733,8 @@ animation-time-overview=0.10000000000000003
 enable-active-window=false
 enable-intellihide=false
 hot-corner=false
-mouse-sensitive=true
+mouse-sensitive=false
+mouse-sensitive-fullscreen-window=false
 pressure-threshold=10
 pressure-timeout=100
 
@@ -684,6 +752,7 @@ position-in-panel=2
 show-battery=true
 show-fan=false
 show-gpu=true
+update-time=15
 
 [org/gnome/shell/keybindings]
 focus-active-notification=@as []
@@ -705,9 +774,9 @@ locations=[<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.290
 contrast=0
 
 [org/gnome/software]
-check-timestamp=int64 1724876374
+check-timestamp=int64 1726934913
 first-run=false
-flatpak-purge-timestamp=int64 1724034523
+flatpak-purge-timestamp=int64 1726823225
 
 [org/gnome/taquin]
 theme='cats'
@@ -724,7 +793,7 @@ zoom-in='<Primary>equal'
 zoom-out='<Primary>minus'
 
 [org/gnome/terminal/legacy/profiles:]
-default='298103db-c81a-4ec9-adf0-129fa535ea3b'
+default='6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d'
 list=['67385d7d-e0f7-4ccc-8fd0-2810a9147dbd', '9e3da51e-0123-4863-b644-145730642348', 'c89548e4-c8bb-4912-873c-854cd11ed756', 'ab26620d-8388-4f48-a99b-8e423e6f471c', '3754c9cc-bb8e-4d53-a7a8-51501604ef32', 'bf7ddbf5-382b-4198-8d57-4c5fc87319d5', '2f006893-a08a-436d-a25e-a23f8fd4c298', '3f07577d-aee6-4529-bec7-d45e5ae24de0', 'f754162f-cea8-4012-b794-c16da90b2798', '718bfa0a-e87c-430e-a66c-a30637789308', '298103db-c81a-4ec9-adf0-129fa535ea3b', '20b247a3-2285-4610-868b-685119d315c1', '19f369e0-cb3c-4953-bb1e-a73534354504', '9c9aeb96-01de-4a6f-ac1e-fdf29dbdb6b3', '2c52f2ae-7fa0-4107-8cd9-a1b5aa5b2d3d', 'ed1fb482-a402-45ac-90d1-28d0060453db', 'bf9d92e2-9d18-430b-a446-8ea5cb4fe03e', 'cdbe4279-2825-450b-91a4-ff0d78c187c5', 'a8c371b7-8881-4c0f-971e-feb6d410cee6', 'e2944c86-b7cf-409d-8338-81f93b6d336c', '2ced3afb-634f-4dbf-8315-098d1e007d96', 'b6d38f6c-ca89-4299-9bdf-c12eb36775bb', '49cee464-f31e-4387-ae45-ce562bd171c8', '63703db4-c219-4553-8e38-9eaf2eb777b3', '0feb871e-a3eb-4537-b2f9-c84e1a1717af', 'ac08c9a1-acca-4a7e-8afb-7f02753db159', '6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d', '287420d9-16ef-4252-bcbe-15cdf94a1808', '72a04a8d-4107-4d21-acbf-5aef12d206cf', 'e4010ae4-18c5-4ca0-8ccc-c9effa98fd5b', 'e7f56185-a2ce-4e5e-afdf-20d6f998117b', '5d6a9007-a4a0-4702-a02f-5667f71993b0', '634c33b8-f138-4953-9fcc-95a4ccb6ac78', '24b228ce-f3c1-43df-9d50-a7414a42b5b1', '3244f2fd-b8cf-480d-9c41-d1e1c80d823e', '59ee3791-f01b-4c93-8ae9-f86ac2af00d6', 'e023ef30-fcd0-4784-bf60-51c94d52f7d1', '56895a67-d4b2-41da-bc57-af3ee585d919', '48ed55be-0bab-4687-a01d-eeeb765f6e60', 'ff02e333-93bb-4261-8df1-af176216c512', '4bb03aac-cb20-4d67-bbfb-1f1e817e78c7', '1cd66fc4-f85b-46b0-87b8-9528129d3c86']
 
 [org/gnome/terminal/legacy/profiles:/:0feb871e-a3eb-4537-b2f9-c84e1a1717af]
@@ -1489,7 +1558,7 @@ sort-column='name'
 sort-directories-first=false
 sort-order='ascending'
 type-format='category'
-window-position=(345, 47)
+window-position=(26, 23)
 window-size=(1231, 902)
 
 [system/locale]

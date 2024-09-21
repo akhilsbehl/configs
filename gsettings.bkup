@@ -55,14 +55,14 @@ io.github.realmazharhussain.GdmSettings never-applied false
 io.github.realmazharhussain.GdmSettings no-donation-dialog true
 io.github.realmazharhussain.GdmSettings.accessibility always-show-accessibility-menu false
 io.github.realmazharhussain.GdmSettings.appearance background-color 'rgb(40,40,40)'
-io.github.realmazharhussain.GdmSettings.appearance background-image '/home/alchemist/images/Untitled_Artwork(2).jpg'
+io.github.realmazharhussain.GdmSettings.appearance background-image '/run/media/alchemist/Titan/pre-wedding-photoshoot/highlights/0051.jpg'
 io.github.realmazharhussain.GdmSettings.appearance background-type 'image'
 io.github.realmazharhussain.GdmSettings.appearance bg-adjustment 'zoom'
-io.github.realmazharhussain.GdmSettings.appearance cursor-theme 'Bibata-Modern-Classic'
+io.github.realmazharhussain.GdmSettings.appearance cursor-theme 'Bibata-Modern-Ice-Right'
 io.github.realmazharhussain.GdmSettings.appearance icon-theme 'Tela-circle'
 io.github.realmazharhussain.GdmSettings.appearance shell-theme ''
 io.github.realmazharhussain.GdmSettings.fonts antialiasing 'rgba'
-io.github.realmazharhussain.GdmSettings.fonts font 'Noto Sans Brahmi 12'
+io.github.realmazharhussain.GdmSettings.fonts font 'Noto Sans Bold 12'
 io.github.realmazharhussain.GdmSettings.fonts hinting 'slight'
 io.github.realmazharhussain.GdmSettings.fonts scaling-factor 1.0
 io.github.realmazharhussain.GdmSettings.misc disable-restart-buttons false
@@ -75,7 +75,7 @@ io.github.realmazharhussain.GdmSettings.misc welcome-message "Pandora's rule: Do
 io.github.realmazharhussain.GdmSettings.mouse natural-scrolling true
 io.github.realmazharhussain.GdmSettings.mouse pointer-acceleration 'default'
 io.github.realmazharhussain.GdmSettings.mouse speed 0.0
-io.github.realmazharhussain.GdmSettings.night-light enabled true
+io.github.realmazharhussain.GdmSettings.night-light enabled false
 io.github.realmazharhussain.GdmSettings.night-light end-hour 6
 io.github.realmazharhussain.GdmSettings.night-light end-minute 0
 io.github.realmazharhussain.GdmSettings.night-light schedule-automatic true
@@ -87,14 +87,14 @@ io.github.realmazharhussain.GdmSettings.power auto-power-saver true
 io.github.realmazharhussain.GdmSettings.power blank-screen true
 io.github.realmazharhussain.GdmSettings.power dim-screen true
 io.github.realmazharhussain.GdmSettings.power idle-delay 3.0
-io.github.realmazharhussain.GdmSettings.power power-button-action 'interactive'
+io.github.realmazharhussain.GdmSettings.power power-button-action 'suspend'
 io.github.realmazharhussain.GdmSettings.power suspend-on-ac true
 io.github.realmazharhussain.GdmSettings.power suspend-on-ac-delay 15.0
 io.github.realmazharhussain.GdmSettings.power suspend-on-battery true
-io.github.realmazharhussain.GdmSettings.power suspend-on-battery-delay 15.0
+io.github.realmazharhussain.GdmSettings.power suspend-on-battery-delay 5.0
 io.github.realmazharhussain.GdmSettings.sound event-sounds true
 io.github.realmazharhussain.GdmSettings.sound feedback-sounds true
-io.github.realmazharhussain.GdmSettings.sound over-amplification false
+io.github.realmazharhussain.GdmSettings.sound over-amplification true
 io.github.realmazharhussain.GdmSettings.sound theme '__custom'
 io.github.realmazharhussain.GdmSettings.tools top-bar-tweaks true
 io.github.realmazharhussain.GdmSettings.top-bar background-color 'rgb(36,31,49)'
@@ -120,12 +120,12 @@ io.missioncenter.MissionCenter app-update-interval-u64 uint64 20
 io.missioncenter.MissionCenter apps-page-core-count-affects-percentages false
 io.missioncenter.MissionCenter apps-page-merged-process-stats false
 io.missioncenter.MissionCenter apps-page-remember-sorting false
-io.missioncenter.MissionCenter apps-page-sorting-column 'None'
-io.missioncenter.MissionCenter apps-page-sorting-order 'None'
+io.missioncenter.MissionCenter apps-page-sorting-column 'Cpu'
+io.missioncenter.MissionCenter apps-page-sorting-order 'Ascending'
 io.missioncenter.MissionCenter perfomance-page-data-points 60
 io.missioncenter.MissionCenter performance-page-cpu-graph 1
 io.missioncenter.MissionCenter performance-page-kernel-times false
-io.missioncenter.MissionCenter performance-selected-page '0000:01:00.0'
+io.missioncenter.MissionCenter performance-selected-page '0000:00:02.0'
 io.missioncenter.MissionCenter performance-smooth-graphs false
 io.missioncenter.MissionCenter window-height 400
 io.missioncenter.MissionCenter window-selected-page 'performance-page'
@@ -332,15 +332,15 @@ org.gnome.Evince pictures-directory @ms nothing
 org.gnome.Evince show-caret-navigation-message true
 org.gnome.Evince.Default continuous true
 org.gnome.Evince.Default dual-page false
-org.gnome.Evince.Default dual-page-odd-left false
+org.gnome.Evince.Default dual-page-odd-left true
 org.gnome.Evince.Default enable-spellchecking true
 org.gnome.Evince.Default fullscreen false
 org.gnome.Evince.Default inverted-colors false
 org.gnome.Evince.Default show-sidebar true
 org.gnome.Evince.Default sidebar-page 'thumbnails'
 org.gnome.Evince.Default sidebar-size 132
-org.gnome.Evince.Default sizing-mode 'automatic'
-org.gnome.Evince.Default window-ratio (0.25, 0.35294117647058826)
+org.gnome.Evince.Default sizing-mode 'fit-page'
+org.gnome.Evince.Default window-ratio (0.96470588235294119, 0.30997624703087884)
 org.gnome.Evince.Default zoom 1.0
 org.gnome.Evolution.DefaultSources default-address-book 'system'
 org.gnome.Evolution.DefaultSources default-calendar 'system'
@@ -380,7 +380,7 @@ org.gnome.FileRoller.General compression-level 'normal'
 org.gnome.FileRoller.General editors @as []
 org.gnome.FileRoller.General encrypt-header false
 org.gnome.FileRoller.Listing list-mode 'as-folder'
-org.gnome.FileRoller.Listing name-column-width 68
+org.gnome.FileRoller.Listing name-column-width 71
 org.gnome.FileRoller.Listing show-path false
 org.gnome.FileRoller.Listing show-size true
 org.gnome.FileRoller.Listing show-time true
@@ -424,7 +424,7 @@ org.gnome.SessionManager auto-save-session false
 org.gnome.SessionManager auto-save-session-one-shot false
 org.gnome.SessionManager logout-prompt true
 org.gnome.SessionManager show-fallback-warning true
-org.gnome.Settings last-panel 'sound'
+org.gnome.Settings last-panel 'universal-access'
 org.gnome.Settings show-development-warning true
 org.gnome.Settings window-state (980, 640, false)
 org.gnome.SimpleScan brightness 0
@@ -446,6 +446,7 @@ org.gnome.SimpleScan selected-device ''
 org.gnome.SimpleScan text-dpi 150
 org.gnome.Snapshot capture-mode 'picture'
 org.gnome.Snapshot countdown 0
+org.gnome.Snapshot enable-audio-recording true
 org.gnome.Snapshot is-maximized false
 org.gnome.Snapshot last-camera-id ''
 org.gnome.Snapshot picture-format 'jpeg'
@@ -541,7 +542,7 @@ org.gnome.Terminal.Legacy.Keybindings toggle-menubar 'disabled'
 org.gnome.Terminal.Legacy.Keybindings zoom-in '<Primary>equal'
 org.gnome.Terminal.Legacy.Keybindings zoom-normal '<Control>0'
 org.gnome.Terminal.Legacy.Keybindings zoom-out '<Primary>minus'
-org.gnome.Terminal.ProfilesList default '298103db-c81a-4ec9-adf0-129fa535ea3b'
+org.gnome.Terminal.ProfilesList default '6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d'
 org.gnome.Terminal.ProfilesList list ['67385d7d-e0f7-4ccc-8fd0-2810a9147dbd', '9e3da51e-0123-4863-b644-145730642348', 'c89548e4-c8bb-4912-873c-854cd11ed756', 'ab26620d-8388-4f48-a99b-8e423e6f471c', '3754c9cc-bb8e-4d53-a7a8-51501604ef32', 'bf7ddbf5-382b-4198-8d57-4c5fc87319d5', '2f006893-a08a-436d-a25e-a23f8fd4c298', '3f07577d-aee6-4529-bec7-d45e5ae24de0', 'f754162f-cea8-4012-b794-c16da90b2798', '718bfa0a-e87c-430e-a66c-a30637789308', '298103db-c81a-4ec9-adf0-129fa535ea3b', '20b247a3-2285-4610-868b-685119d315c1', '19f369e0-cb3c-4953-bb1e-a73534354504', '9c9aeb96-01de-4a6f-ac1e-fdf29dbdb6b3', '2c52f2ae-7fa0-4107-8cd9-a1b5aa5b2d3d', 'ed1fb482-a402-45ac-90d1-28d0060453db', 'bf9d92e2-9d18-430b-a446-8ea5cb4fe03e', 'cdbe4279-2825-450b-91a4-ff0d78c187c5', 'a8c371b7-8881-4c0f-971e-feb6d410cee6', 'e2944c86-b7cf-409d-8338-81f93b6d336c', '2ced3afb-634f-4dbf-8315-098d1e007d96', 'b6d38f6c-ca89-4299-9bdf-c12eb36775bb', '49cee464-f31e-4387-ae45-ce562bd171c8', '63703db4-c219-4553-8e38-9eaf2eb777b3', '0feb871e-a3eb-4537-b2f9-c84e1a1717af', 'ac08c9a1-acca-4a7e-8afb-7f02753db159', '6a0b8fa6-bf34-4b2e-8331-ba72f1e5090d', '287420d9-16ef-4252-bcbe-15cdf94a1808', '72a04a8d-4107-4d21-acbf-5aef12d206cf', 'e4010ae4-18c5-4ca0-8ccc-c9effa98fd5b', 'e7f56185-a2ce-4e5e-afdf-20d6f998117b', '5d6a9007-a4a0-4702-a02f-5667f71993b0', '634c33b8-f138-4953-9fcc-95a4ccb6ac78', '24b228ce-f3c1-43df-9d50-a7414a42b5b1', '3244f2fd-b8cf-480d-9c41-d1e1c80d823e', '59ee3791-f01b-4c93-8ae9-f86ac2af00d6', 'e023ef30-fcd0-4784-bf60-51c94d52f7d1', '56895a67-d4b2-41da-bc57-af3ee585d919', '48ed55be-0bab-4687-a01d-eeeb765f6e60', 'ff02e333-93bb-4261-8df1-af176216c512', '4bb03aac-cb20-4d67-bbfb-1f1e817e78c7', '1cd66fc4-f85b-46b0-87b8-9528129d3c86']
 org.gnome.Weather locations [<(uint32 2, <('London', 'EGWU', false, [(0.89971722940307675, -0.007272211034407213)], [(0.89971722940307675, -0.007272211034407213)])>)>]
 org.gnome.Weather window-height 496
@@ -638,7 +639,7 @@ org.gnome.desktop.a11y.magnifier mag-factor 1.0
 org.gnome.desktop.a11y.magnifier mouse-tracking 'proportional'
 org.gnome.desktop.a11y.magnifier screen-position 'full-screen'
 org.gnome.desktop.a11y.magnifier scroll-at-edges false
-org.gnome.desktop.a11y.magnifier show-cross-hairs false
+org.gnome.desktop.a11y.magnifier show-cross-hairs true
 org.gnome.desktop.a11y.mouse click-type-window-visible true
 org.gnome.desktop.a11y.mouse dwell-click-enabled false
 org.gnome.desktop.a11y.mouse dwell-gesture-double 'up'
@@ -656,9 +657,30 @@ org.gnome.desktop.background picture-opacity 100
 org.gnome.desktop.background picture-options 'zoom'
 org.gnome.desktop.background picture-uri 'file:///home/alchemist/.config/background'
 org.gnome.desktop.background picture-uri-dark 'file:///home/alchemist/.config/background'
-org.gnome.desktop.background primary-color '#e1e184847777'
-org.gnome.desktop.background secondary-color '#000000'
+org.gnome.desktop.background primary-color '#000000000000'
+org.gnome.desktop.background secondary-color '#000000000000'
 org.gnome.desktop.background show-desktop-icons false
+org.gnome.desktop.break-reminders selected-breaks @as []
+org.gnome.desktop.break-reminders.eyesight countdown false
+org.gnome.desktop.break-reminders.eyesight delay-seconds uint32 180
+org.gnome.desktop.break-reminders.eyesight duration-seconds uint32 20
+org.gnome.desktop.break-reminders.eyesight fade-screen true
+org.gnome.desktop.break-reminders.eyesight interval-seconds uint32 1200
+org.gnome.desktop.break-reminders.eyesight lock-screen false
+org.gnome.desktop.break-reminders.eyesight notify true
+org.gnome.desktop.break-reminders.eyesight notify-overdue true
+org.gnome.desktop.break-reminders.eyesight notify-upcoming false
+org.gnome.desktop.break-reminders.eyesight play-sound true
+org.gnome.desktop.break-reminders.movement countdown false
+org.gnome.desktop.break-reminders.movement delay-seconds uint32 180
+org.gnome.desktop.break-reminders.movement duration-seconds uint32 300
+org.gnome.desktop.break-reminders.movement fade-screen true
+org.gnome.desktop.break-reminders.movement interval-seconds uint32 1800
+org.gnome.desktop.break-reminders.movement lock-screen false
+org.gnome.desktop.break-reminders.movement notify true
+org.gnome.desktop.break-reminders.movement notify-overdue true
+org.gnome.desktop.break-reminders.movement notify-upcoming true
+org.gnome.desktop.break-reminders.movement play-sound true
 org.gnome.desktop.calendar show-weekdate false
 org.gnome.desktop.datetime automatic-timezone false
 org.gnome.desktop.default-applications.office.calendar exec 'evolution -c calendar'
@@ -675,6 +697,7 @@ org.gnome.desktop.input-sources show-all-sources false
 org.gnome.desktop.input-sources sources [('xkb', 'us')]
 org.gnome.desktop.input-sources xkb-model 'pc105+inet'
 org.gnome.desktop.input-sources xkb-options ['caps:escape_shifted_capslock']
+org.gnome.desktop.interface accent-color 'pink'
 org.gnome.desktop.interface avatar-directories @as []
 org.gnome.desktop.interface can-change-accels false
 org.gnome.desktop.interface clock-format '12h'
@@ -686,13 +709,14 @@ org.gnome.desktop.interface cursor-blink true
 org.gnome.desktop.interface cursor-blink-time 1200
 org.gnome.desktop.interface cursor-blink-timeout 10
 org.gnome.desktop.interface cursor-size 24
-org.gnome.desktop.interface cursor-theme 'oreo_teal_cursors'
+org.gnome.desktop.interface cursor-theme 'oreo_pink_cursors'
 org.gnome.desktop.interface document-font-name 'Noto Sans 11'
 org.gnome.desktop.interface enable-animations true
 org.gnome.desktop.interface enable-hot-corners false
 org.gnome.desktop.interface font-antialiasing 'rgba'
-org.gnome.desktop.interface font-hinting 'slight'
+org.gnome.desktop.interface font-hinting 'medium'
 org.gnome.desktop.interface font-name 'Noto Sans 11'
+org.gnome.desktop.interface font-rendering 'automatic'
 org.gnome.desktop.interface font-rgba-order 'rgb'
 org.gnome.desktop.interface gtk-color-palette 'black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90'
 org.gnome.desktop.interface gtk-color-scheme ''
@@ -704,12 +728,12 @@ org.gnome.desktop.interface gtk-key-theme 'Default'
 org.gnome.desktop.interface gtk-theme 'Adwaita'
 org.gnome.desktop.interface gtk-timeout-initial 200
 org.gnome.desktop.interface gtk-timeout-repeat 20
-org.gnome.desktop.interface icon-theme 'Tela-circle'
+org.gnome.desktop.interface icon-theme 'Tela-circle-pink'
 org.gnome.desktop.interface locate-pointer false
 org.gnome.desktop.interface menubar-accel 'F10'
 org.gnome.desktop.interface menubar-detachable false
 org.gnome.desktop.interface menus-have-tearoff false
-org.gnome.desktop.interface monospace-font-name 'Fira Code Bold 10'
+org.gnome.desktop.interface monospace-font-name 'Cascadia Mono NF Bold 10 @wght=700'
 org.gnome.desktop.interface overlay-scrolling true
 org.gnome.desktop.interface scaling-factor uint32 0
 org.gnome.desktop.interface show-battery-percentage true
@@ -717,7 +741,7 @@ org.gnome.desktop.interface text-scaling-factor 1.0
 org.gnome.desktop.interface toolbar-detachable false
 org.gnome.desktop.interface toolbar-icons-size 'large'
 org.gnome.desktop.interface toolbar-style 'both-horiz'
-org.gnome.desktop.interface toolkit-accessibility true
+org.gnome.desktop.interface toolkit-accessibility false
 org.gnome.desktop.lockdown disable-application-handlers false
 org.gnome.desktop.lockdown disable-command-line false
 org.gnome.desktop.lockdown disable-lock-screen false
@@ -735,7 +759,7 @@ org.gnome.desktop.media-handling autorun-never false
 org.gnome.desktop.media-handling autorun-x-content-ignore @as []
 org.gnome.desktop.media-handling autorun-x-content-open-folder ['x-content/audio-player', 'x-content/image-dcf']
 org.gnome.desktop.media-handling autorun-x-content-start-app ['x-content/ostree-repository', 'x-content/audio-cdda', 'x-content/video-dvd']
-org.gnome.desktop.notifications application-children ['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus', 'steam', 'org-gnome-software', 'org-qbittorrent-qbittorrent']
+org.gnome.desktop.notifications application-children ['org-gnome-console', 'gnome-power-panel', 'firefox', 'gnome-printers-panel', 'org-gnome-terminal', 'org-gnome-settings', 'org-gnome-terminal-preferences', 'org-gnome-nautilus', 'steam', 'org-gnome-software', 'org-qbittorrent-qbittorrent', 'org-gnome-extensions', 'dev-warp-warp']
 org.gnome.desktop.notifications show-banners true
 org.gnome.desktop.notifications show-in-lock-screen true
 org.gnome.desktop.peripherals.tablet area [0.0, 0.0, 0.0, 0.0]
@@ -797,8 +821,8 @@ org.gnome.desktop.remote-desktop.rdp enable false
 org.gnome.desktop.remote-desktop.rdp negotiate-port true
 org.gnome.desktop.remote-desktop.rdp port uint16 3389
 org.gnome.desktop.remote-desktop.rdp screen-share-mode 'mirror-primary'
-org.gnome.desktop.remote-desktop.rdp tls-cert ''
-org.gnome.desktop.remote-desktop.rdp tls-key ''
+org.gnome.desktop.remote-desktop.rdp tls-cert '/home/alchemist/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt'
+org.gnome.desktop.remote-desktop.rdp tls-key '/home/alchemist/.local/share/gnome-remote-desktop/certificates/rdp-tls.key'
 org.gnome.desktop.remote-desktop.rdp view-only true
 org.gnome.desktop.remote-desktop.vnc auth-method 'prompt'
 org.gnome.desktop.remote-desktop.vnc enable false
@@ -817,9 +841,9 @@ org.gnome.desktop.screensaver logout-delay uint32 7200
 org.gnome.desktop.screensaver logout-enabled false
 org.gnome.desktop.screensaver picture-opacity 100
 org.gnome.desktop.screensaver picture-options 'zoom'
-org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/gnome/neogeo-l.jxl'
-org.gnome.desktop.screensaver primary-color '#e18477'
-org.gnome.desktop.screensaver secondary-color '#000000'
+org.gnome.desktop.screensaver picture-uri 'file:///home/alchemist/.local/share/backgrounds/2024-09-20-01-14-24-0195.jpg'
+org.gnome.desktop.screensaver primary-color '#000000000000'
+org.gnome.desktop.screensaver secondary-color '#000000000000'
 org.gnome.desktop.screensaver show-full-name-in-top-bar true
 org.gnome.desktop.screensaver status-message-enabled true
 org.gnome.desktop.screensaver user-switch-enabled true
@@ -829,10 +853,10 @@ org.gnome.desktop.search-providers enabled @as []
 org.gnome.desktop.search-providers sort-order ['org.gnome.Contacts.desktop', 'org.gnome.Documents.desktop', 'org.gnome.Nautilus.desktop']
 org.gnome.desktop.session idle-delay uint32 180
 org.gnome.desktop.session session-name 'gnome'
-org.gnome.desktop.sound allow-volume-above-100-percent false
+org.gnome.desktop.sound allow-volume-above-100-percent true
 org.gnome.desktop.sound event-sounds true
 org.gnome.desktop.sound input-feedback-sounds false
-org.gnome.desktop.sound theme-name '__custom'
+org.gnome.desktop.sound theme-name 'freedesktop'
 org.gnome.desktop.thumbnail-cache maximum-age 180
 org.gnome.desktop.thumbnail-cache maximum-size 512
 org.gnome.desktop.thumbnailers disable @as []
@@ -1045,6 +1069,7 @@ org.gnome.evolution.addressbook vpane-position-sub 400
 org.gnome.evolution.bogofilter command ''
 org.gnome.evolution.bogofilter utf8-for-spam-filter true
 org.gnome.evolution.calendar allow-direct-summary-edit false
+org.gnome.evolution.calendar allow-event-dnd true
 org.gnome.evolution.calendar audio-dir ''
 org.gnome.evolution.calendar ba-reminder-interval 15
 org.gnome.evolution.calendar ba-reminder-units 'minutes'
@@ -1109,6 +1134,7 @@ org.gnome.evolution.calendar primary-tasks ''
 org.gnome.evolution.calendar publish-template ''
 org.gnome.evolution.calendar recur-events-italic false
 org.gnome.evolution.calendar search-range-years 10
+org.gnome.evolution.calendar send-reminder-with-event false
 org.gnome.evolution.calendar shorten-time 5
 org.gnome.evolution.calendar shorten-time-end true
 org.gnome.evolution.calendar show-event-end true
@@ -1171,6 +1197,7 @@ org.gnome.evolution.mail charset ''
 org.gnome.evolution.mail citation-color '#737373'
 org.gnome.evolution.mail collapse-archive-folders-in-selectors false
 org.gnome.evolution.mail composer-addresses-accept-html @as []
+org.gnome.evolution.mail composer-attach-separate-messages false
 org.gnome.evolution.mail composer-attribution-language ''
 org.gnome.evolution.mail composer-charset ''
 org.gnome.evolution.mail composer-current-folder ''
@@ -1376,6 +1403,11 @@ org.gnome.evolution.window maximized false
 org.gnome.evolution.window width 0
 org.gnome.evolution.window x 0
 org.gnome.evolution.window y 0
+org.gnome.evolution.window height 0
+org.gnome.evolution.window maximized false
+org.gnome.evolution.window width 0
+org.gnome.evolution.window x 0
+org.gnome.evolution.window y 0
 org.gnome.evolution.plugin.attachment-reminder attachment-reminder-clues ['attachment', 'attaching', 'attached', 'enclosed']
 org.gnome.evolution.plugin.autocontacts addressbook-source ''
 org.gnome.evolution.plugin.autocontacts auto-sync-gaim false
@@ -1426,6 +1458,8 @@ org.gnome.evolution.shell folder-bar-width-sub 200
 org.gnome.evolution.shell folder-paths @as []
 org.gnome.evolution.shell icon-only-buttons-in-header-bar false
 org.gnome.evolution.shell markdown-preview-beside-text false
+org.gnome.evolution.shell markdown-to-html-command ''
+org.gnome.evolution.shell markdown-to-html-command-sourcepos-arg ''
 org.gnome.evolution.shell menubar-visible false
 org.gnome.evolution.shell menubar-visible-sub false
 org.gnome.evolution.shell prefer-symbolic-icons 'auto'
@@ -1465,9 +1499,7 @@ org.gnome.evolution.spamassassin learn-command ''
 org.gnome.evolution.spamassassin local-only true
 org.gnome.evolution.text-highlight enabled true
 org.gnome.evolution.text-highlight theme ''
-org.gnome.gedit.plugins active-plugins ['docinfo', 'filebrowser', 'modelines', 'sort', 'spell']
-org.gnome.gedit.plugins.externaltools font 'Monospace 10'
-org.gnome.gedit.plugins.externaltools use-system-font true
+org.gnome.gedit.plugins active-plugins ['filebrowser', 'sort', 'spell', 'textsize']
 org.gnome.gedit.plugins.filebrowser binary-patterns ['*.la', '*.lo']
 org.gnome.gedit.plugins.filebrowser enable-remote false
 org.gnome.gedit.plugins.filebrowser filter-mode ['hide-hidden', 'hide-binary']
@@ -1500,9 +1532,10 @@ org.gnome.gedit.preferences.editor insert-spaces false
 org.gnome.gedit.preferences.editor max-undo-actions 2000
 org.gnome.gedit.preferences.editor restore-cursor-position true
 org.gnome.gedit.preferences.editor right-margin-position uint32 80
-org.gnome.gedit.preferences.editor scheme 'tango'
 org.gnome.gedit.preferences.editor search-highlighting true
 org.gnome.gedit.preferences.editor smart-home-end 'after'
+org.gnome.gedit.preferences.editor style-scheme-for-dark-theme-variant 'solarized-dark'
+org.gnome.gedit.preferences.editor style-scheme-for-light-theme-variant 'tango'
 org.gnome.gedit.preferences.editor syntax-highlighting true
 org.gnome.gedit.preferences.editor tabs-size uint32 8
 org.gnome.gedit.preferences.editor use-default-font true
@@ -1524,7 +1557,7 @@ org.gnome.gedit.preferences.ui bottom-panel-visible false
 org.gnome.gedit.preferences.ui show-tabs-mode 'auto'
 org.gnome.gedit.preferences.ui side-panel-visible false
 org.gnome.gedit.preferences.ui statusbar-visible true
-org.gnome.gedit.preferences.ui theme-variant 'light'
+org.gnome.gedit.preferences.ui theme-variant 'system'
 org.gnome.gedit.state.file-chooser filter-id 0
 org.gnome.gedit.state.file-chooser open-recent true
 org.gnome.gedit.state.history-entry replace-with-entry ['']
@@ -1538,7 +1571,7 @@ org.gnome.gedit.state.window state 0
 org.gnome.gnome-system-monitor cpu-colors [(uint32 0, '#e01b24'), (1, '#ff7800'), (2, '#f6d32d'), (3, '#33d17a'), (4, '#26a269'), (5, '#62a0ea'), (6, '#1c71d8'), (7, '#613583'), (8, '#9141ac'), (9, '#c061cb'), (10, '#ffbe6f'), (11, '#f9f06b'), (12, '#8ff0a4'), (13, '#2ec27e'), (14, '#1a5fb4'), (15, '#c061cb')]
 org.gnome.gnome-system-monitor cpu-smooth-graph true
 org.gnome.gnome-system-monitor cpu-stacked-area-chart false
-org.gnome.gnome-system-monitor current-tab 'processes'
+org.gnome.gnome-system-monitor current-tab 'resources'
 org.gnome.gnome-system-monitor disk-read-color '#3584e4'
 org.gnome.gnome-system-monitor disk-write-color '#e66100'
 org.gnome.gnome-system-monitor disks-interval 5000
@@ -1561,32 +1594,32 @@ org.gnome.gnome-system-monitor smooth-refresh true
 org.gnome.gnome-system-monitor solaris-mode true
 org.gnome.gnome-system-monitor swap-color '#33d17a'
 org.gnome.gnome-system-monitor update-interval 3000
-org.gnome.gnome-system-monitor window-height 500
-org.gnome.gnome-system-monitor window-width 700
-org.gnome.gnome-system-monitor.disktreenew col-0-visible true
-org.gnome.gnome-system-monitor.disktreenew col-0-width 100
-org.gnome.gnome-system-monitor.disktreenew col-1-visible true
-org.gnome.gnome-system-monitor.disktreenew col-1-width 100
-org.gnome.gnome-system-monitor.disktreenew col-2-visible true
-org.gnome.gnome-system-monitor.disktreenew col-2-width 50
-org.gnome.gnome-system-monitor.disktreenew col-3-visible true
-org.gnome.gnome-system-monitor.disktreenew col-3-width 80
-org.gnome.gnome-system-monitor.disktreenew col-4-visible false
-org.gnome.gnome-system-monitor.disktreenew col-4-width 80
-org.gnome.gnome-system-monitor.disktreenew col-5-visible true
-org.gnome.gnome-system-monitor.disktreenew col-5-width 80
-org.gnome.gnome-system-monitor.disktreenew col-6-visible true
-org.gnome.gnome-system-monitor.disktreenew col-6-width 290
-org.gnome.gnome-system-monitor.disktreenew columns-order [0]
-org.gnome.gnome-system-monitor.disktreenew sort-col 1
-org.gnome.gnome-system-monitor.disktreenew sort-order 0
+org.gnome.gnome-system-monitor window-height 720
+org.gnome.gnome-system-monitor window-width 800
+org.gnome.gnome-system-monitor.disksview col-available-visible true
+org.gnome.gnome-system-monitor.disksview col-available-width 80
+org.gnome.gnome-system-monitor.disksview col-device-visible true
+org.gnome.gnome-system-monitor.disksview col-device-width 100
+org.gnome.gnome-system-monitor.disksview col-directory-visible true
+org.gnome.gnome-system-monitor.disksview col-directory-width 100
+org.gnome.gnome-system-monitor.disksview col-free-visible false
+org.gnome.gnome-system-monitor.disksview col-free-width 80
+org.gnome.gnome-system-monitor.disksview col-total-visible true
+org.gnome.gnome-system-monitor.disksview col-total-width 80
+org.gnome.gnome-system-monitor.disksview col-type-visible true
+org.gnome.gnome-system-monitor.disksview col-type-width 50
+org.gnome.gnome-system-monitor.disksview col-used-visible true
+org.gnome.gnome-system-monitor.disksview col-used-width 300
+org.gnome.gnome-system-monitor.disksview columns-order ['device', 'directory', 'type', 'total', 'free', 'available', 'used']
+org.gnome.gnome-system-monitor.disksview sort-col 'directory'
+org.gnome.gnome-system-monitor.disksview sort-order 0
 org.gnome.gnome-system-monitor.memmapstree sort-col 0
 org.gnome.gnome-system-monitor.memmapstree sort-order 0
 org.gnome.gnome-system-monitor.openfilestree sort-col 0
 org.gnome.gnome-system-monitor.openfilestree sort-order 0
 org.gnome.gnome-system-monitor.proctree col-0-visible true
 org.gnome.gnome-system-monitor.proctree col-0-width 225
-org.gnome.gnome-system-monitor.proctree col-1-visible true
+org.gnome.gnome-system-monitor.proctree col-1-visible false
 org.gnome.gnome-system-monitor.proctree col-1-width 98
 org.gnome.gnome-system-monitor.proctree col-10-visible false
 org.gnome.gnome-system-monitor.proctree col-10-width 70
@@ -1614,15 +1647,15 @@ org.gnome.gnome-system-monitor.proctree col-20-visible false
 org.gnome.gnome-system-monitor.proctree col-20-width 59
 org.gnome.gnome-system-monitor.proctree col-21-visible false
 org.gnome.gnome-system-monitor.proctree col-21-width 59
-org.gnome.gnome-system-monitor.proctree col-22-visible true
+org.gnome.gnome-system-monitor.proctree col-22-visible false
 org.gnome.gnome-system-monitor.proctree col-22-width 100
-org.gnome.gnome-system-monitor.proctree col-23-visible true
+org.gnome.gnome-system-monitor.proctree col-23-visible false
 org.gnome.gnome-system-monitor.proctree col-23-width 100
 org.gnome.gnome-system-monitor.proctree col-24-visible true
 org.gnome.gnome-system-monitor.proctree col-24-width 100
 org.gnome.gnome-system-monitor.proctree col-25-visible true
 org.gnome.gnome-system-monitor.proctree col-25-width 100
-org.gnome.gnome-system-monitor.proctree col-26-visible true
+org.gnome.gnome-system-monitor.proctree col-26-visible false
 org.gnome.gnome-system-monitor.proctree col-26-width 100
 org.gnome.gnome-system-monitor.proctree col-3-visible false
 org.gnome.gnome-system-monitor.proctree col-3-width 90
@@ -1638,8 +1671,8 @@ org.gnome.gnome-system-monitor.proctree col-8-visible true
 org.gnome.gnome-system-monitor.proctree col-8-width 71
 org.gnome.gnome-system-monitor.proctree col-9-visible false
 org.gnome.gnome-system-monitor.proctree col-9-width 80
-org.gnome.gnome-system-monitor.proctree columns-order [0]
-org.gnome.gnome-system-monitor.proctree sort-col 0
+org.gnome.gnome-system-monitor.proctree columns-order [0, 12]
+org.gnome.gnome-system-monitor.proctree sort-col 8
 org.gnome.gnome-system-monitor.proctree sort-order 0
 org.gnome.libgnomekbd.desktop default-group -1
 org.gnome.libgnomekbd.desktop group-per-window false
@@ -1704,16 +1737,16 @@ org.gnome.mutter.wayland.keybindings switch-to-session-7 ['<Primary><Alt>F7']
 org.gnome.mutter.wayland.keybindings switch-to-session-8 ['<Primary><Alt>F8']
 org.gnome.mutter.wayland.keybindings switch-to-session-9 ['<Primary><Alt>F9']
 org.gnome.nautilus.compression default-compression-format 'zip'
-org.gnome.nautilus.icon-view captions ['none', 'none', 'none']
-org.gnome.nautilus.icon-view default-zoom-level 'medium'
+org.gnome.nautilus.icon-view captions ['size', 'detailed_type', 'date_accessed']
+org.gnome.nautilus.icon-view default-zoom-level 'extra-large'
 org.gnome.nautilus.list-view default-column-order ['name', 'size', 'type', 'owner', 'group', 'permissions', 'mime_type', 'where', 'date_modified', 'date_modified_with_time', 'date_accessed', 'date_created', 'recency', 'starred']
 org.gnome.nautilus.list-view default-visible-columns ['name', 'size', 'date_modified']
 org.gnome.nautilus.list-view default-zoom-level 'medium'
 org.gnome.nautilus.list-view use-tree-view false
 org.gnome.nautilus.preferences always-use-location-entry false
 org.gnome.nautilus.preferences click-policy 'double'
-org.gnome.nautilus.preferences date-time-format 'simple'
-org.gnome.nautilus.preferences default-folder-viewer 'icon-view'
+org.gnome.nautilus.preferences date-time-format 'detailed'
+org.gnome.nautilus.preferences default-folder-viewer 'list-view'
 org.gnome.nautilus.preferences default-sort-in-reverse-order false
 org.gnome.nautilus.preferences default-sort-order 'name'
 org.gnome.nautilus.preferences fts-enabled true
@@ -1731,7 +1764,8 @@ org.gnome.nautilus.preferences show-directory-item-counts 'local-only'
 org.gnome.nautilus.preferences show-hidden-files false
 org.gnome.nautilus.preferences show-image-thumbnails 'local-only'
 org.gnome.nautilus.preferences thumbnail-limit uint64 50
-org.gnome.nautilus.window-state initial-size (890, 550)
+org.gnome.nautilus.window-state initial-size (953, 575)
+org.gnome.nautilus.window-state initial-size-file-chooser (890, 550)
 org.gnome.nautilus.window-state maximized false
 org.gnome.nm-applet disable-connected-notifications false
 org.gnome.nm-applet disable-disconnected-notifications false
@@ -1745,10 +1779,10 @@ org.gnome.online-accounts whitelisted-providers ['all']
 org.gnome.portal.filechooser last-folder-path ''
 org.gnome.power-manager info-history-graph-points true
 org.gnome.power-manager info-history-graph-smooth true
-org.gnome.power-manager info-history-time 21600
+org.gnome.power-manager info-history-time 28800
 org.gnome.power-manager info-history-type 'charge'
-org.gnome.power-manager info-last-device '/org/freedesktop/UPower/devices/line_power_ACAD'
-org.gnome.power-manager info-page-number 0
+org.gnome.power-manager info-last-device '/org/freedesktop/UPower/devices/battery_BAT1'
+org.gnome.power-manager info-page-number 1
 org.gnome.power-manager info-stats-graph-points true
 org.gnome.power-manager info-stats-graph-smooth true
 org.gnome.power-manager info-stats-type 'discharge-accuracy'
@@ -1775,9 +1809,9 @@ org.gnome.settings-daemon.peripherals.keyboard click-volume 0
 org.gnome.settings-daemon.peripherals.smartcard removal-action 'none'
 org.gnome.settings-daemon.peripherals.touchscreen orientation-lock false
 org.gnome.settings-daemon.plugins whitelisted-plugins ['all']
-org.gnome.settings-daemon.plugins.color night-light-enabled true
+org.gnome.settings-daemon.plugins.color night-light-enabled false
 org.gnome.settings-daemon.plugins.color night-light-last-coordinates (91.0, 181.0)
-org.gnome.settings-daemon.plugins.color night-light-schedule-automatic true
+org.gnome.settings-daemon.plugins.color night-light-schedule-automatic false
 org.gnome.settings-daemon.plugins.color night-light-schedule-from 20.0
 org.gnome.settings-daemon.plugins.color night-light-schedule-to 6.0
 org.gnome.settings-daemon.plugins.color night-light-temperature uint32 2700
@@ -1906,8 +1940,8 @@ org.gnome.shell command-history ['lg']
 org.gnome.shell development-tools true
 org.gnome.shell disable-extension-version-validation false
 org.gnome.shell disable-user-extensions false
-org.gnome.shell disabled-extensions ['window-list@gnome-shell-extensions.gcampax.github.com', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com']
-org.gnome.shell enabled-extensions ['user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'transparent-top-bar@ftpix.com', 'run-or-raise@edvard.cz', 'light-style@gnome-shell-extensions.gcampax.github.com', 'caffeine@patapon.info']
+org.gnome.shell disabled-extensions ['window-list@gnome-shell-extensions.gcampax.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'native-window-placement@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'light-style@gnome-shell-extensions.gcampax.github.com']
+org.gnome.shell enabled-extensions ['user-theme@gnome-shell-extensions.gcampax.github.com', 'clipboard-indicator@tudmotu.com', 'Vitals@CoreCoding.com', 'hidetopbar@mathieu.bidon.ca', 'CustomizeClockOnLockScreen@pratap.fastmail.fm', 'ControlBlurEffectOnLockScreen@pratap.fastmail.fm', 'transparent-top-bar@ftpix.com', 'caffeine@patapon.info', 'blur-my-shell@aunetx', 'system-monitor@gnome-shell-extensions.gcampax.github.com', 'run-or-raise@edvard.cz']
 org.gnome.shell favorite-apps @as []
 org.gnome.shell last-selected-power-profile 'performance'
 org.gnome.shell looking-glass-history ['windows']
@@ -1927,8 +1961,10 @@ org.gnome.shell.extensions.system-monitor show-swap true
 org.gnome.shell.extensions.system-monitor show-upload true
 org.gnome.shell.extensions.user-theme name 'default-pure'
 org.gnome.shell.extensions.window-list display-all-workspaces false
+org.gnome.shell.extensions.window-list embed-previews true
 org.gnome.shell.extensions.window-list grouping-mode 'never'
 org.gnome.shell.extensions.window-list show-on-all-monitors false
+org.gnome.shell.extensions.workspace-indicator embed-previews true
 org.gnome.shell.keybindings focus-active-notification @as []
 org.gnome.shell.keybindings open-new-window-application-1 ['<Super><Control>1']
 org.gnome.shell.keybindings open-new-window-application-2 ['<Super><Control>2']
@@ -1964,7 +2000,7 @@ org.gnome.shell.window-switcher app-icon-mode 'both'
 org.gnome.shell.window-switcher current-workspace-only true
 org.gnome.shell.world-clocks locations [<(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>, <(uint32 2, <('New Delhi', 'VIDP', true, [(0.49858239547081096, 1.345939747314058)], [(0.49916416607037828, 1.3473941825396225)])>)>, <(uint32 2, <('Singapore', 'WSAP', true, [(0.023852838928353343, 1.8136879868485383)], [(0.022568084612667797, 1.8126262332513803)])>)>]
 org.gnome.software allow-updates true
-org.gnome.software check-timestamp int64 1724876374
+org.gnome.software check-timestamp int64 1726934913
 org.gnome.software compatible-projects ['GNOME', 'KDE', 'XFCE']
 org.gnome.software download-updates true
 org.gnome.software download-updates-notify true
@@ -1973,7 +2009,7 @@ org.gnome.software external-appstream-system-wide false
 org.gnome.software external-appstream-urls @as []
 org.gnome.software filter-default-branch true
 org.gnome.software first-run false
-org.gnome.software flatpak-purge-timestamp int64 1724034523
+org.gnome.software flatpak-purge-timestamp int64 1726823225
 org.gnome.software free-repos @as []
 org.gnome.software free-repos-url ''
 org.gnome.software install-bundles-system-wide true
@@ -2050,7 +2086,7 @@ org.gtk.Settings.FileChooser sort-directories-first false
 org.gtk.Settings.FileChooser sort-order 'ascending'
 org.gtk.Settings.FileChooser startup-mode 'recent'
 org.gtk.Settings.FileChooser type-format 'category'
-org.gtk.Settings.FileChooser window-position (345, 47)
+org.gtk.Settings.FileChooser window-position (26, 23)
 org.gtk.Settings.FileChooser window-size (1231, 902)
 org.gtk.gtk4.Settings.ColorChooser custom-colors [(0.27058824896812439, 0.40392157435417175, 0.5372549295425415, 1.0)]
 org.gtk.gtk4.Settings.ColorChooser selected-color (true, 0.14117647707462311, 0.12156862765550613, 0.19215686619281769, 1.0)
