@@ -437,6 +437,25 @@ function fzp {
 function zin { fzp "install" "$@" }
 function zun { fzp "uninstall" "$@" }
 
+function zpacowner {
+  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
+  local file
+  file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
+  [[ -n "$file" ]] && pacman -Qo "$file"
+}
+
+function zpacinfo {
+  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
+  local pkg
+  pkg=$(pacman -Qq | fzf-tmux --query="$1" --select-1 --exit-0)
+  [[ -n "$pkg" ]] && pacman -Qi "$pkg"
+}
+
+alias zpacreqby='zpacinfo | grep "^Required By"'
+alias zpacdepon='zpacinfo | grep "^Depends On"'
+alias zpacver='zpacinfo | grep "^Version"'
+alias zpacreason='zpacinfo | grep -e "^Install Reason" -e "^Required By"'
+
 function gloc {
   local file handler
   file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
