@@ -6,27 +6,44 @@ from rich.console import Console
 from rich.markdown import Markdown
 
 
-def render_markdown(content):
-    console = Console()
+def render_markdown(content, pager):
+    console = Console(color_system="truecolor")
+    markdown = Markdown(
+        content,
+        hyperlinks=True,
+        code_theme="Dracula",
+        inline_code_theme="Dracula",
+    )
+    if not pager:
+        console.print(markdown)
+        return
+
     with console.pager():
-        markdown = Markdown(content)
         console.print(markdown)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Render Markdown files in the shell using the rich library with paging support.")
+        description="Render Markdown files in the terminal."
+    )
     parser.add_argument(
-        "file", nargs='?', help="Path to the Markdown file to render. If not provided, reads from stdin.")
-    parser.add_argument("-v", "--version", action="version",
-                        version="Markdown Renderer 1.0")
+        "file",
+        nargs="?",
+        help="Path to the Markdown file. If missing, read from stdin",
+    )
+    parser.add_argument(
+        "-p",
+        "--pager",
+        action="store_true",
+        help="Use $PAGER to render the content"
+    )
 
     args = parser.parse_args()
 
     content = ""
     if args.file:
         try:
-            with open(args.file, 'r') as file:
+            with open(args.file, "r") as file:
                 content = file.read()
         except FileNotFoundError:
             sys.stderr.write(f"Error: File '{args.file}' not found.\n")
@@ -36,12 +53,13 @@ def main():
             sys.exit(1)
     else:
         if sys.stdin.isatty():
+            sys.stderr.write("Error: No input file provided.\n")
             parser.print_help()
             sys.exit(1)
         else:
             content = sys.stdin.read()
 
-    render_markdown(content)
+    render_markdown(content, args.pager)
 
 
 if __name__ == "__main__":
