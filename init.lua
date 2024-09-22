@@ -963,6 +963,67 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
+                -- Simple file management
+                'stevearc/oil.nvim',
+                ---@module 'oil'
+                ---@type oil.SetupOpts
+                opts = {},
+                config = function ()
+                    require('oil').setup({
+                        default_file_explorer = true,
+                        columns = {
+                            "icon",
+                            "permissions",
+                            "size",
+                            "mtime",
+                        },
+                        skip_confirm_for_simple_edits = true,
+                        prompt_save_on_select_new_entry = true,
+                        watch_for_changes = true,
+                        use_default_keymaps = false,
+                        keymaps = {
+                            ["?"] = "actions.show_help",
+                            ["<CR>"] = "actions.select",
+                            ["<LocalLeader>v"] = {
+                                "actions.select",
+                                opts = { vertical = true },
+                                desc = "Open the entry in a vertical split",
+                            },
+                            ["<LocalLeader>h"] = {
+                                "actions.select",
+                                opts = { horizontal = true },
+                                desc = "Open the entry in a horizontal split",
+                            },
+                            ["<LocalLeader>E"] = {
+                                "actions.select",
+                                opts = { tab = true },
+                                desc = "Open the entry in new tab",
+                            },
+                            ["<LocalLeader>p"] = "actions.preview",
+                            ["<Esc>"] = "actions.close",
+                            ["<LolcalLeader>r"] = "actions.refresh",
+                            ["<LocalLeader>u"] = "actions.parent",
+                            ["<LocalLeader>o"] = "actions.open_cwd",
+                            ["<LocalLeader>c"] = "actions.cd",
+                            ["<LocalLeader>C"] = {
+                                "actions.cd",
+                                opts = { scope = "tab" },
+                                desc = ":tcd to the current oil directory",
+                            },
+                            ["<LocalLeader>s"] = "actions.change_sort",
+                            ["<LocalLeader>x"] = "actions.open_external",
+                            ["<LocalLeader>."] = "actions.toggle_hidden",
+                        },
+                        view_options = {
+                            show_hidden = true,
+                        },
+
+                        VK('n', '-', require("oil").toggle_float)
+                    })
+                end
+            },
+
+            {
                 -- Show special characters
                 'lukas-reineke/indent-blankline.nvim',
                 main = "ibl",
