@@ -239,9 +239,9 @@ alias -g G="| $GREPPER -i"
 
 alias -g l='| less'
 
-alias -g v='nvim'
+alias -g v='$EDITOR'
 
-alias -g V='| vim -'
+alias -g V='| $EDITOR -'
 
 alias -g w='| wc -l'
 
@@ -381,7 +381,7 @@ function fzbin {
 }
 
 # Simplify this
-function vif { fzbin "nvim -O" "$1" }
+function z { fzbin "$EDITOR -O" "$1" }
 
 # This is possibly running on:
 # Some flavor of Linux: Use xdg-open
