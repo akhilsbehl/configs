@@ -204,29 +204,30 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             default_mappings = {
                                 i = {
                                     ["<C-/>"]      = ac.which_key,
-                                    ["<C-_>"]      = ac.which_key,
+                                    ["<C-_>"]      = ac.nop,
+                                    ["<cr>"]       = ac.select_default, -- buggy
                                     ["<C-e>"]      = ac.select_default,
+                                    ["<C-k>"]      = ac.move_selection_previous,
+                                    ["<C-j>"]      = ac.move_selection_next,
+                                    ["<Tab>"]      = ac.move_selection_previous,
+                                    ["<S-Tab>"]    = ac.move_selection_next, -- buggy
+                                    ["<Up>"]       = ac.move_selection_previous,
+                                    ["<Down>"]     = ac.move_selection_next,
                                     ["<C-h>"]      = ac.preview_scrolling_down,
-                                    ["<C-j>"]      = ac.nop,
                                     ["<C-l>"]      = ac.preview_scrolling_up,
                                     ["<C-m>"]      = ac.toggle_selection,
                                     ["<C-n>"]      = ac.results_scrolling_down,
                                     ["<C-p>"]      = ac.results_scrolling_up,
-                                    ["<C-q>"]      = qfix,
                                     ["<C-s>"]      = ac.select_horizontal,
                                     ["<C-t>"]      = ac.select_tab,
                                     ["<C-v>"]      = ac.select_vertical,
+                                    ["<Esc>"]      = ac.close,
+                                    ["<C-q>"]      = qfix,
                                     ["<C-w>"]      = ac.nop,
                                     ["<C-x>"]      = ac.nop,
-                                    ["<Down>"]     = ac.nop,
-                                    ["<Esc>"]      = ac.close,
                                     ["<M-q>"]      = ac.nop,
                                     ["<PageDown>"] = ac.nop,
                                     ["<PageUp>"]   = ac.nop,
-                                    ["<S-Tab>"]    = ac.move_selection_next,
-                                    ["<Tab>"]      = ac.move_selection_previous,
-                                    ["<Up>"]       = ac.nop,
-                                    ["<cr>"]       = ac.select_default, -- buggy
                                 },
                             },
                             layout_config = {
@@ -965,9 +966,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             {
                 -- Simple file management
                 'stevearc/oil.nvim',
-                ---@module 'oil'
-                ---@type oil.SetupOpts
-                opts = {},
                 config = function ()
                     require('oil').setup({
                         default_file_explorer = true,
@@ -994,7 +992,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                 opts = { horizontal = true },
                                 desc = "Open the entry in a horizontal split",
                             },
-                            ["<LocalLeader>E"] = {
+                            ["<LocalLeader>t"] = {
                                 "actions.select",
                                 opts = { tab = true },
                                 desc = "Open the entry in new tab",
@@ -1017,7 +1015,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         view_options = {
                             show_hidden = true,
                         },
-
                         VK('n', '-', require("oil").toggle_float)
                     })
                 end
