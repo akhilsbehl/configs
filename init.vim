@@ -432,7 +432,7 @@ augroup ChangeTheme
 augroup END
 
 "-------------------------
-" Python file config.
+" Language specific file config for some cases
 "-------------------------
 
 augroup Python
@@ -445,9 +445,26 @@ augroup Ocaml
     autocmd BufNewFile,BufRead *.ml setlocal shiftwidth=2
 augroup END
 
+augroup Shell
+    autocmd!
+    autocmd BufNewFile,BufRead *.sh,*.bash,*.zsh setlocal shiftwidth=2
+augroup END
+
 "-------------------------
 " Colorscheme backgournd
 "-------------------------
 
 nnoremap <localleader>cd :set background=dark<CR>
 nnoremap <localleader>cl :set background=light<CR>
+
+"-------------------------
+" AI helpers
+"-------------------------
+
+augroup AI
+    autocmd!
+    autocmd BufNewFile,BufRead * if expand($HAS_GH_COPILOT) == '1' |
+            \ let g:copilot_enabled = 1 |
+            \ let g:codeium_enabled = 0 |
+    \ endif
+augroup END
