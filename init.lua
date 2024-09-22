@@ -26,7 +26,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-if not VG.vscode then
+if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
     require('lazy').setup(
         {
 
@@ -96,7 +96,7 @@ if not VG.vscode then
                             function(server_name)
                                 require('lspconfig')[server_name].setup({})
                             end,
-			    }
+                        }
                     })
                     local cmp = require('cmp')
                     local cmp_format = require('lsp-zero').cmp_format()
@@ -128,10 +128,10 @@ if not VG.vscode then
                     })
                     require('cmp_nvim_ultisnips').setup({})
                     local signs = {
-                        Error = '✘',   -- Bold "X" for errors
-                        Warn  = '⚐',   -- Flag symbol for warnings
-                        Hint  = '➔',   -- Arrow for hints
-                        Info  = '',   -- Info symbol as an information icon
+                        Error = '✘', -- Bold "X" for errors
+                        Warn  = '⚐', -- Flag symbol for warnings
+                        Hint  = '➔', -- Arrow for hints
+                        Info  = '', -- Info symbol as an information icon
                     }
                     for type, icon in pairs(signs) do
                         local hl = 'DiagnosticSign' .. type
@@ -662,7 +662,7 @@ if not VG.vscode then
                 -- Free AI
                 'Exafunction/codeium.vim',
                 event = 'BufEnter',
-                config = function ()
+                config = function()
                     VG.codeium_enabled = 1
                     VG.codeium_disable_bindings = 1
                     VG.codeium_no_map_tab = 1
@@ -684,12 +684,231 @@ if not VG.vscode then
                     VK(
                         'i',
                         '<C-a>',
-                        function ()
+                        function()
                             return vim.fn['codeium#Accept']()
                         end,
                         { expr = true, silent = true }
                     )
                 end,
+            },
+
+            {
+                -- A lot more AI
+                "CopilotC-Nvim/CopilotChat.nvim",
+                branch = "canary",
+                dependencies = {
+                    { "github/copilot.vim" },
+                    { "nvim-lua/plenary.nvim" },
+                },
+                -- build = "make tiktoken",
+                opts = {
+                    auto_follow_cursor = false,
+                    debug = false,
+                    mappings = {
+                        complete = {
+                            detail = 'Use @<Tab> or /<Tab> for options.',
+                            insert ='<Tab>',
+                        },
+                        close = {
+                            normal = '<Esc>',
+                            insert = '<C-c>'
+                        },
+                        reset = {
+                            normal ='<C-l>',
+                            insert = '<C-l>'
+                        },
+                        submit_prompt = {
+                            normal = '<CR>',
+                            insert = '<C-s>'
+                        },
+                        accept_diff = {
+                            normal = '<C-a>',
+                            insert = '<C-a>'
+                        },
+                        yank_diff = {
+                            normal = 'dy',
+                            register = '"',
+                        },
+                        show_diff = {
+                            normal = 'ds'
+                        },
+                        show_help = {
+                            normal = '?'
+                        },
+                    },
+                },
+                config = function(_, opts)
+                    local chat = require("CopilotChat")
+                    local select = require("CopilotChat.select")
+                    opts.selection = select.unnamed
+                    chat.setup(opts)
+                    vim.api.nvim_create_user_command(
+                        "CopilotChatVisual",
+                        function(args)
+                            chat.ask(args.args, { selection = select.visual })
+                        end,
+                        { nargs = "*", range = true }
+                    )
+                    vim.api.nvim_create_user_command(
+                        "CopilotChatInline",
+                        function(args)
+                            chat.ask(
+                                args.args,
+                                {
+                                    selection = select.visual,
+                                    window = {
+                                        layout = "float",
+                                        relative = "cursor",
+                                        width = 1,
+                                        height = 0.4,
+                                        row = 1,
+                                    },
+                                }
+                            )
+                        end,
+                        { nargs = "*", range = true }
+                    )
+                    vim.api.nvim_create_user_command(
+                        "CopilotChatBuffer",
+                        function(args)
+                            chat.ask(args.args, { selection = select.buffer })
+                        end,
+                        { nargs = "*", range = true }
+                    )
+                    vim.api.nvim_create_autocmd(
+                        "BufEnter", {
+                            pattern = "copilot-*",
+                            callback = function()
+                                vim.opt_local.relativenumber = true
+                                vim.opt_local.number = true
+                                local ft = vim.bo.filetype
+                                if ft == "copilot-chat" then
+                                    vim.bo.filetype = "markdown"
+                                end
+                            end,
+                        })
+                end,
+                event = "VeryLazy",
+                keys = {
+                    {
+                        "<LocalLeader>ah",
+                        function()
+                            local actions = require("CopilotChat.actions")
+                            require(
+                                "CopilotChat.integrations.telescope"
+                            ).pick(actions.help_actions())
+                        end,
+                        desc = "CopilotChat - Help actions",
+                    },
+                    {
+                        "<LocalLeader>ap",
+                        function()
+                            local actions = require("CopilotChat.actions")
+                            require(
+                                "CopilotChat.integrations.telescope"
+                            ).pick(actions.prompt_actions())
+                        end,
+                        desc = "CopilotChat - Prompt actions",
+                    },
+                    {
+                        "<LocalLeader>ap",
+                        ":lua require('CopilotChat.integrations.telescope').pick(require('CopilotChat.actions').prompt_actions({selection = require('CopilotChat.select').visual}))<CR>",
+                        mode = "x",
+                        desc = "CopilotChat - Prompt actions",
+                    },
+                    {
+                        "<LocalLeader>ae",
+                        "<cmd>CopilotChatExplain<cr>",
+                        desc = "CopilotChat - Explain code",
+                    },
+                    {
+                        "<LocalLeader>at",
+                        "<cmd>CopilotChatTests<cr>",
+                        desc = "CopilotChat - Generate tests",
+                    },
+                    {
+                        "<LocalLeader>ar",
+                        "<cmd>CopilotChatReview<cr>",
+                        desc = "CopilotChat - Review code",
+                    },
+                    {
+                        "<LocalLeader>aR",
+                        "<cmd>CopilotChatRefactor<cr>",
+                        desc = "CopilotChat - Refactor code",
+                    },
+                    {
+                        "<LocalLeader>an",
+                        "<cmd>CopilotChatBetterNamings<cr>",
+                        desc = "CopilotChat - Better Naming",
+                    },
+                    {
+                        "<LocalLeader>av",
+                        ":CopilotChatVisual",
+                        mode = "x",
+                        desc = "CopilotChat - Open in vertical split",
+                    },
+                    {
+                        "<LocalLeader>ai",
+                        ":CopilotChatInline<cr>",
+                        mode = "x",
+                        desc = "CopilotChat - Inline chat",
+                    },
+                    {
+                        "<LocalLeader>aC",
+                        function()
+                            local input = vim.fn.input("Ask Copilot: ")
+                            if input ~= "" then
+                                vim.cmd("CopilotChat " .. input)
+                            end
+                        end,
+                        desc = "CopilotChat - Ask input",
+                    },
+                    {
+                        "<LocalLeader>am",
+                        "<cmd>CopilotChatCommit<cr>",
+                        desc = "CopilotChat - Generate commit message for all changes",
+                    },
+                    {
+                        "<LocalLeader>aM",
+                        "<cmd>CopilotChatCommitStaged<cr>",
+                        desc = "CopilotChat - Generate commit message for staged changes",
+                    },
+                    {
+                        "<LocalLeader>ac",
+                        function()
+                            local input = vim.fn.input("Quick Chat: ")
+                            if input ~= "" then
+                                vim.cmd("CopilotChatBuffer " .. input)
+                            end
+                        end,
+                        desc = "CopilotChat - Quick chat",
+                    },
+                    {
+                        "<LocalLeader>ad",
+                        "<cmd>CopilotChatDebugInfo<cr>",
+                        desc = "CopilotChat - Debug Info",
+                    },
+                    {
+                        "<LocalLeader>af",
+                        "<cmd>CopilotChatFixDiagnostic<cr>",
+                        desc = "CopilotChat - Fix Diagnostic",
+                    },
+                    {
+                        "<LocalLeader>al",
+                        "<cmd>CopilotChatReset<cr>",
+                        desc = "CopilotChat - Clear buffer and chat history",
+                    },
+                    {
+                        "<LocalLeader>av",
+                        "<cmd>CopilotChatToggle<cr>",
+                        desc = "CopilotChat - Toggle",
+                    },
+                    {
+                        "<LocalLeader>a?",
+                        "<cmd>CopilotChatModels<cr>",
+                        desc = "CopilotChat - Select Models",
+                    }
+                }
             },
 
             {
