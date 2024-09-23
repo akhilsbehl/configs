@@ -644,7 +644,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 -- AI
                 'github/copilot.vim',
                 config = function()
-                    VG.copilot_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 0 or 1
+                    VG.copilot_enabled = (VF.getenv("HAS_GH_COPILOT") == 1) and 0 or 1
                     VG.copilot_no_tab_map = 1
                     VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
                     VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
@@ -664,7 +664,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 'Exafunction/codeium.vim',
                 event = 'BufEnter',
                 config = function()
-                    VG.codeium_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 1 or 0
+                    VG.codeium_enabled = (VF.getenv("HAS_GH_COPILOT") == 1) and 1 or 0
                     VG.codeium_disable_bindings = 1
                     VG.codeium_no_map_tab = 1
                     VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
@@ -923,7 +923,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     'stevearc/dressing.nvim',
                     'nvim-lua/plenary.nvim',
                     'MunifTanjim/nui.nvim',
-                    -- 'zbirenbaum/copilot.lua',
                     {
                         'MeanderingProgrammer/render-markdown.nvim',
                         opts = {
@@ -935,8 +934,8 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 opts = {
                     debug = false,
                     tokenizer = "tiktoken",
-                    provider = (VF.getenv("HAS_GH_COPILOT") == "1") and "copilot" or "groq",
-                    auto_suggestions_provider = (VF.getenv("HAS_GH_COPILOT") == "1") and "copilot" or "groq",
+                    provider = (VF.getenv("HAS_GH_COPILOT") == 1) and "groq" or "copilot",
+                    auto_suggestions_provider = (VF.getenv("HAS_GH_COPILOT") == 1) and "groq" or "copilot",
                     vendors = {
                         groq = {
                             endpoint = "https://api.groq.com/openai/v1",
