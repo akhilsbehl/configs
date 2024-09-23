@@ -456,15 +456,3 @@ augroup END
 
 nnoremap <localleader>cd :set background=dark<CR>
 nnoremap <localleader>cl :set background=light<CR>
-
-"-------------------------
-" AI helpers
-"-------------------------
-
-augroup AI
-    autocmd!
-    autocmd BufNewFile,BufRead * if expand($HAS_GH_COPILOT) == '1' |
-            \ let g:copilot_enabled = 1 |
-            \ let g:codeium_enabled = 0 |
-    \ endif
-augroup END

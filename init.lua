@@ -644,7 +644,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 -- AI
                 'github/copilot.vim',
                 config = function()
-                    VG.copilot_enabled = 0
+                    VG.copilot_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 0 or 1
                     VG.copilot_no_tab_map = 1
                     VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
                     VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
@@ -664,7 +664,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 'Exafunction/codeium.vim',
                 event = 'BufEnter',
                 config = function()
-                    VG.codeium_enabled = 1
+                    VG.codeium_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 1 or 0
                     VG.codeium_disable_bindings = 1
                     VG.codeium_no_map_tab = 1
                     VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
@@ -708,14 +708,14 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     mappings = {
                         complete = {
                             detail = 'Use @<Tab> or /<Tab> for options.',
-                            insert ='<Tab>',
+                            insert = '<Tab>',
                         },
                         close = {
                             normal = '<Esc>',
                             insert = '<C-c>'
                         },
                         reset = {
-                            normal ='<C-l>',
+                            normal = '<C-l>',
                             insert = '<C-l>'
                         },
                         submit_prompt = {
@@ -1051,7 +1051,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             {
                 -- Simple file management
                 'stevearc/oil.nvim',
-                config = function ()
+                config = function()
                     require('oil').setup({
                         default_file_explorer = true,
                         columns = {
@@ -1115,6 +1115,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     show_current_context_start = true,
                 },
                 config = function()
+                    require("ibl").setup()
                     VO.list = true
                     VO.listchars:append('trail:▸')
                 end
