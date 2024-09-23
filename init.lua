@@ -948,6 +948,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                     headers = {
                                         ["Accept"] = "application/json",
                                         ["Content-Type"] = "application/json",
+                                        ["Authorization"] = "Bearer " .. VF.getenv(opts.api_key_name),
                                     },
                                     body = {
                                         model = opts.model,
