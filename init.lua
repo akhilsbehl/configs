@@ -1112,9 +1112,38 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     show_current_context_start = true,
                 },
                 config = function()
-                    require("ibl").setup()
+                    local highlight = {
+                        "RainbowRed",
+                        "RainbowYellow",
+                        "RainbowBlue",
+                        "RainbowOrange",
+                        "RainbowGreen",
+                        "RainbowViolet",
+                        "RainbowCyan"
+                    }
+                    local hooks = require("ibl.hooks")
+                    hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+                        VA.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+                        VA.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+                        VA.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+                        VA.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+                        VA.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+                        VA.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+                        VA.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+                    end)
+                    require("ibl").setup({
+                        scope = {
+                            highlight = highlight,
+                            show_start = false,
+                            show_end = false,
+                        }
+                    })
                     VO.list = true
                     VO.listchars:append('trail:▸')
+                    hooks.register(
+                        hooks.type.SCOPE_HIGHLIGHT,
+                        hooks.builtin.scope_highlight_from_extmark
+                    )
                 end
             },
 
