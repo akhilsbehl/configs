@@ -646,15 +646,15 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 config = function()
                     VG.copilot_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 1 or 0
                     VG.copilot_no_tab_map = 1
-                    VK('n', '<leader>cd', '<cmd>let copilot_enabled=0<cr>')
-                    VK('n', '<leader>ce', '<cmd>let copilot_enabled=1<cr>')
-                    VK('n', '<leader>cs', '<cmd>Copilot<cr>')
                     VK('i', '<C-s>', '<Plug>(copilot-suggest)')
                     VK('i', '<C-d>', '<Plug>(copilot-dismiss)')
                     VK('i', '<C-j>', '<Plug>(copilot-next)')
                     VK('i', '<C-k>', '<Plug>(copilot-previous)')
-                    VK('i', '<C-a>', 'copilot#Accept("")', {
-                        expr = true, replace_keycodes = false,
+                    VK('i', '<C-w>', '<Plug>(copilot-accept-word)')
+                    VK('i', '<C-l>', '<Plug>(copilot-accept-line)')
+                    VK('i', '<C-a>', 'copilot#Accept("\\<CR>")', {
+                        expr = true,
+                        replace_keycodes = false
                     })
                 end,
             },
@@ -667,8 +667,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VG.codeium_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 0 or 1
                     VG.codeium_disable_bindings = 1
                     VG.codeium_no_map_tab = 1
-                    VK('n', '<leader>cd', '<cmd>let codeium_enabled=0<cr>')
-                    VK('n', '<leader>ce', '<cmd>let codeium_enabled=1<cr>')
                     VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
                     VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
                     VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
@@ -701,7 +699,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     { "github/copilot.vim" },
                     { "nvim-lua/plenary.nvim" },
                 },
-                -- build = "make tiktoken",
+                build = "make tiktoken",
                 opts = {
                     auto_follow_cursor = false,
                     debug = false,
@@ -1001,7 +999,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 'SirVer/UltiSnips',
                 config = function()
                     VG.UltiSnipsExpandTrigger                           = '<C-e>'
-                    VG.UltiSnipsListSnippets                            = '<C-l>'
+                    VG.UltiSnipsListSnippets                            = '<C-S-l>'
                     VG.UltiSnipsJumpForwardTrigger                      = '<C-k>'
                     VG.UltiSnipsJumpBackwardTrigger                     = '<C-j>'
                     VG.UltiSnipsRemoveSelectModeMappings                = 0
