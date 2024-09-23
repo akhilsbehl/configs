@@ -792,7 +792,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 event = "VeryLazy",
                 keys = {
                     {
-                        "<LocalLeader>ah",
+                        "<LocalLeader>ch",
                         function()
                             local actions = require("CopilotChat.actions")
                             require(
@@ -802,7 +802,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         desc = "CopilotChat - Help actions",
                     },
                     {
-                        "<LocalLeader>ap",
+                        "<LocalLeader>cp",
                         function()
                             local actions = require("CopilotChat.actions")
                             require(
@@ -812,50 +812,50 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         desc = "CopilotChat - Prompt actions",
                     },
                     {
-                        "<LocalLeader>ap",
+                        "<LocalLeader>cp",
                         ":lua require('CopilotChat.integrations.telescope').pick(require('CopilotChat.actions').prompt_actions({selection = require('CopilotChat.select').visual}))<CR>",
                         mode = "x",
                         desc = "CopilotChat - Prompt actions",
                     },
                     {
-                        "<LocalLeader>ae",
+                        "<LocalLeader>ce",
                         "<cmd>CopilotChatExplain<cr>",
                         desc = "CopilotChat - Explain code",
                     },
                     {
-                        "<LocalLeader>at",
+                        "<LocalLeader>ct",
                         "<cmd>CopilotChatTests<cr>",
                         desc = "CopilotChat - Generate tests",
                     },
                     {
-                        "<LocalLeader>ar",
+                        "<LocalLeader>cr",
                         "<cmd>CopilotChatReview<cr>",
                         desc = "CopilotChat - Review code",
                     },
                     {
-                        "<LocalLeader>aR",
+                        "<LocalLeader>cR",
                         "<cmd>CopilotChatRefactor<cr>",
                         desc = "CopilotChat - Refactor code",
                     },
                     {
-                        "<LocalLeader>an",
+                        "<LocalLeader>cn",
                         "<cmd>CopilotChatBetterNamings<cr>",
                         desc = "CopilotChat - Better Naming",
                     },
                     {
-                        "<LocalLeader>av",
+                        "<LocalLeader>cv",
                         ":CopilotChatVisual",
                         mode = "x",
                         desc = "CopilotChat - Open in vertical split",
                     },
                     {
-                        "<LocalLeader>ai",
+                        "<LocalLeader>ci",
                         ":CopilotChatInline<cr>",
                         mode = "x",
                         desc = "CopilotChat - Inline chat",
                     },
                     {
-                        "<LocalLeader>aC",
+                        "<LocalLeader>cc",
                         function()
                             local input = vim.fn.input("Ask Copilot: ")
                             if input ~= "" then
@@ -865,17 +865,17 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         desc = "CopilotChat - Ask input",
                     },
                     {
-                        "<LocalLeader>am",
+                        "<LocalLeader>cm",
                         "<cmd>CopilotChatCommit<cr>",
                         desc = "CopilotChat - Generate commit message for all changes",
                     },
                     {
-                        "<LocalLeader>aM",
+                        "<LocalLeader>cM",
                         "<cmd>CopilotChatCommitStaged<cr>",
                         desc = "CopilotChat - Generate commit message for staged changes",
                     },
                     {
-                        "<LocalLeader>ac",
+                        "<LocalLeader>cq",
                         function()
                             local input = vim.fn.input("Quick Chat: ")
                             if input ~= "" then
@@ -885,30 +885,114 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         desc = "CopilotChat - Quick chat",
                     },
                     {
-                        "<LocalLeader>ad",
+                        "<LocalLeader>cD",
                         "<cmd>CopilotChatDebugInfo<cr>",
                         desc = "CopilotChat - Debug Info",
                     },
                     {
-                        "<LocalLeader>af",
+                        "<LocalLeader>cf",
                         "<cmd>CopilotChatFixDiagnostic<cr>",
                         desc = "CopilotChat - Fix Diagnostic",
                     },
                     {
-                        "<LocalLeader>al",
+                        "<LocalLeader>cC",
                         "<cmd>CopilotChatReset<cr>",
                         desc = "CopilotChat - Clear buffer and chat history",
                     },
                     {
-                        "<LocalLeader>av",
+                        "<LocalLeader>cv",
                         "<cmd>CopilotChatToggle<cr>",
                         desc = "CopilotChat - Toggle",
                     },
                     {
-                        "<LocalLeader>a?",
+                        "<LocalLeader>cs",
                         "<cmd>CopilotChatModels<cr>",
                         desc = "CopilotChat - Select Models",
                     }
+                }
+            },
+
+            {
+                -- Another variant of a lot more AI
+                'yetone/avante.nvim',
+                event = 'VeryLazy',
+                lazy = false,
+                version = false,
+                build = 'make',
+                dependencies = {
+                    'stevearc/dressing.nvim',
+                    'nvim-lua/plenary.nvim',
+                    'MunifTanjim/nui.nvim',
+                    -- 'zbirenbaum/copilot.lua',
+                    {
+                        'MeanderingProgrammer/render-markdown.nvim',
+                        opts = {
+                            file_types = { "markdown", "Avante" },
+                        },
+                        ft = { "markdown", "Avante" },
+                    }
+                },
+                opts = {
+                    debug = false,
+                    tokenizer = "tiktoken",
+                    provider = (VF.getenv("HAS_GH_COPILOT") == "1") and "copilot" or "groq",
+                    auto_suggestions_provider = (VF.getenv("HAS_GH_COPILOT") == "1") and "copilot" or "groq",
+                    vendors = {
+                        groq = {
+                            endpoint = "https://api.groq.com/openai/v1",
+                            model = "llama-3.1-70b-versatile",
+                            api_key_name = "GROQ_API_KEY",
+                            parse_curl_args = function(opts, code_opts)
+                                return {
+                                    url = opts.endpoint .. "/chat/completions",
+                                    headers = {
+                                        ["Accept"] = "application/json",
+                                        ["Content-Type"] = "application/json",
+                                    },
+                                    body = {
+                                        model = opts.model,
+                                        messages = require(
+                                            "avante.providers"
+                                        ).openai.parse_message(code_opts),
+                                        max_tokens = 4096,
+                                        stream = true,
+                                    },
+                                }
+                            end,
+                            parse_response_data = function(
+                                data_stream,
+                                event_state,
+                                opts
+                            )
+                                require(
+                                    "avante.providers"
+                                ).openai.parse_response(
+                                    data_stream,
+                                    event_state,
+                                    opts
+                                )
+                            end,
+                        }
+                    },
+                    behaviour = {
+                        auto_suggestions = false,
+                        auto_set_highlight_group = true,
+                        auto_set_keymaps = true,
+                        auto_apply_diff_after_generation = false,
+                        support_paste_from_clipboard = false,
+                    },
+                    mappings = {
+                        ask = "<LocalLeader>aa",
+                        edit = "<LocalLeader>ae",
+                        refresh = "<LocalLeader>ar",
+                        suggestion = {
+                            accept = "<C-a>",
+                            next = "<C-k>",
+                            previous = "<C-j>",
+                            dismiss = "<C-c>",
+                        },
+                    },
+                    hints = { enabled = true },
                 }
             },
 
