@@ -842,7 +842,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     },
                     {
                         "<LocalLeader>cv",
-                        ":CopilotChatVisual",
+                        ":CopilotChatVisual<CR>",
                         mode = "x",
                         desc = "CopilotChat - Open in vertical split",
                     },
