@@ -641,7 +641,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
-                -- AI
+                -- AI - Copilot
                 'github/copilot.vim',
                 config = function()
                     VG.copilot_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 1 or 0
@@ -660,44 +660,11 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
-                -- Free AI
-                'Exafunction/codeium.vim',
-                event = 'BufEnter',
-                config = function()
-                    VG.codeium_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 0 or 1
-                    VG.codeium_disable_bindings = 1
-                    VG.codeium_no_map_tab = 1
-                    VK('n', '<leader>cc', '<cmd>call codeium#Chat()<cr>')
-                    VK('i', '<C-s>', '<cmd>call codeium#CycleOrComplete()<cr>')
-                    VK('i', '<C-d>', '<cmd>call codeium#Clear()<cr>')
-                    VK(
-                        'i',
-                        '<C-j>',
-                        '<cmd>call codeium#CycleCompletions(1)<CR>'
-                    )
-                    VK(
-                        'i',
-                        '<C-k>',
-                        '<cmd>call codeium#CycleCompletions(-1)<cr>'
-                    )
-                    VK(
-                        'i',
-                        '<C-a>',
-                        function()
-                            return vim.fn['codeium#Accept']()
-                        end,
-                        { expr = true, silent = true }
-                    )
-                end,
-            },
-
-            {
-                -- A lot more AI
+                -- AI - CopilotChat
                 "CopilotC-Nvim/CopilotChat.nvim",
-                branch = "canary",
                 dependencies = {
                     { "github/copilot.vim" },
-                    { "nvim-lua/plenary.nvim" },
+                    { "nvim-lua/plenary.nvim" , branch = "master" },
                 },
                 build = "make tiktoken",
                 opts = {
@@ -911,7 +878,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
-                -- Another variant of a lot more AI
+                -- AI - Avante/Cursor Style
                 'yetone/avante.nvim',
                 event = 'VeryLazy',
                 lazy = false,
