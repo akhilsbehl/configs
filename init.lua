@@ -210,7 +210,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                     ["<C-k>"]      = ac.move_selection_previous,
                                     ["<C-j>"]      = ac.move_selection_next,
                                     ["<Tab>"]      = ac.move_selection_previous,
-                                    ["<S-Tab>"]    = ac.move_selection_next, -- buggy
+                                    ["<S-Tab>"]    = ac.move_selection_next,
                                     ["<Up>"]       = ac.move_selection_previous,
                                     ["<Down>"]     = ac.move_selection_next,
                                     ["<C-h>"]      = ac.preview_scrolling_down,
