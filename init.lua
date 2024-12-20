@@ -664,7 +664,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 "CopilotC-Nvim/CopilotChat.nvim",
                 dependencies = {
                     { "github/copilot.vim" },
-                    { "nvim-lua/plenary.nvim" , branch = "master" },
+                    { "nvim-lua/plenary.nvim",  branch = "master" },
                 },
                 build = "make tiktoken",
                 opts = {
@@ -706,7 +706,12 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 config = function(_, opts)
                     local chat = require("CopilotChat")
                     local select = require("CopilotChat.select")
-                    opts.selection = select.unnamed
+                    opts.selection = function(source)
+                        return
+                            select.visual(source) or
+                            select.buffer(source) or
+                            select.unnamed(source)
+                    end
                     chat.setup(opts)
                     vim.api.nvim_create_user_command(
                         "CopilotChatVisual",
@@ -903,40 +908,10 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     auto_suggestions_provider = (VF.getenv("HAS_GH_COPILOT") == "1") and "copilot" or "groq",
                     vendors = {
                         groq = {
-                            endpoint = "https://api.groq.com/openai/v1",
-                            model = "llama-3.1-70b-versatile",
+                            __inherited_from = "openai",
                             api_key_name = "GROQ_API_KEY",
-                            parse_curl_args = function(opts, code_opts)
-                                return {
-                                    url = opts.endpoint .. "/chat/completions",
-                                    headers = {
-                                        ["Accept"] = "application/json",
-                                        ["Content-Type"] = "application/json",
-                                        ["Authorization"] = "Bearer " .. VF.getenv(opts.api_key_name),
-                                    },
-                                    body = {
-                                        model = opts.model,
-                                        messages = require(
-                                            "avante.providers"
-                                        ).openai.parse_message(code_opts),
-                                        max_tokens = 4096,
-                                        stream = true,
-                                    },
-                                }
-                            end,
-                            parse_response_data = function(
-                                data_stream,
-                                event_state,
-                                opts
-                            )
-                                require(
-                                    "avante.providers"
-                                ).openai.parse_response(
-                                    data_stream,
-                                    event_state,
-                                    opts
-                                )
-                            end,
+                            endpoint = "https://api.groq.com/openai/v1",
+                            model = "llama-3.3-70b-versatile",
                         }
                     },
                     behaviour = {
