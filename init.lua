@@ -43,7 +43,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     { 'hrsh7th/cmp-nvim-lsp' },
                     { 'hrsh7th/cmp-nvim-lua' },
                     { 'hrsh7th/cmp-path' },
-                    { 'L3MON4D3/LuaSnip' }, -- Only to stop cmp's bitching
+                    { 'L3MON4D3/LuaSnip', run = "make install_jsregexp"},
                     { 'quangnguyen30192/cmp-nvim-ultisnips' },
                 },
                 config = function()
