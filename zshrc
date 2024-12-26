@@ -82,6 +82,32 @@ function cpf() {
     [[ -n "$copier" ]] && "$copier" < "$1"
 }
 
+function enact() {
+    local -a ENVSEARCH=(
+        "$(git rev-parse --show-toplevel 2> /dev/null)"
+        "$PWD"
+        "$HOME"
+    )
+
+    for envroot in "${ENVSEARCH[@]}"; do
+        [[ -n "$envroot" ]] || continue
+        if [[ -d "$envroot/.virtualenv" ]]; then
+            echo "Found $envroot/.virtualenv"
+            local act="$envroot/.virtualenv/bin/activate"
+            if [[ -f "$act" ]]; then
+                source "$act"
+                if [[ $? -eq 0 ]]; then
+                    echo "Activated .virtualenv at $envroot."
+                    return 0
+                else
+                    echo "Could not activate this .virtualenv. Moving on"
+                fi
+            fi
+        fi
+    done
+    echo "No usable virtualenv found. Giving up." && return 1
+}
+
 alias ls='ls --color=auto'
 
 alias ll='ls -l'
