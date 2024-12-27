@@ -43,8 +43,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     { 'hrsh7th/cmp-nvim-lsp' },
                     { 'hrsh7th/cmp-nvim-lua' },
                     { 'hrsh7th/cmp-path' },
-                    { 'L3MON4D3/LuaSnip', run = "make install_jsregexp"},
-                    { 'quangnguyen30192/cmp-nvim-ultisnips' },
                 },
                 config = function()
                     local lsp = require('lsp-zero')
@@ -126,7 +124,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             ['<C-p>'] = cmp.mapping.scroll_docs(-3),
                         }),
                     })
-                    require('cmp_nvim_ultisnips').setup({})
                     local signs = {
                         Error = '✘', -- Bold "X" for errors
                         Warn  = '⚐', -- Flag symbol for warnings
@@ -249,7 +246,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         },
                     })
                     require('telescope').load_extension('fzf')
-                    require('telescope').load_extension('ultisnips')
                     VK('n', '<leader>ff', '<cmd>Telescope git_files<cr>')
                     VK('n', '<leader>fd', '<cmd>Telescope find_files<cr>')
                     VK('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
@@ -271,7 +267,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VK('n', '<leader>fH', '<cmd>Telescope highlights<cr>')
                     VK('n', '<leader>fr', '<cmd>Telescope resume<cr>')
                     VK('n', '<leader>fF', '<cmd>Telescope pickers<cr>')
-                    VK('n', '<leader>fs', '<cmd>Telescope ultisnips<cr>')
                     VK('n', '<leader>gc', '<cmd>Telescope git_commits<cr>')
                     VK('n', '<leader>gC', '<cmd>Telescope git_bcommits<cr>')
                     VK('n', '<leader>gv', '<cmd>Telescope git_bcommits_range<cr>')
@@ -303,7 +298,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 'nvim-telescope/telescope-fzf-native.nvim',
                 build = 'make'
             },
-            'fhill2/telescope-ultisnips.nvim',
 
             {
                 -- Treesitter
@@ -883,24 +877,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
-                -- Snippets engine
-                'SirVer/UltiSnips',
-                config = function()
-                    VG.UltiSnipsExpandTrigger                           = '<C-e>'
-                    VG.UltiSnipsListSnippets                            = '<C-S-l>'
-                    VG.UltiSnipsJumpForwardTrigger                      = '<C-k>'
-                    VG.UltiSnipsJumpBackwardTrigger                     = '<C-j>'
-                    VG.UltiSnipsRemoveSelectModeMappings                = 0
-                    VG.UltiSnipsSnippetStorageDirectoryForUltiSnipsEdit =
-                    '~/.vim/mysnippets'
-                    VG.UltiSnipsSnippetDirectories                      = {
-                        'mysnippets', 'UltiSnips'
-                    }
-                end
-            },
-            'honza/vim-snippets',
-
-            {
                 -- Traverse windows easier
                 'https://gitlab.com/yorickpeterse/nvim-window.git',
                 config = function()
@@ -1099,23 +1075,14 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
 
             'tpope/vim-surround',          -- Use surround movements
 
-            'tpope/vim-repeat',            -- Repeat commands
-
-            'godlygeek/tabular',           -- Align rows
-
             'powerman/vim-plugin-AnsiEsc', -- Escape shell color codes
 
             'folke/tokyonight.nvim',       -- Theme: tokyonight
-
-            'catppuccin/nvim',             -- Themes: catppuccin
-
-            'sainnhe/sonokai',             -- Themes: sonokai
-
-            'sainnhe/gruvbox-material',    -- Themes: gruvbox-material
-
-            'navarasu/onedark.nvim',       -- Themes: onedark
-
-            'rebelot/kanagawa.nvim',       -- Themes: kanagawa
+            'catppuccin/nvim',             -- Theme: catppuccin
+            'sainnhe/sonokai',             -- Theme: sonokai
+            'sainnhe/gruvbox-material',    -- Theme: gruvbox-material
+            'navarasu/onedark.nvim',       -- Theme: onedark
+            'rebelot/kanagawa.nvim',       -- Theme: kanagawa
 
         },
         {
@@ -1127,12 +1094,3 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
 
     VC [[ source ~/.config/nvim/vimrc ]]
 end
-
--- TODOs:
--- 1. Debug Adaptor Protocol
---     1.1. rcarriga/nvim-dap-ui
---     1.2. mfussenegger/nvim-dap
---     1.3. mfussenegger/nvim-dap-python
--- 2. Literate programming?
---     2.1. zyedidia/Literate
---     2.2. zyedidia/literate.vim
