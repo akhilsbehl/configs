@@ -393,6 +393,21 @@ tnoremap tj <Cmd>wincmd j<CR>
 tnoremap tk <Cmd>wincmd k<CR>
 
 "-------------------------
+" Add/remove pyright ignore for Python files
+"-------------------------
+
+function! TogglePyrightIgnore() abort
+    let l:line = getline('.')
+    let l:pattern = '  # pyright: ignore$'
+    if l:line =~ l:pattern
+        let l:newline = substitute(l:line, l:pattern, '', '')
+    else
+        let l:newline = l:line . '  ' . '# pyright: ignore'
+    endif
+    call setline('.', l:newline)
+endfunction
+
+"-------------------------
 " Markdown files config.
 "-------------------------
 
@@ -438,6 +453,8 @@ augroup END
 augroup Python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal foldmethod=indent
+    autocmd BufNewFile,BufRead *.py
+                \ nnoremap <buffer> <leader>ti :call TogglePyrightIgnore()<CR>
 augroup END
 
 augroup Ocaml
