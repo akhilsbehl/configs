@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-_exists () {
+_exists() {
     type "$1" >/dev/null 2>/dev/null
 }
 
@@ -17,10 +17,10 @@ fi
 if test -d "$PWD/.virtualenv"; then
     echo '.virtualenv already exists. Will update requirements if any.'
 else
-    virtualenv --python="$(which python3)" "$PWD/.virtualenv"
+    virtualenv --python="$(pyenv which python || which python3)" "$PWD/.virtualenv"
 fi
 
-source "$PWD/.virtualenv/bin/activate" && \
-    test -f "$PWD/requirements.txt" && \
-        "$PWD/.virtualenv/bin/pip" install -r "$PWD/requirements.txt"
-    "$PWD/.virtualenv/bin/pip" install neovim ipython reorder-python-imports
+source "$PWD/.virtualenv/bin/activate" &&
+    test -f "$PWD/requirements.txt" &&
+    "$PWD/.virtualenv/bin/pip" install -r "$PWD/requirements.txt"
+"$PWD/.virtualenv/bin/pip" install neovim ipython reorder-python-imports
