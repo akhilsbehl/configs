@@ -637,6 +637,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             {
                 -- AI - Copilot
                 'github/copilot.vim',
+		tag = "v1.32.0",
                 config = function()
                     VG.copilot_enabled = (VF.getenv("HAS_GH_COPILOT") == "1") and 1 or 0
                     VG.copilot_no_tab_map = 1
