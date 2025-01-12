@@ -636,6 +636,23 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
+                -- Markdown rendering in Vim
+                "MeanderingProgrammer/render-markdown.nvim",
+                dependencies = {
+                    { "nvim-treesitter/nvim-treesitter" },
+                    { "echasnovski/mini.icons" },
+                },
+                ---@module 'render-markdown'
+                ---@type render.md.UserConfig
+                opts = {
+                    file_types = { 'markdown', 'copilot-chat' },
+                    render_modes = true,
+                    anti_conceal = { enabled = true },
+                    pipe_table = { preset = 'round' },
+                }
+            },
+
+            {
                 -- AI - Copilot
                 'github/copilot.vim',
 		tag = "v1.32.0",
