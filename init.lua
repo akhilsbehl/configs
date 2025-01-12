@@ -1,3 +1,4 @@
+V = vim
 VA = vim.api
 VC = vim.cmd
 VD = vim.diagnostic
@@ -13,9 +14,9 @@ VG.maplocalleader = ' '
 -- VG.perl_host_prog = '/usr/bin/perl'
 VG.loaded_perl_provider = 0
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
+local lazypath = VF.stdpath("data") .. "/lazy/lazy.nvim"
+if not V.loop.fs_stat(lazypath) then
+    VF.system({
         "git",
         "clone",
         "--filter=blob:none",
@@ -24,7 +25,7 @@ if not vim.loop.fs_stat(lazypath) then
         lazypath,
     })
 end
-vim.opt.rtp:prepend(lazypath)
+VO.rtp:prepend(lazypath)
 
 if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
     require('lazy').setup(
@@ -113,11 +114,11 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             }
                         },
                         mapping = cmp.mapping.preset.insert({
-                            ['<c-e>'] = vim.NIL,
+                            ['<c-e>'] = V.NIL,
                             ['<C-t>'] = cmp.mapping.complete(),
                             ['<cr>'] = cmp.mapping.confirm({ select = true }),
                             ['<C-c>'] = cmp.mapping.close(),
-                            ['<C-c>'] = cmp.mapping.abort(),
+                            ['<C-d>'] = cmp.mapping.abort(),
                             ['<tab>'] = cmp.mapping.select_next_item(),
                             ['<S-tab>'] = cmp.mapping.select_prev_item(),
                             ['<C-n>'] = cmp.mapping.scroll_docs(3),
@@ -883,8 +884,9 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 config = function()
                     require('nvim-window').setup({
                         chars = {
-                            'e', 't', 'o', 'v', 'x', 'q', 'p', 'd', 'y', 'g', 'f',
-                            'b', 'l', 'z', 'h', 'c', 'k', 'i', 's', 'u', 'r', 'a',
+                            'e', 't', 'o', 'v', 'x', 'q', 'p', 'd', 'y', 'g',
+                            'f', 'b', 'l', 'z', 'h', 'c', 'k', 'i', 's', 'u',
+                            'r', 'a',
                         },
                         normal_hl = 'PmenuSel',
                         hint_hl = 'Bold',
@@ -1049,6 +1051,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     })
                 end
             },
+            'echasnovski/mini.icons', -- Additional icons
 
             {
                 -- Match pairs
@@ -1066,7 +1069,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 end,
             },
 
-            'echasnovski/mini.icons',      -- Icons provider for nvim
 
             'gpanders/nvim-parinfer',      -- Auto indent parantheses for lisp
 
@@ -1078,12 +1080,13 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
 
             'powerman/vim-plugin-AnsiEsc', -- Escape shell color codes
 
-            'folke/tokyonight.nvim',       -- Theme: tokyonight
-            'catppuccin/nvim',             -- Theme: catppuccin
-            'sainnhe/sonokai',             -- Theme: sonokai
-            'sainnhe/gruvbox-material',    -- Theme: gruvbox-material
-            'navarasu/onedark.nvim',       -- Theme: onedark
-            'rebelot/kanagawa.nvim',       -- Theme: kanagawa
+            -- Themes:
+            'folke/tokyonight.nvim',
+            'catppuccin/nvim',
+            'sainnhe/sonokai',
+            'sainnhe/gruvbox-material',
+            'navarasu/onedark.nvim',
+            'rebelot/kanagawa.nvim',
 
         },
         {
