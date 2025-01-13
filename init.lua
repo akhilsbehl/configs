@@ -990,6 +990,189 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             },
 
             {
+                -- Neo Magit
+                'NeogitOrg/neogit',
+                dependencies = {
+                    "nvim-lua/plenary.nvim",
+                    "sindrets/diffview.nvim",
+                    "nvim-telescope/telescope.nvim"
+                },
+                config = function()
+                    require('neogit').setup({
+                        graph_style = 'kitty',
+                        git_services = {
+                            ["github.com"] = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
+                            ["fractal.ai"] =
+                            "https://gitlab.fractal.ai/${owner}/${repository}/pull-requests/new?source=${branch_name}&t=1",
+                            ["gitlab.com"] =
+                            "https://gitlab.com/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
+
+                        },
+                        use_default_keymaps = false,
+                        kind = 'floating',
+                        commit_editor = {
+                            kind = 'tab',
+                        },
+                        commit_select_view = {
+                            kind = 'tab',
+                        },
+                        commit_view = {
+                            kind = 'floating',
+                            verify_commit = false,
+                        },
+                        log_view = {
+                            kind = 'floating',
+                        },
+                        rebase_editor = {
+                            kind = 'floating',
+                        },
+                        reflog_view = {
+                            kind = 'floating',
+                        },
+                        merge_editor = {
+                            kind = 'floating',
+                        },
+                        description_editor = {
+                            kind = 'floating',
+                        },
+                        tag_editor = {
+                            kind = 'floating',
+                        },
+                        preview_buffer = {
+                            kind = 'floating',
+                        },
+                        popup = {
+                            kind = 'floating',
+                        },
+                        stash = {
+                            kind = 'floating',
+                        },
+                        refs_view = {
+                            kind = 'floating',
+                        },
+                        integrations = {
+                            telescope = true,
+                            diffview = true,
+                        },
+                        mappings = {
+                            commit_editor = {
+                                ["<Esc>"] = "Close",
+                                ["<C-a>"] = "Submit",
+                                ["<C-c>"] = "Abort",
+                                ["<C-j>"] = "PrevMessage",
+                                ["<C-k>"] = "NextMessage",
+                                ["<C-d>"] = "ResetMessage",
+                            },
+                            commit_editor_I = {
+                                ["<C-a>"] = "Submit",
+                                ["<C-c>"] = "Abort",
+                            },
+                            rebase_editor = {
+                                ["p"] = "Pick",
+                                ["r"] = "Reword",
+                                ["e"] = "Edit",
+                                ["s"] = "Squash",
+                                ["f"] = "Fixup",
+                                ["x"] = "Execute",
+                                ["d"] = "Drop",
+                                ["b"] = "Break",
+                                ["q"] = "Close",
+                                ["<cr>"] = "OpenCommit",
+                                ["gk"] = "MoveUp",
+                                ["gj"] = "MoveDown",
+                                ["<C-a>"] = "Submit",
+                                ["<C-c>"] = "Abort",
+                                ["<C-k>"] = "OpenOrScrollUp",
+                                ["<C-j>"] = "OpenOrScrollDown",
+                            },
+                            rebase_editor_I = {
+                                ["<C-a>"] = "Submit",
+                                ["<C-c>"] = "Abort",
+                            },
+                            finder = {
+                                ["<cr>"] = "Select",
+                                ["<C-c>"] = "Close",
+                                ["<esc>"] = "Close",
+                                ["<C-k>"] = "Next",
+                                ["<C-j>"] = "Previous",
+                                ["<down>"] = "Next",
+                                ["<tab>"] = "InsertCompletion",
+                                ["<space>"] = "NOP",
+                                ["<s-space>"] = "NOP",
+                                ["<ScrollWheelDown>"] = "ScrollWheelDown",
+                                ["<ScrollWheelUp>"] = "ScrollWheelUp",
+                                ["<ScrollWheelLeft>"] = "NOP",
+                                ["<ScrollWheelRight>"] = "NOP",
+                                ["<LeftMouse>"] = "MouseClick",
+                                ["<2-LeftMouse>"] = "NOP",
+                            },
+                            popup = {
+                                ["?"] = "HelpPopup",
+                                ["A"] = "CherryPickPopup",
+                                ["d"] = "DiffPopup",
+                                ["M"] = "RemotePopup",
+                                ["P"] = "PushPopup",
+                                ["X"] = "ResetPopup",
+                                ["Z"] = "StashPopup",
+                                ["i"] = "IgnorePopup",
+                                ["t"] = "TagPopup",
+                                ["b"] = "BranchPopup",
+                                ["B"] = "BisectPopup",
+                                ["w"] = "WorktreePopup",
+                                ["c"] = "CommitPopup",
+                                ["f"] = "FetchPopup",
+                                ["l"] = "LogPopup",
+                                ["m"] = "MergePopup",
+                                ["p"] = "PullPopup",
+                                ["r"] = "RebasePopup",
+                                ["v"] = "RevertPopup",
+                            },
+                            status = {
+                                ["j"] = "MoveDown",
+                                ["k"] = "MoveUp",
+                                ["o"] = "OpenTree",
+                                ["q"] = "Close",
+                                ["<Esc>"] = "Close",
+                                ["I"] = "InitRepo",
+                                ["1"] = "Depth1",
+                                ["2"] = "Depth2",
+                                ["3"] = "Depth3",
+                                ["4"] = "Depth4",
+                                ["Q"] = "Command",
+                                ["<tab>"] = "Toggle",
+                                ["x"] = "Discard",
+                                ["s"] = "Stage",
+                                ["S"] = "StageUnstaged",
+                                ["<c-s>"] = "StageAll",
+                                ["u"] = "Unstage",
+                                ["K"] = "Untrack",
+                                ["U"] = "UnstageStaged",
+                                ["y"] = "ShowRefs",
+                                ["$"] = "CommandHistory",
+                                ["Y"] = "YankSelected",
+                                ["<c-r>"] = "RefreshBuffer",
+                                ["<cr>"] = "GoToFile",
+                                ["<S-p>"] = "PeekFile",
+                                ["<C-v>"] = "VSplitOpen",
+                                ["<C-e>"] = "SplitOpen",
+                                ["<C-t>"] = "TabOpen",
+                                ["gj"] = "GoToPreviousHunkHeader",
+                                ["gk"] = "GoToNextHunkHeader",
+                                ["<C-j>"] = "OpenOrScrollUp",
+                                ["<C-k>"] = "OpenOrScrollDown",
+                                ["<C-k>"] = "PeekUp",
+                                ["<C-f>"] = "PeekDown",
+                                ["<C-n>"] = "NextSection",
+                                ["<C-p>"] = "PreviousSection",
+                            },
+                        },
+                    })
+                    VK('n', '<LocalLeader>gs', "<Cmd>Neogit<CR>")
+                    VK('n', '<LocalLeader>gc', "<Cmd>Neogit<CR>")
+                end
+            },
+
+            {
                 -- Show special characters
                 'lukas-reineke/indent-blankline.nvim',
                 main = "ibl",
