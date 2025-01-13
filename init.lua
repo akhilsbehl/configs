@@ -274,23 +274,23 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VK('n', '<leader>gb', '<cmd>Telescope git_branches<cr>')
                     VK('n', '<leader>gs', '<cmd>Telescope git_status<cr>')
                     VK('n', '<leader>gS', '<cmd>Telescope git_stash<cr>')
-                    VK('n', '<localleader>tD',
+                    VK('n', '<localleader>jD',
                         '<cmd>Telescope diagnostics<cr>')
-                    VK('n', '<localleader>tr',
+                    VK('n', '<localleader>jr',
                         '<cmd>Telescope lsp_references<cr>')
-                    VK('n', '<localleader>td',
+                    VK('n', '<localleader>jd',
                         '<cmd>Telescope lsp_definitions<cr>')
-                    VK('n', '<localleader>tI',
+                    VK('n', '<localleader>jI',
                         '<cmd>Telescope lsp_incoming_calls<cr>')
-                    VK('n', '<localleader>tO',
+                    VK('n', '<localleader>jO',
                         '<cmd>Telescope lsp_outgoing_calls<cr>')
-                    VK('n', '<localleader>tm',
+                    VK('n', '<localleader>jm',
                         '<cmd>Telescope lsp_implementations<cr>')
-                    VK('n', '<localleader>tt',
+                    VK('n', '<localleader>jt',
                         '<cmd>Telescope lsp_type_definitions<cr>')
-                    VK('n', '<localleader>tS',
+                    VK('n', '<localleader>jS',
                         '<cmd>Telescope lsp_document_symbols<cr>')
-                    VK('n', '<localleader>tw',
+                    VK('n', '<localleader>jw',
                         '<cmd>Telescope lsp_workspace_symbols<cr>')
                 end,
             },
@@ -428,7 +428,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         multi_windows = true,
                     })
                     VK({ 'n', 'o', 'v' }, 'b', '<cmd>HopChar2<CR>')
-                    VK({ 'n', 'o', 'v' }, 'B', '<cmd>HopPattern<CR>')
+                    VK({ 'n', 'o', 'v' }, '&', '<cmd>HopPattern<CR>')
                     VK({ 'n', 'o', 'v' }, '_', '<cmd>HopLineStart<CR>')
                     VK({ 'n', 'o', 'v' }, '<LocalLeader>f', _f)
                     VK({ 'n', 'o', 'v' }, '<LocalLeader>F', _F)
@@ -693,7 +693,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         row = nil,
                         col = nil,
                     },
-                    auto_insert_mode = true,
+                    auto_insert_mode = false,
                     insert_at_end = true,
                     question_header = "# Me: ",
                     answer_header = "# Copilot: ",
@@ -914,9 +914,15 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 -- Wrap arguments and lists
                 'Wansmer/treesj',
                 dependencies = { 'nvim-treesitter/nvim-treesitter' },
+                -- The plugin insists on all 3 shortcuts. I only use the first
+                keys = {
+                    '<LocalLeader>m',
+                    '<LocalLeader>#',
+                    '<LocalLeader>$',
+                },
                 config = function()
                     require('treesj').setup({
-                        use_default_keymaps = true,
+                        use_default_keymaps = false,
                         check_syntax_error = true,
                         max_join_length = 79,
                         cursor_behavior = 'hold',
