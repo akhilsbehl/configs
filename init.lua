@@ -424,14 +424,16 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         keys = 'etovxqpdygfblzhckisuran',
                         quit_key = '<Esc>',
                         jump_on_sole_occurrence = true,
-                        case_insesitive = false,
+                        case_insensitive = true,
                         multi_windows = true,
                     })
                     VK({ 'n', 'o', 'v' }, 'b', '<cmd>HopChar2<CR>')
-                    VK({ 'n', 'o', 'v' }, 'f', _f)
-                    VK({ 'n', 'o', 'v' }, 'F', _F)
-                    VK({ 'n', 'o', 'v' }, 't', _t)
-                    VK({ 'n', 'o', 'v' }, 'T', _T)
+                    VK({ 'n', 'o', 'v' }, 'B', '<cmd>HopPattern<CR>')
+                    VK({ 'n', 'o', 'v' }, '_', '<cmd>HopLineStart<CR>')
+                    VK({ 'n', 'o', 'v' }, '<LocalLeader>f', _f)
+                    VK({ 'n', 'o', 'v' }, '<LocalLeader>F', _F)
+                    VK({ 'n', 'o', 'v' }, '<LocalLeader>t', _t)
+                    VK({ 'n', 'o', 'v' }, '<LocalLeader>T', _T)
                 end,
             },
 
