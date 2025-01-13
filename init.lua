@@ -507,6 +507,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VK("n", "<leader>zw", "<cmd>Telekasten goto_thisweek<CR>")
                     VK("n", "<leader>zy", "<cmd>Telekasten yank_notelink<CR>")
                     VK("n", "<leader>zt", "<cmd>Telekasten toggle_todo<CR>")
+                    V.treesitter.language.register('markdown', 'telekasten')
                 end,
                 dependencies = {
                     'nvim-telescope/telescope.nvim',
@@ -647,11 +648,11 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 ---@module 'render-markdown'
                 ---@type render.md.UserConfig
                 opts = {
-                    file_types = { 'markdown', 'copilot-chat' },
+                    file_types = { 'markdown', 'copilot-chat', 'telekasten' },
                     render_modes = true,
                     anti_conceal = { enabled = true },
                     pipe_table = { preset = 'round' },
-                }
+                },
             },
 
             {
