@@ -1,11 +1,11 @@
-V = vim
-VA = vim.api
-VC = vim.cmd
-VD = vim.diagnostic
-VF = vim.fn
-VG = vim.g
-VK = vim.keymap.set
-VO = vim.opt
+V = vim ---@diagnostic disable-line
+VA = V.api
+VC = V.cmd
+VD = V.diagnostic
+VF = V.fn
+VG = V.g
+VK = V.keymap.set
+VO = V.opt
 
 VG.mapleader = ','
 VG.maplocalleader = ' '
@@ -47,7 +47,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 },
                 config = function()
                     local lsp = require('lsp-zero')
-                    local lsp_attach = function(client, bufnr)
+                    local lsp_attach = function(_, bufnr)
                         local o = { buffer = bufnr }
                         VK('n', '<leader>lD',
                             '<cmd>lua vim.lsp.buf.declaration()<cr>', o)
@@ -646,8 +646,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     { "nvim-treesitter/nvim-treesitter" },
                     { "echasnovski/mini.icons" },
                 },
-                ---@module 'render-markdown'
-                ---@type render.md.UserConfig
                 opts = {
                     file_types = { 'markdown', 'copilot-chat', 'telekasten' },
                     render_modes = true,
@@ -1159,9 +1157,9 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                 ["<C-t>"] = "TabOpen",
                                 ["gj"] = "GoToPreviousHunkHeader",
                                 ["gk"] = "GoToNextHunkHeader",
-                                ["<C-j>"] = "OpenOrScrollUp",
-                                ["<C-k>"] = "OpenOrScrollDown",
-                                ["<C-k>"] = "PeekUp",
+                                ["<C-k>"] = "OpenOrScrollUp",
+                                ["<C-j>"] = "OpenOrScrollDown",
+                                ["<C-b>"] = "PeekUp",
                                 ["<C-f>"] = "PeekDown",
                                 ["<C-n>"] = "NextSection",
                                 ["<C-p>"] = "PreviousSection",
