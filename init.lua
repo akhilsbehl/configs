@@ -335,6 +335,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             'javascript',
                             'typescript',
                             'commonlisp',
+                            'markdown'
                         },
                         auto_install = true,
                         highlight = {
