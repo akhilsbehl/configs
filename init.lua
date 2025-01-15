@@ -913,15 +913,13 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 -- Wrap arguments and lists
                 'Wansmer/treesj',
                 dependencies = { 'nvim-treesitter/nvim-treesitter' },
-                -- The plugin insists on all 3 shortcuts. I only use the first
                 keys = {
                     '<LocalLeader>m',
-                    '<LocalLeader>#',
-                    '<LocalLeader>$',
+                    '<LocalLeader>-', -- ignore
+                    '<LocalLeader>_', -- ignore
                 },
                 config = function()
                     require('treesj').setup({
-                        use_default_keymaps = false,
                         check_syntax_error = true,
                         max_join_length = 79,
                         cursor_behavior = 'hold',
@@ -967,7 +965,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             },
                             ["<LocalLeader>p"] = "actions.preview",
                             ["<Esc>"] = "actions.close",
-                            ["<LolcalLeader>r"] = "actions.refresh",
+                            ["<LocalLeader>r"] = "actions.refresh",
                             ["<LocalLeader>u"] = "actions.parent",
                             ["<LocalLeader>o"] = "actions.open_cwd",
                             ["<LocalLeader>c"] = "actions.cd",
