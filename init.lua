@@ -693,7 +693,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         col = nil,
                     },
                     auto_insert_mode = false,
-                    insert_at_end = true,
+                    insert_at_end = false,
                     question_header = "# Me: ",
                     answer_header = "# Copilot: ",
                     error_header = "> [!ERROR] Error: ",
@@ -880,12 +880,13 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     {
                         "<LocalLeader>cp",
                         ":CopilotChatPickActionVisual<CR>",
-                        mode = "x",
+                        mode = "v",
                         desc = "CopilotChat - Pick prompt actions over visual selection",
                     },
                     {
                         "<LocalLeader>cp",
                         ":CopilotChatPickActionBuffer<CR>",
+                        mode = "n",
                         desc = "CopilotChat - Pick prompt actions over the buffer contents",
                     },
                 },
