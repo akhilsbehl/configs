@@ -108,17 +108,22 @@ function enact() {
     echo "No usable virtualenv found. Giving up." && return 1
 }
 
-alias ls='ls --color=auto'
-
-alias ll='ls -l'
-
-alias lsg='ls -shHF --group-directories-first'
-
-alias lst='ls -shHFltr'
-
-alias lss='ls -SshHF --group-directories-first'
-
-alias lsa='lsg -A'
+if exists_command lsd; then
+    alias ls='lsd'
+    alias ll='lsd -l'
+    alias lsg='lsd -shHF'
+    alias lst='lsd -shHFltr'
+    alias lss='lsd -SshHF'
+    alias lsa='lsd -A'
+    alias tree='lsd --tree'
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -l'
+    alias lsg='ls -shHF --group-directories-first'
+    alias lst='ls -shHFltr'
+    alias lss='ls -SshHF --group-directories-first'
+    alias lsa='lsg -A'
+fi
 
 alias tmux='tmux -2'
 
@@ -233,7 +238,11 @@ else
   EDITOR=nvim
 fi
 
-eval $(dircolors ~/.dircolors)
+if exists_command vivid; then
+  export LS_COLORS=$(vivid generate ayu)
+else
+  eval $(dircolors ~/.dircolors)
+fi
 
 ################
 # File Aliases #
