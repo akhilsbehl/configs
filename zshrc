@@ -111,9 +111,9 @@ function enact() {
 if exists_command lsd; then
     alias ls='lsd'
     alias ll='lsd -l'
-    alias lsg='lsd -shHF'
-    alias lst='lsd -shHFltr'
-    alias lss='lsd -SshHF'
+    alias lsg='lsd'
+    alias lst='ld'
+    alias lss='lsd -ShF'
     alias lsa='lsd -A'
     alias tree='lsd --tree'
 else
