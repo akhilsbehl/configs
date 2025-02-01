@@ -112,6 +112,7 @@ if exists_command lsd; then
     alias ls='lsd'
     alias ll='lsd -l'
     alias lsg='lsd'
+    alias lsa='lsd -a'
     alias lst='lsd -t'
     alias lss='lsd -S'
     alias lsx='lsd -X'
