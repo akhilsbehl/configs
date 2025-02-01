@@ -420,6 +420,7 @@ function fzbin {
 
 # Simplify this
 function z { fzbin "$EDITOR -O" "$1" }
+alias f='fzbin'
 
 # This is possibly running on:
 # Some flavor of Linux: Use xdg-open
