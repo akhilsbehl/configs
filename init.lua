@@ -687,7 +687,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 },
                 build = "make tiktoken",
                 opts = {
-                    model = 'o3-mini-paygo',
+                    model = 'claude-3.5-sonnet',
                     temperature = 0.0,
                     window = {
                         layout = "horizontal",
@@ -928,6 +928,11 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     debug = false,
                     tokenizer = "tiktoken",
                     provider = "copilot",
+                    copilot = {
+                        model = "claude-3.5-sonnet",
+                        temperature = 0,
+                        max_tokens = 8192,
+                    },
                     behaviour = {
                         auto_suggestions = false,
                         auto_set_highlight_group = true,
