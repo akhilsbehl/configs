@@ -67,16 +67,6 @@ function get_first_available {
   done
 }
 
-function cdl {
-    if [[ -n "$1" ]]; then
-        cd "$1" || return 1
-        ls --color=auto -shHF --group-directories-first
-    else
-        cd "$HOME" || return 1
-        ls --color=auto -shHF --group-directories-first
-    fi
-}
-
 function cpf() {
     copier=$(get_first_available wl-copy xclip clip.exe)
     [[ -n "$copier" ]] && "$copier" < "$1"
@@ -127,6 +117,16 @@ else
     alias lss='ls -SshHF --group-directories-first'
     alias lsa='lsg -A'
 fi
+
+function cdl {
+    if [[ -n "$1" ]]; then
+        cd "$1" || return 1
+        lsg
+    else
+        cd "$HOME" || return 1
+        lsg
+    fi
+}
 
 alias tmux='tmux -2'
 
