@@ -1,0 +1,137 @@
+#########
+#  FZF  #
+#########
+
+# Setup fzf
+
+if [[ ! "$PATH" =~ "$HOME/configs/fzf/bin" ]]; then
+  export PATH="$PATH:$HOME/configs/fzf/bin"
+fi
+
+# Man path
+if [[ ! "$MANPATH" =~ "$HOME/configs/fzf/man" && \
+    -d "$HOME/configs/fzf/man" ]]; then
+  export MANPATH="$MANPATH:$HOME/configs/fzf/man"
+fi
+
+# Auto-completion
+[[ $- =~ i ]] && source "$HOME/configs/fzf/shell/completion.zsh" 2> /dev/null
+
+export FZF_DEFAULT_OPTS="--style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}' --extended cycle --reverse --no-mouse"
+
+GREP_IGNORE_PATHS='-e "/\.git/" -e "/\.virtualenv/" -e "__pycache__" -e "node_modules"'
+RG_IGNORE_PATHS="-g '!.git/*' -g '!.virtualenv/*' -g '!__pycache__' -g '!node_modules'"
+
+if [[ $(get_first_available rg grep) == "rg" ]]; then
+  FZF_IGNORE_PATHS=$RG_IGNORE_PATHS
+  FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow '
+elif [[ $(get_first_available rg grep) == "grep" ]]; then
+  FZF_IGNORE_PATHS=$GREP_IGNORE_PATHS
+  FZF_DEFAULT_COMMAND='find . -type f | grep -v '
+fi
+
+FZF_DEFAULT_COMMAND+=$FZF_IGNORE_PATHS
+
+export FZF_DEFAULT_COMMAND
+
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+
+FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v '
+FZF_ALT_C_COMMAND+=$GREP_IGNORE_PATHS
+export FZF_ALT_C_COMMAND
+export FZF_ALT_C_OPTS=$FZF_DEFAULT_OPTS
+
+export FZF_TMUX_HEIGHT='20%'
+export FZF_COMPLETION_TRIGGER=';;'
+export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi'
+
+function fzp {
+  local mode prefix search_cmd search_args install_cmd install_args
+  mode="$1"
+  prefix=""
+  install_cmd=$(get_first_available paru pacman apt-get)
+  if [[ "$install_cmd" == "paru" ]]; then
+    search_cmd="$install_cmd"
+    if [[ "$mode" == "install" ]]; then
+      search_args="-Slq"
+      install_args="-S --needed"
+    elif [[ "$mode" == "uninstall" ]]; then
+      search_args="-Qq"
+      install_args="-Rns"
+    fi
+  elif [[ "$install_cmd" == "pacman" ]]; then
+    search_cmd="$install_cmd"
+    if [[ "$mode" == "install" ]]; then
+      search_args="-Slq"
+      install_args="-S --needed"
+    elif [[ "$mode" == "uninstall" ]]; then
+      search_args="-Qq"
+      install_args="-Rns"
+    fi
+  elif [[ "$install_cmd" == "apt-get" ]]; then
+    if [[ "$mode" == "install" ]]; then
+      search_cmd="apt-cache"
+      search_args="pkgnames"
+      install_args="install"
+    elif [[ "$mode" == "uninstall" ]]; then
+      search_cmd="dpkg-query"
+      search_args="-W | cut -f 1"
+      install_args="remove"
+    fi
+  fi
+  pkgs=$(eval "$search_cmd $search_args" | fzf --query="$2" | tr '\n' ' ')
+  if [[ -n "$pkgs" ]]; then
+    exists_command sudo && prefix="sudo"
+    if [[ "$install_cmd" == "paru" ]]; then
+        prefix=""
+    fi
+    echo "$prefix $install_cmd $install_args $pkgs"
+    eval "$prefix $install_cmd $install_args $pkgs"
+  fi
+}
+
+function zin { fzp "install" "$@" }
+function zun { fzp "uninstall" "$@" }
+
+function zpacowner {
+  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
+  local file
+  file=$(plocate -r '.*' | fzf --query="$1" --select-1 --exit-0)
+  [[ -n "$file" ]] && pacman -Qo "$file"
+}
+
+function zpacls {
+  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
+  local pkg
+  pkg=$(pacman -Qq | fzf --query="$1" --select-1 --exit-0)
+  [[ -n "$pkg" ]] && pacman -Ql "$pkg"
+}
+
+function zpacinfo {
+  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
+  local pkg
+  pkg=$(pacman -Qq | fzf --query="$1" --select-1 --exit-0)
+  [[ -n "$pkg" ]] && pacman -Qi "$pkg"
+}
+
+alias zpacreqby='zpacinfo | grep "^Required By"'
+alias zpacdepon='zpacinfo | grep "^Depends On"'
+alias zpacver='zpacinfo | grep "^Version"'
+alias zpacreason='zpacinfo | grep -e "^Install Reason" -e "^Required By"'
+
+function zloc {
+  local file handler
+  file=$(plocate -r '.*' | fzf --query="$1" --select-1 --exit-0)
+  handler=$(get_first_available xdg-open start wslopen)
+  [[ -n "$file" ]] && echo "$handler" "$file"
+  [[ -n "$file" ]] && "$handler" "$file"
+}
+
+function zapply-colorscheme {
+    local scheme
+    scheme=$(list-colorschemes | sort -u | fzf --query="$1" --select-1 --exit-0)
+    [[ -n "$scheme" ]] && apply-colorscheme "$(echo "$scheme" | tr -d "'")"
+}
+
+# This should be last
+source <(fzf --zsh)
