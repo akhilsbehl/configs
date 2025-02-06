@@ -1350,6 +1350,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             'sainnhe/gruvbox-material',
             'navarasu/onedark.nvim',
             'rebelot/kanagawa.nvim',
+            'rose-pine/neovim',
 
         },
         {

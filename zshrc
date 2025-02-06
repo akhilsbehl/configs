@@ -351,158 +351,6 @@ for al in ${(z)GIT_ALIASES}; do
   alias g$al="git $al"
 done
 
-#########
-#  FZF  #
-#########
-
-# Setup fzf
-if [[ ! "$PATH" =~ "$HOME/configs/fzf/bin" ]]; then
-  export PATH="$PATH:$HOME/configs/fzf/bin"
-fi
-
-# Man path
-if [[ ! "$MANPATH" =~ "$HOME/configs/fzf/man" && \
-    -d "$HOME/configs/fzf/man" ]]; then
-  export MANPATH="$MANPATH:$HOME/configs/fzf/man"
-fi
-
-# Auto-completion
-[[ $- =~ i ]] && source "$HOME/configs/fzf/shell/completion.zsh" 2> /dev/null
-
-# Key bindings
-source "$HOME/configs/fzf/shell/key-bindings.zsh"
-
-GREP_IGNORE_PATHS='-e "/\.git/" -e "/\.virtualenv/" -e "__pycache__"'
-RG_IGNORE_PATHS="-g '!.git/*' -g '!.virtualenv/*' -g '!__pycache__'"
-
-if [[ $(get_first_available rg grep) == "rg" ]]; then
-  FZF_IGNORE_PATHS=$RG_IGNORE_PATHS
-  export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow '
-elif [[ $(get_first_available rg grep) == "grep" ]]; then
-  FZF_IGNORE_PATHS=$GREP_IGNORE_PATHS
-  export FZF_DEFAULT_COMMAND='find . -type f | grep -v '
-fi
-
-FZF_DEFAULT_COMMAND+=$FZF_IGNORE_PATHS
-export FZF_DEFAULT_COMMAND
-export FZF_DEFAULT_OPTS='--exact --extended --cycle --reverse --multi --no-mouse --prompt="?: " --preview "[[ -f {} ]] && [[ $(file -b --mime-type {} | cut -f 1 -d '/') == "text" ]] && bat --color=always {} | head -30"'
-export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
-
-FZF_ALT_C_COMMAND='find . -type d -not -empty | grep -v '
-FZF_ALT_C_COMMAND+=$GREP_IGNORE_PATHS
-export FZF_ALT_C_COMMAND
-export FZF_ALT_C_OPTS=$FZF_DEFAULT_OPTS
-
-export FZF_TMUX_HEIGHT='20%'
-export FZF_COMPLETION_TRIGGER=';;'
-export FZF_COMPLETION_OPTS='--extended --cycle --reverse --no-mouse --multi'
-
-function fzbin {
-  local orig_dir=$PWD
-  local file
-  if [[ -z "$1" ]]; then
-    echo 'I need at least a program to start with.'
-  elif [[ -z "$2" ]]; then
-    file=$(fzf-tmux -1 --exit-0 | tr '\n' ' ')
-  elif [[ -f "$2" ]]; then
-    file="$2"
-  elif [[ -d "$2" ]]; then
-    cd "$2"
-    file=$(fzf-tmux --query="$3" -1 --exit-0 | tr '\n' ' ')
-  else
-    echo "$2 is not a file or directory."
-    return 0
-  fi
-  [[ -n "$file" ]] && echo "$1" "$file"
-  [[ -n "$file" ]] && eval "$1 $file"
-  cd "$orig_dir"
-}
-
-# Simplify this
-function z { fzbin "$EDITOR -O" "$1" }
-alias f='fzbin'
-
-# This is possibly running on:
-# Some flavor of Linux: Use xdg-open
-# Some flavor of WSL: Use wslopen
-# Some flavor of Cygwin: Use start
-function open { fzbin $(get_first_available start xdg-open wslopen) "$@" }
-
-function fzp {
-  local mode prefix search_cmd search_args install_cmd install_args
-  mode="$1"
-  prefix=""
-  install_cmd=$(get_first_available paru pacman apt-get)
-  if [[ "$install_cmd" == "paru" ]]; then
-    search_cmd="$install_cmd"
-    if [[ "$mode" == "install" ]]; then
-      search_args="-Slq"
-      install_args="-S --needed"
-    elif [[ "$mode" == "uninstall" ]]; then
-      search_args="-Qq"
-      install_args="-Rns"
-    fi
-  elif [[ "$install_cmd" == "pacman" ]]; then
-    search_cmd="$install_cmd"
-    if [[ "$mode" == "install" ]]; then
-      search_args="-Slq"
-      install_args="-S --needed"
-    elif [[ "$mode" == "uninstall" ]]; then
-      search_args="-Qq"
-      install_args="-Rns"
-    fi
-  elif [[ "$install_cmd" == "apt-get" ]]; then
-    if [[ "$mode" == "install" ]]; then
-      search_cmd="apt-cache"
-      search_args="pkgnames"
-      install_args="install"
-    elif [[ "$mode" == "uninstall" ]]; then
-      search_cmd="dpkg-query"
-      search_args="-W | cut -f 1"
-      install_args="remove"
-    fi
-  fi
-  pkgs=$(eval "$search_cmd $search_args" | fzf-tmux --query="$2" | tr '\n' ' ')
-  if [[ -n "$pkgs" ]]; then
-    exists_command sudo && prefix="sudo"
-    if [[ "$install_cmd" == "paru" ]]; then
-        prefix=""
-    fi
-    echo "$prefix $install_cmd $install_args $pkgs"
-    eval "$prefix $install_cmd $install_args $pkgs"
-  fi
-}
-
-function zin { fzp "install" "$@" }
-function zun { fzp "uninstall" "$@" }
-
-function zpacowner {
-  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
-  local file
-  file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
-  [[ -n "$file" ]] && pacman -Qo "$file"
-}
-
-function zpacinfo {
-  ! exists_command pacman && echo "No pacman. Goodbye!" && return 1
-  local pkg
-  pkg=$(pacman -Qq | fzf-tmux --query="$1" --select-1 --exit-0)
-  [[ -n "$pkg" ]] && pacman -Qi "$pkg"
-}
-
-alias zpacreqby='zpacinfo | grep "^Required By"'
-alias zpacdepon='zpacinfo | grep "^Depends On"'
-alias zpacver='zpacinfo | grep "^Version"'
-alias zpacreason='zpacinfo | grep -e "^Install Reason" -e "^Required By"'
-
-function gloc {
-  local file handler
-  file=$(plocate -r '.*' | fzf-tmux --query="$1" --select-1 --exit-0)
-  handler=$(get_first_available xdg-open start wslopen)
-  [[ -n "$file" ]] && echo "$handler" "$file"
-  [[ -n "$file" ]] && "$handler" "$file"
-}
-
 #############
 # SSH Agent #
 #############
@@ -657,12 +505,6 @@ function randomize-colorscheme {
     apply-colorscheme "$(echo $scheme | tr -d "'")"
 }
 
-function zapply-colorscheme {
-    local scheme
-    scheme=$(list-colorschemes | sort -u | fzf --query="$1" --select-1 --exit-0)
-    [[ -n "$scheme" ]] && apply-colorscheme "$(echo "$scheme" | tr -d "'")"
-}
-
 ######################
 # Start tmux session #
 ######################
@@ -699,6 +541,7 @@ export RPROMPT='%F{magenta}%D{%L:%M:%S}'
 #  Source stuff local to each box  #
 ####################################
 
+[[ -f ~/.zshrc.fzf ]] && source ~/.zshrc.fzf
 [[ -f ~/.zshrc.wsl ]] && source ~/.zshrc.wsl
 [[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
 [[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
