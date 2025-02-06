@@ -15,7 +15,10 @@ FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
     --delimiter : \
     --header '╱ CTRL-R (Ripgrep mode) ╱ CTRL-F (fzf mode) ╱' \
     --preview 'bat --color=always {1} --highlight-line {2}' \
-    --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+    --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+    --style full \
+    --tmux 90% \
+    --layout reverse
 )
 [ -n "${selected[0]}" ] && nvim -O "${selected[0]}" "+${selected[1]}"
 
