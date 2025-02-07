@@ -31,8 +31,8 @@ keybinds clear-defaults=true {
         bind "Alt Shift n" { NewTab; SwitchToMode "normal"; }
         bind "Alt Shift s" { ToggleActiveSyncTab; SwitchToMode "normal"; }
         bind "Alt Shift q" { Quit; }
-        bind "Alt r" { SwitchToMode "renamepane"; } // Can't accept the name
-        bind "Alt Shift r" { SwitchToMode "renametab"; } // Can't accept the name
+        bind "Alt r" { SwitchToMode "renamepane"; }
+        bind "Alt Shift r" { SwitchToMode "renametab"; }
         bind "Alt ," { SwitchToMode "resize"; }
         bind "Alt ." { SwitchToMode "move"; }
         bind "Alt /" { SwitchToMode "entersearch"; }
@@ -43,9 +43,11 @@ keybinds clear-defaults=true {
         bind "Alt }" { NextSwapLayout; }
     }
     renametab {
+        bind "Enter" { SwitchToMode "normal"; }
         bind "Esc" { UndoRenameTab; SwitchToMode "normal"; }
     }
     renamepane {
+        bind "Enter" { SwitchToMode "normal"; }
         bind "Esc" { UndoRenamePane; SwitchToMode "normal"; }
     }
     resize {
