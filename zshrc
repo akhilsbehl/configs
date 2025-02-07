@@ -532,11 +532,7 @@ function launchpad {
 #  Set up the prompt  #
 #######################
 
-[[ "$OS" == "Ubuntu" ]] && fpath+=($HOME/.zprompt/pure)
-autoload -U promptinit
-promptinit
-prompt pure
-export RPROMPT='%F{magenta}%D{%L:%M:%S}'
+eval "$(starship init zsh)"
 
 ####################################
 #  Source stuff local to each box  #
