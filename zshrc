@@ -516,12 +516,13 @@ function launchpad-tmux {
 }
 
 function launchpad-zellij {
-  zellij list-sessions | grep -q "launchPad" && zellij attach launchPad
+  zellij list-sessions | grep -q "launchPad" && zellij attach launchPad && return 0
+  zellij
 }
 
 function launchpad {
-    exists_command tmux && launchpad-tmux && return 0
     exists_command zellij && launchpad-zellij && return 0
+    exists_command tmux && launchpad-tmux && return 0
     return 1
 }
 
