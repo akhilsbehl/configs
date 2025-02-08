@@ -10,3 +10,6 @@
 [submodule "fzf"]
 	path = fzf
 	url = https://github.com/junegunn/fzf
+[submodule "fzf-tab"]
+	path = fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab

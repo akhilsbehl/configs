@@ -1,31 +1,41 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=100000
-SAVEHIST=100000
-setopt appendhistory autocd extendedglob nomatch notify
-unsetopt beep
-bindkey -v
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename "$HOME/.zshrc"
+#######################
+# COMPINIT AUTO SETUP #
+#######################
 
+zstyle :compinstall filename "$HOME/.zshrc"
 autoload -Uz compinit
 compinit
-
 autoload -Uz bashcompinit
 bashcompinit
-# End of lines added by compinstall
 
 ##################
 #  Misc options  #
 ##################
 
-KEYTIMEOUT=1
+# Shut up
+unsetopt beep
 
-bindkey '^r' history-incremental-search-backward
+# do not hang my terminal
+stty -ixon
 
-# Share history between terminals. Seriously, already.
-setopt share_history
+# Set vim keybindings
+bindkey -v
+KEYTIMEOUT=1 # React fast to my Esc key
+bindkey '^o' push-input # suspend a half-finished command to come back to it.
+bindkey -v '^?' backward-delete-char # vi-backward-delete-char is really weird
+bindkey '^r' history-incremental-search-backward # Fallback behavior
+
+# History settings
+HISTFILE=~/.histfile
+HISTSIZE=100000
+SAVEHIST=100000
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt histignoredups
+setopt histignorealldups
+setopt histsavenodups
+setopt histfindnodups
 
 # Spell correct
 setopt correct
@@ -36,20 +46,11 @@ setopt noclobber
 # Allow comments in the shell.
 setopt interactivecomments
 
-# Ignore duplicates in history.
-setopt histignoredups
+# Let hidden files (.*) be matched against globs. And fancier globbing.
+setopt globdots extendedglob nomatch
 
-# Let hidden files (.*) be matched against globs.
-setopt globdots
-
-# Let's you suspend a half-finished command and come back to it.
-bindkey '^o' push-input
-
-# vi-backward-delete-char is just really weird
-bindkey -v '^?' backward-delete-char
-
-# do not hang my terminal
-stty -ixon
+# Send me a notification if possible
+setopt notify
 
 ###################
 # Command Aliases #
@@ -516,8 +517,8 @@ function launchpad-tmux {
 }
 
 function launchpad-zellij {
-  zellij list-sessions | grep -q "launchPad" && zellij attach launchPad && return 0
-  zellij
+  test $ZELLIJ ||
+    zellij attach launchPad || zellij
 }
 
 function launchpad {
@@ -526,13 +527,24 @@ function launchpad {
     return 1
 }
 
-# launchpad
-
 #######################
 #  Set up the prompt  #
 #######################
 
-eval "$(starship init zsh)"
+# Keep some vertical padding around the prompt
+precmd() {
+    echo
+}
+preexec() {
+    echo
+}
+
+# autoload -U promptinit
+# promptinit
+# prompt pure
+# export RPROMPT='%F{magenta}%D{%L:%M:%S}'
+# eval "$(starship init zsh)"
+eval "$(oh-my-posh init zsh --config '~/configs/oh-my-posh-atomic-theme.omp.json')"
 
 ####################################
 #  Source stuff local to each box  #
