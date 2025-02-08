@@ -1011,26 +1011,27 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         keymaps = {
                             ["?"] = "actions.show_help",
                             ["<CR>"] = "actions.select",
-                            ["<LocalLeader>v"] = {
+                            ["<C-v>"] = {
                                 "actions.select",
                                 opts = { vertical = true },
                                 desc = "Open the entry in a vertical split",
                             },
-                            ["<LocalLeader>h"] = {
+                            ["<C-s>"] = {
                                 "actions.select",
                                 opts = { horizontal = true },
                                 desc = "Open the entry in a horizontal split",
                             },
-                            ["<LocalLeader>t"] = {
+                            ["<C-t>"] = {
                                 "actions.select",
                                 opts = { tab = true },
                                 desc = "Open the entry in new tab",
                             },
-                            ["<LocalLeader>p"] = "actions.preview",
+                            ["<C-p>"] = "actions.preview",
                             ["<Esc>"] = "actions.close",
-                            ["<LocalLeader>r"] = "actions.refresh",
-                            ["<LocalLeader>u"] = "actions.parent",
-                            ["<LocalLeader>o"] = "actions.open_cwd",
+                            ["<C-r>"] = "actions.refresh",
+                            ["<C-u>"] = "actions.parent",
+                            ["<C-o>"] = "actions.open_cwd",
+                            ["<C-h>"] = "actions.toggle_hidden",
                             ["<LocalLeader>c"] = "actions.cd",
                             ["<LocalLeader>C"] = {
                                 "actions.cd",
@@ -1039,7 +1040,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             },
                             ["<LocalLeader>s"] = "actions.change_sort",
                             ["<LocalLeader>x"] = "actions.open_external",
-                            ["<LocalLeader>."] = "actions.toggle_hidden",
                         },
                         view_options = {
                             show_hidden = true,
