@@ -1,5 +1,5 @@
 keybinds clear-defaults=true {
-    shared_among "normal" "locked" "pane" "tab" "resize" "move" "session" "tmux" "entersearch" "renametab" "renamepane" {
+    shared_among "normal" "pane" "tab" "resize" "move" "session" "tmux" "entersearch" "renametab" "renamepane" {
         bind "Alt Shift d" { Detach; }
         bind "Alt h" { MoveFocus "left"; }
         bind "Alt j" { MoveFocus "down"; }
@@ -116,6 +116,9 @@ keybinds clear-defaults=true {
             SwitchToMode "normal"
         }
         bind "Esc" { ScrollToBottom; SwitchToMode "normal"; }
+    }
+    locked {
+        bind "Alt ?" { SwitchToMode "normal"; }
     }
 }
 
