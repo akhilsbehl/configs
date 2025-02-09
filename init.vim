@@ -2,14 +2,11 @@
 " Look and feel options
 "-----------------------
 
-" Set colorscheme.
-colorscheme rose-pine
-
 " Auto-switch to dir of the file.
 set autochdir
 
 " Look and feel options.
-set cursorline ruler number relativenumber numberwidth=4
+set ruler number relativenumber numberwidth=4
 set showmode showcmd
 set mouse-=a mousefocus
 set textwidth=79 colorcolumn=+1 laststatus=3 signcolumn=yes
@@ -272,24 +269,55 @@ augroup END
 " Making the cursor more conspicuous so I don't keep losing it.
 "-------------------------
 
+" Set up some global state for this feature
+let g:myrc_highlight_cursor_time = 200 " in milliseconds
+let g:myrc_highlight_timer = 0
+let g:myrc_cursorline_match_id = 0
+let g:myrc_cursorcolumn_match_id = 0
+let g:myrc_word_match_id = 0
+
+" Clear any existing highlighting
+hi clear
+
+" Define custom highlight groups
+highlight MyCursorLine ctermfg=white guifg=white ctermbg=red guibg=red
+highlight MyCursorColumn ctermfg=white guifg=white ctermbg=red guibg=red
+highlight MySelectedWord ctermfg=white guifg=white ctermbg=green guibg=green
+
 function! HighlightCursor() abort
-    match PmenuSel /\k*\%#\k*/
-    let g:myrc_highlight_cursor = 1
+  call NoHighlightCursor()
+
+  " Set up the custom highlighting using matchadd()
+  let g:myrc_cursorline_match_id = matchadd('MyCursorLine', '\%'.line('.').'l')
+  let g:myrc_cursorcolumn_match_id = matchadd('MyCursorColumn', '\%'.col('.').'v')
+  let g:myrc_word_match_id = matchadd('MySelectedWord', '\k*\%#\k*')
+
+  " Start a timer to disable highlighting after 200ms
+  let g:myrc_highlight_timer = timer_start(g:myrc_highlight_cursor_time, 'NoHighlightCursor')
+
 endfunction
 
-function! NoHighlightCursor() abort
-    match None
-    let g:myrc_highlight_cursor = 0
-endfunction
-
-function! ToggleHighlightCursor() abort
-    if !exists("g:myrc_highlight_cursor")
-        call HighlightCursor()
-    else
-        call NoHighlightCursor()
+function! NoHighlightCursor(...) abort
+    if g:myrc_cursorline_match_id != 0
+        call matchdelete(g:myrc_cursorline_match_id)
+        let g:myrc_cursorline_match_id = 0
     endif
+    if g:myrc_cursorcolumn_match_id != 0
+        call matchdelete(g:myrc_cursorcolumn_match_id)
+        let g:myrc_cursorcolumn_match_id = 0
+    endif
+    if g:myrc_word_match_id != 0
+      call matchdelete(g:myrc_word_match_id)
+      let g:myrc_word_match_id = 0
+    endif
+
+  if g:myrc_highlight_timer != 0
+    call timer_stop(g:myrc_highlight_timer)
+    let g:myrc_highlight_timer = 0 " Reset the ID
+  endif
 endfunction
-nnoremap <leader>hc :call ToggleHighlightCursor()<CR>
+
+nnoremap <leader>hc :call HighlightCursor()<CR>
 
 "-------------------------
 " Rename the current buffer's file in place and reload.
