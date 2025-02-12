@@ -24,15 +24,15 @@ keybinds clear-defaults=true {
         bind "Alt 7" { GoToTab 7; SwitchToMode "normal"; }
         bind "Alt 8" { GoToTab 8; SwitchToMode "normal"; }
         bind "Alt 9" { GoToTab 9; SwitchToMode "normal"; }
-        bind "Alt Shift j" { GoToNextTab; }
-        bind "Alt Shift k" { GoToPreviousTab; }
+        bind "Alt Shift j" { GoToPreviousTab; }
+        bind "Alt Shift k" { GoToNextTab; }
         bind "Alt Shift h" { BreakPaneLeft; SwitchToMode "normal"; }
         bind "Alt Shift l" { BreakPaneRight; SwitchToMode "normal"; }
         bind "Alt Shift n" { NewTab; SwitchToMode "normal"; }
         bind "Alt Shift s" { ToggleActiveSyncTab; SwitchToMode "normal"; }
         bind "Alt Shift q" { Quit; }
-        bind "Alt r" { SwitchToMode "renamepane"; }
-        bind "Alt Shift r" { SwitchToMode "renametab"; }
+        bind "Alt r" { SwitchToMode "renamepane"; PaneNameInput 0; }
+        bind "Alt Shift r" { SwitchToMode "renametab"; TabNameInput 0; }
         bind "Alt ," { SwitchToMode "resize"; }
         bind "Alt ." { SwitchToMode "move"; }
         bind "Alt /" { SwitchToMode "entersearch"; }
