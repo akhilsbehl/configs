@@ -325,10 +325,10 @@ alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
 #############################
 
 function up() {
-  local n
-  n=$1
-  [[ -z "$n" ]] && n=1
-  repeat $n ..
+  local ndirs
+  ndirs=$1
+  [[ -z "$ndirs" ]] && ndirs=1
+  repeat $ndirs { cd .. }
 }
 
 ###############
