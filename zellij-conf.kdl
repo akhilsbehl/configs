@@ -62,6 +62,8 @@ keybinds clear-defaults=true {
         bind "j" { MovePane "down"; }
         bind "k" { MovePane "up"; }
         bind "l" { MovePane "right"; }
+        bind "Shift h" { MoveTab "left"; }
+        bind "Shift l" { MoveTab "right"; }
         bind "Esc" { SwitchToMode "normal"; }
     }
     entersearch {
