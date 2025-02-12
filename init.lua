@@ -781,7 +781,12 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             prompt =
                             '> /COPILOT_GENERATE\n\nThere is a bug in this code. Identify and rewrite the code to fix it.',
                             description = 'Identify and fix bugs in the code',
-                        }
+                        },
+                        CLI = {
+                            prompt =
+                            '> /COPILOT_GENERATE\n\nGenerate a CLI for this code in English. Include options, arguments, default values, and usage instructions. For python use argparse. For JS use yargs. For others, pick a similar widely-accepted standard.',
+                            description = 'Generate a CLI for the code',
+                        },
                     }
                     local chat = require("CopilotChat")
                     chat.prompts = function()
@@ -808,16 +813,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                 end
                             end,
                         }
-                    )
-                    VA.nvim_create_user_command(
-                        "CopilotChatJustChat",
-                        function()
-                            local input = VF.input("Ask: ")
-                            if input ~= "" then
-                                chat.ask(input)
-                            end
-                        end,
-                        { nargs = "*", range = true }
                     )
                     VA.nvim_create_user_command(
                         "CopilotChatVisual",
@@ -857,11 +852,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     )
                 end,
                 keys = {
-                    {
-                        "<LocalLeader>cc",
-                        ":CopilotChatJustChat<CR>",
-                        desc = "CopilotChat - Just Chat with the model",
-                    },
                     {
                         "<LocalLeader>cv",
                         ":CopilotChatVisual<CR>",
