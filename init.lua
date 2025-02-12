@@ -274,24 +274,15 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VK('n', '<leader>gb', '<cmd>Telescope git_branches<cr>')
                     VK('n', '<leader>gs', '<cmd>Telescope git_status<cr>')
                     VK('n', '<leader>gS', '<cmd>Telescope git_stash<cr>')
-                    VK('n', '<localleader>jD',
-                        '<cmd>Telescope diagnostics<cr>')
-                    VK('n', '<localleader>jr',
-                        '<cmd>Telescope lsp_references<cr>')
-                    VK('n', '<localleader>jd',
-                        '<cmd>Telescope lsp_definitions<cr>')
-                    VK('n', '<localleader>jI',
-                        '<cmd>Telescope lsp_incoming_calls<cr>')
-                    VK('n', '<localleader>jO',
-                        '<cmd>Telescope lsp_outgoing_calls<cr>')
-                    VK('n', '<localleader>jm',
-                        '<cmd>Telescope lsp_implementations<cr>')
-                    VK('n', '<localleader>jt',
-                        '<cmd>Telescope lsp_type_definitions<cr>')
-                    VK('n', '<localleader>jS',
-                        '<cmd>Telescope lsp_document_symbols<cr>')
-                    VK('n', '<localleader>jw',
-                        '<cmd>Telescope lsp_workspace_symbols<cr>')
+                    VK('n', '<leader>jD', '<cmd>Telescope diagnostics<cr>')
+                    VK('n', '<leader>jr', '<cmd>Telescope lsp_references<cr>')
+                    VK('n', '<leader>jd', '<cmd>Telescope lsp_definitions<cr>')
+                    VK('n', '<leader>jI', '<cmd>Telescope lsp_incoming_calls<cr>')
+                    VK('n', '<leader>jO', '<cmd>Telescope lsp_outgoing_calls<cr>')
+                    VK('n', '<leader>jm', '<cmd>Telescope lsp_implementations<cr>')
+                    VK('n', '<leader>jt', '<cmd>Telescope lsp_type_definitions<cr>')
+                    VK('n', '<leader>jS', '<cmd>Telescope lsp_document_symbols<cr>')
+                    VK('n', '<leader>jw', '<cmd>Telescope lsp_workspace_symbols<cr>')
                 end,
             },
             {
