@@ -545,15 +545,19 @@ preexec() {
 # export RPROMPT='%F{magenta}%D{%L:%M:%S}'
 # eval "$(starship init zsh)"
 
+eval "$(oh-my-posh init zsh --config '~/configs/oh-my-posh-atomic-theme.omp.json')"
+
 # vi mode interaction with the prompt
+# Started from this:
 # https://github.com/JanDeDobbeleer/oh-my-posh/issues/5438#issuecomment-2381388638
+# And spent hours on it. Don't mess with it.
 
 _omp_redraw-prompt() {
   local precmd_
   for precmd_ in $precmd_functions; do
     $precmd_
   done
-  zle .reset-prompt && zle -R
+  zle .reset-prompt
 }
 
 function _omp_zle-keymap-select() {
@@ -562,7 +566,7 @@ function _omp_zle-keymap-select() {
     else
         export POSH_VI_MODE="vi:insert"
     fi
-    _omp_redraw-prompt
+    _omp_redraw-prompt && zle -R
 }
 _omp_create_widget zle-keymap-select _omp_zle-keymap-select
 
@@ -576,8 +580,6 @@ TRAPINT() {
     echo
     return $(( 128 + $1 ))
 }
-
-eval "$(oh-my-posh init zsh --config '~/configs/oh-my-posh-atomic-theme.omp.json')"
 
 ####################################
 #  Source stuff local to each box  #
