@@ -544,6 +544,39 @@ preexec() {
 # prompt pure
 # export RPROMPT='%F{magenta}%D{%L:%M:%S}'
 # eval "$(starship init zsh)"
+
+# vi mode interaction with the prompt
+# https://github.com/JanDeDobbeleer/oh-my-posh/issues/5438#issuecomment-2381388638
+
+_omp_redraw-prompt() {
+  local precmd_
+  for precmd_ in $precmd_functions; do
+    $precmd_
+  done
+  zle .reset-prompt && zle -R
+}
+
+function _omp_zle-keymap-select() {
+    if [ "${KEYMAP}" = 'vicmd' ]; then
+        export POSH_VI_MODE="vi:normal"
+    else
+        export POSH_VI_MODE="vi:insert"
+    fi
+    _omp_redraw-prompt
+}
+_omp_create_widget zle-keymap-select _omp_zle-keymap-select
+
+function _omp_zle-line-finish() {
+    export POSH_VI_MODE="vi:insert"
+}
+_omp_create_widget zle-line-finish _omp_zle-line-finish
+
+TRAPINT() {
+    export POSH_VI_MODE="vi:insert"
+    echo
+    return $(( 128 + $1 ))
+}
+
 eval "$(oh-my-posh init zsh --config '~/configs/oh-my-posh-atomic-theme.omp.json')"
 
 ####################################

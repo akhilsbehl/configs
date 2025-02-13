@@ -20,6 +20,17 @@
           "type": "root"
         },
         {
+          "background": "#26a69a",
+          "foreground": "#ffffff",
+          "style": "powerline",
+          "powerline_symbol": "\ue0b0",
+          "template": " {{ .Env.POSH_VI_MODE }} ",
+          "background_templates": [
+            "{{ if eq .Env.POSH_VI_MODE \"vi:normal\" }}#f4511e{{ end }}"
+          ],
+          "type": "text"
+        },
+        {
           "background": "#FF9248",
           "foreground": "#2d3436",
           "powerline_symbol": "\ue0b0",
@@ -50,6 +61,20 @@
           "style": "powerline",
           "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}<#ef5350> \uf046 {{ .Staging.String }}</>{{ end }} ",
           "type": "git"
+        },
+        {
+          "background": "#21c7c7",
+          "foreground": "#000000",
+          "background_templates": [
+            "{{ if eq .Code 0 }}#21c7c7{{ else }}#ff0000{{ end }}"
+          ],
+          "foreground_templates": [
+            "{{ if eq .Code 0 }}#000000{{ else }}#ffffff{{ end }}"
+          ],
+          "style": "powerline",
+          "powerline_symbol": "\ue0b0",
+          "template": " exit:{{ .Code }} ",
+          "type": "text"
         },
         {
           "background": "#83769c",
@@ -213,7 +238,6 @@
           "background": "#b2bec3",
           "foreground": "#222222",
           "leading_diamond": "\ue0b6",
-          "trailing_diamond": "<transparent,background>\ue0b2</>",
           "properties": {
             "linux": "\ue712",
             "macos": "\ue711",
@@ -230,7 +254,7 @@
             "{{if eq \"Discharging\" .State.String}}#fff34e{{end}}",
             "{{if eq \"Full\" .State.String}}#33DD2D{{end}}"
           ],
-          "foreground": "#262626",
+          "foreground": "#ffffff",
           "invert_powerline": true,
           "powerline_symbol": "\ue0b2",
           "properties": {
@@ -246,7 +270,6 @@
           "background": "#40c4ff",
           "foreground": "#ffffff",
           "invert_powerline": true,
-          "leading_diamond": "\ue0b2",
           "properties": {
             "time_format": "Jan 2, 03:04 PM"
           },
@@ -269,8 +292,7 @@
           "type": "text"
         },
         {
-          "foreground": "#e0f8ff",
-          "foreground_templates": ["{{ if gt .Code 0 }}#ef5350{{ end }}"],
+          "foreground": "#21c7c7",
           "properties": {
             "always_enabled": true
           },
