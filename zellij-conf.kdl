@@ -55,6 +55,10 @@ keybinds clear-defaults=true {
         bind "j" { Resize "Increase down"; }
         bind "k" { Resize "Increase up"; }
         bind "l" { Resize "Increase right"; }
+        bind "Shift h" { Resize "Decrease left"; }
+        bind "Shift j" { Resize "Decrease down"; }
+        bind "Shift k" { Resize "Decrease up"; }
+        bind "Shift l" { Resize "Decrease right"; }
         bind "Esc" { SwitchToMode "normal"; }
     }
     move {
@@ -177,7 +181,7 @@ default_cwd "~/configs"
 // The name of the default layout to load on startup
 // Default: "default"
 //
-default_layout "default"
+// default_layout "default"
 
 // The folder in which Zellij will look for layouts
 // (Requires restart)
