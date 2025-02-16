@@ -57,7 +57,7 @@
           "properties": {
             "folder_icon": " \uf07b ",
             "home_icon": "\ue617",
-            "style": "folder"
+            "style": "full"
           },
           "template": " \uf07b\uea9c {{ .Path }} ",
           "type": "path"
