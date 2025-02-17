@@ -1342,6 +1342,9 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
     )
 
     -- Auto update on startup
+    local function plugin_exists(name)
+        return require("lazy.core.config").plugins[name] ~= nil
+    end
     vim.api.nvim_create_autocmd("VimEnter", {
         group = vim.api.nvim_create_augroup(
             "lazyvim_autoupdate",
@@ -1349,9 +1352,24 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
         ),
         callback = function()
             if require("lazy.status").has_updates then
-                require("lazy").update({ show = true, })
+                require("lazy").update({ show = false, })
+                print("LazyVim updated.")
             end
-        end,
+            if plugin_exists("mason.nvim") then
+                local ok, registry = pcall(require, "mason-registry")
+                if ok then
+                    registry.update(
+                        function(success, err)
+                            if not success then
+                                print("Error updating mason registry: " .. err)
+                            else
+                                print("Mason registry updated.")
+                            end
+                        end
+                    )
+                end
+            end
+        end
     })
 
     VC [[ source ~/.config/nvim/vimrc ]]
