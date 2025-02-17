@@ -1341,5 +1341,18 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
         }
     )
 
+    -- Auto update on startup
+    vim.api.nvim_create_autocmd("VimEnter", {
+        group = vim.api.nvim_create_augroup(
+            "lazyvim_autoupdate",
+            { clear = true }
+        ),
+        callback = function()
+            if require("lazy.status").has_updates then
+                require("lazy").update({ show = true, })
+            end
+        end,
+    })
+
     VC [[ source ~/.config/nvim/vimrc ]]
 end
