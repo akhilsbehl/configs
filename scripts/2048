@@ -1,0 +1,366 @@
+#!/usr/bin/env python3
+import pygame
+import random
+import sys
+
+# Constants
+GRID_SIZE = 4
+TILE_SIZE = 100
+GRID_MARGIN = 10
+WINDOW_WIDTH = GRID_SIZE * TILE_SIZE + (GRID_SIZE + 1) * GRID_MARGIN
+WINDOW_HEIGHT = WINDOW_WIDTH + 100
+FONT_SIZE = 48
+SCORE_FONT_SIZE = 36
+GAME_OVER_FONT_SIZE = 64
+ANIMATION_SPEED = 30  # Higher value = faster animation
+
+# Colors (RGB)
+BACKGROUND_COLOR = (187, 173, 160)
+EMPTY_CELL_COLOR = (205, 193, 180)
+TILE_COLORS = {
+    2: (238, 228, 218),
+    4: (237, 224, 200),
+    8: (242, 177, 121),
+    16: (245, 149, 99),
+    32: (246, 124, 95),
+    64: (246, 94, 59),
+    128: (237, 207, 114),
+    256: (237, 204, 97),
+    512: (237, 200, 80),
+    1024: (237, 197, 63),
+    2048: (237, 194, 46),
+}
+TEXT_COLOR = (119, 110, 101)
+TEXT_COLOR_HIGH = (249, 246, 242)
+SCORE_COLOR = (255, 255, 255)
+GAME_OVER_COLOR = (255, 0, 0)
+
+
+class Tile:
+    def __init__(self, x, y, value, grid_x, grid_y):
+        self.x = x  # Pixel x position
+        self.y = y  # Pixel y position
+        self.value = value
+        self.grid_x = grid_x  # Grid x position (0-3)
+        self.grid_y = grid_y  # Grid y position (0-3)
+        self.target_x = x
+        self.target_y = y
+        self.merged = False  # Flag: merged in current move?
+        self.new_tile = True  # Flag: brand new tile?
+
+    def set_target(self, grid_x, grid_y):
+        self.target_x = grid_x * (TILE_SIZE + GRID_MARGIN) + GRID_MARGIN
+        self.target_y = grid_y * (TILE_SIZE + GRID_MARGIN) + GRID_MARGIN
+        self.grid_x = grid_x
+        self.grid_y = grid_y
+
+    def update(self):
+        if self.x < self.target_x:
+            self.x += ANIMATION_SPEED
+            self.x = min(self.x, self.target_x)  # Prevent overshoot
+        elif self.x > self.target_x:
+            self.x -= ANIMATION_SPEED
+            self.x = max(self.x, self.target_x)
+
+        if self.y < self.target_y:
+            self.y += ANIMATION_SPEED
+            self.y = min(self.y, self.target_y)
+        elif self.y > self.target_y:
+            self.y -= ANIMATION_SPEED
+            self.y = max(self.y, self.target_y)
+
+        if self.x == self.target_x and self.y == self.target_y:
+            self.new_tile = False
+
+    def is_moving(self):
+        return self.x != self.target_x or self.y != self.target_y
+
+    def draw(self, screen, font):
+        tile_color = TILE_COLORS.get(self.value, EMPTY_CELL_COLOR)
+        pygame.draw.rect(
+            screen, tile_color, (self.x, self.y, TILE_SIZE, TILE_SIZE)
+        )
+        if self.value > 0:
+            text_color = TEXT_COLOR if self.value <= 4 else TEXT_COLOR_HIGH
+            text_surf = font.render(str(self.value), True, text_color)
+            text_rect = text_surf.get_rect(
+                center=(self.x + TILE_SIZE // 2, self.y + TILE_SIZE // 2)
+            )
+            screen.blit(text_surf, text_rect)
+
+
+class Game2048:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pygame.display.set_caption("2048")
+        self.font = pygame.font.Font(None, FONT_SIZE)
+        self.score_font = pygame.font.Font(None, SCORE_FONT_SIZE)
+        self.game_over_font = pygame.font.Font(None, GAME_OVER_FONT_SIZE)
+        self.clock = pygame.time.Clock()  # Add a clock
+        self.reset_game()
+
+    def reset_game(self):
+        self.tiles = []
+        self.score = 0
+        self.game_over = False
+        self.add_new_tile()
+        self.add_new_tile()
+        self.animating = False
+
+    def add_new_tile(self):
+        empty_cells = [
+            (x, y)
+            for x in range(GRID_SIZE)
+            for y in range(GRID_SIZE)
+            if not any(t.grid_x == x and t.grid_y == y for t in self.tiles)
+        ]
+        if empty_cells:
+            x, y = random.choice(empty_cells)
+            value = 2 if random.random() < 0.9 else 4
+            tile = Tile(
+                x * (TILE_SIZE + GRID_MARGIN) + GRID_MARGIN,
+                y * (TILE_SIZE + GRID_MARGIN) + GRID_MARGIN,
+                value,
+                x,
+                y,
+            )
+            self.tiles.append(tile)
+
+    def draw_grid(self):
+        for y in range(GRID_SIZE):
+            for x in range(GRID_SIZE):
+                rect_x = x * (TILE_SIZE + GRID_MARGIN) + GRID_MARGIN
+                rect_y = y * (TILE_SIZE + GRID_MARGIN) + GRID_MARGIN
+                pygame.draw.rect(
+                    self.screen,
+                    EMPTY_CELL_COLOR,
+                    (rect_x, rect_y, TILE_SIZE, TILE_SIZE),
+                )
+        for tile in self.tiles:
+            tile.draw(self.screen, self.font)
+
+    def draw_score(self):
+        score_text = self.score_font.render(
+            f"Score: {self.score}", True, SCORE_COLOR
+        )
+        score_rect = score_text.get_rect(
+            center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 50)
+        )
+        self.screen.blit(score_text, score_rect)
+
+    def draw_game_over(self):
+        text_surface = self.game_over_font.render(
+            "Game Over!", True, GAME_OVER_COLOR
+        )
+        text_rect = text_surface.get_rect(
+            center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
+        )
+        self.screen.blit(text_surface, text_rect)
+
+    def slide_tiles(self, tiles):
+        new_tiles = []
+        score_earned = 0
+        tiles = [t for t in tiles if t.value != 0]
+        i = 0
+        while i < len(tiles):
+            if i + 1 < len(tiles) and tiles[i].value == tiles[i + 1].value:
+                tiles[i].value *= 2
+                score_earned += tiles[i].value
+                tiles[i].merged = True
+                new_tiles.append(tiles[i])
+                i += 2
+            else:
+                new_tiles.append(tiles[i])
+                i += 1
+        return new_tiles, score_earned
+
+    def move(self, direction):
+        moved = False
+        self.animating = True
+
+        if direction == "left":
+            for y in range(GRID_SIZE):
+                row = sorted(
+                    [t for t in self.tiles if t.grid_y == y],
+                    key=lambda t: t.grid_x,
+                )
+                new_row, score_earned = self.slide_tiles(row)
+                self.score += score_earned
+                for i, tile in enumerate(new_row):
+                    if tile.grid_x != i:
+                        moved = True
+                    tile.set_target(i, y)
+                self.tiles = [
+                    t
+                    for t in self.tiles
+                    if not (t.grid_y == y and t not in new_row)
+                ]
+
+        elif direction == "right":
+            for y in range(GRID_SIZE):
+                row = sorted(
+                    [t for t in self.tiles if t.grid_y == y],
+                    key=lambda t: t.grid_x,
+                    reverse=True,
+                )
+                new_row, score_earned = self.slide_tiles(row)
+                self.score += score_earned
+                for i, tile in enumerate(new_row):
+                    if tile.grid_x != GRID_SIZE - 1 - i:
+                        moved = True
+                    tile.set_target(GRID_SIZE - 1 - i, y)
+                self.tiles = [
+                    t
+                    for t in self.tiles
+                    if not (t.grid_y == y and t not in new_row)
+                ]
+
+        elif direction == "up":
+            for x in range(GRID_SIZE):
+                col = sorted(
+                    [t for t in self.tiles if t.grid_x == x],
+                    key=lambda t: t.grid_y,
+                )
+                new_col, score_earned = self.slide_tiles(col)
+                self.score += score_earned
+                for i, tile in enumerate(new_col):
+                    if tile.grid_y != i:
+                        moved = True
+                    tile.set_target(x, i)
+                self.tiles = [
+                    t
+                    for t in self.tiles
+                    if not (t.grid_x == x and t not in new_col)
+                ]
+
+        elif direction == "down":
+            for x in range(GRID_SIZE):
+                col = sorted(
+                    [t for t in self.tiles if t.grid_x == x],
+                    key=lambda t: t.grid_y,
+                    reverse=True,
+                )
+                new_col, score_earned = self.slide_tiles(col)
+                self.score += score_earned
+                for i, tile in enumerate(new_col):
+                    if tile.grid_y != GRID_SIZE - 1 - i:
+                        moved = True
+                    tile.set_target(x, GRID_SIZE - 1 - i)
+                self.tiles = [
+                    t
+                    for t in self.tiles
+                    if not (t.grid_x == x and t not in new_col)
+                ]
+
+        for tile in self.tiles:
+            tile.merged = False  # Reset merge flags
+
+        return moved
+
+    def check_game_over(self):
+        # If animating, game is not over.
+        if self.animating:
+            return False
+
+        # Check for empty cells.
+        empty_cells = [
+            (x, y)
+            for x in range(GRID_SIZE)
+            for y in range(GRID_SIZE)
+            if not any(t.grid_x == x and t.grid_y == y for t in self.tiles)
+        ]
+        if empty_cells:
+            return False  # Game not over if empty cells exist
+
+        # Check for possible merges (horizontally and vertically).
+        for y in range(GRID_SIZE):
+            for x in range(GRID_SIZE - 1):
+                tile1 = next(
+                    (t for t in self.tiles if t.grid_x == x and t.grid_y == y),
+                    None,
+                )
+                tile2 = next(
+                    (
+                        t
+                        for t in self.tiles
+                        if t.grid_x == x + 1 and t.grid_y == y
+                    ),
+                    None,
+                )
+                if tile1 and tile2 and tile1.value == tile2.value:
+                    return False
+
+        for x in range(GRID_SIZE):
+            for y in range(GRID_SIZE - 1):
+                tile1 = next(
+                    (t for t in self.tiles if t.grid_x == x and t.grid_y == y),
+                    None,
+                )
+                tile2 = next(
+                    (
+                        t
+                        for t in self.tiles
+                        if t.grid_x == x and t.grid_y == y + 1
+                    ),
+                    None,
+                )
+                if tile1 and tile2 and tile1.value == tile2.value:
+                    return False
+
+        return True  # No empty cells and no possible merges
+
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.KEYDOWN:
+                    if self.game_over:
+                        if event.key == pygame.K_r:
+                            self.reset_game()
+                    elif not self.animating:
+                        moved = False
+                        if event.key == pygame.K_LEFT:
+                            moved = self.move("left")
+                        elif event.key == pygame.K_RIGHT:
+                            moved = self.move("right")
+                        elif event.key == pygame.K_UP:
+                            moved = self.move("up")
+                        elif event.key == pygame.K_DOWN:
+                            moved = self.move("down")
+                        if moved:  # Moved add a new tile after the animations.
+                            pass
+
+            self.screen.fill(BACKGROUND_COLOR)
+            self.draw_grid()
+            self.draw_score()
+
+            if self.animating:
+                all_tiles_stopped = True
+                for tile in self.tiles:
+                    tile.update()
+                    if tile.is_moving():
+                        all_tiles_stopped = False
+
+                if all_tiles_stopped:
+                    self.animating = False
+                    self.add_new_tile()  # Add new tile *after* animation
+                    self.game_over = (
+                        self.check_game_over()
+                    )  # Check *after* adding
+
+            if self.game_over:
+                self.draw_game_over()
+
+            pygame.display.flip()
+            self.clock.tick(60)  # Limit frame rate
+
+        pygame.quit()
+        sys.exit()
+
+
+if __name__ == "__main__":
+    game = Game2048()
+    game.run()
