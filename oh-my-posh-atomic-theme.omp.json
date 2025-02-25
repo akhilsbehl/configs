@@ -247,10 +247,10 @@
           "type": "text"
         },
         {
-          "background": "#83769c",
+          "background": "#fcba03",
           "foreground": "#ffffff",
           "background_templates": [
-            "{{ if eq .Code 0 }}#83769c{{ else }}#ff0000{{ end }}"
+            "{{ if gt .Code 0 }}#ff0000{{ end }}"
           ],
           "style": "powerline",
           "powerline_symbol": "\ue0b0",
@@ -258,7 +258,7 @@
           "type": "text"
         },
         {
-          "background": "#21c7c7",
+          "background": "#83769c",
           "foreground": "#ffffff",
           "properties": {
             "style": "roundrock",
@@ -275,7 +275,7 @@
             "always_enabled": true
           },
           "style": "plain",
-          "template": "\u2500\ue285\ue285 ",
+          "template": "\u27a4\u27a4\u27a4 ",
           "type": "status"
         }
       ],
