@@ -642,7 +642,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         'markdown',
                         'copilot-chat',
                         'telekasten',
-                        'Avante',
                     },
                     render_modes = true,
                     anti_conceal = { enabled = true },
@@ -876,63 +875,6 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         desc = "CopilotChat - Pick prompt actions over the buffer contents",
                     },
                 },
-            },
-
-            {
-                -- AI - Avante/Cursor Style
-                'yetone/avante.nvim',
-                event = 'VeryLazy',
-                lazy = false,
-                version = false,
-                build = 'make',
-                dependencies = {
-                    'stevearc/dressing.nvim',
-                    'nvim-lua/plenary.nvim',
-                    'MunifTanjim/nui.nvim',
-                    {
-                        -- support for image pasting
-                        "HakonHarnes/img-clip.nvim",
-                        event = "VeryLazy",
-                        opts = {
-                            default = {
-                                embed_image_as_base64 = false,
-                                prompt_for_file_name = false,
-                                drag_and_drop = {
-                                    insert_mode = true,
-                                },
-                                use_absolute_path = true,
-                            },
-                        },
-                    },
-                },
-                opts = {
-                    debug = false,
-                    tokenizer = "tiktoken",
-                    provider = "copilot",
-                    copilot = {
-                        model = "claude-3.5-sonnet",
-                        temperature = 0,
-                        max_tokens = 8192,
-                    },
-                    behaviour = {
-                        auto_suggestions = false,
-                        auto_set_highlight_group = true,
-                        auto_set_keymaps = true,
-                        auto_apply_diff_after_generation = false,
-                        support_paste_from_clipboard = false,
-                        minimize_diff = true,
-                    },
-                    mappings = {
-                        ask = "<LocalLeader>aa",
-                        edit = "<LocalLeader>ae",
-                        refresh = "<LocalLeader>ar",
-                    },
-                    windows = {
-                        position = "top",
-                        width = 30,
-                    },
-                    hints = { enabled = true },
-                }
             },
 
             {
