@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# 1. Fetch the library page and extract model families
+model_families=$(curl -s https://ollama.com/library |
+    grep -o '<span class="group-hover:underline">[^<]*' |
+    sed 's/<span class="group-hover:underline">//g' |
+    sort | uniq)
+
+# 2. Use fzf to select a model family
+selected_family=$(echo "$model_families" | fzf --prompt="Select a model family: " --height 40% --layout=reverse)
+
+# Exit if no selection is made in fzf
+if [ -z "$selected_family" ]; then
+    echo "No model family selected. Exiting."
+    exit 1
+fi
+
+# 3. Construct the URL for the selected model family's TAGS page.
+family_url="https://ollama.com/library/$selected_family/tags"
+family_details=$(curl -s "$family_url")
+
+# 4. Extract available tags (quantizations) from the /tags page.
+# *** CORRECTED REGEX (FINAL, TESTED) ***
+tags_and_names=$(
+    echo "$family_details" |
+        grep -zoP '<a class="group" href="[^"]+">\s*<div[^>]*>\s*\K[^<]+(?=\s*</div>)' |
+        tr -cd '[:print:]\n' |
+        sed -E 's/^[[:space:]]*//' |
+        sed -E '/^[[:space:]]*$/d' |
+        sort | uniq
+)
+
+# 5. Use fzf to select a specific tag (quantization)
+selected_tag=$(echo "$tags_and_names" | fzf --prompt="Select a tag/quantization for $selected_family: " --height 40% --layout=reverse)
+
+# Exit if no tag is selected
+if [ -z "$selected_tag" ]; then
+    echo "No tag selected. Exiting."
+    exit 1
+fi
+
+# 6. Construct the full model name and pull it
+full_model_name="$selected_family:$selected_tag"
+echo "Pulling model: $full_model_name"
+ollama pull "$full_model_name"
+
+echo "Model '$full_model_name' downloaded successfully (or already present)."
+exit 0
