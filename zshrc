@@ -316,9 +316,9 @@ source $HOME/configs/zshmodules/zsh-syntax-highlighting/zsh-syntax-highlighting.
 
 # Keep these after modules being loaded
 
-alias -g t='> ./tmp-$(date +%y%m%d-%H%M%S)'
+alias -g tea='> ./tmp-$(date +%y%m%d-%H%M%S)'
 
-alias -g T='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
+alias -g Tea='| tee -a ./tmp-$(date +%y%m%d-%H%M%S)'
 
 #############################
 #  up n to go up n folders  #
