@@ -104,10 +104,10 @@ if exists_command lsd; then
     alias ll='lsd -l'
     alias lsg='lsd'
     alias lsa='lsd -a'
+    alias lla='lsd -la'
     alias lst='lsd -t'
     alias lss='lsd -S'
     alias lsx='lsd -X'
-    alias lsg='lsd -G'
     alias lsv='lsd -v'
     alias tree='lsd --tree'
 else
