@@ -532,9 +532,6 @@ function launchpad {
 #######################
 
 # Keep some vertical padding around the prompt
-precmd() {
-    echo
-}
 preexec() {
     echo
 }
@@ -543,43 +540,12 @@ preexec() {
 # promptinit
 # prompt pure
 # export RPROMPT='%F{magenta}%D{%L:%M:%S}'
-# eval "$(starship init zsh)"
 
-eval "$(oh-my-posh init zsh --config '~/configs/oh-my-posh-atomic-theme.omp.json')"
-
-# vi mode interaction with the prompt
-# Started from this:
-# https://github.com/JanDeDobbeleer/oh-my-posh/issues/5438#issuecomment-2381388638
-# And spent hours on it. Don't mess with it.
-
-_omp_redraw-prompt() {
-  local precmd_
-  for precmd_ in $precmd_functions; do
-    $precmd_
-  done
-  zle .reset-prompt
-}
-
-function _omp_zle-keymap-select() {
-    if [ "${KEYMAP}" = 'vicmd' ]; then
-        export POSH_VI_MODE="vi:normal"
-    else
-        export POSH_VI_MODE="vi:insert"
-    fi
-    _omp_redraw-prompt && zle -R
-}
-_omp_create_widget zle-keymap-select _omp_zle-keymap-select
-
-function _omp_zle-line-finish() {
-    export POSH_VI_MODE="vi:insert"
-}
-_omp_create_widget zle-line-finish _omp_zle-line-finish
-
-TRAPINT() {
-    export POSH_VI_MODE="vi:insert"
-    echo
-    return $(( 128 + $1 ))
-}
+if [[ "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select" || \
+      "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select-wrapped" ]]; then
+    zle -N zle-keymap-select "";
+fi
+eval "$(starship init zsh)"
 
 ####################################
 #  Source stuff local to each box  #
