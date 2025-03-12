@@ -2,8 +2,9 @@
 
 # 1. Fetch the library page and extract model families
 model_families=$(curl -s https://ollama.com/library |
-    grep -o '<span class="group-hover:underline">[^<]*' |
-    sed 's/<span class="group-hover:underline">//g' |
+    grep -o '<span class="group-hover:underline truncate">[^<]*' |
+    sed 's/<span class="group-hover:underline truncate">//g' |
+    sed 's/<\/span>//g' |
     sort | uniq)
 
 # 2. Use fzf to select a model family
