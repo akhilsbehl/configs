@@ -507,6 +507,39 @@ function randomize-colorscheme {
 }
 
 ######################
+# Ollama Convenience #
+######################
+
+function update-ollama () {
+    curl -fsSL https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/scripts/install.sh | sh
+}
+
+function zllama () {
+    if [ -z "$1" ]; then
+        ollama list
+    elif [[ \
+        "$1" == "run" || \
+        "$1" == "stop" || \
+        "$1" == "show" || \
+        "$1" == "rm" \
+        ]]; then
+        local choice=$(ollama list | fzf | awk '{print $1}')
+        echo ollama "$1" "$choice"
+        ollama "$1" "$choice"
+    else
+        echo "Invalid argument:"
+        echo "Usage: zllama [command]"
+        echo
+        echo "Commands:"
+        echo "  run: Run a selected ollama model"
+        echo "  stop: Stop a running ollama model"
+        echo "  show: Show the details of a selected ollama model"
+        echo "  rm: Remove a selected ollama model"
+    fi
+}
+
+
+######################
 # Start tmux session #
 ######################
 
@@ -535,11 +568,6 @@ function launchpad {
 preexec() {
     echo
 }
-
-# autoload -U promptinit
-# promptinit
-# prompt pure
-# export RPROMPT='%F{magenta}%D{%L:%M:%S}'
 
 if [[ "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select" || \
       "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select-wrapped" ]]; then
