@@ -510,34 +510,31 @@ function randomize-colorscheme {
 # Ollama Convenience #
 ######################
 
-function update-ollama () {
-    curl -fsSL https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/scripts/install.sh | sh
-}
-
 function zllama () {
-    if [ -z "$1" ]; then
+    local subcmds="list run stop show rm pull update version"
+    local subcmd=$(echo "$subcmds" | tr ' ' '\n' | fzf)
+    if [[ "$subcmd" == "list" ]]; then
         ollama list
-    elif [[ \
-        "$1" == "run" || \
-        "$1" == "stop" || \
-        "$1" == "show" || \
-        "$1" == "rm" \
-        ]]; then
-        local choice=$(ollama list | fzf | awk '{print $1}')
-        echo ollama "$1" "$choice"
-        ollama "$1" "$choice"
-    else
-        echo "Invalid argument:"
-        echo "Usage: zllama [command]"
-        echo
-        echo "Commands:"
-        echo "  run: Run a selected ollama model"
-        echo "  stop: Stop a running ollama model"
-        echo "  show: Show the details of a selected ollama model"
-        echo "  rm: Remove a selected ollama model"
+        return 0
     fi
+    if [[ "$subcmd" == "pull" ]]; then
+        zllama-pull
+        return 0
+    fi
+    if [[ "$subcmd" == "update" ]]; then
+        local url=https://raw.githubusercontent.com/ollama/
+        url+=ollama/refs/heads/main/scripts/install.sh
+        curl -fsSL $url | sh
+        return 0
+    fi
+    if [[ "$subcmd" == "version" ]]; then
+        ollama --version
+        return 0
+    fi
+    local choice=$(ollama list | fzf | awk '{print $1}')
+    echo ollama "$subcmd" "$choice"
+    ollama "$subcmd" "$choice"
 }
-
 
 ######################
 # Start tmux session #
