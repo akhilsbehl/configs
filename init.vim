@@ -285,16 +285,15 @@ highlight MyCursorColumn ctermfg=white guifg=white ctermbg=red guibg=red
 highlight MySelectedWord ctermfg=white guifg=white ctermbg=green guibg=green
 
 function! HighlightCursor() abort
-  call NoHighlightCursor()
+    call NoHighlightCursor()
 
-  " Set up the custom highlighting using matchadd()
-  let g:myrc_cursorline_match_id = matchadd('MyCursorLine', '\%'.line('.').'l')
-  let g:myrc_cursorcolumn_match_id = matchadd('MyCursorColumn', '\%'.col('.').'v')
-  let g:myrc_word_match_id = matchadd('MySelectedWord', '\k*\%#\k*')
+    " Set up the custom highlighting using matchadd()
+    let g:myrc_cursorline_match_id = matchadd('MyCursorLine', '\%'.line('.').'l')
+    let g:myrc_cursorcolumn_match_id = matchadd('MyCursorColumn', '\%'.col('.').'v')
+    let g:myrc_word_match_id = matchadd('MySelectedWord', '\k*\%#\k*')
 
-  " Start a timer to disable highlighting after 200ms
-  let g:myrc_highlight_timer = timer_start(g:myrc_highlight_cursor_time, 'NoHighlightCursor')
-
+    " Start a timer to disable highlighting after 200ms
+    let g:myrc_highlight_timer = timer_start(g:myrc_highlight_cursor_time, 'NoHighlightCursor')
 endfunction
 
 function! NoHighlightCursor(...) abort
@@ -307,14 +306,14 @@ function! NoHighlightCursor(...) abort
         let g:myrc_cursorcolumn_match_id = 0
     endif
     if g:myrc_word_match_id != 0
-      call matchdelete(g:myrc_word_match_id)
-      let g:myrc_word_match_id = 0
+        call matchdelete(g:myrc_word_match_id)
+        let g:myrc_word_match_id = 0
     endif
 
-  if g:myrc_highlight_timer != 0
-    call timer_stop(g:myrc_highlight_timer)
-    let g:myrc_highlight_timer = 0 " Reset the ID
-  endif
+    if g:myrc_highlight_timer != 0
+        call timer_stop(g:myrc_highlight_timer)
+        let g:myrc_highlight_timer = 0 " Reset the ID
+    endif
 endfunction
 
 nnoremap <leader>hc :call HighlightCursor()<CR>
@@ -449,19 +448,58 @@ function! DecorateSelection(str) abort
     normal "xp
 endfunction
 
+function! MarkdownToDocx() abort
+    let l:filepath = expand('%:p')
+    let l:filename = expand('%:t:r')
+    let l:tmp_md_path = '/tmp/' . l:filename . '.md'
+    let l:docx_path = '/tmp/' . l:filename . '.docx'
+
+    if filereadable(l:tmp_md_path)
+        call delete(l:tmp_md_path)
+    endif
+    if filereadable(l:docx_path)
+        call delete(l:docx_path)
+    endif
+
+    call writefile(getline(1, '$'), l:tmp_md_path)
+
+    if !executable('pandoc')
+        echohl ErrorMsg
+        echom "Error: pandoc is not installed."
+        echohl None
+        return
+    endif
+
+    " Construct the pandoc command.
+    let l:command = 'pandoc ' . shellescape(l:tmp_md_path) . ' -o ' .
+                \ shellescape(l:docx_path)
+    silent! execute '!' . l:command
+
+    if !filereadable(l:docx_path)
+        echohl ErrorMsg
+        echom "Error: pandoc failed to create " . l:docx_path
+        echohl None
+        return
+    endif
+
+    silent! execute '!xdg-open ' . shellescape(l:docx_path)
+endfunction
+
 augroup MarkdownSetup
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal 
-            \ textwidth=0 softtabstop=2 shiftwidth=2
+                \ textwidth=0 softtabstop=2 shiftwidth=2
     autocmd FileType markdown nnoremap <buffer> <localleader>p
-            \ <Plug>MarkdownPreviewToggle
+                \ <Plug>MarkdownPreviewToggle
+    autocmd FileType markdown nnoremap <buffer> <localleader>d
+                \ :call MarkdownToDocx()<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>i
-            \ :call DecorateSelection('*')<CR>
+                \ :call DecorateSelection('*')<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>b
-            \ :call DecorateSelection('**')<CR>
-    autocmd FileType markdown vnoremap <buffer> <localleader>d
-            \ :call DecorateSelection('$')<CR>
+                \ :call DecorateSelection('**')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>$
+                \ :call DecorateSelection('$')<CR>
 augroup END
 
 "-------------------------
