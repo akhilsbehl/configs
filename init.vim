@@ -448,7 +448,7 @@ function! DecorateSelection(str) abort
     normal "xp
 endfunction
 
-function! MarkdownToDocx() abort
+function! MarkdownToDocx() range abort
     let l:filepath = expand('%:p')
     let l:filename = expand('%:t:r')
     let l:tmp_md_path = '/tmp/' . l:filename . '.md'
@@ -461,7 +461,8 @@ function! MarkdownToDocx() abort
         call delete(l:docx_path)
     endif
 
-    call writefile(getline(1, '$'), l:tmp_md_path)
+    " Write either the visual selection (range) or the whole buffer.
+    call writefile(getline(a:firstline, a:lastline), l:tmp_md_path)
 
     if !executable('pandoc')
         echohl ErrorMsg
@@ -470,7 +471,6 @@ function! MarkdownToDocx() abort
         return
     endif
 
-    " Construct the pandoc command.
     let l:command = 'pandoc ' . shellescape(l:tmp_md_path) . ' -o ' .
                 \ shellescape(l:docx_path)
     silent! execute '!' . l:command
@@ -493,6 +493,8 @@ augroup MarkdownSetup
     autocmd FileType markdown nnoremap <buffer> <localleader>p
                 \ <Plug>MarkdownPreviewToggle
     autocmd FileType markdown nnoremap <buffer> <localleader>d
+                \ :call MarkdownToDocx()<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>d
                 \ :call MarkdownToDocx()<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>i
                 \ :call DecorateSelection('*')<CR>
