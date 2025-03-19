@@ -816,6 +816,12 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VA.nvim_create_user_command(
                         "CopilotChatVisual",
                         function(args)
+                            if not chat.chat:visible() then
+                                chat.open()
+                            end
+                            if not chat.chat:focused() then
+                                chat.chat:focus()
+                            end
                             chat.ask(args.args, { selection = select.visual })
                         end,
                         { nargs = "*", range = true }
@@ -823,6 +829,12 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     VA.nvim_create_user_command(
                         "CopilotChatBuffer",
                         function(args)
+                            if not chat.chat:visible() then
+                                chat.open()
+                            end
+                            if not chat.chat:focused() then
+                                chat.chat:focus()
+                            end
                             chat.ask(args.args, { selection = select.buffer })
                         end,
                         { nargs = "*", range = true }
