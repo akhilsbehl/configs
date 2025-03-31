@@ -451,6 +451,11 @@ endfunction
 function! MarkdownToDocx() range abort
     let l:filepath = expand('%:p')
     let l:filename = expand('%:t:r')
+
+    if empty(l:filename)
+        let l:filename = 'markdown_' . substitute(tempname(), '.*/', '', '')
+    endif
+
     let l:tmp_md_path = '/tmp/' . l:filename . '.md'
     let l:docx_path = '/tmp/' . l:filename . '.docx'
 
