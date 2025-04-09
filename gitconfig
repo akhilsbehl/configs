@@ -89,6 +89,7 @@
     p = push -u origin
     pf = push -u origin --force
     pl = pull
+    plrs = pull --recurse-submodules
     pla = "!fff() { for b in $(git bl | awk '{print $8}'); do git co $b; git pull; done }; fff"
     pr = remote prune origin
     ps = !git push --set-upstream origin $(git bs)
