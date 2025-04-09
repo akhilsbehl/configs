@@ -1,7 +1,0 @@
-#!/usr/bin/bash
-
-if [ -z "$1" ]; then
-    ~/warchives/stdf/stable-diffusion-webui/webui.sh --xformers
-fi
-
-exit 0

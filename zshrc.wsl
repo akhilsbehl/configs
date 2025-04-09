@@ -2,7 +2,7 @@ if [[ "$(umask)" == "0000" ]]; then
   umask 0022
 fi
 
-alias start=wslopen
+alias start='xdg-open'
 alias winsu='runas.exe /user:admin'
 alias cmd='cmd.exe'
 alias psh='powershell.exe'
@@ -27,6 +27,6 @@ else
   export DISPLAY=:0
 fi
 
-export BROWSER=wslopen
+export BROWSER='xdg-open'
 export WINUSER=$(whoami.exe | cut -f 2 -d '\' | tr -d '')
 export WIN_TERM_SETTINGS="/mnt/c/Users/$WINUSER/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"

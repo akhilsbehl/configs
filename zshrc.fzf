@@ -109,7 +109,7 @@ alias zpacreason='zpacinfo | grep -e "^Install Reason" -e "^Required By"'
 function zloc {
   local file handler
   file=$(plocate -r '.*' | fzf --query="$1" --select-1 --exit-0)
-  handler=$(get_first_available xdg-open start wslopen)
+  handler=$(get_first_available xdg-open start)
   [[ -n "$file" ]] && echo "$handler" "$file"
   [[ -n "$file" ]] && "$handler" "$file"
 }
