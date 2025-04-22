@@ -62,6 +62,7 @@
     dl = diff --cached HEAD^
     ds = diff --stat
     dr = "!fff() { git diff -w $1^..$1; }; fff"
+    df = log -p --follow --
 
     f = fetch
     fa = fetch --all
