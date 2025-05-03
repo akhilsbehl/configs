@@ -5,10 +5,13 @@ model_families=$(curl -s https://ollama.com/library |
     grep -o '<span class="group-hover:underline truncate">[^<]*' |
     sed 's/<span class="group-hover:underline truncate">//g' |
     sed 's/<\/span>//g' |
-    sort | uniq)
+    sort -u
+)
 
 # 2. Use fzf to select a model family
-selected_family=$(echo "$model_families" | fzf --prompt="Select a model family: " --height 40% --layout=reverse)
+selected_family=$(echo "$model_families" |
+    fzf --prompt="Select a model family: " --height 40% --layout=reverse
+)
 
 # Exit if no selection is made in fzf
 if [ -z "$selected_family" ]; then
@@ -22,17 +25,15 @@ family_details=$(curl -s "$family_url")
 
 # 4. Extract available tags (quantizations) from the /tags page.
 # *** CORRECTED REGEX (FINAL, TESTED) ***
-tags_and_names=$(
-    echo "$family_details" |
-        grep -zoP '<a class="group" href="[^"]+">\s*<div[^>]*>\s*\K[^<]+(?=\s*</div>)' |
-        tr -cd '[:print:]\n' |
-        sed -E 's/^[[:space:]]*//' |
-        sed -E '/^[[:space:]]*$/d' |
-        sort | uniq
+tags_and_names=$(echo "$family_details" |
+    grep -oP '<a href="/library/[^"]+:[^"]*"[^>]*>\K[^<]+' |
+    sort -u
 )
 
 # 5. Use fzf to select a specific tag (quantization)
-selected_tag=$(echo "$tags_and_names" | fzf --prompt="Select a tag/quantization for $selected_family: " --height 40% --layout=reverse)
+selected_tag=$(echo "$tags_and_names" |
+    fzf --prompt="Select a tag/quantization for $selected_family: " --height 40% --layout=reverse
+)
 
 # Exit if no tag is selected
 if [ -z "$selected_tag" ]; then
@@ -40,10 +41,11 @@ if [ -z "$selected_tag" ]; then
     exit 1
 fi
 
-# 6. Construct the full model name and pull it
-full_model_name="$selected_family:$selected_tag"
-echo "Pulling model: $full_model_name"
-ollama pull "$full_model_name"
+echo "Pulling model: $selected_tag"
+ollama pull "$selected_tag" || {
+    echo "Failed to pull model '$selected_tag'."
+    exit 1
+}
 
-echo "Model '$full_model_name' downloaded successfully (or already present)."
+echo "Model '$selected_tag' downloaded successfully (or already present)."
 exit 0
