@@ -1,35 +1,38 @@
 #!/bin/bash
 
 extensions=(
-    csv
-    tsv
-    txt
-    jpg
-    jpeg
-    png
-    gif
+    7z
+    avi
     bmp
-    pdf
+    csv
     doc
     docx
-    xls
-    xlsx
+    gif
+    gz
+    html
+    iso
+    jpeg
+    jpg
+    json
+    md
+    mov
+    mp3
+    mp4
+    pbix
+    pdf
+    png
     ppt
     pptx
-    mp3
-    wav
-    mp4
-    avi
-    mov
-    wmv
-    zip
     rar
-    7z
-    iso
-    pbix
-    html
-    md
+    rar
     rst
+    tsv
+    txt
+    wav
+    wmv
+    xls
+    xlsx
+    zip
 )
 
 for extension in "${extensions[@]}"
