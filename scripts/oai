@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import argparse
+
+from colorama import Fore, Style
+from colorama import init as colorama_init
+from openai import AzureOpenAI
+
+
+def main():
+    colorama_init(autoreset=True)
+
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(
+        description='Interactive REPL session with Azure OpenAI.'
+    )
+
+    parser.add_argument(
+        '-m',
+        '--model',
+        choices=[
+            '4o',
+            '4om',
+            '41',
+            '41m',
+            '41n',
+            'o4m',
+        ],
+        default='41n',
+        help='Select the model version'
+    )
+
+    parser.add_argument(
+        '-t',
+        '--temperature',
+        type=float,
+        default=0.0,
+        help='Sampling temperature (default: 0.0)'
+    )
+
+    parser.add_argument(
+        '-o',
+        '--max-tokens',
+        type=int,
+        default=4096,
+        help='Maximum number of tokens to generate (default: 4096)'
+    )
+
+    parser.add_argument(
+        '-n',
+        '--non-interactive',
+        action='store_true',
+        help='Run in non-interactive mode (no user input)'
+    )
+
+    args = parser.parse_args()
+
+    # Model and API setup based on arguments
+    deployment_id = {
+        '4o': os.getenv("GPT4O_DEPLOYMENT"),
+        '4om': os.getenv("GPT4OM_DEPLOYMENT"),
+        '41': os.getenv("GPT41_DEPLOYMENT"),
+        '41m': os.getenv("GPT41M_DEPLOYMENT"),
+        '41n': os.getenv("GPT41N_DEPLOYMENT"),
+        'o4m': os.getenv("GPTO4M_DEPLOYMENT"),
+    }[args.model]
+
+    api_key = {
+        '4o': os.getenv("GPT4O_API_KEY"),
+        '4om': os.getenv("GPT4OM_API_KEY"),
+        '41': os.getenv("GPT41_API_KEY"),
+        '41m': os.getenv("GPT41M_API_KEY"),
+        '41n': os.getenv("GPT41N_API_KEY"),
+        'o4m': os.getenv("GPTO4M_API_KEY"),
+    }[args.model]
+
+    api_base = {
+        "4o": os.getenv("GPT4O_API_BASE"),
+        "4om": os.getenv("GPT4OM_API_BASE"),
+        "41": os.getenv("GPT41_API_BASE"),
+        "41m": os.getenv("GPT41M_API_BASE"),
+        "41n": os.getenv("GPT41N_API_BASE"),
+        "o4m": os.getenv("GPTO4M_API_BASE"),
+    }[args.model]
+
+    api_version = {
+        "4o": os.getenv("AZURE_OPENAI_API_VERSION"),
+        "4om": os.getenv("AZURE_OPENAI_API_VERSION"),
+        "41": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
+        "41m": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
+        "41n": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
+        "o4m": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
+    }[args.model]
+
+    assert deployment_id, f"Deployment ID not found for model {args.model}"
+    assert api_key, f"API key not found for model {args.model}"
+    assert api_base, f"API base not found for model {args.model}"
+    assert api_version, f"API version not found for model {args.model}"
+
+    client = AzureOpenAI(
+        api_version=api_version,
+        api_key=api_key,
+        azure_endpoint=api_base,
+    )
+
+    if args.non_interactive:
+        user_input = sys.stdin.read()
+        messages = [
+            {
+                "role": "user",
+                "content": user_input,
+            }
+        ]
+
+        chat_completion = client.chat.completions.create(
+            model=deployment_id,
+            messages=messages,  # pyright:ignore
+            temperature=args.temperature,
+            max_tokens=args.max_tokens,
+            stream=True,
+        )
+
+        for chunk in chat_completion:
+            delta = chunk.choices[0].delta.content or ""
+            print(delta, end="")
+        print("\n", end="")
+        return
+
+    # Conversation state
+    messages = []
+
+    msg = "NB: Type single line directly or start with" + \
+        " '<<<<' for multiline input and end with '>>>>'."
+    print(f"{Fore.RED}{msg}{Style.RESET_ALL}")
+
+    try:
+        while True:
+            # Prompt for input
+            user_input_lines = []
+
+            print(f"\n{Fore.BLUE}You: {Style.RESET_ALL}", end="")
+            line = input()
+            if line.startswith('<<<<'):
+                while not line.endswith('>>>>'):
+                    user_input_lines.append(line)
+                    line = input()
+                # Append the final line without the end token
+                user_input_lines.append(line[:-4])
+            else:
+                user_input_lines.append(line)
+
+            user_input = "\n".join(user_input_lines)
+
+            if user_input.lower() in ["exit", "quit"]:
+                print(Fore.RED + "Exiting session.")
+                break
+
+            # Append user message to conversation state
+            messages.append({
+                "role": "user",
+                "content": user_input
+            })
+
+            # Get model response
+            chat_completion = client.chat.completions.create(
+                model=deployment_id,
+                messages=messages,
+                temperature=args.temperature,
+                max_tokens=args.max_tokens,
+                stream=True,
+            )
+
+            # Print model's response and update messages
+            response_content = ""
+            print(f"\n{Fore.MAGENTA}AI: {Style.RESET_ALL}", end="")
+            for chunk in chat_completion:
+                delta = chunk.choices[0].delta.content or ""
+                response_content += delta
+                print(delta, end="")
+            print("\n", end="")
+
+            messages.append({
+                "role": "assistant",
+                "content": response_content
+            })
+
+    except KeyboardInterrupt:
+        print("\nSession interrupted by user.")
+
+
+if __name__ == "__main__":
+    main()
