@@ -786,6 +786,11 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             '> /COPILOT_GENERATE\n\nGenerate a CLI for this code in English. Include options, arguments, default values, and usage instructions. For python use argparse. For JS use yargs. For others, pick a similar widely-accepted standard.',
                             description = 'Generate a CLI for the code',
                         },
+                        MakeTable = {
+                            prompt =
+                            '> /COPILOT_GENERATE\n\nConvert this content into a markdown table.',
+                            description = 'Convert to markdown table',
+                        },
                     }
                     local chat = require("CopilotChat")
                     chat.prompts = function()
