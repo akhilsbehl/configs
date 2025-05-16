@@ -8,7 +8,7 @@ alias cmd='cmd.exe'
 alias psh='powershell.exe'
 alias pwsh='pwsh.exe'
 
-alias susp='rundll32.exe powrprof.dll, SetSuspendState Sleep'
+alias suspend='rundll32.exe powrprof.dll, SetSuspendState Sleep'
 alias freeze='rundll32.exe powrprof.dll, SetSuspendState Hibernate'
 alias die='shutdown.exe -s -t 0'
 alias respawn='shutdown.exe -r -t 0'
