@@ -526,8 +526,8 @@ augroup END
 augroup Python
     autocmd!
     autocmd BufNewFile,BufRead *.py setlocal foldmethod=indent
-    autocmd BufNewFile,BufRead *.py
-                \ nnoremap <buffer> <leader>ti :call TogglePyrightIgnore()<CR>
+    autocmd FileType python nnoremap <buffer> <leader>ti
+                \ :call TogglePyrightIgnore()<CR>
 augroup END
 
 augroup Ocaml
