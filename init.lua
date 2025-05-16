@@ -791,6 +791,11 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             '> /COPILOT_GENERATE\n\nConvert this content into a markdown table.',
                             description = 'Convert to markdown table',
                         },
+                        MDFormat = {
+                            prompt =
+                            '> /COPILOT_GENERATE\n\nConvert this into a high quality markdown formatted document paying attention to appropriate hierarchical structure markers and other typesetting details. Infer the structure from the content where unclear. Do not edit the content or add any new content.',
+                            description = 'Format as markdown.',
+                        },
                     }
                     local chat = require("CopilotChat")
                     chat.prompts = function()
