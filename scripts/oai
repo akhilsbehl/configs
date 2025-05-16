@@ -88,10 +88,10 @@ def main():
     api_version = {
         "4o": os.getenv("AZURE_OPENAI_API_VERSION"),
         "4om": os.getenv("AZURE_OPENAI_API_VERSION"),
-        "41": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
-        "41m": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
-        "41n": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
-        "o4m": os.getenv("AZURE_OPENAI_API_VERSION_NEW"),
+        "41": os.getenv("AZURE_OPENAI_API_VERSION"),
+        "41m": os.getenv("AZURE_OPENAI_API_VERSION"),
+        "41n": os.getenv("AZURE_OPENAI_API_VERSION"),
+        "o4m": os.getenv("AZURE_OPENAI_API_VERSION"),
     }[args.model]
 
     assert deployment_id, f"Deployment ID not found for model {args.model}"
