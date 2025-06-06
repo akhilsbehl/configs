@@ -490,17 +490,19 @@ function! MarkdownToDocx() range abort
     silent! execute '!xdg-open ' . shellescape(l:docx_path)
 endfunction
 
+command! -range=% MarkdownToDocx <line1>,<line2>call MarkdownToDocx()
+
 augroup MarkdownSetup
     autocmd!
     autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=markdown
-    autocmd BufNewFile,BufRead *.md,*.markdown setlocal 
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal
                 \ textwidth=0 softtabstop=2 shiftwidth=2
     autocmd FileType markdown nnoremap <buffer> <localleader>p
                 \ <Plug>MarkdownPreviewToggle
     autocmd FileType markdown nnoremap <buffer> <localleader>d
-                \ :call MarkdownToDocx()<CR>
+                \ :MarkdownToDocx<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>d
-                \ :call MarkdownToDocx()<CR>
+                \ :'<,'>MarkdownToDocx<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>i
                 \ :call DecorateSelection('*')<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>b
