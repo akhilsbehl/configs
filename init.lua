@@ -677,7 +677,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                 },
                 build = "make tiktoken",
                 opts = {
-                    model = 'claude-3.5-sonnet',
+                    model = 'gpt-4o',
                     temperature = 0.0,
                     window = {
                         layout = "horizontal",
