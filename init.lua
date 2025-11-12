@@ -1006,11 +1006,21 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     require('neogit').setup({
                         graph_style = 'kitty',
                         git_services = {
-                            ["github.com"] = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
-                            ["fractal.ai"] =
-                            "https://gitlab.fractal.ai/${owner}/${repository}/pull-requests/new?source=${branch_name}&t=1",
-                            ["gitlab.com"] =
-                            "https://gitlab.com/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
+                            ["github.com"] = {
+                                pull_request = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
+                                commit = "https://github.com/${owner}/${repository}/commit/${oid}",
+                                tree = "https://${host}/${owner}/${repository}/tree/${branch_name}",
+                            },
+                            ["fractal.ai"] = {
+                                pull_request = "https://gitlab.fractal.ai/${owner}/${repository}/pull-requests/new?source=${branch_name}&t=1",
+                                commit = "https://gitlab.fractal.ai/${owner}/${repository}/-/commit/${oid}",
+                                tree = "https://gitlab.fractal.ai/${owner}/${repository}/-/tree/${branch_name}",
+                            },
+                            ["gitlab.com"] = {
+                                pull_request = "https://gitlab.com/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
+                                commit = "https://gitlab.com/${owner}/${repository}/-/commit/${oid}",
+                                tree = "https://gitlab.com/${owner}/${repository}/-/tree/${branch_name}",
+                            },
 
                         },
                         use_default_keymaps = false,
