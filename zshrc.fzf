@@ -36,8 +36,8 @@ function fzp {
   local mode prefix search_cmd search_args install_cmd install_args
   mode="$1"
   prefix=""
-  install_cmd=$(get_first_available paru pacman apt-get)
-  if [[ "$install_cmd" == "paru" ]]; then
+  install_cmd=$(get_first_available yay pacman apt-get)
+  if [[ "$install_cmd" == "yay" ]]; then
     search_cmd="$install_cmd"
     if [[ "$mode" == "install" ]]; then
       search_args="-Slq"
@@ -69,7 +69,7 @@ function fzp {
   pkgs=$(eval "$search_cmd $search_args" | fzf --query="$2" | tr '\n' ' ')
   if [[ -n "$pkgs" ]]; then
     exists_command sudo && prefix="sudo"
-    if [[ "$install_cmd" == "paru" ]]; then
+    if [[ "$install_cmd" == "yay" ]]; then
         prefix=""
     fi
     echo "$prefix $install_cmd $install_args $pkgs"
