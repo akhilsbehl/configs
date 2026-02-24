@@ -124,6 +124,13 @@
 
     vi = !gitk
 
+    wl = worktree list
+    wr = "!fff() { git worktree remove \"$1\"; }; fff"
+    wp = worktree prune
+    wa = "!fff() { git worktree add \"$1\"; }; fff"
+    wab = "!fff() { git worktree add \"$2\" \"$1\"; }; fff"
+    wanb = "!fff() { git worktree add -b \"$1\" \"$2\" \"${3:-HEAD}\"; }; fff"
+
     ours = "!fff() { git co --ours $@ && git add $@; }; fff"
     theirs = "!fff() { git co --theirs $@ && git add $@; }; fff"
 
