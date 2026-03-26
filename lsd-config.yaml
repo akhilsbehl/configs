@@ -136,13 +136,13 @@ header: true
 # == Literal ==
 # Whether to show quotes on filenames.
 # Possible values: false, true
-literal: true
+# literal: true
 
 # == Truncate owner ==
 # How to truncate the username and group names for a file if they exceed a certain
 # number of characters.
-truncate-owner:
+# truncate-owner:
   # Number of characters to keep. By default, no truncation is done (empty value).
-  after:
+  # after:
   # String to be appended to a name if truncated.
-  marker: ""
+  # marker: ""

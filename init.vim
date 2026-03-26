@@ -542,6 +542,11 @@ augroup Shell
     autocmd BufNewFile,BufRead *.sh,*.bash,*.zsh setlocal shiftwidth=2
 augroup END
 
+augroup TreesitterStart
+    autocmd!
+    autocmd FileType markdown,telekasten lua vim.treesitter.start()
+augroup END
+
 "-------------------------
 " Colorscheme backgournd
 "-------------------------

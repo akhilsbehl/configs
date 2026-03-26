@@ -4,23 +4,69 @@ _exists() {
     type "$1" >/dev/null 2>/dev/null
 }
 
-if ! _exists python3; then
-    echo "No python3. Are you on the right machine? Quitting."
+# Determine python to use
+if [[ -n "$1" && -f "$PWD/.python-version" ]]; then
+    FILE_VERSION=$(cat "$PWD/.python-version")
+    if [[ "$1" != "$FILE_VERSION" ]]; then
+        echo "Conflict: argument specifies python$1 but .python-version says $FILE_VERSION."
+        read -rp "Which version to use? " CHOSEN
+        PYTHON=$(which "python$CHOSEN" 2>/dev/null)
+        read -rp "Update .python-version to $CHOSEN? [y/N] " UPDATE
+        if [[ "$UPDATE" =~ ^[Yy]$ ]]; then
+            echo "$CHOSEN" > "$PWD/.python-version"
+            echo "Updated .python-version to $CHOSEN."
+        fi
+    else
+        PYTHON=$(which "python$1" 2>/dev/null)
+    fi
+elif [[ -n "$1" ]]; then
+    PYTHON=$(which "python$1" 2>/dev/null)
+    if [[ ! -f "$PWD/.python-version" ]]; then
+        read -rp "Create .python-version with $1? [y/N] " CREATE
+        if [[ "$CREATE" =~ ^[Yy]$ ]]; then
+            echo "$1" > "$PWD/.python-version"
+            echo "Created .python-version with $1."
+        fi
+    fi
+elif [[ -f "$PWD/.python-version" ]]; then
+    VERSION=$(cat "$PWD/.python-version")
+    PYTHON=$(which "python$VERSION" 2>/dev/null)
+else
+    PYTHON=$(which python3)
+fi
+
+if [[ -z "$PYTHON" || ! -x "$PYTHON" ]]; then
+    echo "Could not find a usable Python. Tried: $PYTHON"
     exit 1
 fi
 
-if ! _exists virtualenv; then
-    echo "No virtualenv. Are you on the right machine? Quitting."
-    exit 2
+# Check venv module is available, offer to install if not
+if ! "$PYTHON" -m venv --help >/dev/null 2>&1; then
+    VERSION=$("$PYTHON" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+    echo "venv module not available for python$VERSION."
+    read -rp "Install python${VERSION}-venv via apt? [y/N] " INSTALL
+    if [[ "$INSTALL" =~ ^[Yy]$ ]]; then
+        sudo apt install -y "python${VERSION}-venv"
+        if ! "$PYTHON" -m venv --help >/dev/null 2>&1; then
+            echo "Installation failed. Please install manually."
+            exit 3
+        fi
+    else
+        echo "Cannot create virtualenv without venv module. Quitting."
+        exit 3
+    fi
 fi
 
-if test -d "$PWD/.virtualenv"; then
+echo "Using: $($PYTHON --version) at $PYTHON"
+
+if [[ -d "$PWD/.virtualenv" ]]; then
     echo '.virtualenv already exists. Will update requirements if any.'
 else
-    virtualenv --python="$(pyenv which python || which python3)" "$PWD/.virtualenv"
+    "$PYTHON" -m venv "$PWD/.virtualenv"
 fi
 
-source "$PWD/.virtualenv/bin/activate" &&
-    test -f "$PWD/requirements.txt" &&
+source "$PWD/.virtualenv/bin/activate"
+
+if [[ -f "$PWD/requirements.txt" ]]; then
     "$PWD/.virtualenv/bin/pip" install -r "$PWD/requirements.txt"
-"$PWD/.virtualenv/bin/pip" install neovim ipython reorder-python-imports
+fi

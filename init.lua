@@ -10,9 +10,10 @@ VO = V.opt
 VG.mapleader = ','
 VG.maplocalleader = ' '
 
--- Even though we have perl, nvim can't find it
--- VG.perl_host_prog = '/usr/bin/perl'
+VG.python3_host_prog = VF.stdpath('config') .. '/.virtualenv/bin/python'
 VG.loaded_perl_provider = 0
+VG.loaded_ruby_provider = 0
+VO.rtp:append(VF.stdpath('data') .. '/site')
 
 local lazypath = VF.stdpath("data") .. "/lazy/lazy.nvim"
 if not V.loop.fs_stat(lazypath) then
@@ -294,11 +295,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
             {
                 -- Treesitter
                 'nvim-treesitter/nvim-treesitter',
-                build = function()
-                    local ts_update = require('nvim-treesitter.install')
-                        .update({ with_sync = true })
-                    ts_update()
-                end,
+                build = ":TSUpdate",
                 dependencies = 'nvim-treesitter/nvim-treesitter-textobjects',
                 config = function()
                     VA.nvim_create_autocmd(
@@ -316,7 +313,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                             end
                         }
                     )
-                    require('nvim-treesitter.configs').setup({
+                    require('nvim-treesitter').setup({
                         ensure_installed = {
                             'python',
                             'bash',
@@ -331,6 +328,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         auto_install = true,
                         highlight = {
                             enable = true,
+                            additional_vim_regex_highlighting = { 'markdown' },
                         },
                         indent = {
                             enable = true,
@@ -643,6 +641,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                         'copilot-chat',
                         'telekasten',
                     },
+                    latex = { enabled = false },
                     render_modes = true,
                     anti_conceal = { enabled = true },
                     pipe_table = { preset = 'round' },
@@ -1311,7 +1310,10 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
         {
             checker = {
                 enabled = true,
-            }
+            },
+            rocks = {
+                enabled = false,
+            },
         }
     )
 
