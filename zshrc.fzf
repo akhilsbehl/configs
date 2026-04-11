@@ -17,7 +17,7 @@ fi
 # Auto-completion
 [[ $- =~ i ]] && source "$HOME/configs/fzf/shell/completion.zsh" 2> /dev/null
 
-export FZF_DEFAULT_OPTS="--tmux top,20% --style full --smart-case --color=light --layout=reverse --exact --extended --cycle --no-mouse"
+export FZF_DEFAULT_OPTS="--style full --smart-case --color=light --layout=reverse --exact --extended --cycle --no-mouse"
 
 if [[ $(get_first_available rg grep) == "rg" ]]; then
   export FZF_DEFAULT_COMMAND="rg --files --no-ignore --hidden --follow -g '!.git/*' -g '!.virtualenv/*' -g '!__pycache__' -g '!node_modules'"
@@ -143,12 +143,9 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --tree --depth 1 $realpath'
 
 # custom fzf flags
-# NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
-zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
-
-# To make fzf-tab follow FZF_DEFAULT_OPTS.
-# NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
-zstyle ':fzf-tab:*' use-fzf-default-opts yes
+# NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default. And using it
+# causes bugs.
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept --smart-case --color=light --layout=reverse --exact --extended --cycle --no-mouse
 
 # switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
