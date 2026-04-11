@@ -1,31 +1,234 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-# Check if the user provided an argument
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <path_to_excel_file.xlsx>"
-    exit 1
-fi
+import argparse
+import os
+import re
+import sys
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
-# Check if the provided file exists
-if [ ! -f "$1" ]; then
-    echo "Error: File $1 not found!"
-    exit 2
-fi
-
-# Check if pandas is installed
-if ! python -c "import pandas" &> /dev/null; then
-    echo "Error: pandas library is not installed. Install it using pip install pandas"
-    exit 3
-fi
-
-# Python script to convert each sheet to CSV
-python << END
 import pandas as pd
-input_file = "$1"
-xls = pd.ExcelFile(input_file)
-for sheet_name in xls.sheet_names:
-    df = xls.parse(sheet_name)
-    csv_filename = sheet_name.replace(" ", "_") + ".csv"
-    df.to_csv(csv_filename, index=False)
-    print(f"Saved {csv_filename}")
-END
+
+
+def sanitize(name: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", str(name)).strip("._-")
+    return cleaned or "sheet"
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Export Excel sheets to CSV files."
+    )
+    parser.add_argument(
+        "input_file",
+        help="Path to the input Excel workbook (.xlsx, .xlsm, etc.)",
+    )
+    parser.add_argument(
+        "output_dir",
+        nargs="?",
+        default=".",
+        help="Directory to save CSV files (default: current directory)",
+    )
+    parser.add_argument(
+        "-p",
+        "--prefix",
+        default=None,
+        help="Custom prefix for output filenames (default: input filename without extension)",
+    )
+    parser.add_argument(
+        "-d",
+        "--delimiter",
+        default=",",
+        help="CSV delimiter (default: ,)",
+    )
+    parser.add_argument(
+        "-j",
+        "--jobs",
+        type=int,
+        default=4,
+        help="Number of parallel workers (default: 4)",
+    )
+    parser.add_argument(
+        "--interactive-sheets",
+        action="store_true",
+        help="Interactively choose which sheets to include or exclude if workbook has multiple sheets",
+    )
+    parser.add_argument(
+        "--sheet-mode",
+        choices=["include", "exclude"],
+        default="include",
+        help="Interactive selection mode: include listed sheets or exclude listed sheets (default: include)",
+    )
+    return parser.parse_args()
+
+
+def validate_args(args: argparse.Namespace) -> None:
+    if not os.path.isfile(args.input_file):
+        raise FileNotFoundError(f"File not found: {args.input_file}")
+
+    if args.jobs < 1:
+        raise ValueError("--jobs must be a positive integer")
+
+    os.makedirs(args.output_dir, exist_ok=True)
+
+
+def get_sheet_names(input_file: str) -> list[str]:
+    xls = pd.ExcelFile(input_file, engine="openpyxl")
+    return list(xls.sheet_names)
+
+
+def prompt_sheet_selection(sheet_names: list[str], mode: str) -> list[str]:
+    print("\nWorkbook contains multiple sheets:\n")
+    for idx, name in enumerate(sheet_names, start=1):
+        print(f"  {idx:>2}. {name}")
+
+    print("\nSelection instructions:")
+    if mode == "include":
+        print("  Enter sheet numbers or names to INCLUDE.")
+        print("  Example: 1,3,Sales Data")
+        print("  Press Enter to include all sheets.")
+    else:
+        print("  Enter sheet numbers or names to EXCLUDE.")
+        print("  Example: 2,4,Notes")
+        print("  Press Enter to exclude none.")
+
+    raw = input("\nYour selection: ").strip()
+    if not raw:
+        return sheet_names.copy()
+
+    selected_tokens = [token.strip() for token in raw.split(",") if token.strip()]
+    matched = set()
+
+    for token in selected_tokens:
+        if token.isdigit():
+            idx = int(token)
+            if 1 <= idx <= len(sheet_names):
+                matched.add(sheet_names[idx - 1])
+            else:
+                print(f"Warning: sheet index out of range ignored: {token}", file=sys.stderr)
+        else:
+            exact_matches = [s for s in sheet_names if s == token]
+            if exact_matches:
+                matched.update(exact_matches)
+            else:
+                casefold_matches = [s for s in sheet_names if s.casefold() == token.casefold()]
+                if casefold_matches:
+                    matched.update(casefold_matches)
+                else:
+                    print(f"Warning: sheet name not found ignored: {token}", file=sys.stderr)
+
+    if mode == "include":
+        chosen = [s for s in sheet_names if s in matched]
+    else:
+        chosen = [s for s in sheet_names if s not in matched]
+
+    return chosen
+
+
+def export_sheet(task: tuple[str, str, str, str, str]) -> dict:
+    input_file, output_dir, prefix, sheet_name, delimiter = task
+
+    try:
+        df = pd.read_excel(input_file, sheet_name=sheet_name, engine="openpyxl")
+
+        if df.empty:
+            return {
+                "sheet": sheet_name,
+                "status": "skipped",
+                "message": "empty sheet",
+            }
+
+        filename = f"{prefix}_{sanitize(sheet_name)}.csv"
+        output_path = os.path.join(output_dir, filename)
+        df.to_csv(output_path, index=False, sep=delimiter)
+
+        return {
+            "sheet": sheet_name,
+            "status": "saved",
+            "path": output_path,
+            "rows": len(df),
+            "cols": len(df.columns),
+        }
+    except Exception as exc:
+        return {
+            "sheet": sheet_name,
+            "status": "error",
+            "message": f"{type(exc).__name__}: {exc}",
+        }
+
+
+def main() -> int:
+    try:
+        args = parse_args()
+        validate_args(args)
+    except Exception as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 2
+
+    try:
+        sheet_names = get_sheet_names(args.input_file)
+    except Exception as exc:
+        print(f"Error reading workbook: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 3
+
+    if not sheet_names:
+        print("No sheets found in workbook.", file=sys.stderr)
+        return 4
+
+    prefix = sanitize(args.prefix) if args.prefix else sanitize(
+        os.path.splitext(os.path.basename(args.input_file))[0]
+    )
+
+    selected_sheets = sheet_names
+    if args.interactive_sheets and len(sheet_names) > 1:
+        selected_sheets = prompt_sheet_selection(sheet_names, args.sheet_mode)
+
+    if not selected_sheets:
+        print("No sheets selected. Nothing to export.", file=sys.stderr)
+        return 5
+
+    tasks = [
+        (args.input_file, args.output_dir, prefix, sheet_name, args.delimiter)
+        for sheet_name in selected_sheets
+    ]
+
+    results = []
+    failures = 0
+
+    max_workers = min(args.jobs, len(tasks))
+
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {executor.submit(export_sheet, task): task[3] for task in tasks}
+        for future in as_completed(futures):
+            results.append(future.result())
+
+    for result in sorted(results, key=lambda r: str(r["sheet"])):
+        if result["status"] == "saved":
+            print(
+                f"Saved: {result['path']} "
+                f"({result['rows']} rows, {result['cols']} cols)"
+            )
+        elif result["status"] == "skipped":
+            print(f"Skipped: {result['sheet']} ({result['message']})")
+        else:
+            failures += 1
+            print(
+                f"Failed: {result['sheet']} ({result['message']})",
+                file=sys.stderr,
+            )
+
+    exported_count = sum(1 for r in results if r["status"] == "saved")
+
+    if failures:
+        print(
+            f"\nCompleted with {failures} failed sheet export(s); "
+            f"{exported_count} sheet(s) exported successfully.",
+            file=sys.stderr,
+        )
+        return 6
+
+    print(f"\nCompleted successfully: {exported_count} sheet(s) exported.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
