@@ -2,7 +2,7 @@ if [[ "$(umask)" == "0000" ]]; then
   umask 0022
 fi
 
-alias start='xdg-open'
+alias start='wslview'
 alias winsu='runas.exe /user:admin'
 alias cmd='cmd.exe'
 alias psh='powershell.exe'

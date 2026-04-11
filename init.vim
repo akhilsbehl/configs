@@ -487,7 +487,7 @@ function! MarkdownToDocx() range abort
         return
     endif
 
-    silent! execute '!xdg-open ' . shellescape(l:docx_path)
+    silent! execute '!wslview ' . shellescape(l:docx_path)
 endfunction
 
 command! -range=% MarkdownToDocx <line1>,<line2>call MarkdownToDocx()
