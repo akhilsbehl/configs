@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# tts — kokoro-tts wrapper
+#
+# Usage:
+#   tts [options] [file]
+#   cat file.txt | tts [options]
+#   tts [options] < file.txt
+#
+# Options:
+#   -v VOICE     Use specific voice (default: random from favourites)
+#   -o FILE      Save to output wav file (skips streaming)
+#   -s SPEED     Speed multiplier (default: 1.0)
+#   -l LANG      Language code (default: en-us)
+#   -h           Show this help
+#
+# Examples:
+#   tts article.txt
+#   cat article.txt | tts
+#   w3m -dump https://example.com/article | tts
+#   tts -v bf_emma article.txt
+#   tts -s 1.2 article.txt
+#   tts -o out.wav article.txt
+#   tts < article.txt
+
+KOKORO_DIR="$HOME/.kokoro/kokoro-tts"
+VENV_PYTHON="$KOKORO_DIR/.virtualenv/bin/python"
+
+VOICES=(af_heart af_bella af_sky bf_emma jf_alpha)
+VOICE=""
+OUTPUT=""
+SPEED="1.0"
+LANG="en-us"
+
+usage() {
+  grep '^#' "$0" | grep -v '#!/' | sed 's/^# \?//'
+  exit 0
+}
+
+while getopts ":v:o:s:l:h" opt; do
+  case $opt in
+    v) VOICE="$OPTARG" ;;
+    o) OUTPUT="$(realpath -m "$OPTARG")" ;;
+    s) SPEED="$OPTARG" ;;
+    l) LANG="$OPTARG" ;;
+    h) usage ;;
+    :) echo "Option -$OPTARG requires an argument." >&2; exit 1 ;;
+    \?) echo "Unknown option: -$OPTARG" >&2; exit 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+# Pick random voice if not specified
+if [[ -z "$VOICE" ]]; then
+  VOICE="${VOICES[RANDOM % ${#VOICES[@]}]}"
+fi
+
+# Resolve input: argument, stdin pipe/redirect, or error
+CLEANUP_INPUT=""
+if [[ $# -gt 0 ]]; then
+  INPUT_FILE="$(realpath "$1")"
+  [[ ! -f "$INPUT_FILE" ]] && { echo "File not found: $1" >&2; exit 1; }
+elif [[ ! -t 0 ]]; then
+  INPUT_FILE=$(mktemp /tmp/tts-input.XXXXXX)
+  CLEANUP_INPUT="$INPUT_FILE"
+  cat > "$INPUT_FILE"
+else
+  echo "No input provided. Pipe text, redirect, or pass a file." >&2
+  exit 1
+fi
+
+echo "Voice: $VOICE  Lang: $LANG  Speed: $SPEED" >&2
+
+# Run in a subshell so cd doesn't affect the caller's working directory.
+# Without -o, always stream — kokoro plays directly to the audio device.
+(
+  cd "$KOKORO_DIR"
+  if [[ -n "$OUTPUT" ]]; then
+    "$VENV_PYTHON" -m kokoro_tts "$INPUT_FILE" "$OUTPUT" \
+      --voice "$VOICE" --lang "$LANG" --speed "$SPEED"
+  else
+    "$VENV_PYTHON" -m kokoro_tts "$INPUT_FILE" \
+      --voice "$VOICE" --lang "$LANG" --speed "$SPEED" --stream
+  fi
+)
+TTS_EXIT=$?
+
+[[ -n "$CLEANUP_INPUT" ]] && rm -f "$CLEANUP_INPUT"
+
+exit $TTS_EXIT
