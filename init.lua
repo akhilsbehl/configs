@@ -245,6 +245,9 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                     case_mode               = 'smart_case',
                                 },
                             },
+                            preview = {
+                                treesitter = false, -- tempfix for upstream bug
+                            }
                         },
                     })
                     require('telescope').load_extension('fzf')
