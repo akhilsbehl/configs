@@ -30,3 +30,53 @@ fi
 export BROWSER='xdg-open'
 export WINUSER=$(whoami.exe | cut -f 2 -d '\' | tr -d '')
 export WIN_TERM_SETTINGS="/mnt/c/Users/$WINUSER/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+
+get-wsl-vhdx-path() {
+  local distro=""
+
+  case "${1:-}" in
+    -h|--help)
+      cat <<'EOF'
+Usage: get-wsl-vhdx-path [DISTRO|all]
+
+  (no args)   Path to the VHD for the current WSL distro
+  DISTRO      Path to the VHD for the named distro
+  all         Paths to VHDs for all registered distros
+  -h|--help   Show this help
+EOF
+      return 0
+      ;;
+    all)
+      powershell.exe -NoProfile -Command \
+        "Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss' | ForEach-Object { \$_.GetValue('DistributionName') + ': ' + (Join-Path \$_.GetValue('BasePath') \$_.GetValue('VhdFileName')) }" \
+        2>/dev/null
+      return
+      ;;
+    "")
+      if [[ -z "${WSL_DISTRO_NAME:-}" ]]; then
+        echo "get-wsl-vhdx-path: cannot determine current distro (WSL_DISTRO_NAME is unset)" >&2
+        return 1
+      fi
+      distro="$WSL_DISTRO_NAME"
+      ;;
+    *)
+      distro="$1"
+      ;;
+  esac
+
+  local result
+  result=$(powershell.exe -NoProfile -Command \
+    "\$key = Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss' | Where-Object { \$_.GetValue('DistributionName') -eq '$distro' }; if (-not \$key) { exit 1 } else { Join-Path \$key.GetValue('BasePath') \$key.GetValue('VhdFileName') }" \
+    2>/dev/null)
+
+  if [[ $? -ne 0 ]]; then
+    local available
+    available=$(powershell.exe -NoProfile -Command \
+      "(Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss' | ForEach-Object { \$_.GetValue('DistributionName') }) -join ', '" \
+      2>/dev/null)
+    echo "get-wsl-vhdx-path: distro '$distro' not found. Available: $available" >&2
+    return 1
+  fi
+
+  printf '%s\n' "$result"
+}
