@@ -100,9 +100,35 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                     })
                     local cmp = require('cmp')
                     local cmp_format = require('lsp-zero').cmp_format()
+                    -- Single personal snippet source for nvim-cmp.
+                    local my_snippets = {}
+                    function my_snippets.new()
+                        return setmetatable({}, { __index = my_snippets })
+                    end
+                    function my_snippets:complete(_, callback)
+                        callback({
+                            items = {
+                                {
+                                    label = 'asb',
+                                    kind = vim.lsp.protocol.CompletionItemKind.Snippet,
+                                    insertText = '<<ASB: ${1:placeholder text to write}>>${0}',
+                                    insertTextFormat = vim.lsp.protocol.InsertTextFormat.Snippet,
+                                    documentation = 'Insert ASB note marker',
+                                },
+                            },
+                            isIncomplete = false,
+                        })
+                    end
+                    cmp.register_source('my_snippets', my_snippets.new())
                     cmp.setup({
                         formatting = cmp_format,
+                        snippet = {
+                            expand = function(args)
+                                vim.snippet.expand(args.body)
+                            end,
+                        },
                         sources = {
+                            { name = 'my_snippets' },
                             { name = 'buffer' },
                             { name = 'nvim_lsp' },
                             { name = 'nvim_lua' },
