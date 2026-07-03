@@ -575,6 +575,15 @@ augroup TreesitterStart
 augroup END
 
 "-------------------------
+" Unlimited textwidth for files with no specific filetype
+"-------------------------
+
+augroup NoFiletypeTextwidth
+  autocmd!
+  autocmd BufWinEnter,BufEnter * if empty(&l:filetype) | setlocal textwidth=0 | endif
+augroup END
+
+"-------------------------
 " Colorscheme backgournd
 "-------------------------
 
