@@ -448,26 +448,15 @@ function! DecorateSelection(str) abort
     normal "xp
 endfunction
 
-function! MarkdownToDocx() range abort
-    let l:filepath = expand('%:p')
-    let l:filename = expand('%:t:r')
+function! MarkdownToFormat(format) range abort
+    let l:format = tolower(a:format)
 
-    if empty(l:filename)
-        let l:filename = 'markdown_' . substitute(tempname(), '.*/', '', '')
+    if index(['docx', 'pdf'], l:format) < 0
+        echohl ErrorMsg
+        echom "Error: unsupported format: " . a:format
+        echohl None
+        return
     endif
-
-    let l:tmp_md_path = '/tmp/' . l:filename . '.md'
-    let l:docx_path = '/tmp/' . l:filename . '.docx'
-
-    if filereadable(l:tmp_md_path)
-        call delete(l:tmp_md_path)
-    endif
-    if filereadable(l:docx_path)
-        call delete(l:docx_path)
-    endif
-
-    " Write either the visual selection (range) or the whole buffer.
-    call writefile(getline(a:firstline, a:lastline), l:tmp_md_path)
 
     if !executable('pandoc')
         echohl ErrorMsg
@@ -476,21 +465,55 @@ function! MarkdownToDocx() range abort
         return
     endif
 
-    let l:command = 'pandoc ' . shellescape(l:tmp_md_path) . ' -o ' .
-                \ shellescape(l:docx_path)
+    let l:filename = expand('%:t:r')
+
+    if empty(l:filename)
+        let l:filename = 'markdown_' . substitute(tempname(), '.*/', '', '')
+    endif
+
+    let l:tmp_md_path = '/tmp/' . l:filename . '.md'
+    let l:output_path = '/tmp/' . l:filename . '.' . l:format
+
+    if filereadable(l:tmp_md_path)
+        call delete(l:tmp_md_path)
+    endif
+
+    if filereadable(l:output_path)
+        call delete(l:output_path)
+    endif
+
+    " Write either the visual selection/range or the whole buffer.
+    call writefile(getline(a:firstline, a:lastline), l:tmp_md_path)
+
+    let l:command = 'pandoc ' . shellescape(l:tmp_md_path) .
+                \ ' -o ' . shellescape(l:output_path)
+
     silent! execute '!' . l:command
 
-    if !filereadable(l:docx_path)
+    if !filereadable(l:output_path)
         echohl ErrorMsg
-        echom "Error: pandoc failed to create " . l:docx_path
+        echom "Error: pandoc failed to create " . l:output_path
         echohl None
         return
     endif
 
-    silent! execute '!wslview ' . shellescape(l:docx_path)
+    if executable('wslview')
+        silent! execute '!wslview ' . shellescape(l:output_path)
+    else
+        echom "Created: " . l:output_path
+    endif
+endfunction
+
+function! MarkdownToDocx() range abort
+    execute a:firstline . ',' . a:lastline . 'call MarkdownToFormat("docx")'
+endfunction
+
+function! MarkdownToPdf() range abort
+    execute a:firstline . ',' . a:lastline . 'call MarkdownToFormat("pdf")'
 endfunction
 
 command! -range=% MarkdownToDocx <line1>,<line2>call MarkdownToDocx()
+command! -range=% MarkdownToPdf <line1>,<line2>call MarkdownToPdf()
 
 augroup MarkdownSetup
     autocmd!
@@ -503,6 +526,10 @@ augroup MarkdownSetup
                 \ :MarkdownToDocx<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>d
                 \ :'<,'>MarkdownToDocx<CR>
+    autocmd FileType markdown nnoremap <buffer> <localleader>P
+                \ :MarkdownToPdf<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>P
+                \ :'<,'>MarkdownToPdf<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>i
                 \ :call DecorateSelection('*')<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>b
