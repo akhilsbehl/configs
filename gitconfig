@@ -15,11 +15,10 @@
 
 [delta]
     navigate = true
-    light = false
+    light = true
     line-numbers = true
     side-by-side = true
-    diff-so-fancy = true
-    syntax-theme = gruvbox-dark
+    syntax-theme = gruvbox-light
 
 [diff]
     colorMoved = true
