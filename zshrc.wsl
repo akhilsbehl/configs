@@ -2,7 +2,7 @@ if [[ "$(umask)" == "0000" ]]; then
   umask 0022
 fi
 
-alias start='wslview'
+alias s='wslview'
 alias winsu='runas.exe /user:admin'
 alias cmd='cmd.exe'
 alias psh='powershell.exe'
@@ -79,4 +79,21 @@ EOF
   fi
 
   printf '%s\n' "$result"
+}
+
+wslview() {
+  local target="${1:-}"
+  case "$target" in
+    --help|-h)    echo "Usage: wslview <url|file|directory>" ;;
+    --version|-v) echo "wslview-compat 1.0" ;;
+    "")           echo "Usage: wslview <url|file|directory>" >&2; return 1 ;;
+    http://*|https://*|ftp://*)
+      powershell.exe -NoProfile -NonInteractive -Command "Start-Process '$target'" 2>/dev/null
+      ;;
+    *)
+      local winpath
+      winpath="$(wslpath -w "$target" 2>/dev/null || echo "$target")"
+      powershell.exe -NoProfile -NonInteractive -Command "Start-Process '$winpath'" 2>/dev/null
+      ;;
+  esac
 }
