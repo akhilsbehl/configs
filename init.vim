@@ -319,32 +319,63 @@ endfunction
 nnoremap <leader>hc :call HighlightCursor()<CR>
 
 "-------------------------
-" Rename the current buffer's file in place and reload.
+" Save as new or a copy
 "-------------------------
 
-function! SaveAsInPlace() abort
+function! SaveAsSwitch(delete_original) abort
+    let l:oldbuf  = bufnr('%')
     let l:oldname = expand('%:p')
-    let l:newname = input('New name: ', expand('%:p'))
+    let l:newname = input('New name: ', l:oldname)
+
     if empty(l:newname)
         echo "Need a name for the new file"
         return
     endif
-    if l:newname != l:oldname
-        try
-            execute 'write ' . l:newname
-            execute 'edit ' . l:newname
-        catch /^Vim\%((\a\+)\)\=:/
-            echomsg ' '
-            echohl ErrorMsg
-            echomsg substitute(v:exception, '^\CVim\%((\a\+)\)\=:', '', '')
-            echohl None
+
+    if l:newname ==# l:oldname
+        return
+    endif
+
+    if filereadable(l:newname)
+        let l:choice = confirm(
+            \ '"' . l:newname . '" already exists. Overwrite?',
+            \ "&Yes\n&No",
+            \ 2
+            \ )
+
+        if l:choice != 1
+            echo "Save cancelled"
             return
-        endtry
-        execute 'bdelete ' . l:oldname
-        execute '!rm ' . l:oldname
+        endif
+    endif
+
+    try
+        execute 'write! ' . fnameescape(l:newname)
+        execute 'edit ' . fnameescape(l:newname)
+    catch /^Vim\%((\a\+)\)\=:/
+        echomsg ''
+        echohl ErrorMsg
+        echomsg substitute(v:exception, '^\CVim\%((\a\+)\)\=:', '', '')
+        echohl None
+        return
+    endtry
+
+    if a:delete_original
+        execute 'bdelete ' . l:oldbuf
+
+        if delete(l:oldname)
+            echohl ErrorMsg
+            echomsg 'Failed to delete "' . l:oldname . '"'
+            echohl None
+        endif
     endif
 endfunction
-nnoremap <leader>sr :call SaveAsInPlace()<CR>
+
+" Rename: save as, switch, delete original.
+nnoremap <leader>sr :call SaveAsSwitch(1)<CR>
+
+" Save copy: save as, switch, keep original.
+nnoremap <leader>sc :call SaveAsSwitch(0)<CR>
 
 "-------------------------
 " Toggle a simple terminal and scratch buffer.
