@@ -138,3 +138,5 @@
     process = git-lfs filter-process
     required = true
     clean = git-lfs clean -- %f
+[http]
+	sslCAInfo = /usr/local/share/ca-certificates/zscaler-ca.crt
