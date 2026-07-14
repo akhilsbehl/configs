@@ -38,7 +38,8 @@ When we're working on drafting documents together:
   - When docx or pptx files are generated from or attached to markdown files, always keep their version numbers synced with each other. -v0x.md, -v0x.pptx, -v0x.docx should always be in sync for all values of x. It is okay to skip certain version numbers for certain formats where no new edits are needed to that format.
   - Always keep 'internal chatter' either outside or at the end of the draft with a note. Internal chatter includes back and forth commentary, how we made decisions or choices, etc. Keep the drafts standalone and path independent.
   - Where you need my inputs or decisions, ask them during the drafting stage in chat and not in the document wherever possible.
-  - [CODEX: Ignore this instruction] When a md file is ready for me to review, use the command `zellij-fullscreen-vim-tab`. Use it with only md files and only 1 file argument. Do not loop or open multiple files.
+  - When a md file is ready for me to review, use the command `zellij-fullscreen-vim-tab`. Use it with only md files and only 1 file argument. Do not loop or open multiple files.
+  - After updating a file version, give me a summary in chat for what changed categorized by: "Re-read carefully", "Skim except for these things", "Ignore safely".
 
 ### Writing style
 
