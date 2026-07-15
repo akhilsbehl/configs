@@ -111,7 +111,7 @@ if not VG.vscode then -- Ignore this stuff if I'm running from inside VSCode
                                 {
                                     label = 'asb',
                                     kind = vim.lsp.protocol.CompletionItemKind.Snippet,
-                                    insertText = '<<ASB: ${1:placeholder text to write}>>${0}',
+                                    insertText = '<<ASB: ${1:placeholder text to write}>> ${0}',
                                     insertTextFormat = vim.lsp.protocol.InsertTextFormat.Snippet,
                                     documentation = 'Insert ASB note marker',
                                 },

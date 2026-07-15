@@ -469,14 +469,34 @@ endfunction
 " Markdown files config.
 "-------------------------
 
-function! DecorateSelection(str) abort
-    normal gv"xy
+function! DecorateSelection(before, ...) abort
+    let after = a:0 >= 1 ? a:1 : a:before
+    normal! gv"xy
+    let @x = a:before . @x . after
+    normal! gvd
     let cursor_pos = getpos('.')
-    let cursor_pos[2] = cursor_pos[2] - 1
-    let @x = a:str . @x . a:str
-    normal gvd
+    normal! "xP
     call setpos('.', cursor_pos)
-    normal "xp
+endfunction
+
+let g:decorate_presets = {
+            \ 'bold':    ['**', '**'],
+            \ 'italic':  ['*', '*'],
+            \ 'strike':  ['~~', '~~'],
+            \ 'math':    ['$', '$'],
+            \ 'code':    ['`', '`'],
+            \ 'codeblock':    ["\n```\n", "\n```\n"],
+            \ 'asb':     ['<<ASB: ', '>>'],
+            \ 'asbstrike':     ['<<ASB: ~~', '~~>>'],
+            \ }
+
+function! DecorateWithPreset(name) abort
+    if !has_key(g:decorate_presets, a:name)
+        echoerr 'Unknown decoration preset: ' . a:name
+        return
+    endif
+    let parts = g:decorate_presets[a:name]
+    call DecorateSelection(parts[0], parts[1])
 endfunction
 
 function! MarkdownToFormat(format) range abort
@@ -561,12 +581,22 @@ augroup MarkdownSetup
                 \ :MarkdownToPdf<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>P
                 \ :'<,'>MarkdownToPdf<CR>
-    autocmd FileType markdown vnoremap <buffer> <localleader>i
-                \ :call DecorateSelection('*')<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>b
-                \ :call DecorateSelection('**')<CR>
+                \ :call DecorateWithPreset('bold')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>i
+                \ :call DecorateWithPreset('italic')<CR>
     autocmd FileType markdown vnoremap <buffer> <localleader>$
-                \ :call DecorateSelection('$')<CR>
+                \ :call DecorateWithPreset('math')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>s
+                \ :call DecorateWithPreset('strike')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>c
+                \ :call DecorateWithPreset('code')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>C
+                \ :call DecorateWithPreset('codeblock')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>a
+                \ :call DecorateWithPreset('asb')<CR>
+    autocmd FileType markdown vnoremap <buffer> <localleader>A
+                \ :call DecorateWithPreset('asbstrike')<CR>
 augroup END
 
 "-------------------------
@@ -576,6 +606,7 @@ augroup END
 augroup ChangeTheme
     autocmd!
     autocmd VimEnter,SourcePost $MYVIMRC colorscheme rose-pine
+    autocmd VimEnter,SourcePost $MYVIMRC highlight Visual guibg=#8caed4
     autocmd VimEnter,SourcePost $MYVIMRC lua require('lualine').setup()
 augroup END
 
