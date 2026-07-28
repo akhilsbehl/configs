@@ -34,7 +34,7 @@ A typical review is not a wholesale rewrite. It is a sequence of local and highe
 2. Strike out a few words, a line, or an entire content chunk that should be removed.
 3. Reword a phrase, an entire line, or a larger passage when the intended wording is clear.
 4. Add an editorial comment beside a word, phrase, paragraph, section, table, or Mermaid source line when the required change needs agent judgement.
-5. Add an opening or closing document-level note for cross-cutting instructions, such as a missing recommendation or a structural issue.
+5. Add a document-level note for cross-cutting instructions, such as a missing recommendation or a structural issue.
 6. Have the agent apply feedback to the Markdown source and produce the next versioned draft.
 
 ### 2.4 Preferred workflow
@@ -265,7 +265,7 @@ The sidecar must retain historical operations. It should not silently delete res
 The browser page contains:
 
 - A readable rendered Markdown document.
-- A restrained review toolbar with `Delete`, `Replace`, and `Comment` actions.
+- A restrained review toolbar with `Document level note`, `Abort review`, and `Finish review` actions.
 - Source-mapped text affordances with `Comment`, `Replace`, and `Delete` actions for individual text ranges.
 - A right-side or margin review panel listing open operations.
 - Clear visual treatment for selected text, pending deletions, and replacements.
@@ -281,7 +281,7 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 **Text selection**
 
 1. Reviewer selects rendered text.
-2. Toolbar appears near the selection.
+2. The action menu appears beneath the selection.
 3. Reviewer selects Delete, Replace, or Comment.
 4. Delete requires confirmation only for large selections.
 5. Replace opens a compact field for replacement text.
@@ -297,13 +297,12 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 **Source-mapped text actions**
 
 - Hovering source-mapped text opens a `Comment`, `Replace`, and `Delete` menu beneath that exact range without changing document flow. When a visual selection is active, those actions target the selection instead of the hovered range.
-- The same actions remain available from the toolbar for selections spanning multiple source ranges.
+- When a selection spans multiple source ranges, the hovered-range menu applies the action to the active selection.
 
 **Document comments**
 
-- `Add opening note` appears before the rendered document.
-- `Add closing note` appears after it.
-- These comments are explicitly document-scoped. They must not be attached to arbitrary first or last paragraphs.
+- `Document level note` creates an explicitly document-scoped note at the end of the commented copy.
+- The note must not be attached to an arbitrary last paragraph.
 
 **Operation editing**
 
@@ -420,7 +419,7 @@ The source renderer must be tested against the exact Markdown conventions in exi
 - Rendered document with readable document styling.
 - Text-range Delete, Replace, and Comment operations.
 - Paragraph and heading comments.
-- Document opening and closing comments.
+- Document-level comments.
 - JSON sidecar persistence.
 - Source hash validation.
 - Manual agent application workflow.

@@ -22,6 +22,8 @@ button:hover{background:#eadfd2;border-color:var(--rose);transform:translateY(-1
 button:focus-visible{outline:3px solid rgba(144,122,169,.35);outline-offset:2px}
 #toolbar button[data-action=finish]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
 #toolbar button[data-action=finish]:hover{background:#20556a}
+#toolbar button[data-action=abort]{background:var(--love);border-color:var(--love);color:#fffaf3}
+#toolbar button[data-action=abort]:hover{background:#9f5369}
 h1,h2,h3{color:var(--text);line-height:1.2;letter-spacing:-.02em}
 h1{font-size:2.2rem;margin:1.4em 0 .55em;padding-bottom:.25em;border-bottom:2px solid var(--rose)}
 h2{font-size:1.55rem;margin-top:1.8em;color:var(--pine)}
@@ -105,7 +107,7 @@ export class RichieService {
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="delete">Delete</button><button data-action="replace">Replace</button><button data-action="comment">Comment</button><button data-action="opening">Opening note</button><button data-action="closing">Closing note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });

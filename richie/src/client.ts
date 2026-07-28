@@ -79,7 +79,7 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
       window.close();
       return;
     }
-    if (action === "opening" || action === "closing") { const comment = prompt("Document note:"); if (comment) await post("operations", { kind: "comment", scope: "document", placement: action === "opening" ? "start" : "end", comment }); }
+    if (action === "document-note") { const comment = prompt("Document level note (added at the end):"); if (comment) await post("operations", { kind: "comment", scope: "document", placement: "end", comment }); await refresh(); return; }
     else { const range = selectionRange(); if (!range) throw new Error("Select text first."); if (action === "replace") { const replacement = prompt("Replacement:"); if (replacement !== null) await post("operations", { kind: "replace", scope: "range", range, replacement }); } else if (action === "comment") { const comment = prompt("Comment:"); if (comment) await post("operations", { kind: "comment", scope: "range", range, comment }); } else if (action === "delete" && confirm("Mark selected text for deletion?")) await post("operations", { kind: "delete", scope: "range", range }); }
     await refresh();
   } catch (error) { alert((error as Error).message); }

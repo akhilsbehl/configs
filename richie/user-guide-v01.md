@@ -57,12 +57,9 @@ The installed system service uses the built output in this repository. Rebuild a
 
 1. Open the draft with `richie review path/to/draft-vNN.md`.
 2. Read the rendered document for hierarchy, wording, tables, and diagrams.
-3. Select text and choose an action from the toolbar:
-   - `Delete` marks the selection for deletion.
-   - `Replace` records proposed replacement wording.
-   - `Comment` records an editorial comment.
-4. Use the controls that appear beside a paragraph, heading, list item, table cell, or table row for block-level feedback.
-5. Use `Opening note` or `Closing note` for a document-level instruction.
+3. Select text, then use the menu beneath the selected range for `Comment`, `Replace`, or `Delete`.
+4. Use the controls that appear beside a heading, Mermaid source block, table cell, or table row for block-level feedback.
+5. Use `Document level note` for a cross-cutting instruction. It is added at the end of the commented copy.
 6. Check the feedback list on the right as you work.
 
 Richie saves each operation immediately to a temporary sidecar named like `draft-vNN.review.json`. Each operation retains the selected source quote and source range.
