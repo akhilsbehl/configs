@@ -51,7 +51,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 #panel strong{color:var(--pine)}
 #operations p{margin:10px 0;padding:8px;background:var(--overlay);border-radius:6px;font-size:.86rem;overflow-wrap:anywhere}
 .richie-target{display:none;margin-left:8px;font-size:.72rem}
-p:hover>.richie-target,h1:hover>.richie-target,h2:hover>.richie-target,h3:hover>.richie-target,li:hover>.richie-target,td:hover>.richie-target,tr:hover>.richie-target,details:hover>.richie-target{display:inline}
+p:hover>.richie-target,h1:hover>.richie-target,h2:hover>.richie-target,h3:hover>.richie-target,li:hover>.richie-target,td:hover>.richie-target,tr:hover>.richie-target,details:hover>.richie-target,span[data-md-range]:hover>.richie-target{display:inline}
 p:hover,h1:hover,h2:hover,h3:hover,td:hover,details:hover{outline:1px dashed var(--rose);outline-offset:3px}
 .review-note{color:var(--love);font-size:.9em}
 @media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}}
@@ -96,7 +96,7 @@ export class RichieService {
     const host = request.headers.host ?? "";
     if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return send(response, 421, { error: "Unexpected host" });
     const url = new URL(request.url ?? "/", `http://${host}`); const match = url.pathname.match(/^\/s\/([^/]+)$/);
-    const api = url.pathname.match(/^\/api\/(state|operations|finish)\/([^/]+)$/);
+    const api = url.pathname.match(/^\/api\/(state|operations|finish|abort)\/([^/]+)$/);
     if (url.pathname.startsWith("/assets/")) {
       const asset = url.pathname.slice("/assets/".length);
       if (!/^[A-Za-z0-9._-]+\.js$/.test(asset)) return send(response, 404, { error: "Asset not found" });
@@ -105,7 +105,7 @@ export class RichieService {
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="delete">Delete</button><button data-action="replace">Replace</button><button data-action="comment">Comment</button><button data-action="opening">Opening note</button><button data-action="closing">Closing note</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="delete">Delete</button><button data-action="replace">Replace</button><button data-action="comment">Comment</button><button data-action="opening">Opening note</button><button data-action="closing">Closing note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });
@@ -129,6 +129,11 @@ export class RichieService {
       }
       const outputPath = await nextCommentedPath(session.sourcePath); await writeFile(outputPath, renderCommentedMarkdown(source, session.state), "utf8"); await unlink(session.sidecarPath);
       this.sessions.delete(session.id); this.byPath.delete(session.sourcePath); return send(response, 200, { exported: true, outputPath });
+    }
+    if (api[1] === "abort" && request.method === "POST") {
+      await unlink(session.sidecarPath);
+      this.sessions.delete(session.id); this.byPath.delete(session.sourcePath);
+      return send(response, 200, { aborted: true });
     }
     return send(response, 405, { error: "Method not allowed" });
   }

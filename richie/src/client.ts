@@ -33,11 +33,13 @@ function targetControl(label: string, scope: string, kind: string, element: Elem
   const button = document.createElement("button"); button.className = "richie-target"; button.textContent = label;
   button.addEventListener("click", async (event) => { event.preventDefault(); event.stopPropagation(); const range = blockRange(element); if (!range) return;
     try { if (kind === "comment") { const comment = prompt("Comment:"); if (comment) await post("operations", { kind, scope, range, comment }); }
+      else if (kind === "replace") { const replacement = prompt("Replacement:"); if (replacement !== null) await post("operations", { kind, scope, range, replacement }); }
       else if (confirm(`Mark this ${scope} for deletion?`)) await post("operations", { kind, scope, range }); await refresh();
     } catch (error) { alert((error as Error).message); }
   }); return button;
 }
 document.querySelectorAll("p[data-md-block],h1[data-md-block],h2[data-md-block],h3[data-md-block],li[data-md-block],details[data-md-mermaid-source]").forEach((element) => element.append(targetControl("Comment", "block", "comment", element)));
+[...document.querySelectorAll("span[data-md-range]")].filter((element) => element.firstElementChild?.classList.contains("md-text")).forEach((element) => { element.append(targetControl("Comment", "range", "comment", element)); element.append(targetControl("Replace", "range", "replace", element)); element.append(targetControl("Delete", "range", "delete", element)); });
 document.querySelectorAll("td[data-md-block]").forEach((element) => { element.append(targetControl("Comment", "cell", "comment", element)); element.append(targetControl("Clear", "cell", "delete", element)); element.append(targetControl("Delete column", "column", "delete", element)); });
 document.querySelectorAll("tr[data-md-block]").forEach((element) => element.append(targetControl("Delete row", "row", "delete", element)));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
@@ -46,6 +48,12 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
       if (!confirm("Finish this review? Open feedback will be exported and this tab will close.")) return;
       const result = await post("finish", {}) as { exported: boolean; outputPath: string | null };
       alert(result.exported ? `Review exported to ${result.outputPath}` : "No feedback was recorded. Nothing was exported.");
+      window.close();
+      return;
+    }
+    if (action === "abort") {
+      if (!confirm("Abort this review? All open feedback will be discarded and nothing will be exported.")) return;
+      await post("abort", {});
       window.close();
       return;
     }

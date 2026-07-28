@@ -108,7 +108,7 @@ A visual review surface should make these editorial actions fast without replaci
 
 ## 7. Review operations
 
-The review UI offers three primary operations plus scope selection.
+The review UI offers three primary operations plus scope selection and review lifecycle controls.
 
 | Reviewer intent | Operation | Required data |
 |---|---|---|
@@ -266,11 +266,13 @@ The browser page contains:
 
 - A readable rendered Markdown document.
 - A restrained review toolbar with `Delete`, `Replace`, and `Comment` actions.
+- Source-mapped text affordances with `Comment`, `Replace`, and `Delete` actions for individual text ranges.
 - A right-side or margin review panel listing open operations.
 - Clear visual treatment for selected text, pending deletions, and replacements.
 - Section controls on headings for section-level comments.
 - Document-level controls at the top and bottom.
 - A `Finish review` action that asks for confirmation, verifies feedback was saved, avoids exporting when there is no open feedback, closes the review tab after the response, and displays the next agent command when feedback was exported.
+- An `Abort review` action that asks for confirmation, discards open feedback without exporting, removes the sidecar, closes the session, and closes the review tab after the response.
 
 The interface should be visually quiet. Its purpose is reading and editorial judgement, not an app-like collaboration environment.
 
@@ -292,6 +294,11 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 - Clicking it produces a block or section comment without requiring text selection.
 - Table-row support is optional in the MVP if the renderer cannot assign a clean source range for each row.
 
+**Source-mapped text actions**
+
+- Hovering source-mapped text exposes `Comment`, `Replace`, and `Delete` actions for that exact range.
+- The same actions remain available from the toolbar for selections spanning multiple source ranges.
+
 **Document comments**
 
 - `Add opening note` appears before the rendered document.
@@ -308,9 +315,9 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 
 1. Agent writes or updates `draft-v03.md`.
 2. Reviewer opens the local review application for that draft.
-3. Reviewer performs a visual review, expands Mermaid source when needed, and clicks `Finish review`.
-4. The application saves structured open operations to `draft-v03.review.json`.
-5. Agent reads the sidecar directly.
+3. Reviewer performs a visual review, expands Mermaid source when needed, and clicks `Finish review` or `Abort review`.
+4. `Finish review` exports the commented copy when open feedback exists and removes the sidecar. `Abort review` discards the sidecar without exporting.
+5. Agent reads the commented copy or sidecar, as applicable.
 6. Agent validates the source hash and each target.
 7. Agent applies feedback to Markdown only.
 8. Agent updates each operation status and records rationale where needed.

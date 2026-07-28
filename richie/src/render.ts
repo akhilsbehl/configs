@@ -40,14 +40,14 @@ export function renderReviewHtml(source: string): string {
       const lineNumber = position.start.line + index + 1;
       const lineColumn = index === 0 ? position.start.column : 1;
       cursor = newline < 0 ? position.end.offset : newline + 1;
-      return `<span class="mermaid-source-line" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}">${escape(line)}</span>`;
+      return `<span class="mermaid-source-line" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}"><span class="md-text">${escape(line)}</span></span>`;
     }).join("\n");
     return `<pre><code>${rendered}</code></pre>`;
   };
   const render = (node: Node): string => {
     switch (node.type) {
       case "root": return renderChildren(node);
-      case "text": return `<span${range(node)}>${escape(node.value ?? "")}</span>`;
+      case "text": return `<span${range(node)}><span class="md-text">${escape(node.value ?? "")}</span></span>`;
       case "paragraph": return `<p${blockAttrs(node)}>${renderChildren(node)}</p>`;
       case "heading": {
         const label = text(node); headings.splice((node.depth ?? 1) - 1); headings[node.depth! - 1] = label;

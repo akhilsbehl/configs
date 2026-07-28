@@ -67,6 +67,8 @@ The installed system service uses the built output in this repository. Rebuild a
 
 Richie saves each operation immediately to a temporary sidecar named like `draft-vNN.review.json`. Each operation retains the selected source quote and source range.
 
+Hover over source-mapped text to access `Comment`, `Replace`, and `Delete` actions for that text range. Use the toolbar for a selection that crosses multiple ranges.
+
 ### Tables and Mermaid diagrams
 
 Tables support targeted review controls. Hover over a cell to comment on it, clear its contents, or mark its column for deletion. Hover over a table row to mark the row for deletion. These actions create review operations and do not change the source table during the session.
@@ -76,6 +78,8 @@ Mermaid code blocks render as diagrams in the review surface and also expose a `
 ## Finish a review
 
 Click `Finish review` only when the feedback is complete. Richie asks for confirmation, verifies that the Markdown source has not changed, writes the next available commented copy, and removes the temporary review sidecar after a successful export. If there is no open feedback, Richie removes the empty review state without creating a commented file. After the response, the browser attempts to close the review tab.
+
+Click `Abort review` to discard the open feedback without exporting a commented file. Richie asks for confirmation, removes the review sidecar, closes the session, and attempts to close the browser tab.
 
 The output is named like:
 

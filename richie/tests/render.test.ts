@@ -11,5 +11,6 @@ test("renders source-aware inline Markdown and GFM tables", () => {
   assert.match(html, /data-mermaid=/);
   assert.match(html, /class="mermaid-source"/);
   assert.match(html, /class="mermaid-source-line" data-md-range=/);
+  assert.match(html, /class="md-text">graph TD/);
   assert.match(html, /graph TD; A--&gt;B/);
 });
