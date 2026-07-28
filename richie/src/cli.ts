@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { request } from "node:http";
 import { realpath } from "node:fs/promises";
 import { spawn } from "node:child_process";
@@ -12,6 +13,7 @@ function control(path: string, payload?: unknown): Promise<unknown> {
 }
 async function main(): Promise<void> {
   const [command, input] = process.argv.slice(2);
+  if (command === "status") { console.log(JSON.stringify(await control("/status"))); return; }
   if (command !== "review" || !input) throw new Error("Usage: richie review path/to/draft-vNN.md");
   const sourcePath = await realpath(input); const result = await control("/sessions", { sourcePath }) as { url: string };
   spawn("xdg-open", [result.url], { detached: true, stdio: "ignore" }).unref(); console.log(result.url);

@@ -31,6 +31,8 @@ export class RichieService {
   private readonly sessions = new Map<string, Session>();
   private readonly byPath = new Map<string, string>();
 
+  status(): { sessions: number; port: number } { return { sessions: this.sessions.size, port }; }
+
   async createSession(inputPath: string): Promise<{ id: string; url: string }> {
     const sourcePath = await realpath(inputPath);
     const existing = this.byPath.get(sourcePath);
@@ -88,6 +90,7 @@ export async function startService(): Promise<void> {
   const service = new RichieService();
   const web = createServer((request, response) => service.handle(request, response).catch((error: Error) => send(response, 500, { error: error.message })));
   const control = createServer((request, response) => {
+    if (request.method === "GET" && request.url === "/status") return send(response, 200, service.status());
     if (request.method !== "POST" || request.url !== "/sessions") return send(response, 404, { error: "Not found" });
     body(request).then(async (input) => { const sourcePath = (input as { sourcePath?: unknown }).sourcePath; if (typeof sourcePath !== "string") return send(response, 400, { error: "sourcePath is required" }); return send(response, 201, await service.createSession(sourcePath)); }).catch((error: Error) => send(response, 400, { error: error.message }));
   });
