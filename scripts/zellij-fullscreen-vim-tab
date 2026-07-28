@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 FILE=$(realpath "$1")
-SOCK=/tmp/nvim-zopen.sock
+SOCK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/nvim-zopen.XXXXXX")
+SOCK="$SOCK_DIR/nvim.sock"
 
 # Check if the server is alive by running a trivial remote expression.
 # If it fails, the socket doesn't exist or the server has died — start a new one.
@@ -23,8 +24,8 @@ done
 # Trigger markdown preview in the server (uses your existing <localleader>p mapping)
 nvim --server "$SOCK" --remote-send '<Esc>:MarkdownPreviewToggle<CR>'
 
-# Open a new zellij tab in the named session, attach to the persistent server as a UI, close the tab when done
-zellij action new-tab -- bash -c "nvim --server '$SOCK' --remote-ui; zellij action close-pane"
+# Open a new zellij tab, attach to the server as a UI, then stop the server and remove its socket directory when done.
+zellij action new-tab -- bash -c 'SOCK="$1"; SOCK_DIR="$2"; trap '\''rm -rf -- "$SOCK_DIR"'\'' EXIT; nvim --server "$SOCK" --remote-ui; nvim --server "$SOCK" --remote-expr '\''execute("qa!")'\'' >/dev/null 2>&1 || true; rm -rf -- "$SOCK_DIR"; zellij action close-pane' bash "$SOCK" "$SOCK_DIR"
 
 # Give zellij a moment to open the tab before toggling fullscreen
 sleep 0.3
