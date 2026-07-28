@@ -3,7 +3,7 @@ import { chmod, mkdir, readFile, rm, realpath, unlink, writeFile } from "node:fs
 import { dirname, join, resolve } from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { assertMarkdownFile, newState, nextCommentedPath, readState, renderCommentedMarkdown, reviewSidecarPath, sha256, writeState } from "./store.js";
+import { assertMarkdownFile, hasOpenOperations, newState, nextCommentedPath, readState, renderCommentedMarkdown, reviewSidecarPath, sha256, writeState } from "./store.js";
 import { renderReviewHtml } from "./render.js";
 import type { ReviewOperation, ReviewState, Session } from "./types.js";
 
@@ -78,8 +78,13 @@ export class RichieService {
     }
     if (api[1] === "finish" && request.method === "POST") {
       const source = await readFile(session.sourcePath, "utf8"); if (sha256(source) !== session.state.sourceSha256) return send(response, 409, { error: "Source changed during review; feedback was retained." });
+      if (!hasOpenOperations(session.state)) {
+        await unlink(session.sidecarPath);
+        this.sessions.delete(session.id); this.byPath.delete(session.sourcePath);
+        return send(response, 200, { exported: false, outputPath: null });
+      }
       const outputPath = await nextCommentedPath(session.sourcePath); await writeFile(outputPath, renderCommentedMarkdown(source, session.state), "utf8"); await unlink(session.sidecarPath);
-      this.sessions.delete(session.id); this.byPath.delete(session.sourcePath); return send(response, 200, { outputPath });
+      this.sessions.delete(session.id); this.byPath.delete(session.sourcePath); return send(response, 200, { exported: true, outputPath });
     }
     return send(response, 405, { error: "Method not allowed" });
   }

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { commentedPath, reviewSidecarPath } from "../src/paths.js";
-import { newState, renderCommentedMarkdown, sha256 } from "../src/store.js";
+import { hasOpenOperations, newState, renderCommentedMarkdown, sha256 } from "../src/store.js";
 
 test("derives sidecar and commented paths", () => {
   assert.equal(reviewSidecarPath("/work/draft-v03.md"), "/work/draft-v03.review.json");
@@ -18,4 +18,13 @@ test("exports range and document annotations without changing source text", () =
   assert.match(output, /^<<ASB: \[rvw_002\] Lead with the recommendation\.>>/);
   assert.match(output, /vague <<ASB: \[rvw_001\] Replace "vague" with "unsupported"\.>>/);
   assert.equal(sha256(source), state.sourceSha256);
+});
+
+test("detects whether a review has open feedback", () => {
+  const state = newState("draft-v03.md", "# Draft\n");
+  assert.equal(hasOpenOperations(state), false);
+  state.operations.push({ id: "rvw_001", kind: "comment", status: "needs-review", scope: "document", comment: "Later", createdAt: "2026-01-01T00:00:00Z" });
+  assert.equal(hasOpenOperations(state), false);
+  state.operations.push({ id: "rvw_002", kind: "comment", status: "open", scope: "document", comment: "Act on this", createdAt: "2026-01-01T00:00:00Z" });
+  assert.equal(hasOpenOperations(state), true);
 });

@@ -42,7 +42,13 @@ document.querySelectorAll("td[data-md-block]").forEach((element) => { element.ap
 document.querySelectorAll("tr[data-md-block]").forEach((element) => element.append(targetControl("Delete row", "row", "delete", element)));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; try {
-    if (action === "finish") { const result = await post("finish", {}); alert(`Review exported to ${(result as { outputPath: string }).outputPath}`); return; }
+    if (action === "finish") {
+      if (!confirm("Finish this review? Open feedback will be exported and this tab will close.")) return;
+      const result = await post("finish", {}) as { exported: boolean; outputPath: string | null };
+      alert(result.exported ? `Review exported to ${result.outputPath}` : "No feedback was recorded. Nothing was exported.");
+      window.close();
+      return;
+    }
     if (action === "opening" || action === "closing") { const comment = prompt("Document note:"); if (comment) await post("operations", { kind: "comment", scope: "document", placement: action === "opening" ? "start" : "end", comment }); }
     else { const range = selectionRange(); if (!range) throw new Error("Select text first."); if (action === "replace") { const replacement = prompt("Replacement:"); if (replacement !== null) await post("operations", { kind: "replace", scope: "range", range, replacement }); } else if (action === "comment") { const comment = prompt("Comment:"); if (comment) await post("operations", { kind: "comment", scope: "range", range, comment }); } else if (action === "delete" && confirm("Mark selected text for deletion?")) await post("operations", { kind: "delete", scope: "range", range }); }
     await refresh();

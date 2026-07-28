@@ -16,6 +16,10 @@ export function newState(sourcePath: string, source: string): ReviewState {
   return { schemaVersion: 1, source: sourcePath, sourceSha256: sha256(source), createdAt: new Date().toISOString(), operations: [] };
 }
 
+export function hasOpenOperations(state: ReviewState): boolean {
+  return state.operations.some((operation) => operation.status === "open");
+}
+
 export async function readState(sidecarPath: string): Promise<ReviewState | undefined> {
   try { return JSON.parse(await readFile(sidecarPath, "utf8")) as ReviewState; }
   catch (error: unknown) {
