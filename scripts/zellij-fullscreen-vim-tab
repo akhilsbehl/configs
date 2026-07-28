@@ -3,29 +3,13 @@ FILE=$(realpath "$1")
 SOCK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/nvim-zopen.XXXXXX")
 SOCK="$SOCK_DIR/nvim.sock"
 
-# Check if the server is alive by running a trivial remote expression.
-# If it fails, the socket doesn't exist or the server has died — start a new one.
-if ! nvim --server "$SOCK" --remote-expr '1' 2>/dev/null; then
-    nvim --listen "$SOCK" --headless > /dev/null 2>&1 &
-    # Wait for the socket to become available
-    until nvim --server "$SOCK" --remote-expr '1' 2>/dev/null; do
-        sleep 0.1
-    done
+# Run the complete Neovim lifecycle inside the new tab so the headless server
+# inherits the tab's persistent terminal, including when this wrapper is called
+# from a non-interactive runner.
+if ! zellij action new-tab -- bash -c 'FILE="$1"; SOCK="$2"; SOCK_DIR="$3"; trap '\''rm -rf -- "$SOCK_DIR"'\'' EXIT; nvim --listen "$SOCK" --headless >/dev/null 2>&1 & until nvim --server "$SOCK" --remote-expr '\''1'\'' 2>/dev/null; do sleep 0.1; done; nvim --server "$SOCK" --remote "$FILE"; until nvim --server "$SOCK" --remote-expr "bufname('\''%'\'') =~ '\''$(basename "$FILE")'\''" 2>/dev/null | grep -q '\''1'\''; do sleep 0.1; done; nvim --server "$SOCK" --remote-send '\''<Esc>:MarkdownPreviewToggle<CR>'\''; nvim --server "$SOCK" --remote-ui; nvim --server "$SOCK" --remote-expr '\''execute("qa!")'\'' >/dev/null 2>&1 || true; rm -rf -- "$SOCK_DIR"; zellij action close-pane' bash "$FILE" "$SOCK" "$SOCK_DIR"; then
+    rm -rf -- "$SOCK_DIR"
+    exit 1
 fi
-
-# Open the file in the persistent server
-nvim --server "$SOCK" --remote "$FILE"
-
-# Wait until the server confirms the file is the active buffer
-until nvim --server "$SOCK" --remote-expr "bufname('%') =~ '$(basename "$FILE")'" 2>/dev/null | grep -q '1'; do
-    sleep 0.1
-done
-
-# Trigger markdown preview in the server (uses your existing <localleader>p mapping)
-nvim --server "$SOCK" --remote-send '<Esc>:MarkdownPreviewToggle<CR>'
-
-# Open a new zellij tab, attach to the server as a UI, then stop the server and remove its socket directory when done.
-zellij action new-tab -- bash -c 'SOCK="$1"; SOCK_DIR="$2"; trap '\''rm -rf -- "$SOCK_DIR"'\'' EXIT; nvim --server "$SOCK" --remote-ui; nvim --server "$SOCK" --remote-expr '\''execute("qa!")'\'' >/dev/null 2>&1 || true; rm -rf -- "$SOCK_DIR"; zellij action close-pane' bash "$SOCK" "$SOCK_DIR"
 
 # Give zellij a moment to open the tab before toggling fullscreen
 sleep 0.3
