@@ -47,7 +47,7 @@ export function renderReviewHtml(source: string): string {
   const render = (node: Node): string => {
     switch (node.type) {
       case "root": return renderChildren(node);
-      case "text": return `<span${range(node)}><span class="md-text">${escape(node.value ?? "")}</span></span>`;
+      case "text": return `<span class="md-text-range"${range(node)}><span class="md-text">${escape(node.value ?? "")}</span></span>`;
       case "paragraph": return `<p${blockAttrs(node)}>${renderChildren(node)}</p>`;
       case "heading": {
         const label = text(node); headings.splice((node.depth ?? 1) - 1); headings[node.depth! - 1] = label;
