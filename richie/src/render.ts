@@ -24,6 +24,26 @@ export function renderReviewHtml(source: string): string {
   const renderChildren = (node: Node): string => (node.children ?? []).map(render).join("");
   const text = (node: Node): string => (node.children ?? []).map((child) => child.value ?? text(child)).join("");
   const blockAttrs = (node: Node): string => ` data-md-block="b-${++block}" data-heading-path="${escape(JSON.stringify(headings))}"${range(node)}`;
+  const mermaidSource = (node: Node): string => {
+    const position = node.position;
+    const value = node.value ?? "";
+    if (!position) return `<pre><code>${escape(value)}</code></pre>`;
+    const openingNewline = source.indexOf("\n", position.start.offset);
+    if (openingNewline < 0) return `<pre><code>${escape(value)}</code></pre>`;
+    let cursor = openingNewline + 1;
+    const lines = value.split("\n").map((line) => line.endsWith("\r") ? line.slice(0, -1) : line);
+    const rendered = lines.map((line, index) => {
+      const lineStart = cursor;
+      const newline = source.indexOf("\n", lineStart);
+      const physicalEnd = newline < 0 ? position.end.offset : newline;
+      const lineEnd = physicalEnd > lineStart && source[physicalEnd - 1] === "\r" ? physicalEnd - 1 : physicalEnd;
+      const lineNumber = position.start.line + index + 1;
+      const lineColumn = index === 0 ? position.start.column : 1;
+      cursor = newline < 0 ? position.end.offset : newline + 1;
+      return `<span class="mermaid-source-line" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}">${escape(line)}</span>`;
+    }).join("\n");
+    return `<pre><code>${rendered}</code></pre>`;
+  };
   const render = (node: Node): string => {
     switch (node.type) {
       case "root": return renderChildren(node);
@@ -44,7 +64,11 @@ export function renderReviewHtml(source: string): string {
       case "blockquote": return `<blockquote${blockAttrs(node)}>${renderChildren(node)}</blockquote>`;
       case "list": return `<${node.checked === null ? "ol" : "ul"}${blockAttrs(node)}>${renderChildren(node)}</${node.checked === null ? "ol" : "ul"}>`;
       case "listItem": return `<li${blockAttrs(node)}>${node.checked === true ? "<input type=\"checkbox\" checked disabled> " : node.checked === false ? "<input type=\"checkbox\" disabled> " : ""}${renderChildren(node)}</li>`;
-      case "code": return node.lang === "mermaid" ? `<div class="mermaid"${blockAttrs(node)} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div>` : `<pre${blockAttrs(node)}><code class="language-${escape(node.lang ?? "")}">${escape(node.value ?? "")}</code></pre>`;
+      case "code": {
+        if (node.lang !== "mermaid") return `<pre${blockAttrs(node)}><code class="language-${escape(node.lang ?? "")}">${escape(node.value ?? "")}</code></pre>`;
+        const attrs = blockAttrs(node);
+        return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}</details>`;
+      }
       case "table": return `<table${blockAttrs(node)}><tbody>${renderChildren(node)}</tbody></table>`;
       case "tableRow": return `<tr${blockAttrs(node)}>${renderChildren(node)}</tr>`;
       case "tableCell": return `<td${blockAttrs(node)}>${renderChildren(node)}</td>`;

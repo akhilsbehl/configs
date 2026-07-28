@@ -33,7 +33,7 @@ A typical review is not a wholesale rewrite. It is a sequence of local and highe
 1. Read the rendered document to assess hierarchy, scanability, and narrative flow.
 2. Strike out a few words, a line, or an entire content chunk that should be removed.
 3. Reword a phrase, an entire line, or a larger passage when the intended wording is clear.
-4. Add an editorial comment beside a word, phrase, paragraph, section, table, or Mermaid diagram when the required change needs agent judgement.
+4. Add an editorial comment beside a word, phrase, paragraph, section, table, or Mermaid source line when the required change needs agent judgement.
 5. Add an opening or closing document-level note for cross-cutting instructions, such as a missing recommendation or a structural issue.
 6. Have the agent apply feedback to the Markdown source and produce the next versioned draft.
 
@@ -120,6 +120,8 @@ The review UI offers three primary operations plus scope selection.
 | Comment on the whole document | `comment` | `scope: "document"` and placement `start` or `end` |
 
 The UI may render pending deletions with strikethrough and proposed replacements in a tracked-change style. This is a visual representation of a stored operation, not a mutation of the Markdown file.
+
+For Mermaid fences, the review surface displays both the rendered SVG and the original Mermaid source. The SVG is visual context only. Selection-based operations target source lines or source text, preserving source-aware ranges for agent review. SVG nodes, edges, and labels are not independent review targets.
 
 ## 8. Source identity and mapping
 
@@ -268,7 +270,7 @@ The browser page contains:
 - Clear visual treatment for selected text, pending deletions, and replacements.
 - Section controls on headings for section-level comments.
 - Document-level controls at the top and bottom.
-- A `Finish review` action that verifies feedback was saved and displays the next agent command.
+- A `Finish review` action that asks for confirmation, verifies feedback was saved, avoids exporting when there is no open feedback, closes the review tab after the response, and displays the next agent command when feedback was exported.
 
 The interface should be visually quiet. Its purpose is reading and editorial judgement, not an app-like collaboration environment.
 
@@ -306,7 +308,7 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 
 1. Agent writes or updates `draft-v03.md`.
 2. Reviewer opens the local review application for that draft.
-3. Reviewer performs a visual review and clicks `Finish review`.
+3. Reviewer performs a visual review, expands Mermaid source when needed, and clicks `Finish review`.
 4. The application saves structured open operations to `draft-v03.review.json`.
 5. Agent reads the sidecar directly.
 6. Agent validates the source hash and each target.
@@ -399,7 +401,7 @@ Possible implementation direction:
 - Parse Markdown into an AST with source positions.
 - Generate review HTML from that AST through a custom renderer or compiler plugin.
 - Attach `data-md-range`, block IDs, and heading identity while generating HTML.
-- Render Mermaid only as a view feature. Mermaid source remains in Markdown and is not editable in the review tool.
+- Render Mermaid as a view feature with the SVG and source code displayed together. Mermaid source remains in Markdown and is not directly editable in the review tool, but its lines can be selected for comments, replacements, and deletions.
 
 The source renderer must be tested against the exact Markdown conventions in existing drafts, especially `<<ASB: ...>>` markers, tables, nested lists, links, and code blocks.
 
@@ -446,7 +448,7 @@ The source renderer must be tested against the exact Markdown conventions in exi
 2. Should resolved feedback remain in the main sidecar forever, or should the tool archive it after a tagged Git commit?
 3. Should reviewers be able to choose between a literal replacement and a higher-level rewrite instruction?
 4. How should table-cell and table-row source ranges work when Markdown table parsing normalizes whitespace?
-5. Should Mermaid render as static SVG, an external client-side renderer, or be omitted in the first MVP?
+5. Should Richie later support independent SVG element anchors, or should Mermaid source ranges remain the review boundary?
 6. Should the tool generate a review HTML file on disk or render dynamically from the Markdown server-side?
 7. Should the review application open drafts through a file picker, an OS file association, or drag-and-drop?
 

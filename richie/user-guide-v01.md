@@ -71,11 +71,11 @@ Richie saves each operation immediately to a temporary sidecar named like `draft
 
 Tables support targeted review controls. Hover over a cell to comment on it, clear its contents, or mark its column for deletion. Hover over a table row to mark the row for deletion. These actions create review operations and do not change the source table during the session.
 
-Mermaid code blocks render as diagrams in the review surface. Review the diagram visually, but comment on or edit the Mermaid source in Markdown when the diagram needs a change. Richie does not provide diagram editing. If Mermaid cannot render a diagram, the review surface displays an inline warning and keeps the original source available in the Markdown file.
+Mermaid code blocks render as diagrams in the review surface and also expose a `Mermaid source` view beneath the diagram. Expand the source view to select and comment on exact Mermaid lines. The SVG remains visual context; review operations attach to the Mermaid source, not to SVG nodes or edges. Richie does not provide direct source editing or diagram editing. If Mermaid cannot render a diagram, the review surface displays an inline warning and keeps the source view available.
 
 ## Finish a review
 
-Click `Finish review` only when the feedback is complete. Richie verifies that the Markdown source has not changed, writes the next available commented copy, and removes the temporary review sidecar after a successful export.
+Click `Finish review` only when the feedback is complete. Richie asks for confirmation, verifies that the Markdown source has not changed, writes the next available commented copy, and removes the temporary review sidecar after a successful export. If there is no open feedback, Richie removes the empty review state without creating a commented file. After the response, the browser attempts to close the review tab.
 
 The output is named like:
 

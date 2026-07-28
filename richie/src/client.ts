@@ -37,7 +37,7 @@ function targetControl(label: string, scope: string, kind: string, element: Elem
     } catch (error) { alert((error as Error).message); }
   }); return button;
 }
-document.querySelectorAll("p[data-md-block],h1[data-md-block],h2[data-md-block],h3[data-md-block],li[data-md-block]").forEach((element) => element.append(targetControl("Comment", "block", "comment", element)));
+document.querySelectorAll("p[data-md-block],h1[data-md-block],h2[data-md-block],h3[data-md-block],li[data-md-block],details[data-md-mermaid-source]").forEach((element) => element.append(targetControl("Comment", "block", "comment", element)));
 document.querySelectorAll("td[data-md-block]").forEach((element) => { element.append(targetControl("Comment", "cell", "comment", element)); element.append(targetControl("Clear", "cell", "delete", element)); element.append(targetControl("Delete column", "column", "delete", element)); });
 document.querySelectorAll("tr[data-md-block]").forEach((element) => element.append(targetControl("Delete row", "row", "delete", element)));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {

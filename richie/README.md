@@ -2,7 +2,7 @@
 
 Richie is a local visual review layer for versioned Markdown. It keeps Markdown canonical, captures browser feedback in temporary JSON, and exports a committed `-commented.md` review copy using `<<ASB: ...>>` markers.
 
-See the [user guide](user-guide-v00.md) for installation, review, and handoff instructions.
+See the [user guide](user-guide-v01.md) for installation, review, and handoff instructions.
 
 ## Development
 
@@ -31,4 +31,4 @@ The unit uses the currently installed Node 22 binary under Akhil's NVM installat
 
 Check it with `systemctl status richie` and inspect logs with `journalctl -u richie`. Stop it with `sudo systemctl disable --now richie`.
 
-The service keeps WSL running while enabled. Review JSON files are ignored by Git and are deleted only after a successful `Finish review` export. The agent reviews and commits the resulting `draft-vNN-commented.md` file.
+The service keeps WSL running while enabled. Review JSON files are ignored by Git and are deleted only after a successful `Finish review` action. Richie asks for confirmation before finishing, closes the review tab after the response, and does not export a file when there is no open feedback. The agent reviews and commits the resulting `draft-vNN-commented.md` file.
