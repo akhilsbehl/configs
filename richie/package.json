@@ -1,0 +1,29 @@
+{
+  "name": "richie",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "richie": "dist/src/cli.js" },
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "check": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "start": "node dist/src/service.js",
+    "review": "node dist/src/cli.js review"
+  },
+  "dependencies": {
+    "mermaid": "^11.12.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "rehype-stringify": "^10.0.1",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

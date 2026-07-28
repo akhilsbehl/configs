@@ -1,0 +1,22 @@
+[Unit]
+Description=Richie local Markdown review service
+After=network.target
+
+[Service]
+Type=simple
+User=akhil
+Group=akhil
+WorkingDirectory=/home/akhil/warchives/richie
+Environment=NODE_ENV=production
+Environment=RICHIE_HTTP_PORT=43173
+Environment=RICHIE_CONTROL_SOCKET=/run/richie/control.sock
+ExecStart=/home/akhil/.nvm/versions/node/v22.22.2/bin/node /home/akhil/warchives/richie/dist/src/service.js
+Restart=on-failure
+RestartSec=3
+RuntimeDirectory=richie
+RuntimeDirectoryMode=0700
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
