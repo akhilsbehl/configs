@@ -67,7 +67,7 @@ The installed system service uses the built output in this repository. Rebuild a
 
 Richie saves each operation immediately to a temporary sidecar named like `draft-vNN.review.json`. Each operation retains the selected source quote and source range.
 
-Hover over source-mapped text to open a `Comment`, `Replace`, and `Delete` menu beneath that text range. Use the toolbar for a selection that crosses multiple ranges.
+Hover over source-mapped text to open a `Comment`, `Replace`, and `Delete` menu beneath that text range. If text is visibly selected, the menu actions apply to the active selection; otherwise they apply to the hovered range. Use the toolbar for a selection that crosses multiple ranges.
 
 ### Tables and Mermaid diagrams
 

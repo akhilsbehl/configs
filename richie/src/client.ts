@@ -13,7 +13,7 @@ function parsed(element: Element | null, offset: number): Position | undefined {
 function selectionRange(): { start: Position; end: Position } | undefined {
   const selection = window.getSelection(); if (!selection || selection.isCollapsed) return undefined;
   const startElement = selection.anchorNode?.parentElement ?? null; const endElement = selection.focusNode?.parentElement ?? null;
-  const start = parsed(startElement, selection.anchorOffset); const end = parsed(endElement, selection.focusOffset); if (!start || !end || start.offset >= end.offset) return undefined; return { start, end };
+  const start = parsed(startElement, selection.anchorOffset); const end = parsed(endElement, selection.focusOffset); if (!start || !end || start.offset === end.offset) return undefined; return start.offset < end.offset ? { start, end } : { start: end, end: start };
 }
 async function post(name: string, input: unknown): Promise<unknown> { const response = await fetch(endpoint(name), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input) }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
 async function refresh(): Promise<void> { const state = await fetch(endpoint("state")).then((response) => response.json()) as { operations: Operation[] }; document.querySelector("#operations")!.innerHTML = state.operations.map((operation) => `<p><code>${operation.id}</code> ${operation.kind}: ${operation.replacement ?? operation.comment ?? operation.quote ?? ""}</p>`).join("") || "<p>None</p>"; }
@@ -31,10 +31,12 @@ function blockRange(element: Element): { start: Position; end: Position } | unde
 }
 function targetControl(label: string, scope: string, kind: string, element: Element): HTMLButtonElement {
   const button = document.createElement("button"); button.className = "richie-target"; button.textContent = label;
+  button.addEventListener("mousedown", (event) => event.preventDefault());
   button.addEventListener("click", async (event) => { event.preventDefault(); event.stopPropagation(); const range = blockRange(element); if (!range) return;
-    try { if (kind === "comment") { const comment = prompt("Comment:"); if (comment) await post("operations", { kind, scope, range, comment }); }
-      else if (kind === "replace") { const replacement = prompt("Replacement:"); if (replacement !== null) await post("operations", { kind, scope, range, replacement }); }
-      else if (confirm(`Mark this ${scope} for deletion?`)) await post("operations", { kind, scope, range }); await refresh();
+    const activeRange = selectionRange() ?? range;
+    try { if (kind === "comment") { const comment = prompt("Comment:"); if (comment) await post("operations", { kind, scope, range: activeRange, comment }); }
+      else if (kind === "replace") { const replacement = prompt("Replacement:"); if (replacement !== null) await post("operations", { kind, scope, range: activeRange, replacement }); }
+      else if (confirm(`Mark this ${scope} for deletion?`)) await post("operations", { kind, scope, range: activeRange }); await refresh();
     } catch (error) { alert((error as Error).message); }
   }); return button;
 }
