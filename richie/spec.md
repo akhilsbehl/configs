@@ -296,7 +296,7 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 
 **Source-mapped text actions**
 
-- Hovering source-mapped text exposes `Comment`, `Replace`, and `Delete` actions for that exact range.
+- Hovering source-mapped text opens a `Comment`, `Replace`, and `Delete` menu beneath that exact range without changing document flow.
 - The same actions remain available from the toolbar for selections spanning multiple source ranges.
 
 **Document comments**

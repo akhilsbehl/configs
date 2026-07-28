@@ -38,10 +38,30 @@ function targetControl(label: string, scope: string, kind: string, element: Elem
     } catch (error) { alert((error as Error).message); }
   }); return button;
 }
-document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block],details[data-md-mermaid-source]").forEach((element) => element.append(targetControl("Comment", "block", "comment", element)));
-[...document.querySelectorAll(".md-text-range,.mermaid-source-line")].forEach((element) => { element.append(targetControl("Comment", "range", "comment", element)); element.append(targetControl("Replace", "range", "replace", element)); element.append(targetControl("Delete", "range", "delete", element)); });
-document.querySelectorAll("td[data-md-block]").forEach((element) => { element.append(targetControl("Comment", "cell", "comment", element)); element.append(targetControl("Clear", "cell", "delete", element)); element.append(targetControl("Delete column", "column", "delete", element)); });
-document.querySelectorAll("tr[data-md-block]").forEach((element) => element.append(targetControl("Delete row", "row", "delete", element)));
+type TargetAction = { label: string; kind: string };
+function targetMenu(scope: string, element: Element, actions: TargetAction[]): void {
+  const menu = document.createElement("span"); menu.className = "richie-target-menu";
+  actions.forEach(({ label, kind }) => menu.append(targetControl(label, scope, kind, element)));
+  element.append(menu);
+  const hide = (): void => { menu.style.display = "none"; };
+  const position = (): void => {
+    if (menu.style.display === "none") return;
+    const rect = element.getBoundingClientRect();
+    const width = menu.offsetWidth;
+    const left = Math.min(Math.max(8, rect.left), Math.max(8, window.innerWidth - width - 8));
+    const below = rect.bottom + 6;
+    const top = below + menu.offsetHeight <= window.innerHeight - 8 ? below : Math.max(8, rect.top - menu.offsetHeight - 6);
+    menu.style.left = `${left}px`; menu.style.top = `${top}px`;
+  };
+  element.addEventListener("mouseenter", () => { menu.style.display = "flex"; position(); });
+  element.addEventListener("mouseleave", (event) => { if (!menu.contains(event.relatedTarget as Node | null)) hide(); });
+  menu.addEventListener("mouseleave", (event) => { if (!element.contains(event.relatedTarget as Node | null)) hide(); });
+  window.addEventListener("scroll", position, true); window.addEventListener("resize", position);
+}
+document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block],details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
+[...document.querySelectorAll(".md-text-range,.mermaid-source-line")].forEach((element) => targetMenu("range", element, [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Delete", kind: "delete" }]));
+document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Clear", kind: "delete" }, { label: "Delete column", kind: "delete" }]));
+document.querySelectorAll("tr[data-md-block]").forEach((element) => targetMenu("row", element, [{ label: "Delete row", kind: "delete" }]));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; try {
     if (action === "finish") {

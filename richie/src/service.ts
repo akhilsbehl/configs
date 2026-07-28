@@ -50,8 +50,8 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 #panel{position:fixed;right:20px;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel strong{color:var(--pine)}
 #operations p{margin:10px 0;padding:8px;background:var(--overlay);border-radius:6px;font-size:.86rem;overflow-wrap:anywhere}
-.richie-target{display:none;position:static;margin-left:6px;font-size:.72rem;white-space:nowrap;vertical-align:middle}
-h1:hover>.richie-target,h2:hover>.richie-target,h3:hover>.richie-target,td:hover>.richie-target,tr:hover>.richie-target,details:hover>.richie-target,.md-text-range:hover>.richie-target,.mermaid-source-line:hover>.richie-target{display:inline-block}
+.richie-target-menu{display:none;position:fixed;gap:4px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(87,82,121,.18);white-space:nowrap;z-index:10}
+.richie-target-menu .richie-target{margin:0}
 p:hover,h1:hover,h2:hover,h3:hover,td:hover,details:hover{outline:1px dashed var(--rose);outline-offset:3px}
 .review-note{color:var(--love);font-size:.9em}
 @media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}}
