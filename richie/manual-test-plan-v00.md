@@ -43,6 +43,86 @@ commented-output comparison deterministic. If a selection is hard to make with a
 mouse, use browser zoom at 100%, select from left to right, and repeat once from
 right to left where the case requests a reverse selection.
 
+## Standalone test surface
+
+All content named by the test cases is in this file. Do not open `richie-test.md`,
+another draft, or any external fixture while running the cases below.
+
+## Executive summary
+
+The Moonlight Railway Company runs the only train service that operates after
+midnight and before breakfast. Its locomotives run on **well-timed decisions**, a
+fuel source that is plentiful in theory and strangely scarce in practice.
+
+The railway connects seven small stations across the Valley of Unfinished Plans. It
+is trying to become the most **dependable** railway, not the largest. Read the
+[company noticeboard](https://example.com/moonlight-railway) for the public timetable.
+
+The route has a useful operating rhythm:
+
+1. Dispatch checks that the line is clear.
+2. The conductor confirms the passenger list.
+3. The dining car reports whether the buns are warm.
+4. The engine leaves when all three answers are known.
+
+If the buns are cold, the train may still depart. If the line is unsafe, it must
+not. **Comfort can be delayed; safety cannot.**
+
+> A timetable is a promise with columns.
+
+## Service catalogue
+
+| Service | Departure window | Best for | Known hazard |
+| --- | --- | --- | --- |
+| Moonbeam Local | 00:15-01:00 | Quiet journeys and reflective thinking | Excessive staring at the moon |
+| Comet Limited | 01:30-02:00 | Urgent parcels and dramatic entrances | Conductors speak in rhymes |
+| Orchard Sleeper | 02:45-03:15 | Deep sleep and complicated dreams | Apples may offer unsolicited advice |
+| Dawn Shunter | 04:30-05:00 | Early workers and late owls | Arrives before some passengers do |
+
+The catalogue changes seasonally. During meteor showers, the Comet Limited gains
+two carriages but loses its luggage van. During the annual Marmalade Festival, all
+trains stop at Orange Halt whether or not the timetable says so.
+
+The planning committee tracks its next actions:
+
+- [x] Confirm the ordinary passenger route.
+- [x] Count the emergency blankets.
+- [ ] Decide whether Orange Halt needs a permanent signal box.
+  - [ ] Ask the night signalmen.
+  - [ ] Check the marmalade storage plan.
+
+## Dispatch rules
+
+The dispatcher uses a small ruleset written in `night-operations.toml`.
+
+```bash
+if line_status != "clear":
+    hold_departure()
+else if passenger_count == 0:
+    send_empty_train()
+else:
+    ring_decision_bell()
+    depart()
+```
+
+## Mermaid route map
+
+The route map shows the ordinary passenger flow and an emergency diversion.
+
+```mermaid
+flowchart LR
+    A[Lantern Quay] --> B[Cedar Pass]
+    B --> C[Clockwork Orchard]
+    A --> D[Pigeon Observatory]
+    D --> C
+    B -. emergency diversion .-> E[Orange Halt]
+    E -.-> C
+    classDef station fill:#fff4c2,stroke:#6b4f1d,stroke-width:2px;
+    class A,B,C,D,E station;
+```
+
+The SVG is visual context. The Mermaid source below it is the review target.
+
 ## Case index
 
 | ID | Area | Main behavior |
@@ -812,4 +892,3 @@ The final paragraph is deliberately below a thematic break. Hover the paragraph 
 the break separately. Confirm the break has no review menu, while the paragraph has
 the ordinary block menu. This also verifies that unsupported rendered elements do
 not receive accidental controls.
-

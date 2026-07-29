@@ -76,7 +76,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 #guide-link:hover{background:#eadfd2}
 #navigation .search-box{margin:0 0 14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 #navigation .search-box input{width:100%}
-#navigation .search-box button{flex:1;padding:5px 7px;font-size:.78rem}
+#navigation .search-box button{flex:1 1 0;min-width:0;min-height:34px;padding:5px 7px;font-size:.78rem;white-space:nowrap}
 #panel strong{color:var(--pine)}
 .panel-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 #feedback-count{color:var(--subtle);font-size:.8rem}
