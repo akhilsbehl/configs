@@ -27,11 +27,18 @@ test("exports the exact selected quote in range annotations", () => {
   assert.equal(renderCommentedMarkdown(source, state), "Alpha beta <<ASB: [rvw_001] Comment on \"beta\": Check this word.>> gamma.\n");
 });
 
+test("exports the exact selected quote in deletion annotations", () => {
+  const source = "Alpha beta gamma.\n";
+  const state = newState("draft-v00.md", source);
+  state.operations.push({ id: "rvw_001", kind: "delete", status: "open", scope: "range", quote: "beta", range: { start: { offset: 6, line: 1, column: 7 }, end: { offset: 10, line: 1, column: 11 } }, createdAt: "2026-01-01T00:00:00Z" });
+  assert.equal(renderCommentedMarkdown(source, state), "Alpha beta <<ASB: [rvw_001] Delete \"beta\".>> gamma.\n");
+});
+
 test("exports a cell-specific marker for cell deletions", () => {
   const source = "| A |\n| - |\n| b |\n";
   const state = newState("draft-v00.md", source);
   state.operations.push({ id: "rvw_001", kind: "delete", status: "open", scope: "cell", quote: "b", range: { start: { offset: 14, line: 3, column: 3 }, end: { offset: 15, line: 3, column: 4 } }, createdAt: "2026-01-01T00:00:00Z" });
-  assert.match(renderCommentedMarkdown(source, state), /b <<ASB: \[rvw_001\] Clear this table cell\.>>/);
+  assert.match(renderCommentedMarkdown(source, state), /b <<ASB: \[rvw_001\] Clear the table cell "b"\.>>/);
 });
 
 test("exports document notes at the top and keeps code annotations outside fences", () => {
@@ -42,13 +49,27 @@ test("exports document notes at the top and keeps code annotations outside fence
   assert.equal(renderCommentedMarkdown(source, state), "<<ASB: [rvw_002] Lead with the recommendation.>>\n\n```mermaid\ngraph TD; A-->B\n```\n<<ASB: [rvw_001] Comment on \"A-->B\": Rename this edge.>>\n");
 });
 
+test("exports quoted deletion markers after ordinary and Mermaid code fences", () => {
+  const source = "```bash\nring_decision_bell()\n```\n\n```mermaid\nclassDef station\n```\n";
+  const state = newState("draft-v00.md", source);
+  const ordinaryQuote = "ring_decision_bell()";
+  const mermaidQuote = "classDef station";
+  const ordinaryStart = source.indexOf(ordinaryQuote);
+  const mermaidStart = source.indexOf(mermaidQuote);
+  state.operations.push({ id: "rvw_001", kind: "delete", status: "open", scope: "range", quote: ordinaryQuote, range: { start: { offset: ordinaryStart, line: 2, column: 1 }, end: { offset: ordinaryStart + ordinaryQuote.length, line: 2, column: ordinaryQuote.length + 1 } }, createdAt: "2026-01-01T00:00:00Z" });
+  state.operations.push({ id: "rvw_002", kind: "delete", status: "open", scope: "range", quote: mermaidQuote, range: { start: { offset: mermaidStart, line: 6, column: 1 }, end: { offset: mermaidStart + mermaidQuote.length, line: 6, column: mermaidQuote.length + 1 } }, createdAt: "2026-01-01T00:00:00Z" });
+  const output = renderCommentedMarkdown(source, state);
+  assert.match(output, /```\n<<ASB: \[rvw_001\] Delete "ring_decision_bell\(\)"\.>>\n\n```mermaid/);
+  assert.match(output, /```mermaid\nclassDef station\n```\n<<ASB: \[rvw_002\] Delete "classDef station"\.>>/);
+});
+
 test("marks every cell of a deleted table column inside its fences", () => {
   const source = "| A | B |\n| - | - |\n| 1 | 2 |\n";
   const state = newState("draft-v00.md", source);
   state.operations.push({ id: "rvw_001", kind: "delete", status: "open", scope: "column", quote: "B", range: { start: { offset: 6, line: 1, column: 7 }, end: { offset: 7, line: 1, column: 8 } }, createdAt: "2026-01-01T00:00:00Z" });
   const output = renderCommentedMarkdown(source, state);
-  assert.match(output, /\| A \| B  <<ASB: \[rvw_001\] Delete this table column\.>>\|/);
-  assert.match(output, /\| 1 \| 2  <<ASB: \[rvw_001\] Delete this table column\.>>\|/);
+  assert.match(output, /\| A \| B  <<ASB: \[rvw_001\] Delete the table column selected from "B"\.>>\|/);
+  assert.match(output, /\| 1 \| 2  <<ASB: \[rvw_001\] Delete the table column selected from "B"\.>>\|/);
 });
 
 test("detects whether a review has open feedback", () => {

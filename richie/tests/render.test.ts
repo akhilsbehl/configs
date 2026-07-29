@@ -30,3 +30,16 @@ test("syntax highlights Mermaid source without losing line ranges", () => {
   assert.match(html, /hljs-keyword/);
   assert.match(html, /hljs-operator/);
 });
+
+test("keeps invalid Mermaid source available for client-side render failures", () => {
+  const html = renderReviewHtml("```mermaid\nthis is not valid Mermaid\n```\n");
+  assert.match(html, /<div class="mermaid"[^>]*data-mermaid="this is not valid Mermaid"/);
+  assert.match(html, /<details class="mermaid-source"[^>]*data-md-mermaid-source>/);
+  assert.match(html, /class="mermaid-source-line"[^>]*>.*this is not valid Mermaid/);
+});
+
+test("renders unordered and ordered lists as source-aware block targets", () => {
+  const html = renderReviewHtml("- Alpha\n- Beta\n\n1. One\n2. Two\n");
+  assert.match(html, /<ul data-md-block="[^"]+"[^>]*data-md-range=/);
+  assert.match(html, /<ol data-md-block="[^"]+"[^>]*data-md-range=/);
+});

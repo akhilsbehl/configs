@@ -14,9 +14,10 @@ const publicDirectory = resolve(here, "..", "public");
 const style = `
 :root{color-scheme:light;--base:#faf4ed;--surface:#fffaf3;--overlay:#f2e9de;--muted:#9893a5;--subtle:#797593;--text:#575279;--pine:#286983;--foam:#56949f;--rose:#d7827e;--love:#b4637a;--gold:#ea9d34;--iris:#907aa9;--border:#dfd6cc}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 340px 56px}
+body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 350px 56px}
 #document{max-width:900px;margin:0 auto}
-#toolbar{position:sticky;top:12px;display:flex;flex-wrap:wrap;gap:8px;max-width:900px;margin:0 auto 24px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(87,82,121,.1);z-index:2}
+#toolbar{display:grid;gap:8px;margin:0 0 14px;padding:0 0 14px;border-bottom:1px solid var(--border)}
+#toolbar button{width:100%;min-height:36px}
 .search-box{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:.82rem;color:var(--subtle)}
 .search-box span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .search-box input{width:190px;padding:7px 9px;border:1px solid var(--border);border-radius:7px;background:#fffaf3;color:var(--text);font:inherit;font-size:.9rem}
@@ -39,7 +40,7 @@ dialog button.destructive{background:var(--love);border-color:var(--love)}
 #toolbar button[data-action=finish]:hover{background:#20556a}
 #toolbar button[data-action=abort]{background:var(--love);border-color:var(--love);color:#fffaf3}
 #toolbar button[data-action=abort]:hover{background:#9f5369}
-h1,h2,h3{color:var(--text);line-height:1.2;letter-spacing:-.02em;scroll-margin-top:108px}
+h1,h2,h3{color:var(--text);line-height:1.2;letter-spacing:-.02em;scroll-margin-top:24px}
 h1{font-size:2.2rem;margin:1.4em 0 .55em;padding-bottom:.25em;border-bottom:2px solid var(--rose)}
 h2{font-size:1.55rem;margin-top:1.8em;color:var(--pine)}
 h3{font-size:1.2rem;color:var(--iris)}
@@ -70,7 +71,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable{color:var(--gold)}
 .hljs-title,.hljs-section,.hljs-function .hljs-title{color:var(--iris);font-weight:600}
 .hljs-operator,.hljs-punctuation{color:var(--subtle)}
-#panel,#navigation{position:fixed;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
+#panel,#navigation{position:fixed;top:20px;width:290px;max-height:calc(100vh - 40px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel{right:20px}#navigation{left:20px;border-top-color:var(--foam)}
 #guide-link{display:block;margin:0 0 14px;padding:7px 9px;background:var(--overlay);border-radius:7px;font-weight:700;text-decoration:none}
 #guide-link:hover{background:#eadfd2}
@@ -97,6 +98,8 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .review-target{outline:2px solid rgba(215,130,126,.55);outline-offset:3px;border-radius:3px}
 .review-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
 .review-target[data-review-kind=replace]{background:rgba(234,157,52,.18)}
+.review-target[data-review-kind=replace][data-review-replacement]>*{text-decoration:line-through;text-decoration-color:var(--gold);text-decoration-thickness:2px}
+.review-target[data-review-kind=replace][data-review-replacement]::after{content:"Replacement: " attr(data-review-replacement);display:block;margin-top:5px;padding:3px 6px;background:#fffaf3;border-left:3px solid var(--gold);color:var(--text);font-style:normal;font-weight:600;text-decoration:none;white-space:pre-wrap}
 .review-target[data-review-kind=comment]{background:rgba(86,148,159,.16)}
 .review-column-target{outline:2px solid rgba(215,130,126,.55);outline-offset:-2px}
 .review-column-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
@@ -116,7 +119,7 @@ li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 .richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
 #stale-banner{position:sticky;top:0;z-index:3;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}
 .review-note{color:var(--love);font-size:.9em}
-@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box input{width:min(190px,50vw)}}
+@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}.search-box input{width:min(190px,50vw)}}
 `;
 
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {
@@ -131,6 +134,11 @@ function parseRange(value: unknown): ReviewOperation["range"] | undefined {
   const candidate = value as { start?: { offset?: number; line?: number; column?: number }; end?: { offset?: number; line?: number; column?: number } };
   if (typeof candidate.start?.offset !== "number" || typeof candidate.end?.offset !== "number") return undefined;
   return { start: { offset: candidate.start.offset, line: candidate.start.line ?? 0, column: candidate.start.column ?? 0 }, end: { offset: candidate.end.offset, line: candidate.end.line ?? 0, column: candidate.end.column ?? 0 } };
+}
+
+export function renderReviewPage(session: Pick<Session, "id" | "token" | "sourcePath">, source: string, stale = false): string {
+  const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
+  return `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
 }
 
 export class RichieService {
@@ -172,9 +180,7 @@ export class RichieService {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
       const stale = sha256(source) !== session.state.sourceSha256;
-      const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
-      return send(response, 200, page, "text/html");
+      return send(response, 200, renderReviewPage(session, source, stale), "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });
     const session = this.session(api[2], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });

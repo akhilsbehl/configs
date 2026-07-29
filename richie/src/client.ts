@@ -105,7 +105,7 @@ function makeHighlight(ranges: globalThis.Range[]): unknown {
   return constructor ? new constructor(...ranges) : undefined;
 }
 function clearReviewPresentation(): void {
-  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.classList.remove("review-target", "review-column-target"); });
+  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.removeAttribute("data-review-replacement"); element.classList.remove("review-target", "review-column-target"); });
   const highlights = reviewHighlights(); ["richie-comment", "richie-replace", "richie-delete"].forEach((name) => highlights?.delete(name));
 }
 function columnTargets(operation: Operation): HTMLElement[] {
@@ -122,7 +122,12 @@ function applyReviewPresentation(operations: Operation[]): void {
     if (operation.scope === "column") {
       columnTargets(operation).forEach((target) => { target.classList.add("review-column-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); });
     } else if (operation.scope !== "range") {
-      const target = operationTarget(operation); if (target) { target.classList.add("review-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); }
+      const target = operationTarget(operation); if (target) {
+        target.classList.add("review-target");
+        target.dataset.reviewKind = operation.kind;
+        target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim();
+        if (operation.kind === "replace" && operation.replacement) target.dataset.reviewReplacement = operation.replacement;
+      }
     }
     const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
   });
@@ -228,7 +233,18 @@ async function renderMermaid(): Promise<void> {
   mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
   for (const [index, element] of [...document.querySelectorAll<HTMLElement>(".mermaid")].entries()) {
     try { const result = await mermaid.render(`richie-mermaid-${index}`, element.dataset.mermaid ?? ""); element.innerHTML = result.svg; result.bindFunctions?.(element); }
-    catch (error) { element.insertAdjacentHTML("beforeend", `<p class="review-note">Mermaid did not render: ${(error as Error).message}</p>`); }
+    catch (error) {
+      const note = document.createElement("p");
+      note.className = "review-note";
+      note.textContent = `Mermaid did not render: ${(error as Error).message}`;
+      element.append(note);
+      const source = element.nextElementSibling;
+      if (source instanceof HTMLDetailsElement && source.matches("[data-md-mermaid-source]")) {
+        source.open = true;
+        const summary = source.querySelector("summary");
+        if (summary) summary.textContent = "Mermaid source (render failed)";
+      }
+    }
   }
 }
 function blockRange(element: Element): { start: Position; end: Position } | undefined {
@@ -278,9 +294,11 @@ const cancelHandoff = (): void => {
   hideTimer = undefined; showTimer = undefined;
 };
 function hideNow(): void {
+  cancelHandoff();
   targetPanel.style.display = "none";
   activeTarget?.classList.remove("richie-hover");
   activeTarget = undefined;
+  panelAnchor = undefined;
 }
 const hidePanel = (): void => {
   if (hideTimer !== undefined) window.clearTimeout(hideTimer);
@@ -328,6 +346,9 @@ document.addEventListener("selectionchange", () => {
     else if (!targetPanel.matches(":hover")) hideNow();
   });
 });
+document.querySelector("#document")!.addEventListener("contextmenu", (event) => {
+  if (selectionRange()) event.preventDefault();
+});
 targetPanel.addEventListener("mouseenter", cancelHandoff);
 targetPanel.addEventListener("mouseleave", hidePanel);
 window.addEventListener("scroll", () => {
@@ -339,7 +360,7 @@ document.addEventListener("keydown", (event) => {
   if (dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
   const target = event.target as HTMLElement | null;
   if (target?.closest("input,textarea,select,[contenteditable=true]")) return;
-  if (event.key === "Escape") { hideNow(); return; }
+  if (event.key === "Escape") { event.preventDefault(); hideNow(); return; }
   const kind = event.key === "c" ? "comment" : event.key === "r" ? "replace" : event.key === "d" ? "delete" : undefined;
   if (!kind) return;
   const range = selectionRange(); if (!range) return;
@@ -347,7 +368,10 @@ document.addEventListener("keydown", (event) => {
   void createOperation(kind, "range", range, window.getSelection()?.toString() ?? "");
 });
 document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block],p[data-md-block],ul[data-md-block],ol[data-md-block],blockquote[data-md-block],pre[data-md-block]").forEach((element) => {
-  if (!element.closest("td")) targetMenu("block", element, selectionActions);
+  if (element.closest("td")) return;
+  const list = element.matches("p") ? element.closest("ul[data-md-block],ol[data-md-block]") : null;
+  const actions = list ? [...selectionActions, { label: "Delete list", kind: "delete", scope: "block", target: list }] : selectionActions;
+  targetMenu("block", element, actions);
 });
 [...document.querySelectorAll(".mermaid-source-line,.code-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
 document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));

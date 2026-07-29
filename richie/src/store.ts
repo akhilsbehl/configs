@@ -50,13 +50,14 @@ export async function nextCommentedPath(sourcePath: string): Promise<string> {
 
 function marker(operation: ReviewOperation): string {
   const id = `[${operation.id}]`;
+  const quote = JSON.stringify(operation.quote ?? "selected text");
   if (operation.scope === "document") return `<<ASB: ${id} ${operation.comment ?? "Document note."}>>`;
-  if (operation.scope === "row") return `<<ASB: ${id} Delete this table row.>>`;
-  if (operation.scope === "column") return `<<ASB: ${id} Delete this table column.>>`;
-  if (operation.scope === "cell" && operation.kind === "delete") return `<<ASB: ${id} Clear this table cell.>>`;
-  if (operation.kind === "replace") return `<<ASB: ${id} Replace ${JSON.stringify(operation.quote ?? "selection")} with ${JSON.stringify(operation.replacement ?? "")}.>>`;
-  if (operation.kind === "delete") return `<<ASB: ${id} Delete the preceding selected text.>>`;
-  if (operation.scope === "range" && operation.quote) return `<<ASB: ${id} Comment on ${JSON.stringify(operation.quote)}: ${operation.comment ?? "Review this."}>>`;
+  if (operation.scope === "row") return `<<ASB: ${id} Delete the table row selected from ${quote}.>>`;
+  if (operation.scope === "column") return `<<ASB: ${id} Delete the table column selected from ${quote}.>>`;
+  if (operation.scope === "cell" && operation.kind === "delete") return `<<ASB: ${id} Clear the table cell ${quote}.>>`;
+  if (operation.kind === "replace") return `<<ASB: ${id} Replace ${quote} with ${JSON.stringify(operation.replacement ?? "")}.>>`;
+  if (operation.kind === "delete") return `<<ASB: ${id} Delete ${operation.scope === "block" ? "the block " : ""}${quote}.>>`;
+  if (operation.quote) return `<<ASB: ${id} Comment on ${operation.scope === "range" ? "" : `${operation.scope} `}${quote}: ${operation.comment ?? "Review this."}>>`;
   return `<<ASB: ${id} ${operation.comment ?? "Review this."}>>`;
 }
 

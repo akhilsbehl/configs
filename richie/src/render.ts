@@ -3,7 +3,7 @@ import hljs from "highlight.js";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 
-type Node = { type: string; value?: string; depth?: number; url?: string; lang?: string | null; checked?: boolean | null; align?: Array<string | null>; children?: Node[]; position?: { start: Position; end: Position } };
+type Node = { type: string; value?: string; depth?: number; url?: string; lang?: string | null; checked?: boolean | null; ordered?: boolean | null; align?: Array<string | null>; children?: Node[]; position?: { start: Position; end: Position } };
 type Position = { line: number; column: number; offset: number };
 
 const escape = (value: string): string => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -87,7 +87,7 @@ export function renderReviewHtml(source: string): string {
       case "break": return "<br>";
       case "thematicBreak": return "<hr>";
       case "blockquote": return `<blockquote${blockAttrs(node)}>${renderChildren(node)}</blockquote>`;
-      case "list": return `<${node.checked === null ? "ol" : "ul"}${blockAttrs(node)}>${renderChildren(node)}</${node.checked === null ? "ol" : "ul"}>`;
+      case "list": return `<${node.ordered ? "ol" : "ul"}${blockAttrs(node)}>${renderChildren(node)}</${node.ordered ? "ol" : "ul"}>`;
       case "listItem": return `<li${blockAttrs(node)}>${node.checked === true ? "<input type=\"checkbox\" checked disabled> " : node.checked === false ? "<input type=\"checkbox\" disabled> " : ""}${renderChildren(node)}</li>`;
       case "code": {
         if (node.lang !== "mermaid") {

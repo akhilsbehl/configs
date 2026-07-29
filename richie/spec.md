@@ -265,7 +265,7 @@ The sidecar must retain historical operations. It should not silently delete res
 The browser page contains:
 
 - A readable rendered Markdown document.
-- A restrained review toolbar with `Document level note`, `Abort review`, and `Finish review` actions.
+- A restrained vertical action group at the top of the right sidebar with `Document level note`, `Abort review`, and `Finish review`.
 - Source-mapped text affordances with `Comment`, `Replace`, and `Delete` actions for individual text ranges.
 - A left navigation sidebar for the document outline and a right review-inventory sidebar listing open operations.
 - Clear visual treatment for selected text, pending deletions, and replacements.
