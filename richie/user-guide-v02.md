@@ -1,0 +1,142 @@
+# Richie user guide
+
+Richie opens a local browser review surface for a Markdown file. Use it to record precise editorial feedback, then hand the generated commented copy to an agent for application to the next Markdown version.
+
+Markdown remains the source of truth. Richie does not edit the source file during review.
+
+## Before you start
+
+The input must be a readable file whose name ends in `.md`. Build Richie before using the CLI:
+
+```sh
+npm install
+npm run check
+npm test
+npm run build
+```
+
+The automated test command also builds the project. The separate build command is useful when you only need the runnable service.
+
+## Start Richie
+
+For a one-off session, start the service in one terminal:
+
+```sh
+npm start
+```
+
+Then open a draft from another terminal:
+
+```sh
+npm run review -- path/to/draft-vNN.md
+```
+
+If the `richie` executable is installed, the equivalent command is:
+
+```sh
+richie review path/to/draft-vNN.md
+```
+
+The CLI asks the local control socket to create a session and opens the review URL with `xdg-open`. The service listens only on `127.0.0.1:43173`.
+
+Check service status with:
+
+```sh
+richie status
+```
+
+If the service is unavailable, start it with:
+
+```sh
+sudo systemctl start richie
+```
+
+The installed system service uses the built output in this repository. Rebuild after source changes, then restart the service.
+
+## Review a draft
+
+1. Open the draft with `richie review path/to/draft-vNN.md`.
+2. Read the rendered document for hierarchy, wording, tables, and diagrams.
+3. Select text, then use the menu beneath the selected range, or press `c`, `r`, or `d`, for `Comment`, `Replace`, or `Delete`.
+4. Hover over a block for block-level feedback. Blocks include headings, paragraphs, lists, blockquotes, code blocks, table cells, and Mermaid source.
+5. Use `Document level note` for a cross-cutting instruction. It is added at the end of the commented copy.
+6. Check the feedback list on the right as you work. Each open item is highlighted in the document, can jump back to its source text, and comments and replacements can be edited in place with `Edit`.
+7. Use `Find in document` to search the rendered draft. `Previous` and `Next` move between matches, `Escape` clears the search. Matches may span formatting boundaries such as bold or linked text. The document outline navigates between headings.
+
+Richie saves each operation immediately to a temporary sidecar named like `draft-vNN.review.json`. Each operation retains the selected source quote and source range.
+
+Open feedback is shown inline with a color treatment by operation type and in the feedback panel. Use `Remove` on an individual item to undo it during the review; removal takes effect immediately without a confirmation. Removal preserves the operation in the sidecar history but marks it as superseded, so it is not exported.
+
+### Selections and hover menus
+
+Selecting text shows a `Comment`, `Replace`, and `Delete` menu beneath the selection. The same actions are available on the keyboard while text is selected: `c` for comment, `r` for replace, `d` for delete. `Escape` dismisses the menu.
+
+Hovering over a block briefly shows the same menu for that block. Hover menus act on the hovered block only; they do not appear while text is selected, and they never act on a selection. Deletion marks are recorded immediately without a confirmation dialog because every operation can be removed from the feedback panel.
+
+In dialogs, `Ctrl+Enter` confirms and `Escape` cancels. Comments show an excerpt of the text they target. Replacements must not be empty; use `Delete` to remove text.
+
+### Tables and Mermaid diagrams
+
+Tables support targeted review controls. Hover over a cell to comment on it, replace its contents, clear it, or mark its row or column for deletion. These actions create review operations and do not change the source table during the session.
+
+Mermaid code blocks render as diagrams in the review surface and also expose a `Mermaid source` view beneath the diagram. Expand the source view to select and comment on exact Mermaid lines. The SVG remains visual context; review operations attach to the Mermaid source, not to SVG nodes or edges. Richie does not provide direct source editing or diagram editing. If Mermaid cannot render a diagram, the review surface displays an inline warning and keeps the source view available.
+
+## Finish a review
+
+Click `Finish review` only when the feedback is complete. Richie asks for confirmation, verifies that the Markdown source has not changed, writes the next available commented copy, and removes the temporary review sidecar after a successful export. If there is no open feedback, Richie removes the empty review state without creating a commented file. After the response, the browser attempts to close the review tab.
+
+Click `Abort review` to discard the open feedback without exporting a commented file. Richie asks for confirmation, removes the review sidecar, closes the session, and attempts to close the browser tab.
+
+The output is named like:
+
+```text
+draft-vNN-commented.md
+```
+
+If that name already exists, Richie adds a numeric suffix. The output contains `<<ASB: ...>>` markers for open review operations. Review and apply those markers to the canonical Markdown source, then create the next versioned draft, for example `draft-v04.md` after reviewing `draft-v03.md`.
+
+Do not edit generated HTML as source. Do not treat the commented copy as the canonical draft.
+
+## Troubleshooting
+
+### “Richie service is unavailable”
+
+Start the service and check its status:
+
+```sh
+sudo systemctl start richie
+richie status
+```
+
+For service logs:
+
+```sh
+journalctl -u richie
+```
+
+### The review refuses to start
+
+Richie refuses non-Markdown paths, missing files, and files without read access. It also refuses to reuse a sidecar whose source hash does not match the current Markdown file. Finish the existing review first, or resolve the stale review state deliberately before starting another session.
+
+### The source changed during a review
+
+If the Markdown source changes while a session is open, the review page shows a warning banner, existing highlights may be misaligned, and new feedback is blocked. Restore the source to its reviewed state to continue, or abort the review. `Finish review` also refuses to export while the source differs; the saved feedback is retained in the sidecar.
+
+## WSL service installation
+
+To keep Richie available as a WSL service, build first and install the supplied unit:
+
+```sh
+npm run build
+sudo install -m 644 packaging/richie.service /etc/systemd/system/richie.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now richie
+```
+
+Check it with `systemctl status richie`. Stop and disable it with:
+
+```sh
+sudo systemctl disable --now richie
+```
+
+The unit currently points to the Node 22 binary at `/home/akhil/.nvm/versions/node/v22.22.2/bin/node`. Update `packaging/richie.service` if that installation moves.

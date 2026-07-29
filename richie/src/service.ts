@@ -31,7 +31,8 @@ dialog h2{margin:0 0 8px;font-size:1.25rem}
 dialog p{margin:0 0 16px;white-space:pre-wrap}
 dialog label{display:grid;gap:6px;margin:14px 0}
 dialog textarea{width:100%;min-height:110px;resize:vertical;padding:9px 11px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);font:inherit}
-dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:18px 0 0;padding:0}
+dialog menu{display:flex;flex-direction:row-reverse;justify-content:flex-start;gap:8px;margin:18px 0 0;padding:0}
+dialog [hidden]{display:none}
 dialog button[value=confirm]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
 dialog button.destructive{background:var(--love);border-color:var(--love)}
 #toolbar button[data-action=finish]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
@@ -103,7 +104,8 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .richie-target-menu .richie-target{margin:0}
 li:has(>input[type=checkbox])>p{display:inline}
 li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
-p:hover,h1:hover,h2:hover,h3:hover,td:hover,details:hover{outline:1px dashed var(--rose);outline-offset:3px}
+.richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
+#stale-banner{position:sticky;top:0;z-index:3;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}
 .review-note{color:var(--love);font-size:.9em}
 @media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box{margin-left:0}.search-box input{width:min(190px,50vw)}}
 `;
@@ -156,7 +158,9 @@ export class RichieService {
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="document-note">Document level note</button><label class="search-box"><span>Find in document</span><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output></label><button data-action="search-previous" aria-label="Previous search match">Previous</button><button data-action="search-next" aria-label="Next search match">Next</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="cancel">Cancel</button><button value="confirm">Confirm</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const stale = sha256(source) !== session.state.sourceSha256;
+      const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><label class="search-box"><span>Find in document</span><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output></label><button data-action="search-previous" aria-label="Previous search match">Previous</button><button data-action="search-next" aria-label="Next search match">Next</button><button data-action="finish">Finish review</button></div><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });
@@ -169,9 +173,21 @@ export class RichieService {
       operation.status = "superseded"; operation.updatedAt = new Date().toISOString();
       await writeState(session.sidecarPath, session.state); return send(response, 200, operation);
     }
+    if (api[1] === "operations" && request.method === "PATCH" && api[3]) {
+      const operation = session.state.operations.find((candidate) => candidate.id === api[3]);
+      if (!operation) return send(response, 404, { error: "Review operation not found" });
+      if (operation.status !== "open") return send(response, 409, { error: "Only open feedback can be edited" });
+      const input = await body(request) as Record<string, unknown>;
+      if (operation.kind === "comment" && typeof input.comment === "string" && input.comment.trim()) operation.comment = input.comment;
+      else if (operation.kind === "replace" && typeof input.replacement === "string" && input.replacement.trim()) operation.replacement = input.replacement;
+      else return send(response, 400, { error: "Nothing to update for this operation" });
+      operation.updatedAt = new Date().toISOString();
+      await writeState(session.sidecarPath, session.state); return send(response, 200, operation);
+    }
     if (api[1] === "operations" && request.method === "POST") {
       const input = await body(request) as Record<string, unknown>; const range = parseRange(input.range);
       const source = await readFile(session.sourcePath, "utf8");
+      if (sha256(source) !== session.state.sourceSha256) return send(response, 409, { error: "The Markdown source changed during the review. Restore the source or abort the review." });
       if (range && (range.start.offset < 0 || range.end.offset > source.length || range.start.offset >= range.end.offset)) return send(response, 400, { error: "Invalid source range" });
       const kind = input.kind; if (kind !== "delete" && kind !== "replace" && kind !== "comment") return send(response, 400, { error: "Invalid operation kind" });
       const scope = typeof input.scope === "string" ? input.scope : "range";

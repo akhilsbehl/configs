@@ -3,10 +3,11 @@ import mermaid from "mermaid";
 declare global { interface Window { __RICHIE__: { id: string; token: string } } }
 const context = window.__RICHIE__;
 const endpoint = (name: string) => `/api/${name}/${context.id}?token=${encodeURIComponent(context.token)}`;
+const operationEndpoint = (id: string) => `/api/operations/${context.id}/${encodeURIComponent(id)}?token=${encodeURIComponent(context.token)}`;
 type Position = { offset: number; line: number; column: number };
 type Range = { start: Position; end: Position };
 type Operation = { id: string; kind: "delete" | "replace" | "comment"; status: string; scope: string; range?: Range; comment?: string; replacement?: string; quote?: string };
-type DialogOptions = { title: string; message?: string; inputLabel?: string; confirmLabel?: string; destructive?: boolean };
+type DialogOptions = { title: string; message?: string; inputLabel?: string; inputValue?: string; confirmLabel?: string; destructive?: boolean };
 const dialog = document.querySelector<HTMLDialogElement>("#richie-dialog")!;
 const dialogTitle = dialog.querySelector<HTMLElement>("#richie-dialog-title")!;
 const dialogMessage = dialog.querySelector<HTMLElement>("#richie-dialog-message")!;
@@ -20,7 +21,7 @@ function modal(options: DialogOptions): Promise<string | boolean | undefined> {
   dialogMessage.hidden = !options.message;
   dialogField.hidden = !options.inputLabel;
   dialogField.querySelector("span")!.textContent = options.inputLabel ?? "";
-  dialogInput.value = "";
+  dialogInput.value = options.inputValue ?? "";
   dialogConfirm.textContent = options.confirmLabel ?? "Confirm";
   dialogConfirm.classList.toggle("destructive", options.destructive === true);
   dialogCancel.hidden = options.confirmLabel === "OK";
@@ -31,6 +32,13 @@ function modal(options: DialogOptions): Promise<string | boolean | undefined> {
     if (dialog.returnValue !== "confirm") resolve(undefined);
     else resolve(options.inputLabel ? dialogInput.value : true);
   }, { once: true }));
+}
+dialog.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) { event.preventDefault(); dialogConfirm.click(); }
+});
+function excerpt(value: string): string {
+  const compact = value.replace(/\s+/g, " ").trim();
+  return compact.length > 120 ? `${compact.slice(0, 117)}…` : compact;
 }
 function parsed(node: Node | null, offset: number): Position | undefined {
   const element = node instanceof Element ? node : node?.parentElement;
@@ -50,14 +58,15 @@ function selectionRange(): { start: Position; end: Position } | undefined {
   const start = parsed(selection.anchorNode, selection.anchorOffset); const end = parsed(selection.focusNode, selection.focusOffset); if (!start || !end || start.offset === end.offset) return undefined; return start.offset < end.offset ? { start, end } : { start: end, end: start };
 }
 async function post(name: string, input: unknown): Promise<unknown> { const response = await fetch(endpoint(name), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input) }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
-async function removeOperation(id: string): Promise<unknown> { const response = await fetch(`${endpoint("operations")}/${encodeURIComponent(id)}`, { method: "DELETE" }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
+async function removeOperation(id: string): Promise<unknown> { const response = await fetch(operationEndpoint(id), { method: "DELETE" }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
+async function patchOperation(id: string, input: unknown): Promise<unknown> { const response = await fetch(operationEndpoint(id), { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(input) }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
 function sourceRange(element: Element): Range | undefined {
   const value = element.getAttribute("data-md-range"); if (!value) return undefined;
   const [start, end, startLine, startColumn, endLine, endColumn] = value.split(":").map(Number);
   return { start: { offset: start, line: startLine, column: startColumn }, end: { offset: end, line: endLine, column: endColumn } };
 }
 function operationTarget(operation: Operation): Element | undefined {
-  if (!operation.range) return document.querySelector("#document");
+  if (!operation.range) return undefined;
   let best: Element | undefined; let bestSize = Number.POSITIVE_INFINITY;
   document.querySelectorAll<HTMLElement>("#document [data-md-range]").forEach((element) => {
     const range = sourceRange(element); if (!range || range.start.offset > operation.range!.start.offset || range.end.offset < operation.range!.end.offset) return;
@@ -110,7 +119,13 @@ function applyReviewPresentation(operations: Operation[]): void {
 }
 function operationSummary(operation: Operation): string {
   if (operation.kind === "replace") return `Replace with ${operation.replacement ?? "an empty value"}`;
-  if (operation.kind === "delete") return operation.scope === "range" ? "Mark selected text for deletion" : `Delete ${operation.scope}`;
+  if (operation.kind === "delete") {
+    if (operation.scope === "range") return "Mark the selected text for deletion";
+    if (operation.scope === "cell") return "Clear this cell";
+    if (operation.scope === "row") return "Delete this row";
+    if (operation.scope === "column") return "Delete this column";
+    return "Delete this block";
+  }
   return operation.comment ?? "Review this selection";
 }
 function renderFeedback(operations: Operation[]): void {
@@ -125,8 +140,19 @@ function renderFeedback(operations: Operation[]): void {
     const detail = document.createElement("p"); detail.className = "operation-detail"; detail.textContent = operationSummary(operation); card.append(detail);
     const actions = document.createElement("div"); actions.className = "operation-actions";
     if (operation.range) { const jump = document.createElement("button"); jump.textContent = "Jump to text"; jump.addEventListener("click", () => operationTarget(operation)?.scrollIntoView({ behavior: "smooth", block: "center" })); actions.append(jump); }
+    if (operation.kind !== "delete") {
+      const edit = document.createElement("button"); edit.textContent = "Edit";
+      edit.addEventListener("click", async () => {
+        const isComment = operation.kind === "comment";
+        const value = await modal({ title: isComment ? "Edit comment" : "Edit replacement", inputLabel: isComment ? "Comment" : "Replacement", inputValue: (isComment ? operation.comment : operation.replacement) ?? "", confirmLabel: "Save" });
+        if (value === undefined) return;
+        if (typeof value !== "string" || !value.trim()) { await modal({ title: isComment ? "Comment is empty" : "Replacement is empty", message: "Type a value, or cancel the dialog.", confirmLabel: "OK" }); return; }
+        try { await patchOperation(operation.id, isComment ? { comment: value } : { replacement: value }); await refresh(); }
+        catch (error) { await modal({ title: "Richie could not update the feedback", message: (error as Error).message, confirmLabel: "OK" }); }
+      });
+      actions.append(edit);
+    }
     const remove = document.createElement("button"); remove.textContent = "Remove"; remove.dataset.action = "remove-operation"; remove.addEventListener("click", async () => {
-      if (!await modal({ title: "Remove feedback", message: `${operation.id} will be removed from this review.`, confirmLabel: "Remove", destructive: true })) return;
       try { await removeOperation(operation.id); await refresh(); } catch (error) { await modal({ title: "Richie could not remove the feedback", message: (error as Error).message, confirmLabel: "OK" }); }
     }); actions.append(remove); card.append(actions); container.append(card);
   });
@@ -147,14 +173,31 @@ function applySearchHighlights(): void {
   if (highlights) { const all = makeHighlight(searchMatches); if (all) highlights.set("richie-search", all); if (searchIndex >= 0) { const current = makeHighlight([searchMatches[searchIndex]]); if (current) highlights.set("richie-search-current", current); } }
   else searchMatches.forEach((range, index) => { const parent = range.commonAncestorContainer.parentElement; parent?.classList.add(index === searchIndex ? "search-current" : "search-match"); });
 }
+type TextEntry = { node: Text; start: number };
+function collectDocumentText(): { entries: TextEntry[]; lowered: string } {
+  const entries: TextEntry[] = []; let full = "";
+  const walker = document.createTreeWalker(document.querySelector("#document")!, NodeFilter.SHOW_TEXT);
+  let node: Node | null;
+  while ((node = walker.nextNode())) { entries.push({ node: node as Text, start: full.length }); full += node.textContent ?? ""; }
+  return { entries, lowered: full.toLocaleLowerCase() };
+}
+function locateDocumentText(entries: TextEntry[], index: number, atEnd: boolean): { node: Text; offset: number } | undefined {
+  for (const entry of entries) {
+    const limit = entry.start + entry.node.length;
+    if ((atEnd ? index <= limit : index < limit) && index >= entry.start) return { node: entry.node, offset: index - entry.start };
+  }
+  return undefined;
+}
 function updateSearch(): void {
   const input = document.querySelector<HTMLInputElement>("#document-search")!; const query = input.value.trim().toLocaleLowerCase(); searchMatches = []; searchIndex = -1;
   if (query) {
-    const walker = document.createTreeWalker(document.querySelector("#document")!, NodeFilter.SHOW_TEXT);
-    let node: Node | null;
-    while ((node = walker.nextNode())) {
-      const text = node.textContent?.toLocaleLowerCase() ?? ""; let start = 0;
-      while (true) { const found = text.indexOf(query, start); if (found < 0) break; const range = document.createRange(); range.setStart(node, found); range.setEnd(node, found + query.length); searchMatches.push(range); start = found + Math.max(query.length, 1); }
+    const { entries, lowered } = collectDocumentText();
+    let start = 0;
+    while (true) {
+      const found = lowered.indexOf(query, start); if (found < 0) break;
+      const from = locateDocumentText(entries, found, false); const to = locateDocumentText(entries, found + query.length, true);
+      if (from && to) { const range = document.createRange(); range.setStart(from.node, from.offset); range.setEnd(to.node, to.offset); searchMatches.push(range); }
+      start = found + Math.max(query.length, 1);
     }
     if (searchMatches.length) searchIndex = 0;
   }
@@ -178,22 +221,40 @@ function blockRange(element: Element): { start: Position; end: Position } | unde
   const [start, end, startLine, startColumn, endLine, endColumn] = value.split(":").map(Number);
   return { start: { offset: start, line: startLine, column: startColumn }, end: { offset: end, line: endLine, column: endColumn } };
 }
-function targetControl(label: string, scope: string, kind: string, element: Element): HTMLButtonElement {
+async function createOperation(kind: string, scope: string, range: Range | undefined, targetText: string): Promise<void> {
+  try {
+    if (kind === "comment") {
+      const comment = await modal({ title: "Add comment", message: targetText.trim() ? `Commenting on: ${excerpt(targetText)}` : undefined, inputLabel: "Comment", confirmLabel: "Add comment" });
+      if (comment === undefined) return;
+      if (typeof comment !== "string" || !comment.trim()) { await modal({ title: "Comment is empty", message: "Type a comment, or cancel the dialog.", confirmLabel: "OK" }); return; }
+      await post("operations", { kind, scope, range, comment });
+    } else if (kind === "replace") {
+      const replacement = await modal({ title: "Replace text", message: `Text to replace: ${excerpt(targetText)}`, inputLabel: "Replacement", confirmLabel: "Replace" });
+      if (replacement === undefined) return;
+      if (typeof replacement !== "string" || !replacement.trim()) { await modal({ title: "Replacement is empty", message: "Type the replacement text, or use Delete to remove the text instead.", confirmLabel: "OK" }); return; }
+      await post("operations", { kind, scope, range, replacement });
+    } else {
+      await post("operations", { kind, scope, range });
+    }
+    window.getSelection()?.removeAllRanges();
+    hideNow();
+    await refresh();
+  } catch (error) { await modal({ title: "Richie could not save the review", message: (error as Error).message, confirmLabel: "OK" }); }
+}
+function targetControl(label: string, scope: string, kind: string, element: Element | undefined): HTMLButtonElement {
   const button = document.createElement("button"); button.className = "richie-target"; button.textContent = label;
   button.addEventListener("mousedown", (event) => event.preventDefault());
-  button.addEventListener("click", async (event) => { event.preventDefault(); event.stopPropagation();
-    const selection = window.getSelection(); const selectedRange = selectionRange(); const activeRange = selectedRange ?? blockRange(element); if (!activeRange) return;
-    const activeScope = selectedRange ? "range" : scope;
-    const targetText = (selectedRange ? selection?.toString() : element.textContent)?.trim() ?? "";
-    try { if (kind === "comment") { const comment = await modal({ title: "Add comment", inputLabel: "Comment", confirmLabel: "Add comment" }); if (typeof comment === "string" && comment) await post("operations", { kind, scope: activeScope, range: activeRange, comment }); }
-      else if (kind === "replace") { const replacement = await modal({ title: "Replace text", message: `Text to replace: ${targetText}`, inputLabel: "Replacement", confirmLabel: "Replace" }); if (typeof replacement === "string") await post("operations", { kind, scope: activeScope, range: activeRange, replacement }); }
-      else if (await modal({ title: `Delete ${activeScope}`, message: `Mark this ${activeScope} for deletion?`, confirmLabel: "Delete", destructive: true })) await post("operations", { kind, scope: activeScope, range: activeRange }); await refresh();
-    } catch (error) { await modal({ title: "Richie could not save the review", message: (error as Error).message, confirmLabel: "OK" }); }
-  }); return button;
+  button.addEventListener("click", (event) => {
+    event.preventDefault(); event.stopPropagation();
+    if (element) { const range = blockRange(element); if (range) void createOperation(kind, scope, range, element.textContent ?? ""); }
+    else { const range = selectionRange(); if (range) void createOperation(kind, "range", range, window.getSelection()?.toString() ?? ""); }
+  });
+  return button;
 }
 type TargetAction = { label: string; kind: string; scope?: string; target?: Element };
 const targetPanel = document.createElement("span"); targetPanel.className = "richie-target-menu"; document.body.append(targetPanel);
 let activeTarget: Element | undefined;
+let panelAnchor: (() => DOMRect | undefined) | undefined;
 let hideTimer: number | undefined;
 let showTimer: number | undefined;
 const cancelHandoff = (): void => {
@@ -201,11 +262,16 @@ const cancelHandoff = (): void => {
   if (showTimer !== undefined) window.clearTimeout(showTimer);
   hideTimer = undefined; showTimer = undefined;
 };
+function hideNow(): void {
+  targetPanel.style.display = "none";
+  activeTarget?.classList.remove("richie-hover");
+  activeTarget = undefined;
+}
 const hidePanel = (): void => {
   if (hideTimer !== undefined) window.clearTimeout(hideTimer);
   hideTimer = window.setTimeout(() => {
     hideTimer = undefined;
-    if (!selectionRange()) targetPanel.style.display = "none";
+    if (!selectionRange()) hideNow();
   }, 180);
 };
 function positionPanel(rect: DOMRect): void {
@@ -215,38 +281,65 @@ function positionPanel(rect: DOMRect): void {
   const top = below + targetPanel.offsetHeight <= window.innerHeight - 8 ? below : Math.max(8, rect.top - targetPanel.offsetHeight - 6);
   targetPanel.style.left = `${left}px`; targetPanel.style.top = `${top}px`;
 }
-function showPanel(scope: string, element: Element, actions: TargetAction[], rect = element.getBoundingClientRect()): void {
-  cancelHandoff(); activeTarget = element; targetPanel.replaceChildren();
-  actions.forEach(({ label, kind, scope: actionScope, target }) => targetPanel.append(targetControl(label, actionScope ?? scope, kind, target ?? element)));
+function showPanel(scope: string, element: Element | undefined, actions: TargetAction[], rect = element?.getBoundingClientRect()): void {
+  if (!rect) return;
+  cancelHandoff();
+  activeTarget?.classList.remove("richie-hover");
+  activeTarget = element;
+  element?.classList.add("richie-hover");
+  targetPanel.replaceChildren();
+  actions.forEach(({ label, kind, scope: actionScope, target }) => targetPanel.append(targetControl(label, actionScope ?? scope, kind, element ? (target ?? element) : undefined)));
   targetPanel.style.display = "flex"; positionPanel(rect);
+  panelAnchor = element
+    ? () => element.getBoundingClientRect()
+    : () => { const selection = window.getSelection(); return selection?.rangeCount && !selection.isCollapsed ? selection.getRangeAt(0).getBoundingClientRect() : undefined; };
 }
 function targetMenu(scope: string, element: Element, actions: TargetAction[]): void {
   element.addEventListener("mouseenter", () => {
     if (selectionRange()) return;
-    if (hideTimer === undefined) showPanel(scope, element, actions);
-    else showTimer = window.setTimeout(() => showPanel(scope, element, actions), 200);
+    cancelHandoff();
+    showTimer = window.setTimeout(() => { showTimer = undefined; showPanel(scope, element, actions); }, 220);
   });
-  element.addEventListener("mouseleave", hidePanel);
+  element.addEventListener("mouseleave", () => {
+    if (showTimer !== undefined) { window.clearTimeout(showTimer); showTimer = undefined; }
+    hidePanel();
+  });
 }
 const selectionActions: TargetAction[] = [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Delete", kind: "delete" }];
 document.addEventListener("selectionchange", () => {
   window.setTimeout(() => {
     const range = selectionRange(); const selection = window.getSelection();
-    if (range && selection?.rangeCount) showPanel("range", activeTarget ?? document.querySelector("#document")!, selectionActions, selection.getRangeAt(0).getBoundingClientRect());
-    else if (!targetPanel.matches(":hover")) targetPanel.style.display = "none";
+    if (range && selection?.rangeCount) showPanel("range", undefined, selectionActions, selection.getRangeAt(0).getBoundingClientRect());
+    else if (!targetPanel.matches(":hover")) hideNow();
   });
 });
 targetPanel.addEventListener("mouseenter", cancelHandoff);
 targetPanel.addEventListener("mouseleave", hidePanel);
-window.addEventListener("scroll", () => { if (selectionRange()) targetPanel.style.display = "none"; }, true);
-document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block],p[data-md-block]").forEach((element) => {
+window.addEventListener("scroll", () => {
+  if (targetPanel.style.display === "none" || !panelAnchor) return;
+  const rect = panelAnchor();
+  if (rect && rect.bottom > 0 && rect.top < window.innerHeight) positionPanel(rect); else hideNow();
+}, true);
+document.addEventListener("keydown", (event) => {
+  if (dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
+  const target = event.target as HTMLElement | null;
+  if (target?.closest("input,textarea,select,[contenteditable=true]")) return;
+  if (event.key === "Escape") { hideNow(); return; }
+  const kind = event.key === "c" ? "comment" : event.key === "r" ? "replace" : event.key === "d" ? "delete" : undefined;
+  if (!kind) return;
+  const range = selectionRange(); if (!range) return;
+  event.preventDefault();
+  void createOperation(kind, "range", range, window.getSelection()?.toString() ?? "");
+});
+document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block],p[data-md-block],ul[data-md-block],ol[data-md-block],blockquote[data-md-block],pre[data-md-block]").forEach((element) => {
   if (!element.closest("td")) targetMenu("block", element, selectionActions);
 });
 [...document.querySelectorAll(".mermaid-source-line,.code-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
 document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
-document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
+document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
-  const action = (event.target as HTMLElement).dataset.action; try {
+  const action = (event.target as HTMLElement).dataset.action; if (!action) return;
+  try {
     if (action === "search-next") { moveSearch(1); return; }
     if (action === "search-previous") { moveSearch(-1); return; }
     if (action === "finish") {
@@ -262,12 +355,20 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
       window.close();
       return;
     }
-    if (action === "document-note") { const comment = await modal({ title: "Document level note", message: "This note will be added at the end.", inputLabel: "Comment", confirmLabel: "Add note" }); if (typeof comment === "string" && comment) await post("operations", { kind: "comment", scope: "document", placement: "end", comment }); await refresh(); return; }
-    else { const range = selectionRange(); if (!range) throw new Error("Select text first."); if (action === "replace") { const replacement = await modal({ title: "Replace text", message: `Text to replace: ${window.getSelection()?.toString().trim() ?? ""}`, inputLabel: "Replacement", confirmLabel: "Replace" }); if (typeof replacement === "string") await post("operations", { kind: "replace", scope: "range", range, replacement }); } else if (action === "comment") { const comment = await modal({ title: "Add comment", inputLabel: "Comment", confirmLabel: "Add comment" }); if (typeof comment === "string" && comment) await post("operations", { kind: "comment", scope: "range", range, comment }); } else if (action === "delete" && await modal({ title: "Delete selected text", message: "Mark the selected text for deletion?", confirmLabel: "Delete", destructive: true })) await post("operations", { kind: "delete", scope: "range", range }); }
-    await refresh();
+    if (action === "document-note") {
+      const comment = await modal({ title: "Document level note", message: "This note will be added at the end of the commented copy.", inputLabel: "Comment", confirmLabel: "Add note" });
+      if (comment === undefined) return;
+      if (typeof comment !== "string" || !comment.trim()) { await modal({ title: "Comment is empty", message: "Type a comment, or cancel the dialog.", confirmLabel: "OK" }); return; }
+      await post("operations", { kind: "comment", scope: "document", placement: "end", comment });
+      await refresh();
+    }
   } catch (error) { await modal({ title: "Richie could not complete the action", message: (error as Error).message, confirmLabel: "OK" }); }
 });
 refresh();
 renderMermaid();
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("input", updateSearch);
-document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); moveSearch(event.shiftKey ? -1 : 1); } });
+document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("keydown", (event) => {
+  const input = event.target as HTMLInputElement;
+  if (event.key === "Enter") { event.preventDefault(); moveSearch(event.shiftKey ? -1 : 1); }
+  if (event.key === "Escape") { event.preventDefault(); input.value = ""; updateSearch(); input.blur(); }
+});

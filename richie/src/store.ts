@@ -8,7 +8,7 @@ export const sha256 = (value: string): string => createHash("sha256").update(val
 
 export async function assertMarkdownFile(sourcePath: string): Promise<string> {
   if (!sourcePath.endsWith(".md")) throw new Error("Richie accepts Markdown files ending in .md");
-  await access(sourcePath, constants.R_OK | constants.W_OK);
+  await access(sourcePath, constants.R_OK);
   return readFile(sourcePath, "utf8");
 }
 
@@ -46,6 +46,7 @@ function marker(operation: ReviewOperation): string {
   if (operation.scope === "document") return `<<ASB: ${id} ${operation.comment ?? "Document note."}>>`;
   if (operation.scope === "row") return `<<ASB: ${id} Delete this table row.>>`;
   if (operation.scope === "column") return `<<ASB: ${id} Delete this table column.>>`;
+  if (operation.scope === "cell" && operation.kind === "delete") return `<<ASB: ${id} Clear this table cell.>>`;
   if (operation.kind === "replace") return `<<ASB: ${id} Replace ${JSON.stringify(operation.quote ?? "selection")} with ${JSON.stringify(operation.replacement ?? "")}.>>`;
   if (operation.kind === "delete") return `<<ASB: ${id} Delete the preceding selected text.>>`;
   if (operation.scope === "range" && operation.quote) return `<<ASB: ${id} Comment on ${JSON.stringify(operation.quote)}: ${operation.comment ?? "Review this."}>>`;
