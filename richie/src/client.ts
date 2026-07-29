@@ -79,8 +79,19 @@ type TargetAction = { label: string; kind: string; scope?: string; target?: Elem
 const targetPanel = document.createElement("span"); targetPanel.className = "richie-target-menu"; document.body.append(targetPanel);
 let activeTarget: Element | undefined;
 let hideTimer: number | undefined;
-const cancelHide = (): void => { if (hideTimer !== undefined) window.clearTimeout(hideTimer); };
-const hidePanel = (): void => { cancelHide(); hideTimer = window.setTimeout(() => { if (!selectionRange()) targetPanel.style.display = "none"; }, 180); };
+let showTimer: number | undefined;
+const cancelHandoff = (): void => {
+  if (hideTimer !== undefined) window.clearTimeout(hideTimer);
+  if (showTimer !== undefined) window.clearTimeout(showTimer);
+  hideTimer = undefined; showTimer = undefined;
+};
+const hidePanel = (): void => {
+  if (hideTimer !== undefined) window.clearTimeout(hideTimer);
+  hideTimer = window.setTimeout(() => {
+    hideTimer = undefined;
+    if (!selectionRange()) targetPanel.style.display = "none";
+  }, 180);
+};
 function positionPanel(rect: DOMRect): void {
   const width = targetPanel.offsetWidth;
   const left = Math.min(Math.max(8, rect.left), Math.max(8, window.innerWidth - width - 8));
@@ -89,12 +100,16 @@ function positionPanel(rect: DOMRect): void {
   targetPanel.style.left = `${left}px`; targetPanel.style.top = `${top}px`;
 }
 function showPanel(scope: string, element: Element, actions: TargetAction[], rect = element.getBoundingClientRect()): void {
-  cancelHide(); activeTarget = element; targetPanel.replaceChildren();
+  cancelHandoff(); activeTarget = element; targetPanel.replaceChildren();
   actions.forEach(({ label, kind, scope: actionScope, target }) => targetPanel.append(targetControl(label, actionScope ?? scope, kind, target ?? element)));
   targetPanel.style.display = "flex"; positionPanel(rect);
 }
 function targetMenu(scope: string, element: Element, actions: TargetAction[]): void {
-  element.addEventListener("mouseenter", () => { if (!selectionRange()) showPanel(scope, element, actions); });
+  element.addEventListener("mouseenter", () => {
+    if (selectionRange()) return;
+    if (hideTimer === undefined) showPanel(scope, element, actions);
+    else showTimer = window.setTimeout(() => showPanel(scope, element, actions), 200);
+  });
   element.addEventListener("mouseleave", hidePanel);
 }
 const selectionActions: TargetAction[] = [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Delete", kind: "delete" }];
@@ -105,7 +120,7 @@ document.addEventListener("selectionchange", () => {
     else if (!targetPanel.matches(":hover")) targetPanel.style.display = "none";
   });
 });
-targetPanel.addEventListener("mouseenter", cancelHide);
+targetPanel.addEventListener("mouseenter", cancelHandoff);
 targetPanel.addEventListener("mouseleave", hidePanel);
 window.addEventListener("scroll", () => { if (selectionRange()) targetPanel.style.display = "none"; }, true);
 document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block],p[data-md-block]").forEach((element) => {

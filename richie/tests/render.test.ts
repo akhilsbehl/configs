@@ -11,7 +11,7 @@ test("renders source-aware inline Markdown and GFM tables", () => {
   assert.match(html, /data-mermaid=/);
   assert.match(html, /class="mermaid-source"/);
   assert.match(html, /class="mermaid-source-line" data-md-range=/);
-  assert.match(html, /class="md-text">graph TD/);
+  assert.match(html, /class="md-text"><span class="hljs-keyword">graph<\/span>/);
   assert.match(html, /class="md-text-range" data-md-range=/);
   assert.match(html, /graph TD; A--&gt;B/);
 });
@@ -20,5 +20,13 @@ test("renders checklist controls beside paragraph text and source-aware code blo
   const html = renderReviewHtml("- [ ] Review this\n\n```ts\nconst answer = 42;\n```\n");
   assert.match(html, /<li[^>]*><input type="checkbox" disabled> <p/);
   assert.match(html, /<pre data-md-block="[^"]+"[^>]*data-md-range=/);
-  assert.match(html, /<code class="language-ts"><span class="code-source-line" data-md-range="[^"]+"><span class="md-text">const answer = 42;<\/span><\/span><\/code>/);
+  assert.match(html, /<code class="language-ts"><span class="code-source-line" data-md-range="[^"]+"><span class="md-text">.*hljs-keyword.*const.*hljs-number.*42.*<\/span><\/span><\/code>/);
+  assert.doesNotMatch(html, /<\/span>\n<span class="code-source-line"/);
+});
+
+test("syntax highlights Mermaid source without losing line ranges", () => {
+  const html = renderReviewHtml("```mermaid\ngraph TD\nA-->B\n```\n");
+  assert.match(html, /class="mermaid-source-line" data-md-range="[^"]+"/);
+  assert.match(html, /hljs-keyword/);
+  assert.match(html, /hljs-operator/);
 });

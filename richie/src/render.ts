@@ -1,4 +1,5 @@
 import { unified } from "unified";
+import hljs from "highlight.js";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 
@@ -7,6 +8,17 @@ type Position = { line: number; column: number; offset: number };
 
 const escape = (value: string): string => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const slug = (value: string): string => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "section";
+hljs.registerLanguage("mermaid", (language) => ({
+  name: "Mermaid",
+  case_insensitive: true,
+  keywords: "graph flowchart sequenceDiagram classDiagram stateDiagram erDiagram journey gantt pie quadrantChart requirementDiagram gitGraph mindmap timeline subgraph end direction TB TD BT RL LR",
+  contains: [
+    language.COMMENT("%%", "$"),
+    language.QUOTE_STRING_MODE,
+    { scope: "operator", begin: /-->|---|-\.-|==>|==|--/ },
+    { scope: "title", begin: /[A-Za-z_][\w-]*(?=\s*[\[(\{])/ },
+  ],
+}));
 
 export function parseMarkdown(source: string): Node {
   return unified().use(remarkParse).use(remarkGfm).parse(source) as unknown as Node;
@@ -24,7 +36,11 @@ export function renderReviewHtml(source: string): string {
   const renderChildren = (node: Node): string => (node.children ?? []).map(render).join("");
   const text = (node: Node): string => (node.children ?? []).map((child) => child.value ?? text(child)).join("");
   const blockAttrs = (node: Node): string => ` data-md-block="b-${++block}" data-heading-path="${escape(JSON.stringify(headings))}"${range(node)}`;
-  const sourceLines = (node: Node, className: string): string => {
+  const highlighted = (value: string, language?: string | null): string => {
+    if (language && hljs.getLanguage(language)) return hljs.highlight(value, { language, ignoreIllegals: true }).value;
+    return language ? escape(value) : hljs.highlightAuto(value).value;
+  };
+  const sourceLines = (node: Node, className: string, language?: string | null): string => {
     const position = node.position;
     const value = node.value ?? "";
     if (!position) return escape(value);
@@ -40,13 +56,13 @@ export function renderReviewHtml(source: string): string {
       const lineNumber = position.start.line + index + 1;
       const lineColumn = index === 0 ? position.start.column : 1;
       cursor = newline < 0 ? position.end.offset : newline + 1;
-      return `<span class="${className}" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}"><span class="md-text">${escape(line)}</span></span>`;
-    }).join("\n");
+      return `<span class="${className}" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}"><span class="md-text">${highlighted(line, language)}</span></span>`;
+    }).join("");
   };
   const mermaidSource = (node: Node): string => {
     const value = node.value ?? "";
     if (!node.position) return `<pre><code>${escape(value)}</code></pre>`;
-    const rendered = sourceLines(node, "mermaid-source-line");
+    const rendered = sourceLines(node, "mermaid-source-line", "mermaid");
     return `<pre><code>${rendered}</code></pre>`;
   };
   const render = (node: Node): string => {
@@ -76,7 +92,7 @@ export function renderReviewHtml(source: string): string {
       case "code": {
         if (node.lang !== "mermaid") {
           const attrs = blockAttrs(node);
-          return `<pre${attrs}><code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line")}</code></pre>`;
+          return `<pre${attrs}><code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line", node.lang)}</code></pre>`;
         }
         const attrs = blockAttrs(node);
         return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}</details>`;

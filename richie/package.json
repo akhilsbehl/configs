@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "bin": { "richie": "dist/src/cli.js" },
-  "engines": { "node": ">=22" },
+  "bin": {
+    "richie": "dist/src/cli.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.server.json",
     "check": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit",
@@ -13,11 +17,12 @@
     "review": "node dist/src/cli.js review"
   },
   "dependencies": {
+    "highlight.js": "^11.11.1",
     "mermaid": "^11.12.1",
+    "rehype-stringify": "^10.0.1",
     "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
-    "rehype-stringify": "^10.0.1",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },

@@ -59,6 +59,12 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .mermaid-source pre{margin:0;border:0;border-radius:0;box-shadow:none}
 .mermaid-source-line,.code-source-line{display:block;min-height:1.6em}
 .mermaid-source-line:hover,.code-source-line:hover{background:rgba(215,130,126,.18)}
+.hljs-comment,.hljs-quote{color:var(--muted);font-style:italic}
+.hljs-keyword,.hljs-selector-tag,.hljs-built_in,.hljs-type{color:var(--love);font-weight:600}
+.hljs-string,.hljs-attribute,.hljs-symbol,.hljs-bullet{color:var(--pine)}
+.hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable{color:var(--gold)}
+.hljs-title,.hljs-section,.hljs-function .hljs-title{color:var(--iris);font-weight:600}
+.hljs-operator,.hljs-punctuation{color:var(--subtle)}
 #panel{position:fixed;right:20px;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel strong{color:var(--pine)}
 #operations p{margin:10px 0;padding:8px;background:var(--overlay);border-radius:6px;font-size:.86rem;overflow-wrap:anywhere}
