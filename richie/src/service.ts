@@ -17,7 +17,7 @@ const style = `
 body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 340px 56px}
 #document{max-width:900px;margin:0 auto}
 #toolbar{position:sticky;top:12px;display:flex;flex-wrap:wrap;gap:8px;max-width:900px;margin:0 auto 24px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(87,82,121,.1);z-index:2}
-.search-box{display:flex;align-items:center;gap:7px;margin-left:auto;font-size:.82rem;color:var(--subtle)}
+.search-box{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:.82rem;color:var(--subtle)}
 .search-box span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .search-box input{width:190px;padding:7px 9px;border:1px solid var(--border);border-radius:7px;background:#fffaf3;color:var(--text);font:inherit;font-size:.9rem}
 .search-box output{min-width:44px;color:var(--subtle);font-variant-numeric:tabular-nums}
@@ -72,6 +72,11 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .hljs-operator,.hljs-punctuation{color:var(--subtle)}
 #panel,#navigation{position:fixed;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel{right:20px}#navigation{left:20px;border-top-color:var(--foam)}
+#guide-link{display:block;margin:0 0 14px;padding:7px 9px;background:var(--overlay);border-radius:7px;font-weight:700;text-decoration:none}
+#guide-link:hover{background:#eadfd2}
+#navigation .search-box{margin:0 0 14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+#navigation .search-box input{width:100%}
+#navigation .search-box button{flex:1;padding:5px 7px;font-size:.78rem}
 #panel strong{color:var(--pine)}
 .panel-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 #feedback-count{color:var(--subtle);font-size:.8rem}
@@ -103,6 +108,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 ::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 ::highlight(richie-delete){background:rgba(180,99,122,.22);text-decoration:line-through;text-decoration-color:var(--love);text-decoration-thickness:2px}
 ::highlight(richie-search){background:rgba(144,122,169,.3)}
+::highlight(richie-search-current){background:rgba(234,157,52,.6)}
 .richie-target-menu{display:none;position:fixed;gap:4px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(87,82,121,.18);white-space:nowrap;z-index:10}
 .richie-target-menu .richie-target{margin:0}
 li:has(>input[type=checkbox])>p{display:inline}
@@ -110,7 +116,7 @@ li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 .richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
 #stale-banner{position:sticky;top:0;z-index:3;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}
 .review-note{color:var(--love);font-size:.9em}
-@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box{margin-left:0}.search-box input{width:min(190px,50vw)}}
+@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box input{width:min(190px,50vw)}}
 `;
 
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {
@@ -158,12 +164,16 @@ export class RichieService {
       if (!/^[A-Za-z0-9._-]+\.js$/.test(asset)) return send(response, 404, { error: "Asset not found" });
       return send(response, 200, await readFile(join(publicDirectory, asset), "utf8"), "text/javascript");
     }
+    if (url.pathname === "/guide" && request.method === "GET") {
+      const guide = await readFile(resolve(here, "..", "..", "user-guide.md"), "utf8");
+      return send(response, 200, `<!doctype html><meta charset="utf-8"><title>Richie user guide</title><style>${style}</style><main id="document">${renderReviewHtml(guide)}</main>`, "text/html");
+    }
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
       const stale = sha256(source) !== session.state.sourceSha256;
       const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><label class="search-box"><span>Find in document</span><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output></label><button data-action="finish">Finish review</button></div><aside id="navigation"><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });

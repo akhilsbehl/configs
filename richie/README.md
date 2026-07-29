@@ -2,7 +2,7 @@
 
 Richie is a local visual review layer for versioned Markdown. It keeps Markdown canonical, captures browser feedback in temporary JSON, and exports a committed `-commented.md` review copy using `<<ASB: ...>>` markers.
 
-See the [user guide](user-guide-v03.md) for installation, review, and handoff instructions.
+See the [user guide](user-guide.md) for installation, review, and handoff instructions.
 
 The review surface has document navigation on the left, feedback inventory on the right, inline range highlights, and document search.
 

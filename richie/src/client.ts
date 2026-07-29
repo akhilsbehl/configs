@@ -176,12 +176,15 @@ function renderOutline(): void {
   });
 }
 let searchMatches: globalThis.Range[] = [];
-function clearSearchHighlights(): void { const highlights = reviewHighlights(); highlights?.delete("richie-search"); document.querySelectorAll(".search-match").forEach((element) => element.classList.remove("search-match")); }
+let searchIndex = -1;
+function clearSearchHighlights(): void { const highlights = reviewHighlights(); highlights?.delete("richie-search"); highlights?.delete("richie-search-current"); document.querySelectorAll(".search-match,.search-current").forEach((element) => element.classList.remove("search-match", "search-current")); }
 function applySearchHighlights(): void {
   clearSearchHighlights(); if (!searchMatches.length) return;
   const highlights = reviewHighlights();
-  if (highlights) { const all = makeHighlight(searchMatches); if (all) highlights.set("richie-search", all); }
-  else searchMatches.forEach((range) => range.commonAncestorContainer.parentElement?.classList.add("search-match"));
+  if (highlights) {
+    const all = makeHighlight(searchMatches); if (all) highlights.set("richie-search", all);
+    if (searchIndex >= 0) { const current = makeHighlight([searchMatches[searchIndex]]); if (current) highlights.set("richie-search-current", current); }
+  } else searchMatches.forEach((range, index) => range.commonAncestorContainer.parentElement?.classList.add(index === searchIndex ? "search-current" : "search-match"));
 }
 type TextEntry = { node: Text; start: number };
 function collectDocumentText(): { entries: TextEntry[]; lowered: string } {
@@ -199,7 +202,7 @@ function locateDocumentText(entries: TextEntry[], index: number, atEnd: boolean)
   return undefined;
 }
 function updateSearch(): void {
-  const input = document.querySelector<HTMLInputElement>("#document-search")!; const query = input.value.trim().toLocaleLowerCase(); searchMatches = [];
+  const input = document.querySelector<HTMLInputElement>("#document-search")!; const query = input.value.trim().toLocaleLowerCase(); searchMatches = []; searchIndex = -1;
   if (query) {
     const { entries, lowered } = collectDocumentText();
     let start = 0;
@@ -210,7 +213,15 @@ function updateSearch(): void {
       start = found + Math.max(query.length, 1);
     }
   }
-  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = searchMatches.length ? `${searchMatches.length} matches` : query ? "0 matches" : ""; applySearchHighlights();
+  if (searchMatches.length) searchIndex = 0;
+  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = searchMatches.length ? `${searchIndex + 1}/${searchMatches.length}` : query ? "0 matches" : ""; applySearchHighlights();
+}
+function moveSearch(step: number): void {
+  if (!searchMatches.length) return;
+  searchIndex = (searchIndex + step + searchMatches.length) % searchMatches.length;
+  applySearchHighlights();
+  searchMatches[searchIndex].startContainer.parentElement?.scrollIntoView({ behavior: "smooth", block: "center" });
+  document.querySelector<HTMLOutputElement>("#search-count")!.textContent = `${searchIndex + 1}/${searchMatches.length}`;
 }
 async function refresh(): Promise<void> { const state = await fetch(endpoint("state")).then((response) => response.json()) as { operations: Operation[] }; renderFeedback(state.operations); applyReviewPresentation(state.operations); renderOutline(); }
 async function renderMermaid(): Promise<void> {
@@ -368,8 +379,10 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
 });
 refresh();
 renderMermaid();
+document.querySelectorAll<HTMLButtonElement>("[data-action=search-next],[data-action=search-previous]").forEach((button) => button.addEventListener("click", () => moveSearch(button.dataset.action === "search-next" ? 1 : -1)));
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("input", updateSearch);
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("keydown", (event) => {
   const input = event.target as HTMLInputElement;
+  if (event.key === "Enter") { event.preventDefault(); moveSearch(event.shiftKey ? -1 : 1); }
   if (event.key === "Escape") { event.preventDefault(); input.value = ""; updateSearch(); input.blur(); }
 });

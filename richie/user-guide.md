@@ -29,7 +29,7 @@ If installed, use `richie review path/to/draft-vNN.md`. The service listens only
 3. Hover over a heading, paragraph, list, blockquote, code block, table cell, or Mermaid source for block-level feedback.
 4. Use `Document level note` for cross-cutting feedback. It appears at the top of the commented copy.
 5. Use the left sidebar to navigate headings. Use the right sidebar to inspect, edit, jump to, or remove feedback.
-6. Use `Find in document` to highlight matching text. `Escape` clears the search.
+6. Use the search control at the top of the left sidebar. `Previous match` and `Next match`, or `Shift+Enter` and `Enter`, move between results. `Escape` clears the search.
 
 Richie saves every operation immediately to `draft-vNN.review.json`. Each range operation retains the exact source quote and source range. Range highlighting applies only to the selection, not its containing paragraph or line.
 
