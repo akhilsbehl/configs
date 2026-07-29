@@ -86,9 +86,14 @@ function domRange(operation: Operation): globalThis.Range | undefined {
   const range = document.createRange(); range.setStart(start.node, start.offset); range.setEnd(end.node, end.offset); return range;
 }
 type HighlightStore = { delete: (name: string) => void; set: (name: string, value: unknown) => void };
+type HighlightConstructor = new (...ranges: globalThis.Range[]) => unknown;
 function reviewHighlights(): HighlightStore | undefined {
   const css = (window as unknown as { CSS?: { highlights?: HighlightStore } }).CSS;
   return css?.highlights;
+}
+function makeHighlight(ranges: globalThis.Range[]): unknown {
+  const constructor = (window as unknown as { Highlight?: HighlightConstructor }).Highlight;
+  return constructor ? new constructor(...ranges) : undefined;
 }
 function clearReviewPresentation(): void {
   document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.classList.remove("review-target"); });
@@ -101,7 +106,7 @@ function applyReviewPresentation(operations: Operation[]): void {
     const target = operationTarget(operation); if (target) { target.classList.add("review-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); }
     const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
   });
-  const highlights = reviewHighlights(); ranges.forEach((value, kind) => highlights?.set(`richie-${kind}`, value as unknown as never));
+  const highlights = reviewHighlights(); ranges.forEach((value, kind) => { const highlight = makeHighlight(value); if (highlight) highlights?.set(`richie-${kind}`, highlight); });
 }
 function operationSummary(operation: Operation): string {
   if (operation.kind === "replace") return `Replace with ${operation.replacement ?? "an empty value"}`;
@@ -139,7 +144,7 @@ function clearSearchHighlights(): void { const highlights = reviewHighlights(); 
 function applySearchHighlights(): void {
   clearSearchHighlights(); if (!searchMatches.length) return;
   const highlights = reviewHighlights();
-  if (highlights) { highlights.set("richie-search", searchMatches as unknown as never); if (searchIndex >= 0) highlights.set("richie-search-current", [searchMatches[searchIndex]] as unknown as never); }
+  if (highlights) { const all = makeHighlight(searchMatches); if (all) highlights.set("richie-search", all); if (searchIndex >= 0) { const current = makeHighlight([searchMatches[searchIndex]]); if (current) highlights.set("richie-search-current", current); } }
   else searchMatches.forEach((range, index) => { const parent = range.commonAncestorContainer.parentElement; parent?.classList.add(index === searchIndex ? "search-current" : "search-match"); });
 }
 function updateSearch(): void {
