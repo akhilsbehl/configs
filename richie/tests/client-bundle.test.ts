@@ -14,4 +14,8 @@ test("bundles the targeted interaction regressions", async () => {
   assert.match(client, /data-review-replacement|reviewReplacement/);
   assert.match(client, /\.md-text,code\[data-md-range\]/);
   assert.match(client, /scope\s*===\s*"range"/);
+  assert.match(client, /Replacement Markdown/);
+  assert.match(client, /Delete this image/);
+  assert.match(client, /data-md-media/);
+  assert.match(client, /mediaState\s*=\s*"failed"/);
 });

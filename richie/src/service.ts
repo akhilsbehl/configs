@@ -1,8 +1,9 @@
 import { createServer, request as httpRequest, type IncomingMessage, type ServerResponse } from "node:http";
 import { chmod, mkdir, readFile, rm, realpath, unlink, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { loadLocalImage, MediaError } from "./media.js";
 import { assertMarkdownFile, hasOpenOperations, newState, nextCommentedPath, readState, renderCommentedMarkdown, reviewSidecarPath, sha256, writeState } from "./store.js";
 import { renderReviewHtml } from "./render.js";
 import type { ReviewOperation, ReviewState, Session } from "./types.js";
@@ -57,6 +58,19 @@ tr:hover td{background:#f0d9d2}
 pre{overflow:auto;margin:1.2rem 0;padding:16px 18px;background:var(--overlay);border:1px solid var(--border);border-left:4px solid var(--iris);border-radius:9px;color:var(--text);font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;box-shadow:0 4px 14px rgba(87,82,121,.05)}
 code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
 :not(pre)>code{padding:2px 5px;background:var(--overlay);border-radius:4px;color:var(--love)}
+.media-target{position:relative;display:inline-flex;max-width:100%;flex-direction:column;vertical-align:middle;border-radius:8px;text-decoration:none}
+.media-target img{display:block;max-width:100%;max-height:70vh;object-fit:contain;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.media-target[data-media-state=loading] img{opacity:.72}
+.media-fallback{display:grid;gap:6px;min-width:min(360px,80vw);padding:12px;border:1px dashed var(--love);border-radius:8px;background:var(--overlay);color:var(--text)}
+.media-fallback[hidden]{display:none}
+.media-fallback strong{color:var(--love)}
+.media-fallback code{overflow-wrap:anywhere;white-space:pre-wrap}
+.media-target.review-target[data-review-kind=comment]{box-shadow:0 0 0 3px rgba(86,148,159,.2)}
+.media-target.review-target[data-review-kind=delete]{overflow:hidden;background:repeating-linear-gradient(135deg,rgba(180,99,122,.05),rgba(180,99,122,.05) 12px,rgba(180,99,122,.22) 12px,rgba(180,99,122,.22) 18px);text-decoration:none}
+.media-target.review-target[data-review-kind=delete]>*{opacity:.42}
+.media-target.review-target[data-review-kind=delete]::after{content:"Delete image";position:absolute;inset:50% auto auto 50%;padding:4px 8px;transform:translate(-50%,-50%);border-radius:5px;background:var(--love);color:#fffaf3;font-weight:700;white-space:nowrap}
+.media-target.review-target[data-review-kind=replace]>*{opacity:.52;text-decoration:none}
+.media-target.review-target[data-review-kind=replace][data-review-replacement]::after{position:static;content:"Replacement: " attr(data-review-replacement);display:block;margin-top:5px;padding:5px 7px;background:#fffaf3;border-left:3px solid var(--gold);color:var(--text);font-style:normal;font-weight:600;text-decoration:none;white-space:pre-wrap}
 .mermaid{overflow:auto;margin:1.5rem 0 0;padding:18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 5px 16px rgba(87,82,121,.06)}
 .mermaid svg{display:block;max-width:100%;height:auto;margin:auto}
 .mermaid-source{margin:0 0 1.5rem;padding:0;background:var(--surface);border:1px solid var(--border);border-top:0;border-radius:0 0 10px 10px;overflow:hidden}
@@ -129,6 +143,16 @@ function send(response: ServerResponse, code: number, value: unknown, contentTyp
   response.writeHead(code, { "content-type": contentType, "cache-control": "no-store" });
   response.end(contentType === "application/json" ? JSON.stringify(value) : String(value));
 }
+function sendMedia(response: ServerResponse, body: Buffer, contentType: string, filename: string): void {
+  response.writeHead(200, {
+    "content-type": contentType,
+    "content-length": body.length,
+    "content-disposition": `inline; filename="${filename.replace(/[^A-Za-z0-9._-]/g, "_")}"`,
+    "cache-control": "no-store",
+    "x-content-type-options": "nosniff",
+  });
+  response.end(body);
+}
 async function body(request: IncomingMessage): Promise<unknown> {
   let output = ""; for await (const chunk of request) output += chunk; return output ? JSON.parse(output) : {};
 }
@@ -141,7 +165,8 @@ function parseRange(value: unknown): ReviewOperation["range"] | undefined {
 
 export function renderReviewPage(session: Pick<Session, "id" | "token" | "sourcePath">, source: string, stale = false): string {
   const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
-  return `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+  const localImageUrl = (path: string): string => `/api/media/${encodeURIComponent(session.id)}?token=${encodeURIComponent(session.token)}&path=${encodeURIComponent(path)}`;
+  return `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source, { localImageUrl })}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
 }
 
 export class RichieService {
@@ -169,6 +194,7 @@ export class RichieService {
     const host = request.headers.host ?? "";
     if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return send(response, 421, { error: "Unexpected host" });
     const url = new URL(request.url ?? "/", `http://${host}`); const match = url.pathname.match(/^\/s\/([^/]+)$/);
+    const media = url.pathname.match(/^\/api\/media\/([^/]+)$/);
     const api = url.pathname.match(/^\/api\/(state|operations|finish|abort)\/([^/]+)(?:\/([^/]+))?$/);
     if (url.pathname.startsWith("/assets/")) {
       const asset = url.pathname.slice("/assets/".length);
@@ -184,6 +210,17 @@ export class RichieService {
       const source = await readFile(session.sourcePath, "utf8");
       const stale = sha256(source) !== session.state.sourceSha256;
       return send(response, 200, renderReviewPage(session, source, stale), "text/html");
+    }
+    if (media) {
+      const session = this.session(media[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
+      if (request.method !== "GET") return send(response, 405, { error: "Method not allowed" });
+      try {
+        const image = await loadLocalImage(session.sourcePath, url.searchParams.get("path") ?? "");
+        return sendMedia(response, image.body, image.contentType, basename(image.resolvedPath));
+      } catch (error) {
+        if (error instanceof MediaError) return send(response, error.status, { error: error.message });
+        throw error;
+      }
     }
     if (!api) return send(response, 404, { error: "Not found" });
     const session = this.session(api[2], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
@@ -212,8 +249,11 @@ export class RichieService {
       if (sha256(source) !== session.state.sourceSha256) return send(response, 409, { error: "The Markdown source changed during the review. Restore the source or abort the review." });
       if (range && (range.start.offset < 0 || range.end.offset > source.length || range.start.offset >= range.end.offset)) return send(response, 400, { error: "Invalid source range" });
       const kind = input.kind; if (kind !== "delete" && kind !== "replace" && kind !== "comment") return send(response, 400, { error: "Invalid operation kind" });
-      const scope = typeof input.scope === "string" ? input.scope : "range";
-      const operation: ReviewOperation = { id: `rvw_${String(session.state.operations.length + 1).padStart(3, "0")}`, kind, status: "open", scope: scope as ReviewOperation["scope"], range, quote: range ? source.slice(range.start.offset, range.end.offset) : undefined, replacement: typeof input.replacement === "string" ? input.replacement : undefined, comment: typeof input.comment === "string" ? input.comment : undefined, placement: input.placement === "start" || input.placement === "end" ? input.placement : undefined, createdAt: new Date().toISOString() };
+      const scopes: ReviewOperation["scope"][] = ["range", "block", "section", "document", "cell", "row", "column", "media"];
+      const requestedScope = typeof input.scope === "string" ? input.scope : "range";
+      const scope = scopes.includes(requestedScope as ReviewOperation["scope"]) ? requestedScope as ReviewOperation["scope"] : undefined;
+      if (!scope) return send(response, 400, { error: "Invalid operation scope" });
+      const operation: ReviewOperation = { id: `rvw_${String(session.state.operations.length + 1).padStart(3, "0")}`, kind, status: "open", scope, range, quote: range ? source.slice(range.start.offset, range.end.offset) : undefined, replacement: typeof input.replacement === "string" ? input.replacement : undefined, comment: typeof input.comment === "string" ? input.comment : undefined, placement: input.placement === "start" || input.placement === "end" ? input.placement : undefined, createdAt: new Date().toISOString() };
       session.state.operations.push(operation); await writeState(session.sidecarPath, session.state); return send(response, 201, operation);
     }
     if (api[1] === "finish" && request.method === "POST") {

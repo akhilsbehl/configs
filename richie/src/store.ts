@@ -55,6 +55,9 @@ function marker(operation: ReviewOperation): string {
   if (operation.scope === "row") return `<<ASB: ${id} Delete the table row selected from ${quote}.>>`;
   if (operation.scope === "column") return `<<ASB: ${id} Delete the table column selected from ${quote}.>>`;
   if (operation.scope === "cell" && operation.kind === "delete") return `<<ASB: ${id} Clear the table cell ${quote}.>>`;
+  if (operation.scope === "media" && operation.kind === "replace") return `<<ASB: ${id} Replace image ${quote} with ${JSON.stringify(operation.replacement ?? "")}.>>`;
+  if (operation.scope === "media" && operation.kind === "delete") return `<<ASB: ${id} Delete image ${quote}.>>`;
+  if (operation.scope === "media") return `<<ASB: ${id} Comment on image ${quote}: ${operation.comment ?? "Review this image."}>>`;
   if (operation.kind === "replace") return `<<ASB: ${id} Replace ${quote} with ${JSON.stringify(operation.replacement ?? "")}.>>`;
   if (operation.kind === "delete") return `<<ASB: ${id} Delete ${operation.scope === "block" ? "the block " : ""}${quote}.>>`;
   if (operation.quote) return `<<ASB: ${id} Comment on ${operation.scope === "range" ? "" : `${operation.scope} `}${quote}: ${operation.comment ?? "Review this."}>>`;

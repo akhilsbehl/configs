@@ -140,6 +140,7 @@ function operationSummary(operation: Operation): string {
   if (operation.kind === "replace") return `Replace with ${operation.replacement ?? "an empty value"}`;
   if (operation.kind === "delete") {
     if (operation.scope === "range") return "Mark the selected text for deletion";
+    if (operation.scope === "media") return "Delete this image";
     if (operation.scope === "cell") return "Clear this cell";
     if (operation.scope === "row") return "Delete this row";
     if (operation.scope === "column") return "Delete this column";
@@ -163,7 +164,7 @@ function renderFeedback(operations: Operation[]): void {
       const edit = document.createElement("button"); edit.textContent = "Edit";
       edit.addEventListener("click", async () => {
         const isComment = operation.kind === "comment";
-        const value = await modal({ title: isComment ? "Edit comment" : "Edit replacement", inputLabel: isComment ? "Comment" : "Replacement", inputValue: (isComment ? operation.comment : operation.replacement) ?? "", confirmLabel: "Save" });
+        const value = await modal({ title: isComment ? "Edit comment" : operation.scope === "media" ? "Edit image replacement" : "Edit replacement", inputLabel: isComment ? "Comment" : operation.scope === "media" ? "Replacement Markdown" : "Replacement", inputValue: (isComment ? operation.comment : operation.replacement) ?? "", confirmLabel: "Save" });
         if (value === undefined) return;
         if (typeof value !== "string" || !value.trim()) { await modal({ title: isComment ? "Comment is empty" : "Replacement is empty", message: "Type a value, or cancel the dialog.", confirmLabel: "OK" }); return; }
         try { await patchOperation(operation.id, isComment ? { comment: value } : { replacement: value }); await refresh(); }
@@ -199,7 +200,10 @@ function collectDocumentText(): { entries: TextEntry[]; lowered: string } {
   const entries: TextEntry[] = []; let full = "";
   const walker = document.createTreeWalker(document.querySelector("#document")!, NodeFilter.SHOW_TEXT);
   let node: Node | null;
-  while ((node = walker.nextNode())) { entries.push({ node: node as Text, start: full.length }); full += node.textContent ?? ""; }
+  while ((node = walker.nextNode())) {
+    if (node.parentElement?.closest("[hidden]")) continue;
+    entries.push({ node: node as Text, start: full.length }); full += node.textContent ?? "";
+  }
   return { entries, lowered: full.toLocaleLowerCase() };
 }
 function locateDocumentText(entries: TextEntry[], index: number, atEnd: boolean): { node: Text; offset: number } | undefined {
@@ -263,7 +267,7 @@ async function createOperation(kind: string, scope: string, range: Range | undef
       if (typeof comment !== "string" || !comment.trim()) { await modal({ title: "Comment is empty", message: "Type a comment, or cancel the dialog.", confirmLabel: "OK" }); return; }
       await post("operations", { kind, scope, range, comment });
     } else if (kind === "replace") {
-      const replacement = await modal({ title: "Replace text", message: `Text to replace: ${excerpt(targetText)}`, inputLabel: "Replacement", confirmLabel: "Replace" });
+      const replacement = await modal({ title: scope === "media" ? "Replace image" : "Replace text", message: `Text to replace: ${excerpt(targetText)}`, inputLabel: scope === "media" ? "Replacement Markdown" : "Replacement", confirmLabel: "Replace" });
       if (replacement === undefined) return;
       if (typeof replacement !== "string" || !replacement.trim()) { await modal({ title: "Replacement is empty", message: "Type the replacement text, or use Delete to remove the text instead.", confirmLabel: "OK" }); return; }
       await post("operations", { kind, scope, range, replacement });
@@ -280,7 +284,7 @@ function targetControl(label: string, scope: string, kind: string, element: Elem
   button.addEventListener("mousedown", (event) => event.preventDefault());
   button.addEventListener("click", (event) => {
     event.preventDefault(); event.stopPropagation();
-    if (element) { const range = blockRange(element); if (range) void createOperation(kind, scope, range, element.textContent ?? ""); }
+    if (element) { const range = blockRange(element); if (range) void createOperation(kind, scope, range, element.getAttribute("data-md-media-source") ?? element.textContent ?? ""); }
     else { const range = selectionRange(); if (range) void createOperation(kind, "range", range, window.getSelection()?.toString() ?? ""); }
   });
   return button;
@@ -342,6 +346,7 @@ function targetMenu(scope: string, element: Element, actions: TargetAction[]): v
   });
 }
 const selectionActions: TargetAction[] = [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Delete", kind: "delete" }];
+const mediaActions: TargetAction[] = [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Delete", kind: "delete" }];
 document.addEventListener("selectionchange", () => {
   window.setTimeout(() => {
     const range = selectionRange(); const selection = window.getSelection();
@@ -379,6 +384,7 @@ document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block]
 [...document.querySelectorAll(".mermaid-source-line,.code-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
 document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
 document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
+document.querySelectorAll("[data-md-media]").forEach((element) => targetMenu("media", element, mediaActions));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; if (!action) return;
   try {
@@ -406,6 +412,18 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
 });
 refresh();
 renderMermaid();
+document.querySelectorAll<HTMLElement>("[data-md-media]").forEach((media) => {
+  const image = media.querySelector<HTMLImageElement>("img");
+  const fallback = media.querySelector<HTMLElement>(".media-fallback");
+  if (!image || !fallback) return;
+  const loaded = (): void => { media.dataset.mediaState = "loaded"; image.hidden = false; fallback.hidden = true; };
+  const failed = (): void => { media.dataset.mediaState = "failed"; image.hidden = true; fallback.hidden = false; };
+  image.addEventListener("load", loaded);
+  image.addEventListener("error", failed);
+  if (image.complete) {
+    if (image.naturalWidth > 0) loaded(); else failed();
+  }
+});
 document.querySelectorAll<HTMLButtonElement>("[data-action=search-next],[data-action=search-previous]").forEach((button) => button.addEventListener("click", () => moveSearch(button.dataset.action === "search-next" ? 1 : -1)));
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("input", updateSearch);
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("keydown", (event) => {

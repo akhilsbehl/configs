@@ -3,8 +3,9 @@ import hljs from "highlight.js";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 
-type Node = { type: string; value?: string; depth?: number; url?: string; lang?: string | null; checked?: boolean | null; ordered?: boolean | null; align?: Array<string | null>; children?: Node[]; position?: { start: Position; end: Position } };
+type Node = { type: string; value?: string; depth?: number; url?: string; title?: string | null; alt?: string; identifier?: string; label?: string; lang?: string | null; checked?: boolean | null; ordered?: boolean | null; align?: Array<string | null>; children?: Node[]; position?: { start: Position; end: Position } };
 type Position = { line: number; column: number; offset: number };
+export type RenderOptions = { localImageUrl?: (path: string) => string };
 
 const escape = (value: string): string => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const slug = (value: string): string => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "section";
@@ -24,8 +25,14 @@ export function parseMarkdown(source: string): Node {
   return unified().use(remarkParse).use(remarkGfm).parse(source) as unknown as Node;
 }
 
-export function renderReviewHtml(source: string): string {
+export function renderReviewHtml(source: string, options: RenderOptions = {}): string {
   const root = parseMarkdown(source);
+  const definitions = new Map<string, Node>();
+  const collectDefinitions = (node: Node): void => {
+    if (node.type === "definition" && node.identifier) definitions.set(node.identifier, node);
+    for (const child of node.children ?? []) collectDefinitions(child);
+  };
+  collectDefinitions(root);
   const headings: string[] = [];
   let block = 0;
   const range = (node: Node): string => {
@@ -65,10 +72,63 @@ export function renderReviewHtml(source: string): string {
     const rendered = sourceLines(node, "mermaid-source-line", "mermaid");
     return `<pre><code>${rendered}</code></pre>`;
   };
+  const mediaSource = (node: Node): { url?: string; alt: string; title?: string | null } => {
+    if (node.type === "image") return { url: node.url, alt: node.alt ?? "", title: node.title };
+    const definition = node.identifier ? definitions.get(node.identifier) : undefined;
+    return { url: definition?.url, alt: node.alt ?? "", title: definition?.title };
+  };
+  const positionAt = (offset: number): Position => {
+    const before = source.slice(0, offset);
+    const line = before.split("\n").length;
+    const lastNewline = before.lastIndexOf("\n");
+    return { offset, line, column: offset - lastNewline };
+  };
+  const imageLocation = (url: string | undefined): { src?: string; error?: string } => {
+    if (!url) return { error: "Image reference is missing its definition." };
+    if (/^https:/i.test(url)) return { src: url };
+    if (/^\/\//.test(url) || /^[a-z][a-z0-9+.-]*:/i.test(url)) return { error: "This image source is blocked. Richie loads only HTTPS and local raster images." };
+    if (!options.localImageUrl) return { error: "Local images are unavailable in this view." };
+    return { src: options.localImageUrl(url) };
+  };
+  const renderImage = (image: Node, target: Node = image, href?: string): string => {
+    const media = mediaSource(image);
+    const location = imageLocation(media.url);
+    const quote = target.position ? source.slice(target.position.start.offset, target.position.end.offset) : "";
+    const fallback = `<span class="media-fallback"${location.src ? " hidden" : ""}><strong>${escape(location.error ?? "Image could not load.")}</strong><code>${escape(quote)}</code></span>`;
+    const picture = location.src ? `<img src="${escape(location.src)}" alt="${escape(media.alt)}"${media.title ? ` title="${escape(media.title)}"` : ""} loading="lazy" decoding="async" referrerpolicy="no-referrer">${fallback}` : fallback;
+    const attributes = ` class="media-target" data-md-media data-md-media-source="${escape(quote)}" data-media-state="${location.src ? "loading" : "failed"}"${range(target)}`;
+    if (href) return `<a${attributes} href="${escape(href)}" target="_blank" rel="noreferrer">${picture}</a>`;
+    return `<span${attributes}>${picture}</span>`;
+  };
+  const renderText = (node: Node): string => {
+    const value = node.value ?? "";
+    if (!node.position) return `<span class="md-text">${escape(value)}</span>`;
+    const pattern = /!\[([^\]\n]*)\]\[([^\]\n]+)\]/g;
+    let cursor = 0;
+    let output = "";
+    for (const match of value.matchAll(pattern)) {
+      const index = match.index;
+      const start = node.position.start.offset + index;
+      if (source.slice(start, start + 2) !== "![") continue;
+      if (index > cursor) {
+        const textNode: Node = { type: "text", value: value.slice(cursor, index), position: { start: positionAt(node.position.start.offset + cursor), end: positionAt(start) } };
+        output += `<span class="md-text-range"${range(textNode)}><span class="md-text">${escape(textNode.value ?? "")}</span></span>`;
+      }
+      const end = start + match[0].length;
+      output += renderImage({ type: "imageReference", alt: match[1], identifier: match[2].trim().toLowerCase().replace(/\s+/g, " "), position: { start: positionAt(start), end: positionAt(end) } });
+      cursor = index + match[0].length;
+    }
+    if (!output) return `<span class="md-text-range"${range(node)}><span class="md-text">${escape(value)}</span></span>`;
+    if (cursor < value.length) {
+      const textNode: Node = { type: "text", value: value.slice(cursor), position: { start: positionAt(node.position.start.offset + cursor), end: node.position.end } };
+      output += `<span class="md-text-range"${range(textNode)}><span class="md-text">${escape(textNode.value ?? "")}</span></span>`;
+    }
+    return output;
+  };
   const render = (node: Node): string => {
     switch (node.type) {
       case "root": return renderChildren(node);
-      case "text": return `<span class="md-text-range"${range(node)}><span class="md-text">${escape(node.value ?? "")}</span></span>`;
+      case "text": return renderText(node);
       case "paragraph": return `<p${blockAttrs(node)}>${renderChildren(node)}</p>`;
       case "heading": {
         const label = text(node); headings.splice((node.depth ?? 1) - 1); headings[node.depth! - 1] = label;
@@ -83,7 +143,14 @@ export function renderReviewHtml(source: string): string {
         const { start, end } = node.position;
         return `<code data-md-range="${start.offset + 1}:${end.offset - 1}:${start.line}:${start.column + 1}:${end.line}:${Math.max(start.column + 1, end.column - 1)}">${escape(node.value ?? "")}</code>`;
       }
-      case "link": return `<a${range(node)} href="${escape(node.url ?? "#")}" rel="noreferrer">${renderChildren(node)}</a>`;
+      case "link": {
+        const children = node.children ?? [];
+        if (children.length === 1 && (children[0].type === "image" || children[0].type === "imageReference")) return renderImage(children[0], node, node.url);
+        return `<a${range(node)} href="${escape(node.url ?? "#")}" rel="noreferrer">${renderChildren(node)}</a>`;
+      }
+      case "image":
+      case "imageReference": return renderImage(node);
+      case "definition": return "";
       case "break": return "<br>";
       case "thematicBreak": return "<hr>";
       case "blockquote": return `<blockquote${blockAttrs(node)}>${renderChildren(node)}</blockquote>`;

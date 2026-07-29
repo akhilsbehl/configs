@@ -26,7 +26,7 @@ If installed, use `richie review path/to/draft-vNN.md`. The service listens only
 
 1. Read the rendered document.
 2. Select text and choose `Comment`, `Replace`, or `Delete`, or press `c`, `r`, or `d`.
-3. Hover over a heading, paragraph, list item, blockquote, code block, table cell, or Mermaid source for block-level feedback. A list item also offers `Delete list` for the whole containing list.
+3. Hover over a heading, paragraph, list item, blockquote, code block, table cell, Mermaid source, or Markdown image for scoped feedback. A list item also offers `Delete list` for the whole containing list.
 4. Use `Document level note` for cross-cutting feedback. It appears at the top of the commented copy.
 5. Use the left sidebar to navigate headings. The user guide and search controls stay fixed while a long outline scrolls. The right sidebar keeps its 3 review actions fixed while the feedback inventory scrolls.
 6. Use the search control at the top of the left sidebar. `Previous match` and `Next match`, or `Shift+Enter` and `Enter`, move between results. `Escape` clears the search.
@@ -35,17 +35,23 @@ Richie saves every operation immediately to `draft-vNN.review.json`. Each range 
 
 Pending block and cell replacements show the old content struck through and the proposed replacement beneath it. With a valid document selection active, Richie suppresses the browser context menu so `c`, `r`, and `d` remain available.
 
-### Tables and Mermaid
+### Tables, Mermaid, and images
 
 Hover over a table cell to comment, replace, clear, delete its row, or delete its column. A column deletion highlights every cell in that column and exports a marker inside each affected table cell, preserving the Markdown table fences.
 
 Mermaid diagrams render as SVG for reading and expose a source view for review. Select Mermaid source lines, not SVG elements. Review highlighting maps only to the source view, so a source selection cannot spread across generated SVG labels. If rendering fails, Richie opens the source automatically so it remains reviewable. Markers for Mermaid and ordinary fenced-code feedback are exported after the closing fence, so the source block continues to render. A code-block-level marker is aligned with that closing fence.
 
+Richie renders direct, linked, and reference-style Markdown images. Hover an image and choose `Comment`, `Replace`, or `Delete`. The operation targets the complete image syntax. For a linked image, it also includes the outer link syntax. Replacement input is stored as Markdown text and is not rendered as active content in the review page.
+
+Remote images load automatically only over HTTPS and use a no-referrer policy. Local images may use relative, parent-relative, or absolute WSL paths. Richie follows symlinks and serves authenticated PNG, JPEG, GIF, WebP, and AVIF files up to 25 MiB. A live session token can request any supported local raster image path. Do not share review URLs or tokens.
+
+Missing, blocked, oversized, unsupported, and failed images show their original Markdown in a visible fallback. Richie does not render local SVG, `http:`, `file:`, `data:`, protocol-relative image URLs, raw HTML video, or raw HTML audio.
+
 ## Finish a review
 
 Click `Finish review` when feedback is complete. Richie verifies the source hash, exports the next available `draft-vNN-commented.md`, and removes the temporary sidecar. If there is no open feedback, no commented copy is created.
 
-Exported deletion markers quote the exact selected source text. Cell, row, column, and block deletions also identify their operation scope.
+Exported deletion markers quote the exact selected source text. Cell, row, column, block, and image deletions also identify their operation scope.
 
 Click `Abort review` to discard open feedback without exporting a file.
 

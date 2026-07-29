@@ -88,3 +88,22 @@ test("does not export feedback removed from the review", () => {
   assert.equal(hasOpenOperations(state), false);
   assert.equal(renderCommentedMarkdown(source, state), source);
 });
+
+test("exports media-specific comment, replacement, and deletion markers after complete image syntax", () => {
+  const source = "![One](one.png)\n\n[![Two](two.png)](https://example.com)\n\n![Three](three.png)\n";
+  const state = newState("draft-v00.md", source);
+  const one = "![One](one.png)";
+  const two = "[![Two](two.png)](https://example.com)";
+  const three = "![Three](three.png)";
+  const rangeFor = (quote: string) => {
+    const offset = source.indexOf(quote);
+    return { start: { offset, line: 1, column: 1 }, end: { offset: offset + quote.length, line: 1, column: quote.length + 1 } };
+  };
+  state.operations.push({ id: "rvw_001", kind: "comment", status: "open", scope: "media", quote: one, comment: "Check this image.", range: rangeFor(one), createdAt: "2026-01-01T00:00:00Z" });
+  state.operations.push({ id: "rvw_002", kind: "replace", status: "open", scope: "media", quote: two, replacement: "![New](new.png)", range: rangeFor(two), createdAt: "2026-01-01T00:00:00Z" });
+  state.operations.push({ id: "rvw_003", kind: "delete", status: "open", scope: "media", quote: three, range: rangeFor(three), createdAt: "2026-01-01T00:00:00Z" });
+  const output = renderCommentedMarkdown(source, state);
+  assert.match(output, /!\[One\]\(one\.png\) <<ASB: \[rvw_001\] Comment on image "!\[One\]\(one\.png\)": Check this image\.>>/);
+  assert.match(output, /\[!\[Two\]\(two\.png\)\]\(https:\/\/example\.com\) <<ASB: \[rvw_002\] Replace image "\[!\[Two\]\(two\.png\)\]\(https:\/\/example\.com\)" with "!\[New\]\(new\.png\)"\.>>/);
+  assert.match(output, /!\[Three\]\(three\.png\) <<ASB: \[rvw_003\] Delete image "!\[Three\]\(three\.png\)"\.>>/);
+});

@@ -2,7 +2,7 @@ export type Position = { line: number; column: number; offset: number };
 export type Range = { start: Position; end: Position };
 export type OperationKind = "delete" | "replace" | "comment";
 export type OperationStatus = "open" | "applied" | "rejected" | "needs-review" | "superseded";
-export type Scope = "range" | "block" | "section" | "document" | "cell" | "row" | "column";
+export type Scope = "range" | "block" | "section" | "document" | "cell" | "row" | "column" | "media";
 
 export type ReviewOperation = {
   id: string;

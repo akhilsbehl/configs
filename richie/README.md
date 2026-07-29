@@ -4,7 +4,9 @@ Richie is a local visual review layer for versioned Markdown. It keeps Markdown 
 
 See the [user guide](user-guide.md) for installation, review, and handoff instructions.
 
-The review surface has document navigation on the left, review actions and feedback inventory on the right, inline range highlights, and document search. The user guide and search controls remain fixed while the outline scrolls. The review actions remain fixed while the feedback inventory scrolls.
+The review surface has document navigation on the left, review actions and feedback inventory on the right, inline range highlights, Markdown image review, and document search. The user guide and search controls remain fixed while the outline scrolls. The review actions remain fixed while the feedback inventory scrolls.
+
+Richie renders inline, linked, and reference-style Markdown images. Hover an image to comment on, replace, or delete its complete Markdown syntax. Remote images load directly over HTTPS. Local PNG, JPEG, GIF, WebP, and AVIF files load through the authenticated review session, including absolute and parent-relative paths. SVG and raw HTML media remain disabled.
 
 ## Development
 

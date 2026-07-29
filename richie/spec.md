@@ -118,10 +118,13 @@ The review UI offers three primary operations plus scope selection and review li
 | Comment on a paragraph or table row | `comment` | Block anchor and optional range |
 | Comment on a section | `comment` | Heading anchor and heading path |
 | Comment on the whole document | `comment` | `scope: "document"` and placement `start` |
+| Review a Markdown image | `comment`, `replace`, or `delete` | `scope: "media"`, complete image or linked-image source range, exact quote |
 
 The UI may render pending deletions with strikethrough and proposed replacements in a tracked-change style. This is a visual representation of a stored operation, not a mutation of the Markdown file.
 
 For Mermaid fences, the review surface displays both the rendered SVG and the original Mermaid source. The SVG is visual context only. Selection-based operations target source lines or source text, preserving source-aware ranges for agent review. SVG nodes, edges, and labels are not independent review targets. Exported feedback for Mermaid or other fenced-code ranges sits after the closing fence so the source remains valid.
+
+For Markdown images, the renderer supports direct, linked, and reference-style syntax. A whole-image operation targets the complete image node. If an image is the sole child of a link, the target expands to the complete outer link node. The rendered media is disposable visual context; the exact Markdown range remains canonical.
 
 ## 8. Source identity and mapping
 
@@ -270,6 +273,7 @@ The browser page contains:
 - A left navigation sidebar with fixed guide and search controls and an independently scrolling document outline.
 - A right review-inventory sidebar with fixed review actions and an independently scrolling list of open operations.
 - Clear visual treatment for selected text, pending deletions, and replacements.
+- Source-mapped Markdown images with whole-image Comment, Replace, and Delete actions.
 - Section controls on headings for section-level comments.
 - Document-level controls at the top and bottom.
 - A `Finish review` action that asks for confirmation, verifies feedback was saved, avoids exporting when there is no open feedback, closes the review tab after the response, and displays the next agent command when feedback was exported.
@@ -304,6 +308,13 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 
 - `Document level note` creates an explicitly document-scoped note at the top of the commented copy.
 - The note must not be attached to an arbitrary last paragraph.
+
+**Markdown images**
+
+- Remote image sources load directly in the browser only over HTTPS.
+- Local raster image sources load through the authenticated session media route.
+- Missing, failed, blocked, oversized, and unsupported sources show the exact Markdown fallback.
+- Pending image deletion and replacement states remain visible without mutating or executing replacement Markdown.
 
 **Operation editing**
 
@@ -376,6 +387,7 @@ The MVP needs a short-lived local HTTP server because browsers cannot reliably w
   - `GET /api/review` for current state.
   - `POST /api/operations` to create or modify operations.
   - `POST /api/finish` to mark review finished.
+  - `GET /api/media/:session?token=...&path=...` to serve an authenticated local raster image.
 - Validate that all writes are for the active source file.
 - Shut down when the browser session ends or after a short idle timeout.
 
@@ -388,8 +400,10 @@ There is no need for session persistence across server restarts in the MVP. The 
 - It does not require an iframe sandbox in the MVP.
 - It binds to `127.0.0.1` only and rejects unexpected `Host` headers.
 - It accepts same-origin JSON writes only.
-- It does not make outbound requests.
-- It reads and writes only the declared Markdown and sibling sidecar paths.
+- Remote HTTPS images create direct browser requests with referrer information suppressed.
+- A valid live session token may read any local regular file path whose content signature is PNG, JPEG, GIF, WebP, or AVIF and whose size does not exceed 25 MiB.
+- The media route rejects non-image content, SVG, directories, missing files, unsupported methods, and invalid session tokens.
+- Review-state writes remain limited to the declared Markdown and sibling sidecar paths.
 
 ## 14. Rendering choices
 
@@ -397,7 +411,7 @@ The renderer must be selected based on source-position fidelity, not visual poli
 
 Required capabilities:
 
-- Standard Markdown features used in existing drafts: headings, emphasis, lists, links, blockquotes, code, tables, task lists, and Mermaid fences where relevant.
+- Standard Markdown features used in existing drafts: headings, emphasis, lists, links, images, blockquotes, code, tables, task lists, and Mermaid fences where relevant.
 - Parser position information for block and inline nodes.
 - Custom HTML generation that retains source ranges.
 - Predictable output across runs.
@@ -409,6 +423,7 @@ Possible implementation direction:
 - Generate review HTML from that AST through a custom renderer or compiler plugin.
 - Attach `data-md-range`, block IDs, and heading identity while generating HTML.
 - Render Mermaid as a view feature with the SVG and source code displayed together. Mermaid source remains in Markdown and is not directly editable in the review tool, but its lines can be selected for comments, replacements, and deletions.
+- Render supported raster images as a view feature while retaining the exact source range for whole-image operations.
 
 The source renderer must be tested against the exact Markdown conventions in existing drafts, especially `<<ASB: ...>>` markers, tables, nested lists, links, and code blocks.
 
@@ -421,6 +436,7 @@ The source renderer must be tested against the exact Markdown conventions in exi
 - Text-range Delete, Replace, and Comment operations.
 - Paragraph and heading comments.
 - Document-level comments.
+- Whole-image comments, replacements, and deletions for standard Markdown images.
 - JSON sidecar persistence.
 - Source hash validation.
 - Manual agent application workflow.
@@ -432,6 +448,8 @@ The source renderer must be tested against the exact Markdown conventions in exi
 - Agent long polling, SSE, presence indicators, chat, or agent replies.
 - Direct source edits from the browser.
 - Arbitrary HTML support.
+- Raw HTML video, audio, iframe, object, and other embedded media.
+- SVG images, image metadata-specific operations, and visual-region annotations.
 - Whiteboards and diagram editing.
 - Export, hosted sharing, authentication, cloud storage, or account management.
 - Automated application of operations without an agent reviewing the target.
@@ -448,6 +466,7 @@ The source renderer must be tested against the exact Markdown conventions in exi
 8. No feedback is silently lost, silently applied to the wrong location, or silently discarded.
 9. Generated HTML never becomes the canonical source and is safe to delete.
 10. The workflow works entirely on the local machine with Git-tracked Markdown and sidecar files.
+11. A reviewer can comment on, replace, or delete a complete Markdown image while failed media remains source-reviewable.
 
 ## 17. Open decisions before implementation
 

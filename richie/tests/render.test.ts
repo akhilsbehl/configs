@@ -46,3 +46,33 @@ test("renders unordered and ordered lists as source-aware block targets", () => 
   assert.match(html, /<ul data-md-block="[^"]+"[^>]*data-md-range=/);
   assert.match(html, /<ol data-md-block="[^"]+"[^>]*data-md-range=/);
 });
+
+test("renders direct, remote, reference-style, and linked Markdown images as exact media targets", () => {
+  const source = [
+    "Before ![Local alt](./figs/local.png \"Local title\") after.",
+    "",
+    "![Remote](https://example.com/remote.png)",
+    "",
+    "![Reference][hero]",
+    "",
+    "[![Linked](../linked.webp)](https://example.com/details)",
+    "",
+    "[hero]: /outside/hero.jpg \"Hero title\"",
+    "",
+  ].join("\n");
+  const html = renderReviewHtml(source, { localImageUrl: (path) => `/media?path=${encodeURIComponent(path)}` });
+  assert.match(html, /class="media-target"[^>]*data-md-media-source="!\[Local alt\]\(\.\/figs\/local\.png &quot;Local title&quot;\)"/);
+  assert.match(html, /src="\/media\?path=\.%2Ffigs%2Flocal\.png" alt="Local alt" title="Local title"/);
+  assert.match(html, /src="https:\/\/example\.com\/remote\.png" alt="Remote"[^>]*referrerpolicy="no-referrer"/);
+  assert.match(html, /src="\/media\?path=%2Foutside%2Fhero\.jpg" alt="Reference" title="Hero title"/);
+  assert.match(html, /<a class="media-target"[^>]*data-md-media-source="\[!\[Linked\]\(\.\.\/linked\.webp\)\]\(https:\/\/example\.com\/details\)"[^>]*target="_blank"/);
+});
+
+test("keeps blocked, unresolved, and raw HTML media source-reviewable without rendering active content", () => {
+  const source = "![Blocked](http://example.com/image.png)\n\n![Missing][unknown]\n\n<video controls src=\"movie.mp4\"></video>\n";
+  const html = renderReviewHtml(source);
+  assert.match(html, /This image source is blocked/);
+  assert.match(html, /Image reference is missing its definition/);
+  assert.match(html, /<code>!\[Blocked\]\(http:\/\/example\.com\/image\.png\)<\/code>/);
+  assert.doesNotMatch(html, /<video/);
+});
