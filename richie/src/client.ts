@@ -42,7 +42,8 @@ function excerpt(value: string): string {
 }
 function parsed(node: Node | null, offset: number): Position | undefined {
   const element = node instanceof Element ? node : node?.parentElement;
-  const mapped = element?.closest("[data-md-range]");
+  const sourceText = element?.closest(".md-text,code[data-md-range]");
+  const mapped = sourceText?.matches("[data-md-range]") ? sourceText : sourceText?.closest("[data-md-range]");
   const value = mapped?.getAttribute("data-md-range"); if (!value || !mapped || !node) return undefined;
   const [start, end, startLine, startColumn, endLine, endColumn] = value.split(":").map(Number);
   const prefix = document.createRange();
@@ -129,7 +130,9 @@ function applyReviewPresentation(operations: Operation[]): void {
         if (operation.kind === "replace" && operation.replacement) target.dataset.reviewReplacement = operation.replacement;
       }
     }
-    const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
+    if (operation.scope === "range") {
+      const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
+    }
   });
   const highlights = reviewHighlights(); ranges.forEach((value, kind) => { const highlight = makeHighlight(value); if (highlight) highlights?.set(`richie-${kind}`, highlight); });
 }

@@ -71,8 +71,9 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable{color:var(--gold)}
 .hljs-title,.hljs-section,.hljs-function .hljs-title{color:var(--iris);font-weight:600}
 .hljs-operator,.hljs-punctuation{color:var(--subtle)}
-#panel,#navigation{position:fixed;top:20px;width:290px;max-height:calc(100vh - 40px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
+#panel,#navigation{position:fixed;top:20px;display:flex;flex-direction:column;width:290px;height:calc(100vh - 40px);overflow:hidden;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel{right:20px}#navigation{left:20px;border-top-color:var(--foam)}
+#toolbar,#guide-link,#navigation .search-box,.panel-heading{flex:none}
 #guide-link{display:block;margin:0 0 14px;padding:7px 9px;background:var(--overlay);border-radius:7px;font-weight:700;text-decoration:none}
 #guide-link:hover{background:#eadfd2}
 #navigation .search-box{margin:0 0 14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
@@ -81,7 +82,9 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 #panel strong{color:var(--pine)}
 .panel-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 #feedback-count{color:var(--subtle);font-size:.8rem}
-#operations{margin-top:8px}
+#operations,#outline{min-height:0;overflow:auto}
+#operations{flex:1;margin-top:8px}
+#outline{flex:1}
 .operation-card{margin:8px 0;padding:9px;background:var(--overlay);border-radius:7px;font-size:.84rem;overflow-wrap:anywhere;border-left:3px solid var(--foam)}
 .operation-card[data-kind=delete]{border-left-color:var(--love)}
 .operation-card[data-kind=replace]{border-left-color:var(--gold)}
@@ -119,7 +122,7 @@ li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 .richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
 #stale-banner{position:sticky;top:0;z-index:3;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}
 .review-note{color:var(--love);font-size:.9em}
-@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}.search-box input{width:min(190px,50vw)}}
+@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;display:block;width:auto;height:auto;overflow:visible;margin:0 auto 20px;max-width:900px}#operations,#outline{overflow:visible}.search-box input{width:min(190px,50vw)}}
 `;
 
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {

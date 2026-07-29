@@ -29,6 +29,9 @@ test("syntax highlights Mermaid source without losing line ranges", () => {
   assert.match(html, /class="mermaid-source-line" data-md-range="[^"]+"/);
   assert.match(html, /hljs-keyword/);
   assert.match(html, /hljs-operator/);
+  assert.match(html, /<div class="mermaid"[^>]*><pre>graph TD/);
+  assert.doesNotMatch(html, /<div class="mermaid"[^>]*>.*class="md-text"/);
+  assert.match(html, /<details class="mermaid-source"[^>]*>.*class="md-text"/);
 });
 
 test("keeps invalid Mermaid source available for client-side render failures", () => {
