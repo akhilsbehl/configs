@@ -39,7 +39,7 @@ dialog button.destructive{background:var(--love);border-color:var(--love)}
 #toolbar button[data-action=finish]:hover{background:#20556a}
 #toolbar button[data-action=abort]{background:var(--love);border-color:var(--love);color:#fffaf3}
 #toolbar button[data-action=abort]:hover{background:#9f5369}
-h1,h2,h3{color:var(--text);line-height:1.2;letter-spacing:-.02em}
+h1,h2,h3{color:var(--text);line-height:1.2;letter-spacing:-.02em;scroll-margin-top:108px}
 h1{font-size:2.2rem;margin:1.4em 0 .55em;padding-bottom:.25em;border-bottom:2px solid var(--rose)}
 h2{font-size:1.55rem;margin-top:1.8em;color:var(--pine)}
 h3{font-size:1.2rem;color:var(--iris)}
