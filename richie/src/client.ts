@@ -105,14 +105,25 @@ function makeHighlight(ranges: globalThis.Range[]): unknown {
   return constructor ? new constructor(...ranges) : undefined;
 }
 function clearReviewPresentation(): void {
-  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.classList.remove("review-target"); });
+  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.classList.remove("review-target", "review-column-target"); });
   const highlights = reviewHighlights(); ["richie-comment", "richie-replace", "richie-delete"].forEach((name) => highlights?.delete(name));
+}
+function columnTargets(operation: Operation): HTMLElement[] {
+  const target = operationTarget(operation)?.closest("td");
+  const table = target?.closest("table");
+  if (!target || !table) return [];
+  const index = [...target.parentElement!.children].indexOf(target);
+  return [...table.querySelectorAll("tr")].map((row) => row.children.item(index)).filter((cell): cell is HTMLElement => cell instanceof HTMLElement);
 }
 function applyReviewPresentation(operations: Operation[]): void {
   clearReviewPresentation();
   const ranges = new Map<string, globalThis.Range[]>();
   operations.filter((operation) => operation.status === "open").forEach((operation) => {
-    const target = operationTarget(operation); if (target) { target.classList.add("review-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); }
+    if (operation.scope === "column") {
+      columnTargets(operation).forEach((target) => { target.classList.add("review-column-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); });
+    } else if (operation.scope !== "range") {
+      const target = operationTarget(operation); if (target) { target.classList.add("review-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); }
+    }
     const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
   });
   const highlights = reviewHighlights(); ranges.forEach((value, kind) => { const highlight = makeHighlight(value); if (highlight) highlights?.set(`richie-${kind}`, highlight); });
@@ -165,13 +176,12 @@ function renderOutline(): void {
   });
 }
 let searchMatches: globalThis.Range[] = [];
-let searchIndex = -1;
-function clearSearchHighlights(): void { const highlights = reviewHighlights(); highlights?.delete("richie-search"); highlights?.delete("richie-search-current"); document.querySelectorAll(".search-match,.search-current").forEach((element) => element.classList.remove("search-match", "search-current")); }
+function clearSearchHighlights(): void { const highlights = reviewHighlights(); highlights?.delete("richie-search"); document.querySelectorAll(".search-match").forEach((element) => element.classList.remove("search-match")); }
 function applySearchHighlights(): void {
   clearSearchHighlights(); if (!searchMatches.length) return;
   const highlights = reviewHighlights();
-  if (highlights) { const all = makeHighlight(searchMatches); if (all) highlights.set("richie-search", all); if (searchIndex >= 0) { const current = makeHighlight([searchMatches[searchIndex]]); if (current) highlights.set("richie-search-current", current); } }
-  else searchMatches.forEach((range, index) => { const parent = range.commonAncestorContainer.parentElement; parent?.classList.add(index === searchIndex ? "search-current" : "search-match"); });
+  if (highlights) { const all = makeHighlight(searchMatches); if (all) highlights.set("richie-search", all); }
+  else searchMatches.forEach((range) => range.commonAncestorContainer.parentElement?.classList.add("search-match"));
 }
 type TextEntry = { node: Text; start: number };
 function collectDocumentText(): { entries: TextEntry[]; lowered: string } {
@@ -189,7 +199,7 @@ function locateDocumentText(entries: TextEntry[], index: number, atEnd: boolean)
   return undefined;
 }
 function updateSearch(): void {
-  const input = document.querySelector<HTMLInputElement>("#document-search")!; const query = input.value.trim().toLocaleLowerCase(); searchMatches = []; searchIndex = -1;
+  const input = document.querySelector<HTMLInputElement>("#document-search")!; const query = input.value.trim().toLocaleLowerCase(); searchMatches = [];
   if (query) {
     const { entries, lowered } = collectDocumentText();
     let start = 0;
@@ -199,14 +209,8 @@ function updateSearch(): void {
       if (from && to) { const range = document.createRange(); range.setStart(from.node, from.offset); range.setEnd(to.node, to.offset); searchMatches.push(range); }
       start = found + Math.max(query.length, 1);
     }
-    if (searchMatches.length) searchIndex = 0;
   }
-  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = searchMatches.length ? `${searchIndex + 1}/${searchMatches.length}` : query ? "0 matches" : ""; applySearchHighlights();
-}
-function moveSearch(step: number): void {
-  if (!searchMatches.length) return; searchIndex = (searchIndex + step + searchMatches.length) % searchMatches.length; applySearchHighlights();
-  const range = searchMatches[searchIndex]; range.commonAncestorContainer.parentElement?.scrollIntoView({ behavior: "smooth", block: "center" });
-  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = `${searchIndex + 1}/${searchMatches.length}`;
+  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = searchMatches.length ? `${searchMatches.length} matches` : query ? "0 matches" : ""; applySearchHighlights();
 }
 async function refresh(): Promise<void> { const state = await fetch(endpoint("state")).then((response) => response.json()) as { operations: Operation[] }; renderFeedback(state.operations); applyReviewPresentation(state.operations); renderOutline(); }
 async function renderMermaid(): Promise<void> {
@@ -340,8 +344,6 @@ document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; if (!action) return;
   try {
-    if (action === "search-next") { moveSearch(1); return; }
-    if (action === "search-previous") { moveSearch(-1); return; }
     if (action === "finish") {
       if (!await modal({ title: "Finish review", message: "Open feedback will be exported and this tab will close.", confirmLabel: "Finish review" })) return;
       const result = await post("finish", {}) as { exported: boolean; outputPath: string | null };
@@ -356,10 +358,10 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
       return;
     }
     if (action === "document-note") {
-      const comment = await modal({ title: "Document level note", message: "This note will be added at the end of the commented copy.", inputLabel: "Comment", confirmLabel: "Add note" });
+      const comment = await modal({ title: "Document level note", message: "This note will be added at the top of the commented copy.", inputLabel: "Comment", confirmLabel: "Add note" });
       if (comment === undefined) return;
       if (typeof comment !== "string" || !comment.trim()) { await modal({ title: "Comment is empty", message: "Type a comment, or cancel the dialog.", confirmLabel: "OK" }); return; }
-      await post("operations", { kind: "comment", scope: "document", placement: "end", comment });
+      await post("operations", { kind: "comment", scope: "document", placement: "start", comment });
       await refresh();
     }
   } catch (error) { await modal({ title: "Richie could not complete the action", message: (error as Error).message, confirmLabel: "OK" }); }
@@ -369,6 +371,5 @@ renderMermaid();
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("input", updateSearch);
 document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("keydown", (event) => {
   const input = event.target as HTMLInputElement;
-  if (event.key === "Enter") { event.preventDefault(); moveSearch(event.shiftKey ? -1 : 1); }
   if (event.key === "Escape") { event.preventDefault(); input.value = ""; updateSearch(); input.blur(); }
 });

@@ -34,6 +34,23 @@ test("exports a cell-specific marker for cell deletions", () => {
   assert.match(renderCommentedMarkdown(source, state), /b <<ASB: \[rvw_001\] Clear this table cell\.>>/);
 });
 
+test("exports document notes at the top and keeps code annotations outside fences", () => {
+  const source = "```mermaid\ngraph TD; A-->B\n```\n";
+  const state = newState("draft-v00.md", source);
+  state.operations.push({ id: "rvw_001", kind: "comment", status: "open", scope: "range", quote: "A-->B", comment: "Rename this edge.", range: { start: { offset: 20, line: 2, column: 11 }, end: { offset: 25, line: 2, column: 16 } }, createdAt: "2026-01-01T00:00:00Z" });
+  state.operations.push({ id: "rvw_002", kind: "comment", status: "open", scope: "document", placement: "start", comment: "Lead with the recommendation.", createdAt: "2026-01-01T00:00:00Z" });
+  assert.equal(renderCommentedMarkdown(source, state), "<<ASB: [rvw_002] Lead with the recommendation.>>\n\n```mermaid\ngraph TD; A-->B\n```\n<<ASB: [rvw_001] Comment on \"A-->B\": Rename this edge.>>\n");
+});
+
+test("marks every cell of a deleted table column inside its fences", () => {
+  const source = "| A | B |\n| - | - |\n| 1 | 2 |\n";
+  const state = newState("draft-v00.md", source);
+  state.operations.push({ id: "rvw_001", kind: "delete", status: "open", scope: "column", quote: "B", range: { start: { offset: 6, line: 1, column: 7 }, end: { offset: 7, line: 1, column: 8 } }, createdAt: "2026-01-01T00:00:00Z" });
+  const output = renderCommentedMarkdown(source, state);
+  assert.match(output, /\| A \| B  <<ASB: \[rvw_001\] Delete this table column\.>>\|/);
+  assert.match(output, /\| 1 \| 2  <<ASB: \[rvw_001\] Delete this table column\.>>\|/);
+});
+
 test("detects whether a review has open feedback", () => {
   const state = newState("draft-v03.md", "# Draft\n");
   assert.equal(hasOpenOperations(state), false);

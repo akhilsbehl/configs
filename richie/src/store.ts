@@ -2,7 +2,14 @@ import { createHash, randomUUID } from "node:crypto";
 import { access, readFile, rename, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { commentedPath, reviewSidecarPath } from "./paths.js";
+import { parseMarkdown } from "./render.js";
 import type { ReviewOperation, ReviewState } from "./types.js";
+
+type MarkdownNode = {
+  type: string;
+  children?: MarkdownNode[];
+  position?: { start: { offset: number }; end: { offset: number } };
+};
 
 export const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex");
 
@@ -53,17 +60,58 @@ function marker(operation: ReviewOperation): string {
   return `<<ASB: ${id} ${operation.comment ?? "Review this."}>>`;
 }
 
+function walk(node: MarkdownNode, type: string, matches: MarkdownNode[] = []): MarkdownNode[] {
+  if (node.type === type) matches.push(node);
+  for (const child of node.children ?? []) walk(child, type, matches);
+  return matches;
+}
+
+function contains(node: MarkdownNode, operation: ReviewOperation): boolean {
+  return Boolean(node.position && operation.range && node.position.start.offset <= operation.range.start.offset && node.position.end.offset >= operation.range.end.offset);
+}
+
+function codeMarkerPlacement(source: string, node: MarkdownNode, operation: ReviewOperation): { offset: number; text: string } {
+  const start = node.position!.start.offset;
+  const lineStart = source.lastIndexOf("\n", start - 1) + 1;
+  const lineEnd = source.indexOf("\n", start);
+  const openingLine = source.slice(lineStart, lineEnd < 0 ? source.length : lineEnd);
+  const fence = openingLine.search(/[`~]{3,}/);
+  const prefix = fence < 0 ? "" : openingLine.slice(0, fence);
+  return { offset: node.position!.end.offset, text: `\n${prefix}${marker(operation)}` };
+}
+
+function columnMarkerPlacements(source: string, root: MarkdownNode, operation: ReviewOperation): Array<{ offset: number; text: string }> {
+  const table = walk(root, "table").find((candidate) => contains(candidate, operation));
+  if (!table) return [];
+  const rows = (table.children ?? []).filter((candidate) => candidate.type === "tableRow");
+  const column = rows.find((row) => (row.children ?? []).some((cell) => contains(cell, operation)))?.children?.findIndex((cell) => contains(cell, operation));
+  if (column === undefined || column < 0) return [];
+  return rows.flatMap((row) => {
+    const cell = row.children?.[column];
+    if (!cell?.position) return [];
+    const closingFence = source.lastIndexOf("|", cell.position.end.offset - 1);
+    return [{ offset: closingFence >= cell.position.start.offset ? closingFence : cell.position.end.offset, text: ` ${marker(operation)}` }];
+  });
+}
+
 export function renderCommentedMarkdown(source: string, state: ReviewState): string {
-  const ranged = state.operations.filter((operation) => operation.status === "open" && operation.range)
-    .sort((a, b) => (b.range?.end.offset ?? 0) - (a.range?.end.offset ?? 0));
+  const root = parseMarkdown(source) as MarkdownNode;
+  const codeBlocks = walk(root, "code");
+  const insertions = state.operations.filter((operation) => operation.status === "open" && operation.range).flatMap((operation) => {
+    if (operation.scope === "column") {
+      const placements = columnMarkerPlacements(source, root, operation);
+      if (placements.length) return placements;
+    }
+    const codeBlock = codeBlocks.find((candidate) => contains(candidate, operation));
+    if (codeBlock) return [codeMarkerPlacement(source, codeBlock, operation)];
+    return [{ offset: operation.range!.end.offset, text: ` ${marker(operation)}` }];
+  }).sort((a, b) => b.offset - a.offset);
   let output = source;
-  for (const operation of ranged) {
-    const offset = operation.range!.end.offset;
-    output = `${output.slice(0, offset)} ${marker(operation)}${output.slice(offset)}`;
+  for (const insertion of insertions) {
+    output = `${output.slice(0, insertion.offset)}${insertion.text}${output.slice(insertion.offset)}`;
   }
   const opening = state.operations.filter((operation) => operation.status === "open" && operation.scope === "document" && operation.placement === "start").map(marker);
-  const closing = state.operations.filter((operation) => operation.status === "open" && operation.scope === "document" && operation.placement !== "start").map(marker);
-  return [...opening, output, ...closing].filter(Boolean).join("\n\n");
+  return [...opening, output].filter(Boolean).join("\n\n");
 }
 
 export { reviewSidecarPath };

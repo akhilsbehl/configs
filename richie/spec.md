@@ -117,11 +117,11 @@ The review UI offers three primary operations plus scope selection and review li
 | Explain a concern or request | `comment` | Selected range or scope anchor, comment text, context anchors |
 | Comment on a paragraph or table row | `comment` | Block anchor and optional range |
 | Comment on a section | `comment` | Heading anchor and heading path |
-| Comment on the whole document | `comment` | `scope: "document"` and placement `start` or `end` |
+| Comment on the whole document | `comment` | `scope: "document"` and placement `start` |
 
 The UI may render pending deletions with strikethrough and proposed replacements in a tracked-change style. This is a visual representation of a stored operation, not a mutation of the Markdown file.
 
-For Mermaid fences, the review surface displays both the rendered SVG and the original Mermaid source. The SVG is visual context only. Selection-based operations target source lines or source text, preserving source-aware ranges for agent review. SVG nodes, edges, and labels are not independent review targets.
+For Mermaid fences, the review surface displays both the rendered SVG and the original Mermaid source. The SVG is visual context only. Selection-based operations target source lines or source text, preserving source-aware ranges for agent review. SVG nodes, edges, and labels are not independent review targets. Exported feedback for Mermaid or other fenced-code ranges sits after the closing fence so the source remains valid.
 
 ## 8. Source identity and mapping
 
@@ -267,7 +267,7 @@ The browser page contains:
 - A readable rendered Markdown document.
 - A restrained review toolbar with `Document level note`, `Abort review`, and `Finish review` actions.
 - Source-mapped text affordances with `Comment`, `Replace`, and `Delete` actions for individual text ranges.
-- A right-side or margin review panel listing open operations.
+- A left navigation sidebar for the document outline and a right review-inventory sidebar listing open operations.
 - Clear visual treatment for selected text, pending deletions, and replacements.
 - Section controls on headings for section-level comments.
 - Document-level controls at the top and bottom.
@@ -301,7 +301,7 @@ The interface should be visually quiet. Its purpose is reading and editorial jud
 
 **Document comments**
 
-- `Document level note` creates an explicitly document-scoped note at the end of the commented copy.
+- `Document level note` creates an explicitly document-scoped note at the top of the commented copy.
 - The note must not be attached to an arbitrary last paragraph.
 
 **Operation editing**

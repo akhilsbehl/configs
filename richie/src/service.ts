@@ -14,7 +14,7 @@ const publicDirectory = resolve(here, "..", "public");
 const style = `
 :root{color-scheme:light;--base:#faf4ed;--surface:#fffaf3;--overlay:#f2e9de;--muted:#9893a5;--subtle:#797593;--text:#575279;--pine:#286983;--foam:#56949f;--rose:#d7827e;--love:#b4637a;--gold:#ea9d34;--iris:#907aa9;--border:#dfd6cc}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 340px 56px 24px}
+body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 340px 56px}
 #document{max-width:900px;margin:0 auto}
 #toolbar{position:sticky;top:12px;display:flex;flex-wrap:wrap;gap:8px;max-width:900px;margin:0 auto 24px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(87,82,121,.1);z-index:2}
 .search-box{display:flex;align-items:center;gap:7px;margin-left:auto;font-size:.82rem;color:var(--subtle)}
@@ -70,7 +70,8 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable{color:var(--gold)}
 .hljs-title,.hljs-section,.hljs-function .hljs-title{color:var(--iris);font-weight:600}
 .hljs-operator,.hljs-punctuation{color:var(--subtle)}
-#panel{position:fixed;right:20px;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
+#panel,#navigation{position:fixed;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
+#panel{right:20px}#navigation{left:20px;border-top-color:var(--foam)}
 #panel strong{color:var(--pine)}
 .panel-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 #feedback-count{color:var(--subtle);font-size:.8rem}
@@ -84,7 +85,6 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .operation-actions{display:flex;gap:6px;margin-top:7px}
 .operation-actions button{padding:4px 7px;font-size:.78rem}
 .operation-actions button[data-action=remove-operation]{color:var(--love)}
-#outline{margin-top:18px;padding-top:12px;border-top:1px solid var(--border)}
 #outline-items{margin-top:6px}
 .outline-link{display:block;width:100%;padding:4px 6px;border:0;background:transparent;text-align:left;color:var(--subtle);font:inherit;font-size:.82rem;cursor:pointer;border-radius:4px}
 .outline-link:hover{background:var(--overlay);color:var(--pine);transform:none}
@@ -93,13 +93,16 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .review-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
 .review-target[data-review-kind=replace]{background:rgba(234,157,52,.18)}
 .review-target[data-review-kind=comment]{background:rgba(86,148,159,.16)}
+.review-column-target{outline:2px solid rgba(215,130,126,.55);outline-offset:-2px}
+.review-column-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
+.review-column-target[data-review-kind=replace]{background:rgba(234,157,52,.18)}
+.review-column-target[data-review-kind=comment]{background:rgba(86,148,159,.16)}
 .search-match{background:rgba(144,122,169,.28);border-radius:2px}
 .search-current{background:rgba(234,157,52,.55)}
 ::highlight(richie-comment){background:rgba(86,148,159,.24);text-decoration:underline;text-decoration-color:var(--foam);text-decoration-thickness:2px}
 ::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 ::highlight(richie-delete){background:rgba(180,99,122,.22);text-decoration:line-through;text-decoration-color:var(--love);text-decoration-thickness:2px}
 ::highlight(richie-search){background:rgba(144,122,169,.3)}
-::highlight(richie-search-current){background:rgba(234,157,52,.6)}
 .richie-target-menu{display:none;position:fixed;gap:4px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(87,82,121,.18);white-space:nowrap;z-index:10}
 .richie-target-menu .richie-target{margin:0}
 li:has(>input[type=checkbox])>p{display:inline}
@@ -107,7 +110,7 @@ li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 .richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
 #stale-banner{position:sticky;top:0;z-index:3;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}
 .review-note{color:var(--love);font-size:.9em}
-@media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box{margin-left:0}.search-box input{width:min(190px,50vw)}}
+@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box{margin-left:0}.search-box input{width:min(190px,50vw)}}
 `;
 
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {
@@ -160,7 +163,7 @@ export class RichieService {
       const source = await readFile(session.sourcePath, "utf8");
       const stale = sha256(source) !== session.state.sourceSha256;
       const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><label class="search-box"><span>Find in document</span><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output></label><button data-action="search-previous" aria-label="Previous search match">Previous</button><button data-action="search-next" aria-label="Next search match">Next</button><button data-action="finish">Finish review</button></div><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><label class="search-box"><span>Find in document</span><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output></label><button data-action="finish">Finish review</button></div><aside id="navigation"><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });
