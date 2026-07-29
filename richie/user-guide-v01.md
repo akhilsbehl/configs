@@ -60,9 +60,12 @@ The installed system service uses the built output in this repository. Rebuild a
 3. Select text, then use the menu beneath the selected range for `Comment`, `Replace`, or `Delete`.
 4. Use the controls that appear beside a heading, Mermaid source block, table cell, or table row for block-level feedback.
 5. Use `Document level note` for a cross-cutting instruction. It is added at the end of the commented copy.
-6. Check the feedback list on the right as you work.
+6. Check the feedback list on the right as you work. Each open item is highlighted in the document and can jump back to its source text.
+7. Use `Find in document` to search the rendered draft. `Previous` and `Next` move between matches. The document outline navigates between headings.
 
 Richie saves each operation immediately to a temporary sidecar named like `draft-vNN.review.json`. Each operation retains the selected source quote and source range.
+
+Open feedback is shown inline with a color treatment by operation type and in the feedback panel. Use `Remove` on an individual item to undo it during the review. Removal preserves the operation in the sidecar history but marks it as superseded, so it is not exported.
 
 Hover over source-mapped text to open a `Comment`, `Replace`, and `Delete` menu beneath that text range. If text is visibly selected, the menu actions apply to the active selection; otherwise they apply to the hovered range. Use the toolbar for a selection that crosses multiple ranges.
 

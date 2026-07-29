@@ -17,6 +17,10 @@ const style = `
 body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 340px 56px 24px}
 #document{max-width:900px;margin:0 auto}
 #toolbar{position:sticky;top:12px;display:flex;flex-wrap:wrap;gap:8px;max-width:900px;margin:0 auto 24px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(87,82,121,.1);z-index:2}
+.search-box{display:flex;align-items:center;gap:7px;margin-left:auto;font-size:.82rem;color:var(--subtle)}
+.search-box span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.search-box input{width:190px;padding:7px 9px;border:1px solid var(--border);border-radius:7px;background:#fffaf3;color:var(--text);font:inherit;font-size:.9rem}
+.search-box output{min-width:44px;color:var(--subtle);font-variant-numeric:tabular-nums}
 button{padding:7px 11px;border:1px solid var(--border);border-radius:7px;background:var(--overlay);color:var(--text);font:inherit;font-size:.9rem;cursor:pointer;transition:background .15s ease,border-color .15s ease,transform .15s ease}
 button:hover{background:#eadfd2;border-color:var(--rose);transform:translateY(-1px)}
 button:focus-visible{outline:3px solid rgba(144,122,169,.35);outline-offset:2px}
@@ -67,14 +71,41 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .hljs-operator,.hljs-punctuation{color:var(--subtle)}
 #panel{position:fixed;right:20px;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel strong{color:var(--pine)}
-#operations p{margin:10px 0;padding:8px;background:var(--overlay);border-radius:6px;font-size:.86rem;overflow-wrap:anywhere}
+.panel-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#feedback-count{color:var(--subtle);font-size:.8rem}
+#operations{margin-top:8px}
+.operation-card{margin:8px 0;padding:9px;background:var(--overlay);border-radius:7px;font-size:.84rem;overflow-wrap:anywhere;border-left:3px solid var(--foam)}
+.operation-card[data-kind=delete]{border-left-color:var(--love)}
+.operation-card[data-kind=replace]{border-left-color:var(--gold)}
+.operation-meta{display:flex;justify-content:space-between;gap:8px;color:var(--subtle);font-size:.76rem;text-transform:capitalize}
+.operation-quote{display:block;margin:5px 0;color:var(--text);font-style:italic}
+.operation-detail{margin:0;color:var(--text)}
+.operation-actions{display:flex;gap:6px;margin-top:7px}
+.operation-actions button{padding:4px 7px;font-size:.78rem}
+.operation-actions button[data-action=remove-operation]{color:var(--love)}
+#outline{margin-top:18px;padding-top:12px;border-top:1px solid var(--border)}
+#outline-items{margin-top:6px}
+.outline-link{display:block;width:100%;padding:4px 6px;border:0;background:transparent;text-align:left;color:var(--subtle);font:inherit;font-size:.82rem;cursor:pointer;border-radius:4px}
+.outline-link:hover{background:var(--overlay);color:var(--pine);transform:none}
+.outline-link[data-depth="2"]{padding-left:16px}.outline-link[data-depth="3"]{padding-left:28px}
+.review-target{outline:2px solid rgba(215,130,126,.55);outline-offset:3px;border-radius:3px}
+.review-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
+.review-target[data-review-kind=replace]{background:rgba(234,157,52,.18)}
+.review-target[data-review-kind=comment]{background:rgba(86,148,159,.16)}
+.search-match{background:rgba(144,122,169,.28);border-radius:2px}
+.search-current{background:rgba(234,157,52,.55)}
+::highlight(richie-comment){background:rgba(86,148,159,.24);text-decoration:underline;text-decoration-color:var(--foam);text-decoration-thickness:2px}
+::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px}
+::highlight(richie-delete){background:rgba(180,99,122,.22);text-decoration:line-through;text-decoration-color:var(--love);text-decoration-thickness:2px}
+::highlight(richie-search){background:rgba(144,122,169,.3)}
+::highlight(richie-search-current){background:rgba(234,157,52,.6)}
 .richie-target-menu{display:none;position:fixed;gap:4px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(87,82,121,.18);white-space:nowrap;z-index:10}
 .richie-target-menu .richie-target{margin:0}
 li:has(>input[type=checkbox])>p{display:inline}
 li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 p:hover,h1:hover,h2:hover,h3:hover,td:hover,details:hover{outline:1px dashed var(--rose);outline-offset:3px}
 .review-note{color:var(--love);font-size:.9em}
-@media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}}
+@media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}.search-box{margin-left:0}.search-box input{width:min(190px,50vw)}}
 `;
 
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {
@@ -116,7 +147,7 @@ export class RichieService {
     const host = request.headers.host ?? "";
     if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return send(response, 421, { error: "Unexpected host" });
     const url = new URL(request.url ?? "/", `http://${host}`); const match = url.pathname.match(/^\/s\/([^/]+)$/);
-    const api = url.pathname.match(/^\/api\/(state|operations|finish|abort)\/([^/]+)$/);
+    const api = url.pathname.match(/^\/api\/(state|operations|finish|abort)\/([^/]+)(?:\/([^/]+))?$/);
     if (url.pathname.startsWith("/assets/")) {
       const asset = url.pathname.slice("/assets/".length);
       if (!/^[A-Za-z0-9._-]+\.js$/.test(asset)) return send(response, 404, { error: "Asset not found" });
@@ -125,12 +156,19 @@ export class RichieService {
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="cancel">Cancel</button><button value="confirm">Confirm</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="document-note">Document level note</button><label class="search-box"><span>Find in document</span><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output></label><button data-action="search-previous" aria-label="Previous search match">Previous</button><button data-action="search-next" aria-label="Next search match">Next</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="cancel">Cancel</button><button value="confirm">Confirm</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });
     const session = this.session(api[2], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
     if (api[1] === "state" && request.method === "GET") return send(response, 200, session.state);
+    if (api[1] === "operations" && request.method === "DELETE" && api[3]) {
+      const operation = session.state.operations.find((candidate) => candidate.id === api[3]);
+      if (!operation) return send(response, 404, { error: "Review operation not found" });
+      if (operation.status !== "open") return send(response, 409, { error: "Only open feedback can be removed" });
+      operation.status = "superseded"; operation.updatedAt = new Date().toISOString();
+      await writeState(session.sidecarPath, session.state); return send(response, 200, operation);
+    }
     if (api[1] === "operations" && request.method === "POST") {
       const input = await body(request) as Record<string, unknown>; const range = parseRange(input.range);
       const source = await readFile(session.sourcePath, "utf8");

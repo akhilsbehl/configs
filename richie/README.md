@@ -4,6 +4,8 @@ Richie is a local visual review layer for versioned Markdown. It keeps Markdown 
 
 See the [user guide](user-guide-v01.md) for installation, review, and handoff instructions.
 
+The review surface highlights open feedback inline, provides per-item navigation and removal, and includes document search and an outline for longer drafts.
+
 ## Development
 
 ```sh

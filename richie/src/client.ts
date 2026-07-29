@@ -4,7 +4,8 @@ declare global { interface Window { __RICHIE__: { id: string; token: string } } 
 const context = window.__RICHIE__;
 const endpoint = (name: string) => `/api/${name}/${context.id}?token=${encodeURIComponent(context.token)}`;
 type Position = { offset: number; line: number; column: number };
-type Operation = { id: string; kind: string; comment?: string; replacement?: string; quote?: string };
+type Range = { start: Position; end: Position };
+type Operation = { id: string; kind: "delete" | "replace" | "comment"; status: string; scope: string; range?: Range; comment?: string; replacement?: string; quote?: string };
 type DialogOptions = { title: string; message?: string; inputLabel?: string; confirmLabel?: string; destructive?: boolean };
 const dialog = document.querySelector<HTMLDialogElement>("#richie-dialog")!;
 const dialogTitle = dialog.querySelector<HTMLElement>("#richie-dialog-title")!;
@@ -49,7 +50,117 @@ function selectionRange(): { start: Position; end: Position } | undefined {
   const start = parsed(selection.anchorNode, selection.anchorOffset); const end = parsed(selection.focusNode, selection.focusOffset); if (!start || !end || start.offset === end.offset) return undefined; return start.offset < end.offset ? { start, end } : { start: end, end: start };
 }
 async function post(name: string, input: unknown): Promise<unknown> { const response = await fetch(endpoint(name), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input) }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
-async function refresh(): Promise<void> { const state = await fetch(endpoint("state")).then((response) => response.json()) as { operations: Operation[] }; document.querySelector("#operations")!.innerHTML = state.operations.map((operation) => `<p><code>${operation.id}</code> ${operation.kind}: ${operation.replacement ?? operation.comment ?? operation.quote ?? ""}</p>`).join("") || "<p>None</p>"; }
+async function removeOperation(id: string): Promise<unknown> { const response = await fetch(`${endpoint("operations")}/${encodeURIComponent(id)}`, { method: "DELETE" }); const output = await response.json(); if (!response.ok) throw new Error(output.error); return output; }
+function sourceRange(element: Element): Range | undefined {
+  const value = element.getAttribute("data-md-range"); if (!value) return undefined;
+  const [start, end, startLine, startColumn, endLine, endColumn] = value.split(":").map(Number);
+  return { start: { offset: start, line: startLine, column: startColumn }, end: { offset: end, line: endLine, column: endColumn } };
+}
+function operationTarget(operation: Operation): Element | undefined {
+  if (!operation.range) return document.querySelector("#document");
+  let best: Element | undefined; let bestSize = Number.POSITIVE_INFINITY;
+  document.querySelectorAll<HTMLElement>("#document [data-md-range]").forEach((element) => {
+    const range = sourceRange(element); if (!range || range.start.offset > operation.range!.start.offset || range.end.offset < operation.range!.end.offset) return;
+    const size = range.end.offset - range.start.offset;
+    if (size < bestSize) { best = element; bestSize = size; }
+  });
+  return best;
+}
+function pointAtSourceOffset(offset: number, fromEnd = false): { node: Text; offset: number } | undefined {
+  const nodes: Array<{ node: Text; start: number; end: number }> = [];
+  const walker = document.createTreeWalker(document.querySelector("#document")!, NodeFilter.SHOW_TEXT);
+  let node: Node | null;
+  while ((node = walker.nextNode())) {
+    const text = node as Text; const start = parsed(text, 0)?.offset; const end = parsed(text, text.length)?.offset;
+    if (start !== undefined && end !== undefined) nodes.push({ node: text, start: Math.min(start, end), end: Math.max(start, end) });
+  }
+  const candidates = nodes.filter((candidate) => offset >= candidate.start && offset <= candidate.end);
+  const candidate = fromEnd ? candidates.at(-1) : candidates[0];
+  if (!candidate) return undefined;
+  return { node: candidate.node, offset: Math.max(0, Math.min(candidate.node.length, offset - candidate.start)) };
+}
+function domRange(operation: Operation): globalThis.Range | undefined {
+  if (!operation.range) return undefined;
+  const start = pointAtSourceOffset(operation.range.start.offset); const end = pointAtSourceOffset(operation.range.end.offset, true);
+  if (!start || !end) return undefined;
+  const range = document.createRange(); range.setStart(start.node, start.offset); range.setEnd(end.node, end.offset); return range;
+}
+type HighlightStore = { delete: (name: string) => void; set: (name: string, value: unknown) => void };
+function reviewHighlights(): HighlightStore | undefined {
+  const css = (window as unknown as { CSS?: { highlights?: HighlightStore } }).CSS;
+  return css?.highlights;
+}
+function clearReviewPresentation(): void {
+  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.classList.remove("review-target"); });
+  const highlights = reviewHighlights(); ["richie-comment", "richie-replace", "richie-delete"].forEach((name) => highlights?.delete(name));
+}
+function applyReviewPresentation(operations: Operation[]): void {
+  clearReviewPresentation();
+  const ranges = new Map<string, globalThis.Range[]>();
+  operations.filter((operation) => operation.status === "open").forEach((operation) => {
+    const target = operationTarget(operation); if (target) { target.classList.add("review-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); }
+    const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
+  });
+  const highlights = reviewHighlights(); ranges.forEach((value, kind) => highlights?.set(`richie-${kind}`, value as unknown as never));
+}
+function operationSummary(operation: Operation): string {
+  if (operation.kind === "replace") return `Replace with ${operation.replacement ?? "an empty value"}`;
+  if (operation.kind === "delete") return operation.scope === "range" ? "Mark selected text for deletion" : `Delete ${operation.scope}`;
+  return operation.comment ?? "Review this selection";
+}
+function renderFeedback(operations: Operation[]): void {
+  const open = operations.filter((operation) => operation.status === "open");
+  const count = document.querySelector<HTMLElement>("#feedback-count")!; count.textContent = `${open.length} open`;
+  const container = document.querySelector<HTMLElement>("#operations")!; container.replaceChildren();
+  if (!open.length) { const empty = document.createElement("p"); empty.textContent = "No feedback yet. Select text or use a block control to add some."; container.append(empty); return; }
+  open.forEach((operation) => {
+    const card = document.createElement("article"); card.className = "operation-card"; card.dataset.kind = operation.kind;
+    const meta = document.createElement("div"); meta.className = "operation-meta"; meta.append(operation.id, document.createTextNode(`${operation.kind} · ${operation.scope}`)); card.append(meta);
+    if (operation.quote) { const quote = document.createElement("q"); quote.className = "operation-quote"; quote.textContent = operation.quote; card.append(quote); }
+    const detail = document.createElement("p"); detail.className = "operation-detail"; detail.textContent = operationSummary(operation); card.append(detail);
+    const actions = document.createElement("div"); actions.className = "operation-actions";
+    if (operation.range) { const jump = document.createElement("button"); jump.textContent = "Jump to text"; jump.addEventListener("click", () => operationTarget(operation)?.scrollIntoView({ behavior: "smooth", block: "center" })); actions.append(jump); }
+    const remove = document.createElement("button"); remove.textContent = "Remove"; remove.dataset.action = "remove-operation"; remove.addEventListener("click", async () => {
+      if (!await modal({ title: "Remove feedback", message: `${operation.id} will be removed from this review.`, confirmLabel: "Remove", destructive: true })) return;
+      try { await removeOperation(operation.id); await refresh(); } catch (error) { await modal({ title: "Richie could not remove the feedback", message: (error as Error).message, confirmLabel: "OK" }); }
+    }); actions.append(remove); card.append(actions); container.append(card);
+  });
+}
+function renderOutline(): void {
+  const container = document.querySelector<HTMLElement>("#outline-items")!; container.replaceChildren();
+  document.querySelectorAll<HTMLElement>("#document h1, #document h2, #document h3").forEach((heading) => {
+    const link = document.createElement("button"); link.className = "outline-link"; link.dataset.depth = heading.tagName.slice(1); link.textContent = heading.textContent ?? "Untitled section";
+    link.addEventListener("click", () => heading.scrollIntoView({ behavior: "smooth", block: "start" })); container.append(link);
+  });
+}
+let searchMatches: globalThis.Range[] = [];
+let searchIndex = -1;
+function clearSearchHighlights(): void { const highlights = reviewHighlights(); highlights?.delete("richie-search"); highlights?.delete("richie-search-current"); document.querySelectorAll(".search-match,.search-current").forEach((element) => element.classList.remove("search-match", "search-current")); }
+function applySearchHighlights(): void {
+  clearSearchHighlights(); if (!searchMatches.length) return;
+  const highlights = reviewHighlights();
+  if (highlights) { highlights.set("richie-search", searchMatches as unknown as never); if (searchIndex >= 0) highlights.set("richie-search-current", [searchMatches[searchIndex]] as unknown as never); }
+  else searchMatches.forEach((range, index) => { const parent = range.commonAncestorContainer.parentElement; parent?.classList.add(index === searchIndex ? "search-current" : "search-match"); });
+}
+function updateSearch(): void {
+  const input = document.querySelector<HTMLInputElement>("#document-search")!; const query = input.value.trim().toLocaleLowerCase(); searchMatches = []; searchIndex = -1;
+  if (query) {
+    const walker = document.createTreeWalker(document.querySelector("#document")!, NodeFilter.SHOW_TEXT);
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      const text = node.textContent?.toLocaleLowerCase() ?? ""; let start = 0;
+      while (true) { const found = text.indexOf(query, start); if (found < 0) break; const range = document.createRange(); range.setStart(node, found); range.setEnd(node, found + query.length); searchMatches.push(range); start = found + Math.max(query.length, 1); }
+    }
+    if (searchMatches.length) searchIndex = 0;
+  }
+  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = searchMatches.length ? `${searchIndex + 1}/${searchMatches.length}` : query ? "0 matches" : ""; applySearchHighlights();
+}
+function moveSearch(step: number): void {
+  if (!searchMatches.length) return; searchIndex = (searchIndex + step + searchMatches.length) % searchMatches.length; applySearchHighlights();
+  const range = searchMatches[searchIndex]; range.commonAncestorContainer.parentElement?.scrollIntoView({ behavior: "smooth", block: "center" });
+  const count = document.querySelector<HTMLOutputElement>("#search-count")!; count.textContent = `${searchIndex + 1}/${searchMatches.length}`;
+}
+async function refresh(): Promise<void> { const state = await fetch(endpoint("state")).then((response) => response.json()) as { operations: Operation[] }; renderFeedback(state.operations); applyReviewPresentation(state.operations); renderOutline(); }
 async function renderMermaid(): Promise<void> {
   mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
   for (const [index, element] of [...document.querySelectorAll<HTMLElement>(".mermaid")].entries()) {
@@ -131,6 +242,8 @@ document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) =
 document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; try {
+    if (action === "search-next") { moveSearch(1); return; }
+    if (action === "search-previous") { moveSearch(-1); return; }
     if (action === "finish") {
       if (!await modal({ title: "Finish review", message: "Open feedback will be exported and this tab will close.", confirmLabel: "Finish review" })) return;
       const result = await post("finish", {}) as { exported: boolean; outputPath: string | null };
@@ -151,3 +264,5 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
 });
 refresh();
 renderMermaid();
+document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("input", updateSearch);
+document.querySelector<HTMLInputElement>("#document-search")?.addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); moveSearch(event.shiftKey ? -1 : 1); } });

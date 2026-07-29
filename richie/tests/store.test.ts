@@ -35,3 +35,11 @@ test("detects whether a review has open feedback", () => {
   state.operations.push({ id: "rvw_002", kind: "comment", status: "open", scope: "document", comment: "Act on this", createdAt: "2026-01-01T00:00:00Z" });
   assert.equal(hasOpenOperations(state), true);
 });
+
+test("does not export feedback removed from the review", () => {
+  const source = "Alpha beta.\n";
+  const state = newState("draft-v03.md", source);
+  state.operations.push({ id: "rvw_001", kind: "comment", status: "superseded", scope: "range", quote: "beta", comment: "Ignore this.", range: { start: { offset: 6, line: 1, column: 7 }, end: { offset: 10, line: 1, column: 11 } }, createdAt: "2026-01-01T00:00:00Z" });
+  assert.equal(hasOpenOperations(state), false);
+  assert.equal(renderCommentedMarkdown(source, state), source);
+});
