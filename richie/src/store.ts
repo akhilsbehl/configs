@@ -48,6 +48,7 @@ function marker(operation: ReviewOperation): string {
   if (operation.scope === "column") return `<<ASB: ${id} Delete this table column.>>`;
   if (operation.kind === "replace") return `<<ASB: ${id} Replace ${JSON.stringify(operation.quote ?? "selection")} with ${JSON.stringify(operation.replacement ?? "")}.>>`;
   if (operation.kind === "delete") return `<<ASB: ${id} Delete the preceding selected text.>>`;
+  if (operation.scope === "range" && operation.quote) return `<<ASB: ${id} Comment on ${JSON.stringify(operation.quote)}: ${operation.comment ?? "Review this."}>>`;
   return `<<ASB: ${id} ${operation.comment ?? "Review this."}>>`;
 }
 

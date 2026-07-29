@@ -20,6 +20,16 @@ body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16p
 button{padding:7px 11px;border:1px solid var(--border);border-radius:7px;background:var(--overlay);color:var(--text);font:inherit;font-size:.9rem;cursor:pointer;transition:background .15s ease,border-color .15s ease,transform .15s ease}
 button:hover{background:#eadfd2;border-color:var(--rose);transform:translateY(-1px)}
 button:focus-visible{outline:3px solid rgba(144,122,169,.35);outline-offset:2px}
+dialog{width:min(520px,calc(100vw - 32px));padding:0;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);box-shadow:0 18px 60px rgba(87,82,121,.28)}
+dialog::backdrop{background:rgba(40,34,56,.38)}
+dialog form{padding:20px}
+dialog h2{margin:0 0 8px;font-size:1.25rem}
+dialog p{margin:0 0 16px;white-space:pre-wrap}
+dialog label{display:grid;gap:6px;margin:14px 0}
+dialog textarea{width:100%;min-height:110px;resize:vertical;padding:9px 11px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);font:inherit}
+dialog menu{display:flex;justify-content:flex-end;gap:8px;margin:18px 0 0;padding:0}
+dialog button[value=confirm]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
+dialog button.destructive{background:var(--love);border-color:var(--love)}
 #toolbar button[data-action=finish]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
 #toolbar button[data-action=finish]:hover{background:#20556a}
 #toolbar button[data-action=abort]{background:var(--love);border-color:var(--love);color:#fffaf3}
@@ -47,13 +57,15 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .mermaid-source summary{padding:9px 14px;background:var(--overlay);color:var(--pine);font-weight:700;cursor:pointer;user-select:none}
 .mermaid-source summary:hover{background:#eadfd2}
 .mermaid-source pre{margin:0;border:0;border-radius:0;box-shadow:none}
-.mermaid-source-line{display:block;min-height:1.6em}
-.mermaid-source-line:hover{background:rgba(215,130,126,.18)}
+.mermaid-source-line,.code-source-line{display:block;min-height:1.6em}
+.mermaid-source-line:hover,.code-source-line:hover{background:rgba(215,130,126,.18)}
 #panel{position:fixed;right:20px;top:82px;width:290px;max-height:calc(100vh - 104px);overflow:auto;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
 #panel strong{color:var(--pine)}
 #operations p{margin:10px 0;padding:8px;background:var(--overlay);border-radius:6px;font-size:.86rem;overflow-wrap:anywhere}
 .richie-target-menu{display:none;position:fixed;gap:4px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(87,82,121,.18);white-space:nowrap;z-index:10}
 .richie-target-menu .richie-target{margin:0}
+li:has(>input[type=checkbox])>p{display:inline}
+li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 p:hover,h1:hover,h2:hover,h3:hover,td:hover,details:hover{outline:1px dashed var(--rose);outline-offset:3px}
 .review-note{color:var(--love);font-size:.9em}
 @media(max-width:1000px){body{padding:16px}#panel{position:static;width:auto;max-height:none;margin:0 auto 20px;max-width:900px}#toolbar{top:8px}}
@@ -107,7 +119,7 @@ export class RichieService {
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
       const source = await readFile(session.sourcePath, "utf8");
-      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+      const page = `<!doctype html><meta charset="utf-8"><title>Richie: ${session.sourcePath}</title><style>${style}</style><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><aside id="panel"><strong>Open feedback</strong><div id="operations"></div></aside><main id="document">${renderReviewHtml(source)}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="cancel">Cancel</button><button value="confirm">Confirm</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
       return send(response, 200, page, "text/html");
     }
     if (!api) return send(response, 404, { error: "Not found" });

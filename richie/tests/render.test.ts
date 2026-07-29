@@ -15,3 +15,10 @@ test("renders source-aware inline Markdown and GFM tables", () => {
   assert.match(html, /class="md-text-range" data-md-range=/);
   assert.match(html, /graph TD; A--&gt;B/);
 });
+
+test("renders checklist controls beside paragraph text and source-aware code blocks", () => {
+  const html = renderReviewHtml("- [ ] Review this\n\n```ts\nconst answer = 42;\n```\n");
+  assert.match(html, /<li[^>]*><input type="checkbox" disabled> <p/);
+  assert.match(html, /<pre data-md-block="[^"]+"[^>]*data-md-range=/);
+  assert.match(html, /<code class="language-ts"><span class="code-source-line" data-md-range="[^"]+"><span class="md-text">const answer = 42;<\/span><\/span><\/code>/);
+});

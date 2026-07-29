@@ -24,15 +24,15 @@ export function renderReviewHtml(source: string): string {
   const renderChildren = (node: Node): string => (node.children ?? []).map(render).join("");
   const text = (node: Node): string => (node.children ?? []).map((child) => child.value ?? text(child)).join("");
   const blockAttrs = (node: Node): string => ` data-md-block="b-${++block}" data-heading-path="${escape(JSON.stringify(headings))}"${range(node)}`;
-  const mermaidSource = (node: Node): string => {
+  const sourceLines = (node: Node, className: string): string => {
     const position = node.position;
     const value = node.value ?? "";
-    if (!position) return `<pre><code>${escape(value)}</code></pre>`;
+    if (!position) return escape(value);
     const openingNewline = source.indexOf("\n", position.start.offset);
-    if (openingNewline < 0) return `<pre><code>${escape(value)}</code></pre>`;
+    if (openingNewline < 0) return escape(value);
     let cursor = openingNewline + 1;
     const lines = value.split("\n").map((line) => line.endsWith("\r") ? line.slice(0, -1) : line);
-    const rendered = lines.map((line, index) => {
+    return lines.map((line, index) => {
       const lineStart = cursor;
       const newline = source.indexOf("\n", lineStart);
       const physicalEnd = newline < 0 ? position.end.offset : newline;
@@ -40,8 +40,13 @@ export function renderReviewHtml(source: string): string {
       const lineNumber = position.start.line + index + 1;
       const lineColumn = index === 0 ? position.start.column : 1;
       cursor = newline < 0 ? position.end.offset : newline + 1;
-      return `<span class="mermaid-source-line" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}"><span class="md-text">${escape(line)}</span></span>`;
+      return `<span class="${className}" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}"><span class="md-text">${escape(line)}</span></span>`;
     }).join("\n");
+  };
+  const mermaidSource = (node: Node): string => {
+    const value = node.value ?? "";
+    if (!node.position) return `<pre><code>${escape(value)}</code></pre>`;
+    const rendered = sourceLines(node, "mermaid-source-line");
     return `<pre><code>${rendered}</code></pre>`;
   };
   const render = (node: Node): string => {
@@ -57,7 +62,11 @@ export function renderReviewHtml(source: string): string {
       case "emphasis": return `<em${range(node)}>${renderChildren(node)}</em>`;
       case "strong": return `<strong${range(node)}>${renderChildren(node)}</strong>`;
       case "delete": return `<del${range(node)}>${renderChildren(node)}</del>`;
-      case "inlineCode": return `<code${range(node)}>${escape(node.value ?? "")}</code>`;
+      case "inlineCode": {
+        if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;
+        const { start, end } = node.position;
+        return `<code data-md-range="${start.offset + 1}:${end.offset - 1}:${start.line}:${start.column + 1}:${end.line}:${Math.max(start.column + 1, end.column - 1)}">${escape(node.value ?? "")}</code>`;
+      }
       case "link": return `<a${range(node)} href="${escape(node.url ?? "#")}" rel="noreferrer">${renderChildren(node)}</a>`;
       case "break": return "<br>";
       case "thematicBreak": return "<hr>";
@@ -65,7 +74,10 @@ export function renderReviewHtml(source: string): string {
       case "list": return `<${node.checked === null ? "ol" : "ul"}${blockAttrs(node)}>${renderChildren(node)}</${node.checked === null ? "ol" : "ul"}>`;
       case "listItem": return `<li${blockAttrs(node)}>${node.checked === true ? "<input type=\"checkbox\" checked disabled> " : node.checked === false ? "<input type=\"checkbox\" disabled> " : ""}${renderChildren(node)}</li>`;
       case "code": {
-        if (node.lang !== "mermaid") return `<pre${blockAttrs(node)}><code class="language-${escape(node.lang ?? "")}">${escape(node.value ?? "")}</code></pre>`;
+        if (node.lang !== "mermaid") {
+          const attrs = blockAttrs(node);
+          return `<pre${attrs}><code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line")}</code></pre>`;
+        }
         const attrs = blockAttrs(node);
         return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}</details>`;
       }

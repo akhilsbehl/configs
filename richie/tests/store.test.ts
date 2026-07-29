@@ -20,6 +20,13 @@ test("exports range and document annotations without changing source text", () =
   assert.equal(sha256(source), state.sourceSha256);
 });
 
+test("exports the exact selected quote in range annotations", () => {
+  const source = "Alpha beta gamma.\n";
+  const state = newState("draft-v00.md", source);
+  state.operations.push({ id: "rvw_001", kind: "comment", status: "open", scope: "range", quote: "beta", comment: "Check this word.", range: { start: { offset: 6, line: 1, column: 7 }, end: { offset: 10, line: 1, column: 11 } }, createdAt: "2026-01-01T00:00:00Z" });
+  assert.equal(renderCommentedMarkdown(source, state), "Alpha beta <<ASB: [rvw_001] Comment on \"beta\": Check this word.>> gamma.\n");
+});
+
 test("detects whether a review has open feedback", () => {
   const state = newState("draft-v03.md", "# Draft\n");
   assert.equal(hasOpenOperations(state), false);
