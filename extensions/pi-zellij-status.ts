@@ -13,12 +13,7 @@ const PLAN_QUESTION_TOOL = "plan_mode_question";
 const PLAN_STATE_ENTRY = "plan-mode-state";
 
 type Status = "idle" | "waiting" | undefined;
-type Pane = {
-  id: number;
-  title?: string;
-  tab_id?: number;
-  tab_name?: string;
-};
+type Pane = { id: number; title?: string; tab_id?: number; tab_name?: string };
 type Tab = { tab_id: number; name?: string };
 type PlanStateEntry = { type?: string; customType?: string; data?: unknown };
 
@@ -37,10 +32,10 @@ export default function piZellijStatus(pi: ExtensionAPI): void {
   let disposed = false;
 
   const enqueueUpdate = () => {
-    updateQueue = updateQueue
-      .then(() => updateZellij())
-      .catch(() => undefined);
+    updateQueue = updateQueue.then(() => updateZellij()).catch(() => undefined);
   };
+
+  const waitingCount = () => [...waitingReasons.values()].reduce((sum, value) => sum + value, 0);
 
   const changeWaiting = (reason: string, delta: 1 | -1) => {
     const wasWaiting = waitingCount() > 0;
@@ -49,7 +44,18 @@ export default function piZellijStatus(pi: ExtensionAPI): void {
     else waitingReasons.set(reason, next);
     if (!wasWaiting && waitingCount() > 0) process.stdout.write("\x07");
     idle = false;
-    notifyIfNeeded();
+    enqueueUpdate();
+  };
+
+  const ensureWaiting = (reason: string) => {
+    if ((waitingReasons.get(reason) ?? 0) === 0) changeWaiting(reason, 1);
+  };
+
+  const clearWaiting = (reason: string) => {
+    if ((waitingReasons.get(reason) ?? 0) === 0) return;
+    waitingReasons.delete(reason);
+    idle = false;
+    enqueueUpdate();
   };
 
   const setIdle = () => {
@@ -64,53 +70,40 @@ export default function piZellijStatus(pi: ExtensionAPI): void {
     enqueueUpdate();
   };
 
-  const notifyIfNeeded = () => {
-    enqueueUpdate();
-  };
-
   pi.on("input", () => {
-    // A new user turn means the user has returned to this Pi instance.
     clearIdle();
+    // A new chat turn is also an explicit action on a completed-plan menu.
+    clearWaiting("plan-review");
   });
 
   pi.on("agent_settled", (_event, ctx) => {
     setIdle();
-
     // pi-plan-mode presents its completed-plan menu from its own
     // agent_settled handler and currently exposes no public event for it.
-    // Defer this check until sibling handlers have persisted their state.
     setImmediate(() => {
-      if (disposed || !planReviewIsReady(ctx)) return;
-      changeWaiting("plan-review", 1);
+      if (disposed) return;
+      if (planReviewIsReady(ctx)) ensureWaiting("plan-review");
+      else clearWaiting("plan-review");
     });
   });
 
   pi.on("tool_execution_start", (event) => {
-    if (event.toolName === PLAN_QUESTION_TOOL) {
-      changeWaiting("plan-question", 1);
-    }
+    if (event.toolName === PLAN_QUESTION_TOOL) ensureWaiting("plan-question");
   });
 
   pi.on("tool_execution_end", (event) => {
-    if (event.toolName === PLAN_QUESTION_TOOL) {
-      changeWaiting("plan-question", -1);
-    }
+    if (event.toolName === PLAN_QUESTION_TOOL) changeWaiting("plan-question", -1);
   });
 
-  // @gotgenes/pi-permission-system public event channels.
   const unsubscribePermissionPrompt = pi.events.on(CHANNEL_PERMISSION_PROMPT, () => {
-    changeWaiting("permission", 1);
+    ensureWaiting("permission");
   });
   const unsubscribePermissionDecision = pi.events.on(CHANNEL_PERMISSION_DECISION, () => {
     changeWaiting("permission", -1);
   });
-
-  // @juicesharp/rpiv-ask-user-question public event channel.
   const unsubscribeAskUser = pi.events.on(CHANNEL_ASK_USER_BLOCKED, (data) => {
-    const active = isRecord(data) && data.active === true;
-    const inactive = isRecord(data) && data.active === false;
-    if (active) changeWaiting("ask-user", 1);
-    else if (inactive) changeWaiting("ask-user", -1);
+    if (isRecord(data) && data.active === true) ensureWaiting("ask-user");
+    else if (isRecord(data) && data.active === false) changeWaiting("ask-user", -1);
   });
 
   pi.on("session_shutdown", () => {
@@ -119,12 +112,6 @@ export default function piZellijStatus(pi: ExtensionAPI): void {
     unsubscribePermissionDecision();
     unsubscribeAskUser();
   });
-
-  function waitingCount(): number {
-    let count = 0;
-    for (const value of waitingReasons.values()) count += value;
-    return count;
-  }
 
   function currentStatus(): Status {
     if (waitingCount() > 0) return "waiting";
@@ -138,9 +125,7 @@ export default function piZellijStatus(pi: ExtensionAPI): void {
     if (!ownPane || ownPane.tab_id === undefined) return;
 
     const status = currentStatus();
-    const basePaneName = stripStatus(ownPane.title ?? "pi");
-    const paneName = appendStatus(basePaneName, status);
-    await action("rename-pane", "--pane-id", paneId, paneName);
+    await action("rename-pane", "--pane-id", paneId, appendStatus(stripStatus(ownPane.title ?? "pi"), status));
 
     const refreshedPanes = await listPanes();
     const tabPanes = refreshedPanes.filter((pane) => pane.tab_id === ownPane.tab_id);
@@ -169,9 +154,7 @@ export default function piZellijStatus(pi: ExtensionAPI): void {
   }
 
   async function zellij(...args: string[]): Promise<string> {
-    const result = await execFileAsync("zellij", ["--session", session, ...args], {
-      maxBuffer: 1024 * 1024,
-    });
+    const result = await execFileAsync("zellij", ["--session", session, ...args], { maxBuffer: 1024 * 1024 });
     return result.stdout;
   }
 }
@@ -218,9 +201,7 @@ function aggregateTabStatus(panes: Pane[], ownPaneId: string, ownStatus: Status)
 
 function planReviewIsReady(ctx: ExtensionContext): boolean {
   const entries = ctx.sessionManager.getBranch() as unknown as PlanStateEntry[];
-  const latest = [...entries].reverse().find((entry) =>
-    entry.type === "custom" && entry.customType === PLAN_STATE_ENTRY,
-  );
+  const latest = [...entries].reverse().find((entry) => entry.type === "custom" && entry.customType === PLAN_STATE_ENTRY);
   if (!latest || !isRecord(latest.data)) return false;
   return latest.data.awaitingAction === true && typeof latest.data.latestPlan === "string";
 }
