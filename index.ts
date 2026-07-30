@@ -7,8 +7,27 @@ import { Type, type Static } from "typebox";
 
 const API_KEY_ENV = "JINA_API_KEY";
 const MAX_OUTPUT = 50_000;
-const REQUEST_TIMEOUT_MS = 120_000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 120_000;
+const DEFAULT_DEEPSEARCH_TIMEOUT_MS = 900_000;
+const DEFAULT_DEEPSEARCH_IDLE_TIMEOUT_MS = 300_000;
 const MAX_ERROR_BODY = 500;
+
+type RequestOptions = {
+  totalTimeoutMs: number;
+  idleTimeoutMs?: number;
+  stream?: boolean;
+};
+
+type TimeoutReason = "total" | "idle";
+
+function configuredTimeout(name: string, fallback: number): number {
+  const raw = process.env[name]?.trim();
+  if (raw === undefined || raw === "") return fallback;
+  if (!/^\d+$/.test(raw) || Number(raw) <= 0 || !Number.isSafeInteger(Number(raw))) {
+    throw new Error(`${name} must be a positive integer number of milliseconds; received ${JSON.stringify(raw)}`);
+  }
+  return Number(raw);
+}
 const READER_ENDPOINT = "https://r.jina.ai/";
 const SEARCH_ENDPOINT = "https://s.jina.ai/";
 const DEEPSEARCH_ENDPOINT = "https://deepsearch.jina.ai/v1/chat/completions";
@@ -78,31 +97,82 @@ function extractSources(content: string, inputSource?: string): string[] {
   return [...urls].slice(0, 100);
 }
 
-function composeSignal(signal: AbortSignal | undefined): { signal: AbortSignal; dispose: () => void } {
+function composeSignal(
+  signal: AbortSignal | undefined,
+  options: RequestOptions,
+): {
+  signal: AbortSignal;
+  dispose: () => void;
+  resetIdle: () => void;
+  timeoutReason: () => TimeoutReason | undefined;
+} {
   const controller = new AbortController();
+  let reason: TimeoutReason | undefined;
+  let totalTimer: ReturnType<typeof setTimeout> | undefined;
+  let idleTimer: ReturnType<typeof setTimeout> | undefined;
+
   const abort = () => controller.abort(signal?.reason);
   if (signal?.aborted) abort();
   else signal?.addEventListener("abort", abort, { once: true });
-  const timer = setTimeout(() => controller.abort(new Error("Request timed out")), REQUEST_TIMEOUT_MS);
+
+  totalTimer = setTimeout(() => {
+    reason = "total";
+    controller.abort(new Error("Request total timeout"));
+  }, options.totalTimeoutMs);
+
+  const resetIdle = () => {
+    if (!options.idleTimeoutMs) return;
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      reason = "idle";
+      controller.abort(new Error("Request idle timeout"));
+    }, options.idleTimeoutMs);
+  };
+  resetIdle();
+
   return {
     signal: controller.signal,
+    resetIdle,
+    timeoutReason: () => reason,
     dispose: () => {
-      clearTimeout(timer);
+      if (totalTimer) clearTimeout(totalTimer);
+      if (idleTimer) clearTimeout(idleTimer);
       signal?.removeEventListener("abort", abort);
     },
   };
+}
+
+async function readResponseBody(
+  body: ReadableStream<Uint8Array> | null,
+  onChunk: () => void,
+): Promise<string> {
+  if (!body) throw new Error("Jina returned a streamed response without a body");
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let result = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    onChunk();
+    result += decoder.decode(value, { stream: true });
+  }
+  result += decoder.decode();
+  return result;
 }
 
 async function request(
   operation: string,
   input: RequestInfo | URL,
   init: RequestInit,
-  signal?: AbortSignal,
+  signal: AbortSignal | undefined,
+  options: RequestOptions,
 ): Promise<string> {
-  const composed = composeSignal(signal);
+  const composed = composeSignal(signal, options);
   try {
     const response = await fetch(input, { ...init, signal: composed.signal });
-    const body = await response.text();
+    const body = options.stream
+      ? await readResponseBody(response.body, composed.resetIdle)
+      : await response.text();
     if (!response.ok) {
       const detail = sanitizeErrorBody(body);
       throw new Error(`${operation} failed (${response.status})${detail ? `: ${detail}` : ""}`);
@@ -110,7 +180,11 @@ async function request(
     return body;
   } catch (error) {
     if (composed.signal.aborted && !signal?.aborted) {
-      throw new Error(`${operation} timed out after ${REQUEST_TIMEOUT_MS / 1000} seconds`);
+      const reason = composed.timeoutReason();
+      if (reason === "idle" && options.idleTimeoutMs) {
+        throw new Error(`${operation} stalled for ${options.idleTimeoutMs / 1000} seconds without receiving data`);
+      }
+      throw new Error(`${operation} timed out after ${options.totalTimeoutMs / 1000} seconds`);
     }
     if (signal?.aborted) throw new Error(`${operation} was cancelled`);
     throw error;
@@ -161,7 +235,7 @@ async function readUrl(url: string, signal?: AbortSignal): Promise<JinaResult> {
       "X-With-Iframe": "true",
       "X-With-Images-Summary": "true",
     },
-  }, signal);
+  }, signal, { totalTimeoutMs: configuredTimeout("JINA_REQUEST_TIMEOUT_MS", DEFAULT_REQUEST_TIMEOUT_MS) });
   return makeResult("read", input, body, input);
 }
 
@@ -171,7 +245,7 @@ async function search(query: string, signal?: AbortSignal): Promise<JinaResult> 
   url.searchParams.set("q", input);
   const body = await request("Jina Search", url, {
     headers: { Authorization: `Bearer ${apiKey()}`, "X-Return-Format": "markdown" },
-  }, signal);
+  }, signal, { totalTimeoutMs: configuredTimeout("JINA_REQUEST_TIMEOUT_MS", DEFAULT_REQUEST_TIMEOUT_MS) });
   return makeResult("search", input, body);
 }
 
@@ -186,7 +260,11 @@ async function deepSearch(prompt: string, signal?: AbortSignal): Promise<JinaRes
       stream: true,
       reasoning_effort: "medium",
     }),
-  }, signal);
+  }, signal, {
+    totalTimeoutMs: configuredTimeout("JINA_DEEPSEARCH_TIMEOUT_MS", DEFAULT_DEEPSEARCH_TIMEOUT_MS),
+    idleTimeoutMs: configuredTimeout("JINA_DEEPSEARCH_IDLE_TIMEOUT_MS", DEFAULT_DEEPSEARCH_IDLE_TIMEOUT_MS),
+    stream: true,
+  });
   return makeResult("deepsearch", input, parseDeepSearchSse(body));
 }
 

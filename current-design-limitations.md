@@ -100,6 +100,22 @@ Reader and DeepSearch should have equivalent schemas rather than returning arbit
 4. Add timeout, error, and citation handling.
 5. Improve testing and optional artifact storage.
 
+## Timeout configuration
+
+The extension uses separate timeout settings for short Jina requests and DeepSearch:
+
+| Setting | Default | Applies to |
+|---|---:|---|
+| `JINA_REQUEST_TIMEOUT_MS` | `120000` (2 minutes) | Reader and Search |
+| `JINA_DEEPSEARCH_TIMEOUT_MS` | `900000` (15 minutes) | DeepSearch total request duration |
+| `JINA_DEEPSEARCH_IDLE_TIMEOUT_MS` | `300000` (5 minutes) | DeepSearch time without receiving stream data |
+
+Values must be positive integer milliseconds. Invalid explicitly supplied values fail with a configuration error rather than silently using a default. The caller's Pi cancellation signal remains separate from timeout failures.
+
+DeepSearch keeps `stream: true`, as recommended by Jina for long-running requests. The client now consumes the response body progressively and resets the idle timer whenever a chunk arrives. The total timeout remains the hard upper bound. An upstream HTTP error, such as 504 or 524, is reported separately from a local total or idle timeout. DeepSearch is not retried automatically because retries can duplicate expensive work.
+
+For unusually complex research, an operator can raise `JINA_DEEPSEARCH_TIMEOUT_MS`, but 30 minutes should be treated as a practical maximum rather than a default. The source and installed extension copies must remain synchronized when reinstalling the extension.
+
 ## Design principle
 
 Commands are for humans. Tools are for agents. The extension should expose both interfaces over the same underlying Jina client rather than using the command interface as a proxy for agent access.
