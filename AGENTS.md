@@ -1,0 +1,1 @@
+/home/akhil/.pi/agent/AGENTS.md

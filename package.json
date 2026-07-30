@@ -1,0 +1,9 @@
+{
+  "name": "pi-zellij-status",
+  "private": true,
+  "keywords": ["pi-package"],
+  "pi": {
+    "extensions": ["./extensions"],
+    "skills": ["./skills"]
+  }
+}
