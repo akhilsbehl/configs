@@ -41,5 +41,8 @@
 	},
 	"dependencies": {
 		"@narumitw/pi-tui-kit": "^0.40.0"
+	},
+	"overrides": {
+		"brace-expansion": "5.0.8"
 	}
 }
