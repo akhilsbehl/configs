@@ -3,14 +3,10 @@ import { lstatSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync }
 import { dirname, join } from "node:path";
 import { getAgentDir } from "@earendil-works/pi-coding-agent";
 import { INFORMATION_PROFILES } from "./information-profiles.js";
-import { segmentPaletteForPreset } from "./presets/index.js";
 import {
 	type ConfigSegmentName,
 	DENSITIES,
 	LINE_BREAK_SEGMENT_NAME,
-	PALETTE_NAMES,
-	PALETTE_PRESET_NAMES,
-	type PaletteName,
 	SEGMENT_NAMES,
 	SEPARATOR_NAMES,
 	type SegmentName,
@@ -52,9 +48,24 @@ const LEGACY_STATUS_ICON_KEYS = {
 
 const DEFAULT_SEGMENTS: SegmentName[] = [...INFORMATION_PROFILES.balanced];
 
+const TOKYO_NIGHT_PALETTE: SegmentPalette = {
+	brand: { fg: "#090c0c", bg: "#a3aed2" },
+	provider: { fg: "#090c0c", bg: "#a3aed2" },
+	model: { fg: "#090c0c", bg: "#a3aed2" },
+	thinking: { fg: "#090c0c", bg: "#a3aed2" },
+	cwd: { fg: "#e3e5e5", bg: "#769ff0" },
+	branch: { fg: "#769ff0", bg: "#394260" },
+	tools: { fg: "#769ff0", bg: "#212736" },
+	context: { fg: "#769ff0", bg: "#212736" },
+	tokens: { fg: "#769ff0", bg: "#212736" },
+	cache: { fg: "#769ff0", bg: "#212736" },
+	cost: { fg: "#a0a9cb", bg: "#1d2230" },
+	time: { fg: "#a0a9cb", bg: "#1d2230" },
+	turn: { fg: "#a0a9cb", bg: "#1d2230" },
+};
+
 export const DEFAULT_STATUSLINE_CONFIG: StatuslineConfig = {
-	palettePreset: "tokyo-night",
-	palette: segmentPaletteForPreset("tokyo-night"),
+	palette: TOKYO_NIGHT_PALETTE,
 	density: "compact",
 	separator: "none",
 	segments: DEFAULT_SEGMENTS,
@@ -85,7 +96,6 @@ export const DEFAULT_STATUSLINE_CONFIG: StatuslineConfig = {
 };
 
 const DEFAULT_STATUSLINE_DOCUMENT_CONFIG = {
-	palettePreset: DEFAULT_STATUSLINE_CONFIG.palettePreset,
 	density: DEFAULT_STATUSLINE_CONFIG.density,
 	separator: DEFAULT_STATUSLINE_CONFIG.separator,
 	segments: DEFAULT_SEGMENTS,
@@ -147,7 +157,6 @@ export function normalizeStatuslineConfig(value: unknown): {
 		};
 	}
 	const knownRoot = new Set([
-		"palettePreset",
 		"palette",
 		"density",
 		"separator",
@@ -162,10 +171,6 @@ export function normalizeStatuslineConfig(value: unknown): {
 	}
 
 	normalizePalette(value.palette, config, diagnostics);
-	normalizeEnum(value, "palettePreset", PALETTE_PRESET_NAMES, config, diagnostics);
-	if (!isRecord(value.palette) && isPaletteName(config.palettePreset)) {
-		config.palette = segmentPaletteForPreset(config.palettePreset);
-	}
 	normalizeEnum(value, "density", DENSITIES, config, diagnostics);
 	normalizeEnum(value, "separator", SEPARATOR_NAMES, config, diagnostics);
 	normalizeBoolean(value, "stackExtensionStatuses", config, diagnostics);
@@ -464,19 +469,6 @@ function normalizePalette(
 	diagnostics: StatuslineConfigDiagnostic[],
 ) {
 	if (value === undefined) return;
-	if (typeof value === "string") {
-		if (!(PALETTE_NAMES as readonly string[]).includes(value)) {
-			diagnostics.push(
-				invalidDiagnostic(
-					"palette",
-					`Expected a palette object or one of: ${PALETTE_NAMES.join(", ")}`,
-				),
-			);
-			return;
-		}
-		config.palettePreset = value as (typeof PALETTE_NAMES)[number];
-		return;
-	}
 	if (!isRecord(value)) {
 		diagnostics.push(invalidDiagnostic("palette", "Expected a palette object"));
 		return;
@@ -510,7 +502,6 @@ function normalizePalette(
 		}
 	}
 	config.palette = palette;
-	config.palettePreset = "custom";
 }
 
 function normalizeModelTruncation(
@@ -572,10 +563,7 @@ function isSafeSegmentText(
 	return true;
 }
 
-function normalizeEnum<
-	K extends "palettePreset" | "density" | "separator",
-	T extends StatuslineConfig[K],
->(
+function normalizeEnum<K extends "density" | "separator", T extends StatuslineConfig[K]>(
 	value: Record<string, unknown>,
 	field: K,
 	accepted: readonly T[],
@@ -676,10 +664,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isConfigSegmentName(value: string): value is ConfigSegmentName {
 	return value === LINE_BREAK_SEGMENT_NAME || isSegmentName(value);
-}
-
-function isPaletteName(value: StatuslineConfig["palettePreset"]): value is PaletteName {
-	return (PALETTE_NAMES as readonly StatuslineConfig["palettePreset"][]).includes(value);
 }
 
 function isSegmentName(value: string): value is SegmentName {

@@ -1,12 +1,8 @@
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import { visibleWidth } from "@earendil-works/pi-tui";
 import { ansiStyle } from "./ansi.js";
-import { resolvePreset } from "./presets/index.js";
-import type { BlockColors, PowerlinePreset } from "./presets/types.js";
 import {
 	LINE_BREAK_SEGMENT_NAME,
-	type PalettePreset,
-	type PowerlineBlockName,
 	type RenderItem,
 	type RenderSegment,
 	type SegmentPalette,
@@ -14,16 +10,23 @@ import {
 	type StatuslineConfig,
 } from "./types.js";
 
+interface BlockColors {
+	fg?: string;
+	bg?: string;
+}
+
 interface PowerlineBlock {
-	baseBlock: PowerlineBlockName;
 	colors: BlockColors;
 	segments: RenderSegment[];
 }
 
+const TOKYO_NIGHT_LEAD = "#a3aed2";
+const TOKYO_NIGHT_EXTENSION_SEPARATOR = "#394260";
+
 export function renderPowerlineStatusline(
 	width: number,
 	items: RenderItem[],
-	config: Pick<StatuslineConfig, "palettePreset" | "palette" | "density" | "separator">,
+	config: Pick<StatuslineConfig, "palette" | "density" | "separator">,
 ): string {
 	if (items.length === 0 || width <= 0) return "";
 	return splitLines(items)
@@ -59,7 +62,7 @@ const SEGMENT_RETENTION_PRIORITY: Readonly<Record<RenderSegment["name"], number>
 function fitPowerlineSegments(
 	segments: readonly RenderSegment[],
 	width: number,
-	config: Pick<StatuslineConfig, "palettePreset" | "palette" | "density" | "separator">,
+	config: Pick<StatuslineConfig, "palette" | "density" | "separator">,
 ): string {
 	if (segments.length === 0) return "";
 	const fitted = [...segments];
@@ -84,20 +87,16 @@ function fitPowerlineSegments(
 	return visibleWidth(rendered) <= width ? rendered : "";
 }
 
-export function powerlineExtensionSeparator(
-	_theme: Theme,
-	palettePreset: PalettePreset = "tokyo-night",
-): string {
-	return ansiStyle(" • ", { fg: resolvePreset(palettePreset).extensionSeparator });
+export function powerlineExtensionSeparator(_theme: Theme): string {
+	return ansiStyle(" • ", { fg: TOKYO_NIGHT_EXTENSION_SEPARATOR });
 }
 
 function joinPowerlineSegments(
 	segments: RenderSegment[],
-	config: Pick<StatuslineConfig, "palettePreset" | "palette" | "density" | "separator">,
+	config: Pick<StatuslineConfig, "palette" | "density" | "separator">,
 ): string {
-	const preset = resolvePreset(config.palettePreset);
-	const blocks = contiguousBlocks(segments, preset, config.palettePreset, config.palette);
-	let line = ansiStyle("░▒▓", { fg: preset.lead });
+	const blocks = contiguousBlocks(segments, config.palette);
+	let line = ansiStyle("░▒▓", { fg: TOKYO_NIGHT_LEAD });
 
 	for (const [index, block] of blocks.entries()) {
 		const previous = index === 0 ? undefined : blocks[index - 1]?.colors;
@@ -112,24 +111,15 @@ function joinPowerlineSegments(
 
 function contiguousBlocks(
 	segments: RenderSegment[],
-	preset: PowerlinePreset,
-	palettePreset: PalettePreset,
 	configuredPalette: SegmentPalette,
 ): PowerlineBlock[] {
 	const blocks: PowerlineBlock[] = [];
-	const usesConfiguredColors = palettePreset === "custom";
 	for (const segment of segments) {
-		const colors = usesConfiguredColors
-			? (configuredPalette[segment.name] ?? {})
-			: preset.blocks[segment.block];
+		const colors = configuredPalette[segment.name] ?? {};
 		const previous = blocks.at(-1);
-		const matchesPrevious =
-			previous !== undefined &&
-			(usesConfiguredColors
-				? colorsEqual(previous.colors, colors)
-				: previous.baseBlock === segment.block);
-		if (matchesPrevious) previous.segments.push(segment);
-		else blocks.push({ baseBlock: segment.block, colors, segments: [segment] });
+		if (previous !== undefined && colorsEqual(previous.colors, colors))
+			previous.segments.push(segment);
+		else blocks.push({ colors, segments: [segment] });
 	}
 	return blocks;
 }

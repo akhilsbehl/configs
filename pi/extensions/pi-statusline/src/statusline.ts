@@ -19,7 +19,6 @@ import {
 	loadStatuslineSettingsForAgent,
 	settingsFilePath,
 } from "./settings.js";
-import type { PalettePreset } from "./types.js";
 
 const STATUSLINE_KEY = "statusline";
 const GIT_STATUS_REFRESH_INTERVAL_MS = 30_000;
@@ -28,7 +27,6 @@ const EMPTY_EXTENSION_STATUS_ICON_ALIASES: ExtensionStatusIconAliasMap = new Map
 
 export default function statusline(pi: ExtensionAPI) {
 	let loaded: LoadedStatuslineSettings | undefined;
-	let previewPalettePreset: PalettePreset | undefined;
 	let activeSessionManager: ExtensionContext["sessionManager"] | undefined;
 	const runtime: RuntimeState = {
 		turnCount: 0,
@@ -119,7 +117,6 @@ export default function statusline(pi: ExtensionAPI) {
 		menuController = new AbortController();
 		const cwd = ctx.cwd;
 		activeSessionManager = ctx.sessionManager;
-		previewPalettePreset = undefined;
 		clearGitStatusDebounce();
 		activeGitStatusTarget = ctx.mode === "tui" ? { cwd, generation } : undefined;
 		runtime.gitStatus = undefined;
@@ -163,9 +160,7 @@ export default function statusline(pi: ExtensionAPI) {
 				invalidate() {},
 				render(width: number): string[] {
 					if (!loaded) return [];
-					const config = previewPalettePreset
-						? { ...loaded.config, palettePreset: previewPalettePreset }
-						: loaded.config;
+					const config = loaded.config;
 					const mainLine = renderStatusline(width, ctx, footerData, theme, config, runtime);
 					const lines = mainLine ? mainLine.split("\n") : [];
 					lines.push(
@@ -192,13 +187,7 @@ export default function statusline(pi: ExtensionAPI) {
 		},
 		apply(next, ctx) {
 			if (ctx.sessionManager !== activeSessionManager) return;
-			previewPalettePreset = undefined;
 			loaded = next;
-			refresh();
-		},
-		preview(palettePreset, ctx) {
-			if (ctx.sessionManager !== activeSessionManager) return;
-			previewPalettePreset = palettePreset;
 			refresh();
 		},
 	});
@@ -227,7 +216,6 @@ export default function statusline(pi: ExtensionAPI) {
 		sessionGeneration += 1;
 		menuController.abort(new DOMException("Statusline session shut down", "AbortError"));
 		activeSessionManager = undefined;
-		previewPalettePreset = undefined;
 		activeGitStatusTarget = undefined;
 		clearGitStatusDebounce();
 		pendingGitStatusRefresh = undefined;

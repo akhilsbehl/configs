@@ -21,8 +21,8 @@ const COMPATIBLE_STATUS_ICON_KEYS: Readonly<Record<string, string>> = {
 	pisync: "sync",
 };
 const EMPTY_EXTENSION_STATUS_ICON_ALIASES: ExtensionStatusIconAliasMap = new Map();
-function extensionStatusSeparator(config: StatuslineConfig, theme: Theme): string {
-	return powerlineExtensionSeparator(theme, config.palettePreset);
+function extensionStatusSeparator(_config: StatuslineConfig, theme: Theme): string {
+	return powerlineExtensionSeparator(theme);
 }
 
 export function formatExtensionStatuses(

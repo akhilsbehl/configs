@@ -23,8 +23,8 @@
 		]
 	},
 	"scripts": {
-		"check": "biome check --vcs-use-ignore-file=false src test package.json tsconfig.json README.md && npm run typecheck",
-		"format": "biome check --write --vcs-use-ignore-file=false src test package.json tsconfig.json README.md",
+		"check": "biome check --vcs-use-ignore-file=false src package.json tsconfig.json README.md && npm run typecheck",
+		"format": "biome check --write --vcs-use-ignore-file=false src package.json tsconfig.json README.md",
 		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {

@@ -8,8 +8,6 @@ import {
 	Container,
 	Key,
 	matchesKey,
-	type SelectItem,
-	SelectList,
 	Text,
 	truncateToWidth,
 	wrapTextWithAnsi,
@@ -21,7 +19,6 @@ import {
 	type InformationProfileName,
 	inferInformationProfile,
 } from "./information-profiles.js";
-import { segmentPaletteForPreset } from "./presets/index.js";
 import {
 	DEFAULT_STATUSLINE_DOCUMENT,
 	type LoadedStatuslineSettings,
@@ -31,10 +28,6 @@ import {
 import {
 	type ConfigSegmentName,
 	LINE_BREAK_SEGMENT_NAME,
-	PALETTE_NAMES,
-	PALETTE_PRESET_NAMES,
-	type PaletteName,
-	type PalettePreset,
 	SEGMENT_NAMES,
 	type SegmentName,
 } from "./types.js";
@@ -67,7 +60,6 @@ export interface StatuslineCommandOptions {
 	settingsPath: string;
 	getLoaded(): LoadedStatuslineSettings;
 	apply(loaded: LoadedStatuslineSettings, ctx: ExtensionCommandContext): void;
-	preview?(palettePreset: PalettePreset | undefined, ctx: ExtensionCommandContext): void;
 	save?: (settingsPath: string, rawDocument: string) => LoadedStatuslineSettings;
 	getMenuOwner?(): { signal: AbortSignal; isCurrent(): boolean };
 }
@@ -126,7 +118,7 @@ async function showMainMenu(ctx: ExtensionCommandContext, options: StatuslineCom
 		isCurrent: () => !fallbackController.signal.aborted,
 	};
 	type Screen = "main" | "advanced" | "information";
-	type Action = "appearance" | "setInformation" | "layout" | "edit" | "status" | "help" | "back";
+	type Action = "setInformation" | "layout" | "edit" | "status" | "help" | "back";
 	const menu = defineMenu<undefined, Screen, Action, ExtensionCommandContext>({
 		start: "main",
 		screens: {
@@ -136,11 +128,6 @@ async function showMainMenu(ctx: ExtensionCommandContext, options: StatuslineCom
 					kind: "actions",
 					title: "pi-statusline",
 					items: [
-						{
-							id: "appearance",
-							label: `Appearance (${config.palettePreset})`,
-							action: "appearance",
-						},
 						{
 							id: "information",
 							label: `Information (${inferInformationProfile(config.segments)})`,
@@ -193,10 +180,6 @@ async function showMainMenu(ctx: ExtensionCommandContext, options: StatuslineCom
 			},
 		},
 		actions: {
-			appearance: async () => {
-				await choosePalettePreset(ctx, options);
-				return { kind: "close" };
-			},
 			setInformation: async ({ itemId }) => {
 				const profile = INFORMATION_PROFILE_NAMES.find((candidate) => candidate === itemId);
 				if (!profile) return { kind: "rejected" };
@@ -231,110 +214,6 @@ async function showMainMenu(ctx: ExtensionCommandContext, options: StatuslineCom
 	} finally {
 		fallbackController.abort(new DOMException("Statusline menu closed", "AbortError"));
 	}
-}
-
-async function choosePalettePreset(
-	ctx: ExtensionCommandContext,
-	options: StatuslineCommandOptions,
-) {
-	if (ctx.mode !== "tui") {
-		if (ctx.hasUI) ctx.ui.notify(`Edit palettePreset manually: ${options.settingsPath}`, "info");
-		return;
-	}
-	const current = options.getLoaded();
-	let selection: PalettePreset | undefined;
-	try {
-		selection = await showPalettePresetPicker(ctx, current.config.palettePreset, options);
-	} finally {
-		options.preview?.(undefined, ctx);
-	}
-	if (selection === undefined) return;
-
-	let loaded: LoadedStatuslineSettings;
-	try {
-		const rawDocument = palettePresetDocument(current, selection);
-		loaded = (options.save ?? saveStatuslineSettingsDocument)(options.settingsPath, rawDocument);
-	} catch (error) {
-		ctx.ui.notify(`Palette preset was not saved: ${formatError(error)}`, "error");
-		return;
-	}
-	try {
-		options.apply(loaded, ctx);
-	} catch (error) {
-		const rollbackError = restoreStatuslineSettings(ctx, options, current, loaded);
-		ctx.ui.notify(
-			rollbackError
-				? `Palette preset could not be applied: ${formatError(error)}; rollback failed: ${formatError(rollbackError)}`
-				: `Palette preset could not be applied: ${formatError(error)}; previous settings restored.`,
-			"error",
-		);
-		return;
-	}
-	const message =
-		loaded.config.palettePreset === "custom"
-			? "Custom palette applied. Edit colors via /statusline → Advanced → Edit settings JSON."
-			: `Palette preset applied: ${loaded.config.palettePreset}.`;
-	ctx.ui.notify(message, "info");
-}
-
-async function showPalettePresetPicker(
-	ctx: ExtensionCommandContext,
-	current: PalettePreset,
-	options: StatuslineCommandOptions,
-): Promise<PalettePreset | undefined> {
-	const items: SelectItem[] = PALETTE_PRESET_NAMES.map((palettePreset) => ({
-		value: palettePreset,
-		label: palettePreset,
-		description:
-			[
-				palettePreset === current ? "current" : undefined,
-				palettePreset === "custom" ? "per-segment colors from settings JSON" : undefined,
-			]
-				.filter((part): part is string => part !== undefined)
-				.join(" • ") || undefined,
-	}));
-	const selectedIndex = PALETTE_PRESET_NAMES.indexOf(current);
-	const result = await ctx.ui.custom<PalettePreset | null>((tui, theme, _keybindings, done) => {
-		const container = new Container();
-		container.addChild(new DynamicBorder((text: string) => theme.fg("accent", text)));
-		const title = new Text("", 1, 0);
-		container.addChild(title);
-		const list = new SelectList(items, Math.min(items.length, 10), {
-			selectedPrefix: (text) => theme.fg("accent", text),
-			selectedText: (text) => theme.fg("accent", text),
-			description: (text) => theme.fg("muted", text),
-			scrollInfo: (text) => theme.fg("dim", text),
-			noMatch: (text) => theme.fg("warning", text),
-		});
-		list.setSelectedIndex(selectedIndex);
-		list.onSelectionChange = (item) => {
-			options.preview?.(item.value as PalettePreset, ctx);
-		};
-		list.onSelect = (item) => done(item.value as PalettePreset);
-		list.onCancel = () => done(null);
-		container.addChild(list);
-		const hint = new Text("", 1, 0);
-		container.addChild(hint);
-		container.addChild(new DynamicBorder((text: string) => theme.fg("accent", text)));
-		const updateThemedText = () => {
-			title.setText(theme.fg("accent", theme.bold(`Palette preset (current: ${current})`)));
-			hint.setText(theme.fg("dim", "↑↓ preview • enter apply • esc cancel"));
-		};
-		updateThemedText();
-
-		return {
-			render: (width: number) => container.render(width),
-			invalidate() {
-				container.invalidate();
-				updateThemedText();
-			},
-			handleInput(data: string) {
-				list.handleInput(data);
-				tui.requestRender();
-			},
-		};
-	});
-	return result ?? undefined;
 }
 
 function applyInformationProfile(
@@ -610,23 +489,6 @@ async function editSettings(ctx: ExtensionCommandContext, options: StatuslineCom
 	ctx.ui.notify(`pi-statusline settings saved and applied${suffix}.`, "info");
 }
 
-function palettePresetDocument(
-	current: LoadedStatuslineSettings,
-	palettePreset: PalettePreset,
-): string {
-	const { parsed } = editableSettings(current, "choosing a palette preset");
-	if (palettePreset === "custom" && !isRecord(parsed.palette)) {
-		const seedPreset = isPaletteName(current.config.palettePreset)
-			? current.config.palettePreset
-			: "tokyo-night";
-		parsed.palette = segmentPaletteForPreset(seedPreset);
-	} else if (palettePreset !== "custom" && typeof parsed.palette === "string") {
-		delete parsed.palette;
-	}
-	parsed.palettePreset = palettePreset;
-	return `${JSON.stringify(parsed, null, "\t")}\n`;
-}
-
 function informationProfileDocument(
 	current: LoadedStatuslineSettings,
 	profile: InformationProfileName,
@@ -875,7 +737,7 @@ function showStatus(ctx: ExtensionCommandContext, options: StatuslineCommandOpti
 			`pi-statusline source: ${loaded.source}`,
 			`active path: ${loaded.settingsPath}`,
 			`save target: ${options.settingsPath}`,
-			`palette preset: ${loaded.config.palettePreset}`,
+			`palette: ${Object.keys(loaded.config.palette).length === 0 ? "custom (unstyled)" : "Tokyo Night or custom per-segment colors"}`,
 			`density: ${loaded.config.density}`,
 			`separator: ${loaded.config.separator}`,
 			`information: ${inferInformationProfile(loaded.config.segments)}`,
@@ -890,16 +752,16 @@ function showHelp(ctx: ExtensionCommandContext, settingsPath: string) {
 	if (!canNotify(ctx)) return;
 	ctx.ui.notify(
 		[
-			"/statusline — open Appearance, Information, Advanced, Status, and Help",
+			"/statusline — open Information, Advanced, Status, and Help",
 			"/statusline settings — edit and apply JSON",
 			"/statusline status — show source, path, information level, and warnings",
 			"/statusline help — show this help",
-			"Menu actions: Appearance, Information, Advanced, Status, Help.",
+			"Menu actions: Information, Advanced, Status, Help.",
 			"Information levels: minimal, balanced, detailed; any other segment array is custom.",
 			"Advanced actions: Custom layout, Edit settings JSON, Back.",
 			`Settings: ${settingsPath}`,
-			"Fields: palettePreset, palette, density, separator, segments, segmentText, extensionStatusIcons, stackExtensionStatuses, maxExtensionStatuses",
-			"Named presets ignore but preserve palette; custom uses its per-segment fg/bg colors.",
+			"Fields: palette, density, separator, segments, segmentText, extensionStatusIcons, stackExtensionStatuses, maxExtensionStatuses",
+			"Tokyo Night is the built-in palette; palette accepts per-segment fg/bg colors.",
 			"Responsive rows retain context, model, location, and active work before decorative data.",
 			"Custom layout can show, hide, reorder, or split data segments across rows.",
 			"Press M for move mode, Alt+Up/Alt+Down for quick move, and B for a line break.",
@@ -914,10 +776,6 @@ function showHelp(ctx: ExtensionCommandContext, settingsPath: string) {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function isPaletteName(value: PalettePreset): value is PaletteName {
-	return (PALETTE_NAMES as readonly PalettePreset[]).includes(value);
 }
 
 function canNotify(ctx: ExtensionCommandContext): boolean {

@@ -17,9 +17,9 @@ A representative uncolored layout:
 - **Responsive:** removes lower-priority segments before important information gets clipped.
 - **Quiet when idle:** activity appears only while Pi is streaming or running tools.
 - **Native-aligned usage:** optional token, prompt-cache, subscription, and cost details.
-- **Easy choices:** three information levels and seven previewable color presets.
-- **Still flexible:** custom layouts, multiline rows, colors, labels, separators, and status icons stay
-  available under **Advanced**.
+- **Simple defaults:** Tokyo Night colors require no setup.
+- **Still flexible:** custom layouts, multiline rows, per-segment colors, labels, separators, and status
+  icons stay available under **Advanced**.
 
 > **Need more customization?** See
 > [`pi-starship`](https://github.com/narumiruna/pi-extensions/tree/main/extensions/pi-starship)
@@ -48,11 +48,9 @@ For the best result, use a terminal font that includes Powerline glyphs and emoj
 
 1. Install the extension and start Pi.
 2. Run `/statusline`.
-3. Use the standard Main/Advanced navigation, then choose an appearance or information level;
-   specialized previews still apply changes immediately.
+3. Use the standard Main/Advanced navigation, then choose an information level or edit settings.
 
 ```text
-Appearance (tokyo-night)
 Information (balanced)
 Advanced
 Status
@@ -61,10 +59,9 @@ Help
 
 | Menu item | What it does |
 | --- | --- |
-| **Appearance** | Preview palettes with Up/Down; Enter applies and Escape cancels |
 | **Information** | Preview and apply a curated set of segments |
 | **Advanced** | Open Custom layout or Edit settings JSON |
-| **Status** | Show the effective source, path, appearance, layout, and diagnostics |
+| **Status** | Show the effective source, path, palette, layout, and diagnostics |
 | **Help** | Show command and schema guidance |
 
 ### Information levels
@@ -86,16 +83,16 @@ reads or writes.
 
 | Command | Purpose |
 | --- | --- |
-| `/statusline` | Open Appearance, Information, Advanced, Status, and Help |
+| `/statusline` | Open Information, Advanced, Status, and Help |
 | `/statusline settings` | Open the JSON editor in TUI mode |
 | `/statusline status` | Show the effective settings and diagnostics |
 | `/statusline help` | Show command and schema guidance |
 
 The direct `settings`, `status`, and `help` routes remain for compatibility. The root standard menu
 is TUI-only; Escape returns from Advanced or closes Main. RPC receives observable notifications
-instead of TUI-only controls. Unknown subcommands and trailing arguments are rejected. Palette and
-information previews, the width-aware layout editor, and the JSON editor remain specialized UI
-because they provide live preview/edit behavior rather than standard navigation.
+instead of TUI-only controls. Unknown subcommands and trailing arguments are rejected. The
+width-aware layout editor and JSON editor remain specialized UI because they provide live edit
+behavior rather than standard navigation.
 
 ## 📐 Runtime behavior
 
@@ -157,8 +154,7 @@ automatically; rename it to `pi-statusline.json`. If both files exist, `pi-statu
 
 | Field | Accepted values | Purpose |
 | --- | --- | --- |
-| `palettePreset` | `tokyo-night`, `ocean`, `sunset`, `forest`, `candy`, `neon`, `mono`, `custom` | Select the active color preset |
-| `palette` | Per-segment `fg`/`bg` `#RRGGBB` colors | Define colors used by `custom` |
+| `palette` | Per-segment `fg`/`bg` `#RRGGBB` colors | Override Tokyo Night colors per segment |
 | `density` | `compact`, `cozy` | Control horizontal padding |
 | `separator` | `none`, `dot`, `bar`, `powerline`, `round` | Separate adjacent segments in one color block |
 | `segments` | Ordered unique segment names and `line_break` | Control visibility, order, and rows |
@@ -175,7 +171,6 @@ A compact customization example:
 
 ```json
 {
-  "palettePreset": "ocean",
   "density": "compact",
   "separator": "dot",
   "segments": ["model", "thinking", "cwd", "branch", "context", "cache", "cost"],
@@ -199,16 +194,13 @@ A compact customization example:
 Use **Advanced → Edit settings JSON** or `/statusline settings` to edit, validate, atomically save, and
 apply the file.
 
-## 🎨 Appearance
+## 🎨 Palette
 
-Named palettes provide contrast-checked color ramps. Appearance previews update while the picker
-moves, but save only when Enter is pressed; Escape restores the saved palette.
-
-When `palettePreset` is `custom`, `palette` maps segment names to foreground/background colors:
+Tokyo Night is the fixed built-in palette. The optional `palette` object maps segment names to
+foreground/background colors and overrides those segments:
 
 ```json
 {
-  "palettePreset": "custom",
   "palette": {
     "model": { "fg": "#090c0c", "bg": "#a3aed2" },
     "context": { "fg": "#c0caf5", "bg": "#1d2230" }
@@ -216,11 +208,8 @@ When `palettePreset` is `custom`, `palette` maps segment names to foreground/bac
 }
 ```
 
-- Selecting `custom` without a palette copies the active named preset as a starting point.
-- A manually authored `"palettePreset": "custom"` without `palette` uses Tokyo Night colors.
-- Named presets ignore but preserve an existing custom palette.
-- A `palette` object without `palettePreset` selects `custom`.
-- Legacy string palettes such as `"palette": "ocean"` remain accepted.
+- Missing `palette` uses the complete Tokyo Night palette.
+- A supplied palette object is treated as per-segment custom colors.
 - Missing custom colors remain unstyled instead of inheriting Tokyo Night.
 - Adjacent segments with identical colors share one block; transitions use ``.
 
@@ -346,9 +335,7 @@ extensions/pi-statusline/
 │   ├── extension-status.ts
 │   ├── git-status.ts
 │   ├── ansi.ts
-│   ├── types.ts
-│   └── presets/
-├── test/
+│   └── types.ts
 ├── README.md
 ├── LICENSE
 ├── tsconfig.json
