@@ -1,6 +1,6 @@
 {
   "lastChangelogVersion": "0.83.0",
-  "theme": "rose-pine-dawn",
+  "theme": "neobones-light",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-luna",
   "defaultThinkingLevel": "medium",
