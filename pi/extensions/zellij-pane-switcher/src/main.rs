@@ -5,11 +5,22 @@ use zellij_tile::prelude::*;
 
 use std::collections::BTreeMap;
 
+#[derive(Clone, Copy)]
+struct FloatingContext {
+    tab_id: usize,
+    was_visible: bool,
+    pane: Option<(bool, u32)>,
+}
+
 #[derive(Default)]
 struct State {
     panes: Vec<Pane>,
     tabs: BTreeMap<usize, String>,
+    tab_ids: BTreeMap<usize, usize>,
+    floating_visibility: BTreeMap<usize, bool>,
+    switcher_tab_position: Option<usize>,
     origin_pane: Option<(bool, u32)>,
+    floating_context: Option<FloatingContext>,
     query: String,
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
@@ -73,9 +84,41 @@ impl State {
             });
     }
 
+    fn snapshot_floating_context(&mut self) {
+        let Some(tab_position) = self.switcher_tab_position else {
+            return;
+        };
+        let Some(&tab_id) = self.tab_ids.get(&tab_position) else {
+            return;
+        };
+        let Some(&was_visible) = self.floating_visibility.get(&tab_position) else {
+            return;
+        };
+        let pane = self
+            .panes
+            .iter()
+            .find(|pane| pane.tab_position == tab_position && pane.is_floating && !pane.is_plugin)
+            .map(identity);
+        self.floating_context = Some(FloatingContext {
+            tab_id,
+            was_visible,
+            pane,
+        });
+    }
+
+    fn restore_floating_context(&mut self, target: Option<(bool, u32)>) {
+        let Some(context) = self.floating_context.take() else {
+            return;
+        };
+        if context.pane.is_some() && !context.was_visible && context.pane != target {
+            let _ = hide_floating_panes(Some(context.tab_id));
+        }
+    }
+
     fn cancel(&mut self) {
         let origin_pane = self.origin_pane.take();
         self.dismiss();
+        self.restore_floating_context(None);
         if let Some(origin_pane) = origin_pane {
             if self.panes.iter().any(|pane| identity(pane) == origin_pane) {
                 focus_pane(origin_pane);
@@ -91,6 +134,7 @@ impl State {
         self.origin_pane = None;
         focus_pane(selected);
         self.dismiss();
+        self.restore_floating_context(Some(selected));
         self.status = None;
     }
 
@@ -144,6 +188,9 @@ impl State {
     }
 
     fn focus_starred(&mut self) {
+        if self.floating_context.is_none() {
+            self.snapshot_floating_context();
+        }
         let Some(starred) = self.starred else {
             self.show_switcher();
             self.status = Some("No starred pane".to_string());
@@ -152,6 +199,7 @@ impl State {
         self.show_switcher();
         focus_pane(starred);
         self.dismiss();
+        self.restore_floating_context(Some(starred));
     }
 
     fn handle_message(&mut self, name: String) -> bool {
@@ -159,6 +207,9 @@ impl State {
             "open" => {
                 if self.origin_pane.is_none() {
                     self.snapshot_origin();
+                }
+                if self.floating_context.is_none() {
+                    self.snapshot_floating_context();
                 }
                 self.show_switcher();
                 self.status = None;
@@ -208,6 +259,13 @@ impl ZellijPlugin for State {
         match event {
             Event::PaneUpdate(manifest) => {
                 let own_plugin_id = get_plugin_ids().plugin_id;
+                self.switcher_tab_position =
+                    manifest.panes.iter().find_map(|(tab_position, panes)| {
+                        panes
+                            .iter()
+                            .any(|pane| pane.is_plugin && pane.id == own_plugin_id)
+                            .then_some(*tab_position)
+                    });
                 self.panes = manifest
                     .panes
                     .into_iter()
@@ -237,6 +295,11 @@ impl ZellijPlugin for State {
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
             Event::TabUpdate(tabs) => {
+                self.tab_ids = tabs.iter().map(|tab| (tab.position, tab.tab_id)).collect();
+                self.floating_visibility = tabs
+                    .iter()
+                    .map(|tab| (tab.position, tab.are_floating_panes_visible))
+                    .collect();
                 self.tabs = tabs
                     .into_iter()
                     .map(|tab| (tab.position, tab.name))
