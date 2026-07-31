@@ -65,6 +65,7 @@ keybinds {
         bind "Alt y" {
             MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
                 name "open"
+                floating true
             }
         }
         bind "Alt g" {

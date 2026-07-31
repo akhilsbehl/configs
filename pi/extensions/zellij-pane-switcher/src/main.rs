@@ -60,7 +60,6 @@ impl State {
     }
 
     fn show_switcher(&mut self) {
-        float_multiple_panes(vec![PaneId::Plugin(get_plugin_ids().plugin_id)]);
         show_self(true);
     }
 
