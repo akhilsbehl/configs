@@ -237,7 +237,7 @@ mirror_session false
 //   - detach (Default)
 //   - quit
 //
-on_force_close "quit"
+on_force_close "detach"
 
 // Configure the scroll back buffer size
 // This is the number of lines zellij stores for each pane in the scroll back
@@ -283,13 +283,14 @@ copy_on_select true
 // otherwise this will error if such a session exists.
 // Default: <RANDOM>
 //
-session_name "launchPad"
+// Session names are supplied per project, for example:
+// zellij attach --create project-alpha
 
 // When `session_name` is provided, attaches to that session
 // if it is already running or creates it otherwise.
 // Default: false
 //
-attach_to_session true
+// attach_to_session is intentionally disabled for project-specific sessions
 
 // Toggle between having Zellij lay out panes according to a predefined set of layouts whenever possible
 // Options:
