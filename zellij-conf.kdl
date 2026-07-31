@@ -41,6 +41,19 @@ keybinds clear-defaults=true {
         bind "Alt ?" { SwitchToMode "locked"; }
         bind "Alt {" { PreviousSwapLayout; }
         bind "Alt }" { NextSwapLayout; }
+        bind "Alt y" {
+            MessagePlugin "file:/home/akhil/configs/zellij-pane-switcher.wasm" {
+                name "open"
+                floating true
+            }
+            SwitchToMode "normal"
+        }
+        bind "Alt g" {
+            MessagePlugin "file:/home/akhil/configs/zellij-pane-switcher.wasm" {
+                name "focus-starred"
+            }
+            SwitchToMode "normal"
+        }
     }
     renametab {
         bind "Enter" { SwitchToMode "normal"; }
