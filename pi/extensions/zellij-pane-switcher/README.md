@@ -57,7 +57,28 @@ The plugin recognizes these message names for external Zellij bindings:
 - `open`: show and focus the switcher pane;
 - `focus-starred`: focus the starred pane, or show `No starred pane`.
 
-Zellij keybindings must send these messages. The plugin does not modify the user's configuration.
+Example `config.kdl` bindings:
+
+```kdl
+keybinds {
+    shared_except "resize" "scroll" {
+        bind "Alt y" {
+            MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
+                name "open"
+                floating true
+            }
+        }
+        bind "Alt g" {
+            MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
+                name "focus-starred"
+                floating true
+            }
+        }
+    }
+}
+```
+
+Zellij delivers these bindings through the plugin pipe API. The plugin does not modify the user's configuration. Change the plugin URL or keys to override the defaults.
 
 ## Design
 

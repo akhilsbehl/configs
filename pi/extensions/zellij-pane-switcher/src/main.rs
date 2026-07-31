@@ -164,7 +164,6 @@ impl ZellijPlugin for State {
             EventType::TabUpdate,
             EventType::Key,
             EventType::Mouse,
-            EventType::CustomMessage,
         ]);
         request_permission(&[
             PermissionType::ReadApplicationState,
@@ -202,7 +201,6 @@ impl ZellijPlugin for State {
             }
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
-            Event::CustomMessage(name, _) => self.handle_message(name),
             Event::TabUpdate(tabs) => {
                 self.tabs = tabs
                     .into_iter()
@@ -212,6 +210,10 @@ impl ZellijPlugin for State {
             }
             _ => false,
         }
+    }
+
+    fn pipe(&mut self, pipe_message: PipeMessage) -> bool {
+        self.handle_message(pipe_message.name)
     }
 
     fn render(&mut self, rows: usize, cols: usize) {
