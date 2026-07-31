@@ -13,7 +13,7 @@ struct State {
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
     status: Option<String>,
-    hidden_floating: Vec<PaneId>,
+    floating_panes_hidden: bool,
     prepared_initially: bool,
 }
 
@@ -58,21 +58,16 @@ impl State {
     }
 
     fn suppress_other_floating_panes(&mut self) {
-        self.hidden_floating.clear();
-        for pane in self
-            .panes
-            .iter()
-            .filter(|pane| pane.is_floating && !pane.is_suppressed)
-        {
-            let pane_id = pane_id(pane);
-            hide_pane_with_id(pane_id);
-            self.hidden_floating.push(pane_id);
+        if self.floating_panes_hidden {
+            return;
         }
+        self.floating_panes_hidden = hide_floating_panes(None).unwrap_or(false);
     }
 
     fn restore_floating_panes(&mut self) {
-        for pane_id in self.hidden_floating.drain(..) {
-            show_pane_with_id(pane_id, true, false);
+        if self.floating_panes_hidden {
+            let _ = show_floating_panes(None);
+            self.floating_panes_hidden = false;
         }
     }
 
@@ -313,14 +308,6 @@ impl ZellijPlugin for State {
 
 fn identity(pane: &Pane) -> (bool, u32) {
     (pane.is_plugin, pane.pane_id)
-}
-
-fn pane_id(pane: &Pane) -> PaneId {
-    if pane.is_plugin {
-        PaneId::Plugin(pane.pane_id)
-    } else {
-        PaneId::Terminal(pane.pane_id)
-    }
 }
 
 fn pane_index_at_line(matches: &[SearchMatch], target_line: usize) -> Option<usize> {
