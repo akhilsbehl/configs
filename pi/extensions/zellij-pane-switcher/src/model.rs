@@ -27,7 +27,7 @@ pub struct SearchMatch {
     pub score: usize,
 }
 
-pub fn filter_panes<'a>(panes: &'a [Pane], query: &str) -> Vec<SearchMatch> {
+pub fn filter_panes(panes: &[Pane], query: &str) -> Vec<SearchMatch> {
     let query = query.trim().to_lowercase();
     let mut matches = panes
         .iter()
