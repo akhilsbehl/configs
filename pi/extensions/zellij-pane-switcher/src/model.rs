@@ -19,6 +19,13 @@ impl Pane {
             self.title.clone()
         }
     }
+
+    pub fn is_zellij_chrome(&self) -> bool {
+        matches!(
+            self.title.trim().to_lowercase().as_str(),
+            "tab-bar" | "status-bar"
+        )
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -144,5 +151,12 @@ mod tests {
     #[test]
     fn empty_titles_have_explicit_fallback_labels() {
         assert_eq!(pane(0, 9, "").label(), "terminal 9");
+    }
+
+    #[test]
+    fn zellij_chrome_is_not_a_selectable_pane() {
+        assert!(pane(0, 1, "tab-bar").is_zellij_chrome());
+        assert!(pane(0, 2, "STATUS-BAR").is_zellij_chrome());
+        assert!(!pane(0, 3, "shell").is_zellij_chrome());
     }
 }

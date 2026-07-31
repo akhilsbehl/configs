@@ -189,6 +189,7 @@ impl ZellijPlugin for State {
                         is_plugin: pane.is_plugin,
                         title: pane.title,
                     })
+                    .filter(|pane| !pane.is_zellij_chrome())
                     .collect();
                 self.panes.sort_by_key(Pane::key);
                 if let Some(starred) = self.starred {
@@ -219,8 +220,16 @@ impl ZellijPlugin for State {
     fn render(&mut self, rows: usize, cols: usize) {
         self.normalize_selection();
         let matches = self.matches();
-        println!("Pane Switcher  {rows}x{cols}");
-        println!("Query: {}", self.query);
+        let count = matches.len();
+        println!("\x1b[1;36m◆ Pane Switcher\x1b[0m  \x1b[2m{count} panes\x1b[0m");
+        println!(
+            "\x1b[2mSearch\x1b[0m  {}",
+            if self.query.is_empty() {
+                "type to filter"
+            } else {
+                &self.query
+            }
+        );
         println!(
             "{}",
             self.status.as_deref().unwrap_or(if matches.is_empty() {
@@ -238,27 +247,30 @@ impl ZellijPlugin for State {
                     .filter(|name| !name.trim().is_empty())
                     .cloned()
                     .unwrap_or_else(|| format!("Tab {}", matched.pane.tab_position + 1));
-                println!("[{tab_name}]");
+                println!(
+                    "\x1b[1;35m╭─ {} · {}\x1b[0m",
+                    matched.pane.tab_position + 1,
+                    tab_name
+                );
                 previous_tab = Some(matched.pane.tab_position);
             }
             let pane_id = identity(&matched.pane);
             let selected = if self.selected == Some(pane_id) {
-                '>'
+                '›'
             } else {
                 ' '
             };
             let starred = if self.starred == Some(pane_id) {
-                '*'
+                '★'
             } else {
                 ' '
             };
-            println!(
-                "{selected}{starred} [{}] {}",
-                matched.pane.tab_position + 1,
-                matched.pane.label()
-            );
+            let kind = if matched.pane.is_plugin { '◆' } else { '•' };
+            println!("  {selected} {starred} {kind} {}", matched.pane.label());
         }
-        println!("Tab/Shift-Tab move | Enter focus | Space star | Esc hide");
+        println!(
+            "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m focus  \x1b[2mSpace\x1b[0m star  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
+        );
     }
 }
 
