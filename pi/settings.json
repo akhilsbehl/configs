@@ -1,0 +1,51 @@
+{
+  "lastChangelogVersion": "0.83.0",
+  "theme": "rose-pine-dawn",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-luna",
+  "defaultThinkingLevel": "medium",
+  "hideThinkingBlock": false,
+  "packages": [
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-patty-bg-tasks",
+    "npm:@narumitw/pi-statusline",
+    "npm:@gotgenes/pi-permission-system",
+    "npm:@mzwing/pi-permission-auto-review",
+    "npm:@narumitw/pi-btw",
+    "git:github.com/algal/pi-openai-server-compaction"
+  ],
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "quietStartup": false,
+  "enabledModels": [
+    "google/gemini-flash-latest",
+    "google/gemini-flash-lite-latest",
+    "google/gemini-3.1-pro-preview",
+    "openai-codex/gpt-5.6-terra",
+    "openai-codex/gpt-5.6-sol",
+    "openai-codex/gpt-5.6-luna"
+  ],
+  "observational-memory": {
+    "observeAfterTokens": 25000,
+    "reflectAfterTokens": 25000,
+    "compactAfterTokens": 100000,
+    "compactAfterTokensMode": "ratio",
+    "compactAfterTokensRatio": 0.25,
+    "observationsPoolMaxTokens": 20000,
+    "observationsPoolTargetTokens": 10000,
+    "agentMaxTurns": 16,
+    "passive": true,
+    "debugLog": false
+  },
+  "showHardwareCursor": true,
+  "editorPaddingX": 0,
+  "autocompleteMaxVisible": 10,
+  "steeringMode": "all",
+  "followUpMode": "all",
+  "collapseChangelog": true,
+  "enableInstallTelemetry": false,
+  "defaultProjectTrust": "always",
+  "doubleEscapeAction": "none",
+  "treeFilterMode": "all"
+}
