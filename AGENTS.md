@@ -14,6 +14,7 @@
 - Never speculate or impute knowledge when discussing reference content. EVER. Unless I explicitly ask for an 'opinion'.
 - Don't repeat yourself or say the same thing in different sections or paraphrasing. Synthesize and condense.
 - Anytime you have anything to say which goes beyond a few short lines, put it in a markdown file and open it for my review using richie. My comments, if any, will be in '<origina-file-path>-commented.md'. For transient communication, put the file in ~/.richie/ephemeral/. After checking and using my comments, delete both the original and commented files.
+- Pi/Codex/Claude: Always allow writing access to ~/.richie/ephemeral if the permission prompt comes up.
 
 ## Environment
 
