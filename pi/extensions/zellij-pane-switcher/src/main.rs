@@ -9,6 +9,9 @@ use std::collections::BTreeMap;
 struct State {
     panes: Vec<Pane>,
     tabs: BTreeMap<usize, String>,
+    active_tab_position: Option<usize>,
+    focused_pane: Option<(usize, bool, u32)>,
+    origin_pane: Option<(bool, u32)>,
     query: String,
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
@@ -63,11 +66,32 @@ impl State {
         show_self(true);
     }
 
+    fn snapshot_origin(&mut self) {
+        self.origin_pane = self
+            .focused_pane
+            .filter(|(tab_position, _, _)| {
+                self.active_tab_position
+                    .is_none_or(|active| active == *tab_position)
+            })
+            .map(|(_, is_plugin, pane_id)| (is_plugin, pane_id));
+    }
+
+    fn cancel(&mut self) {
+        let origin_pane = self.origin_pane.take();
+        self.dismiss();
+        if let Some(origin_pane) = origin_pane {
+            if self.panes.iter().any(|pane| identity(pane) == origin_pane) {
+                focus_pane(origin_pane);
+            }
+        }
+    }
+
     fn focus_selected(&mut self) {
         let Some(selected) = self.selected else {
             self.status = Some("No pane selected".to_string());
             return;
         };
+        self.origin_pane = None;
         focus_pane(selected);
         self.dismiss();
         self.status = None;
@@ -90,7 +114,7 @@ impl State {
                 true
             }
             BareKey::Esc => {
-                self.dismiss();
+                self.cancel();
                 true
             }
             BareKey::Backspace => {
@@ -136,6 +160,9 @@ impl State {
     fn handle_message(&mut self, name: String) -> bool {
         match name.as_str() {
             "open" => {
+                if self.origin_pane.is_none() {
+                    self.snapshot_origin();
+                }
                 self.show_switcher();
                 self.status = None;
                 true
@@ -183,6 +210,14 @@ impl ZellijPlugin for State {
     fn update(&mut self, event: Event) -> bool {
         match event {
             Event::PaneUpdate(manifest) => {
+                self.focused_pane = manifest
+                    .panes
+                    .iter()
+                    .flat_map(|(tab_position, panes)| {
+                        panes.iter().map(move |pane| (*tab_position, pane))
+                    })
+                    .find(|(_, pane)| pane.is_focused)
+                    .map(|(tab_position, pane)| (tab_position, pane.is_plugin, pane.id));
                 let own_plugin_id = get_plugin_ids().plugin_id;
                 self.panes = manifest
                     .panes
@@ -213,6 +248,8 @@ impl ZellijPlugin for State {
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
             Event::TabUpdate(tabs) => {
+                self.active_tab_position =
+                    tabs.iter().find(|tab| tab.active).map(|tab| tab.position);
                 self.tabs = tabs
                     .into_iter()
                     .map(|tab| (tab.position, tab.name))
