@@ -205,6 +205,8 @@ impl State {
     fn handle_message(&mut self, name: String) -> bool {
         match name.as_str() {
             "open" => {
+                self.query.clear();
+                self.normalize_selection();
                 if self.origin_pane.is_none() {
                     self.snapshot_origin();
                 }
@@ -222,37 +224,15 @@ impl State {
             _ => false,
         }
     }
-
-    fn handle_mouse(&mut self, mouse: Mouse) -> bool {
-        let Some((line, _column)) = mouse.position() else {
-            return false;
-        };
-        if !matches!(mouse, Mouse::LeftClick(_, _)) || line < 3 {
-            return false;
-        }
-        let matches = self.matches();
-        if let Some(index) = pane_index_at_line(&matches, line) {
-            self.selected = Some(identity(&matches[index].pane));
-            self.status = None;
-            return true;
-        }
-        false
-    }
 }
 
 impl ZellijPlugin for State {
     fn load(&mut self, _configuration: BTreeMap<String, String>) {
-        subscribe(&[
-            EventType::PaneUpdate,
-            EventType::TabUpdate,
-            EventType::Key,
-            EventType::Mouse,
-        ]);
+        subscribe(&[EventType::PaneUpdate, EventType::TabUpdate, EventType::Key]);
         request_permission(&[
             PermissionType::ReadApplicationState,
             PermissionType::ChangeApplicationState,
         ]);
-        set_self_mouse_selection_support(true);
     }
 
     fn update(&mut self, event: Event) -> bool {
@@ -293,7 +273,6 @@ impl ZellijPlugin for State {
                 true
             }
             Event::Key(key) => self.handle_key(key),
-            Event::Mouse(mouse) => self.handle_mouse(mouse),
             Event::TabUpdate(tabs) => {
                 self.tab_ids = tabs.iter().map(|tab| (tab.position, tab.tab_id)).collect();
                 self.floating_visibility = tabs
@@ -318,23 +297,20 @@ impl ZellijPlugin for State {
         self.normalize_selection();
         let matches = self.matches();
         let count = matches.len();
-        println!("\x1b[1;36m◆ Pane Switcher\x1b[0m  \x1b[2m{count} panes\x1b[0m");
-        println!(
-            "\x1b[2mSearch\x1b[0m  {}",
-            if self.query.is_empty() {
-                "type to filter"
-            } else {
-                &self.query
-            }
-        );
-        println!(
-            "{}",
-            self.status.as_deref().unwrap_or(if matches.is_empty() {
-                "No matching panes"
-            } else {
-                ""
-            })
-        );
+        let search = if self.query.is_empty() {
+            "type to filter"
+        } else {
+            &self.query
+        };
+
+        println!("\x1b[1;36m╭─ Pane Switcher\x1b[0m  \x1b[2m{count} results\x1b[0m");
+        println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
+        println!("\x1b[1;36m╰──────────────────────────────────────\x1b[0m");
+
+        if matches.is_empty() {
+            println!("\x1b[2m  No matching panes\x1b[0m");
+        }
+
         let mut previous_tab = None;
         for matched in matches {
             if previous_tab != Some(matched.pane.tab_position) {
@@ -345,25 +321,50 @@ impl ZellijPlugin for State {
                     .cloned()
                     .unwrap_or_else(|| format!("Tab {}", matched.pane.tab_position + 1));
                 println!(
-                    "\x1b[1;35m╭─ {} · {}\x1b[0m",
+                    "\n\x1b[1;35m▸ Tab {}\x1b[0m  \x1b[2m{}\x1b[0m",
                     matched.pane.tab_position + 1,
                     tab_name
                 );
                 previous_tab = Some(matched.pane.tab_position);
             }
+
             let pane_id = identity(&matched.pane);
-            let selected = if self.selected == Some(pane_id) {
-                '›'
+            let marker = if self.selected == Some(pane_id) {
+                "›"
             } else {
-                ' '
+                " "
             };
-            let starred = if self.starred == Some(pane_id) {
-                '★'
+            let star = if self.starred == Some(pane_id) {
+                "★"
             } else {
-                ' '
+                " "
             };
-            let kind = if matched.pane.is_plugin { '◆' } else { '•' };
-            println!("  {selected} {starred} {kind} {}", matched.pane.label());
+            let kind = if matched.pane.is_plugin {
+                "plugin"
+            } else if matched.pane.is_floating {
+                "float"
+            } else {
+                "split"
+            };
+            let hidden = if matched.pane.is_suppressed {
+                " hidden"
+            } else {
+                ""
+            };
+            let row = format!(
+                "  {marker} {star}  {kind:<6} {}{hidden}",
+                matched.pane.label()
+            );
+            if self.selected == Some(pane_id) {
+                println!("\x1b[1;7m{row}\x1b[0m");
+            } else {
+                println!("{row}");
+            }
+        }
+
+        let status = self.status.as_deref().unwrap_or("");
+        if !status.is_empty() {
+            println!("\n\x1b[1;33m!\x1b[0m {status}");
         }
         println!(
             "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m focus  \x1b[2mSpace\x1b[0m star  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
@@ -373,22 +374,6 @@ impl ZellijPlugin for State {
 
 fn identity(pane: &Pane) -> (bool, u32) {
     (pane.is_plugin, pane.pane_id)
-}
-
-fn pane_index_at_line(matches: &[SearchMatch], target_line: usize) -> Option<usize> {
-    let mut line = 3;
-    let mut previous_tab = None;
-    for (index, matched) in matches.iter().enumerate() {
-        if previous_tab != Some(matched.pane.tab_position) {
-            line += 1;
-            previous_tab = Some(matched.pane.tab_position);
-        }
-        if line == target_line {
-            return Some(index);
-        }
-        line += 1;
-    }
-    None
 }
 
 fn focus_pane(pane: (bool, u32)) {

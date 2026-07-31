@@ -4,7 +4,7 @@ A Rust/WebAssembly Zellij plugin for finding and focusing panes across the curre
 
 ## Status
 
-The first interactive slice is implemented. It discovers panes across tabs, groups them by tab, supports local fuzzy search, keyboard navigation, starring, focusing, hiding, and mouse selection. It also handles the `open` and `focus-starred` plugin messages for external Zellij keybindings.
+The plugin discovers panes across tabs, groups them by tab, supports local fuzzy search, keyboard navigation, starring, focusing, and hiding. It also handles the `open` and `focus-starred` plugin messages for external Zellij keybindings.
 
 ## Requirements
 
