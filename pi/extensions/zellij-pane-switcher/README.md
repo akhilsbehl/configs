@@ -4,9 +4,7 @@ A Rust/WebAssembly Zellij plugin for finding and focusing panes across the curre
 
 ## Status
 
-Initial API-proof slice is implemented. It subscribes to pane, tab, keyboard, and mouse events, requests the required state-change permissions, excludes its own plugin pane, and renders the current pane inventory. The searchable pane model has dependency-free fuzzy matching and passing direct Rust tests.
-
-The interactive actions and persistent floating-pane integration are next.
+The first interactive slice is implemented. It discovers panes across tabs, groups them by tab, supports local fuzzy search, keyboard navigation, starring, focusing, hiding, and mouse selection. It also handles the `open` and `focus-starred` plugin messages for external Zellij keybindings.
 
 ## Requirements
 
@@ -54,7 +52,12 @@ rustc --test src/model.rs -o /tmp/zellij-pane-switcher-model-tests
 | `Space` | Star or unstar the selected pane |
 | `Backspace` | Delete the last search character |
 
-The default bindings will be documented with the final Zellij configuration. Users will be able to override them without the plugin overwriting existing configuration.
+The plugin recognizes these message names for external Zellij bindings:
+
+- `open`: show and focus the switcher pane;
+- `focus-starred`: focus the starred pane, or show `No starred pane`.
+
+Zellij keybindings must send these messages. The plugin does not modify the user's configuration.
 
 ## Design
 
