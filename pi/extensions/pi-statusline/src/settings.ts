@@ -157,6 +157,9 @@ export function normalizeStatuslineConfig(value: unknown): {
 		};
 	}
 	const knownRoot = new Set([
+		// Retained for compatibility with settings written before named presets were removed.
+		// The fixed Tokyo Night palette is now used regardless of this value.
+		"palettePreset",
 		"palette",
 		"density",
 		"separator",
