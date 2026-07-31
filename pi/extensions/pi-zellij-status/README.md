@@ -25,8 +25,8 @@ Status values are appended to the current pane and tab names. The extension stri
 Examples:
 
 ```text
-my-pane [idle]
-my-pane [waiting]
+my-pane [☼ Idle]
+my-pane [◷ Waiting]
 my-tab [☼ Idle 0 / ● Running 1 / ◷ Waiting 0]
 ```
 

@@ -15,7 +15,9 @@ const PLAN_STATE_ENTRY = "plan-mode-state";
 
 type Status = "idle" | "running" | "waiting" | undefined;
 type StatusLabel =
-  | Exclude<Status, undefined>
+  | "☼ Idle"
+  | "● Running"
+  | "◷ Waiting"
   | `I${number}/R${number}/W${number}`
   | `☼ Idle ${number} / ● Running ${number} / ◷ Waiting ${number}`;
 type Pane = { id: number; title?: string; tab_id?: number; tab_name?: string };
@@ -203,8 +205,19 @@ function stripStatus(name: string): string {
   return base;
 }
 
-function appendStatus(name: string, status: StatusLabel | undefined): string {
-  return status ? `${name} [${status}]` : name;
+function appendStatus(name: string, status: Status | StatusLabel): string {
+  if (!status) return name;
+  const label = typeof status === "string" && (isPaneStatus(status) || isTabTally(status))
+    ? status
+    : statusLabel(status as Status);
+  return `${name} [${label}]`;
+}
+
+function statusLabel(status: Status): StatusLabel {
+  if (status === "idle") return "☼ Idle";
+  if (status === "running") return "● Running";
+  if (status === "waiting") return "◷ Waiting";
+  throw new Error("Cannot label an undefined status");
 }
 
 function getStatusSuffix(name: string): string | undefined {
@@ -216,7 +229,7 @@ function getStatusSuffix(name: string): string | undefined {
 
 function isStatusSuffix(suffix: string): boolean {
   if (!suffix) return false;
-  if (isTabTally(suffix)) return true;
+  if (isPaneStatus(suffix) || isTabTally(suffix)) return true;
   return suffix.split(", ").every((token) => {
     const colon = token.indexOf(":");
     const status = colon < 0 ? token : token.slice(0, colon);
@@ -226,6 +239,10 @@ function isStatusSuffix(suffix: string): boolean {
       && !detail.includes("[")
       && !detail.includes("]");
   });
+}
+
+function isPaneStatus(suffix: string): suffix is "☼ Idle" | "● Running" | "◷ Waiting" {
+  return suffix === "☼ Idle" || suffix === "● Running" || suffix === "◷ Waiting";
 }
 
 function isTabTally(suffix: string): suffix is `I${number}/R${number}/W${number}` | `☼ Idle ${number} / ● Running ${number} / ◷ Waiting ${number}` {
@@ -251,6 +268,10 @@ function statusFromTitle(title: string | undefined): Status {
 }
 
 function statusFromToken(token: string): Status {
+  if (token === "☼ Idle") return "idle";
+  if (token === "● Running") return "running";
+  if (token === "◷ Waiting") return "waiting";
+
   const colon = token.indexOf(":");
   const status = colon < 0 ? token : token.slice(0, colon);
   if (status === WAITING_STATUS) return WAITING_STATUS;
