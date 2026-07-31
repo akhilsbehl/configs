@@ -3,6 +3,8 @@ pub struct Pane {
     pub tab_position: usize,
     pub pane_id: u32,
     pub is_plugin: bool,
+    pub is_floating: bool,
+    pub is_suppressed: bool,
     pub title: String,
 }
 
@@ -114,6 +116,8 @@ mod tests {
             tab_position,
             pane_id,
             is_plugin: false,
+            is_floating: false,
+            is_suppressed: false,
             title: title.to_string(),
         }
     }

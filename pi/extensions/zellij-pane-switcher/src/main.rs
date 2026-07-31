@@ -13,6 +13,8 @@ struct State {
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
     status: Option<String>,
+    hidden_floating: Vec<PaneId>,
+    prepared_initially: bool,
 }
 
 register_plugin!(State);
@@ -55,13 +57,42 @@ impl State {
         self.status = None;
     }
 
+    fn suppress_other_floating_panes(&mut self) {
+        self.hidden_floating.clear();
+        for pane in self
+            .panes
+            .iter()
+            .filter(|pane| pane.is_floating && !pane.is_suppressed)
+        {
+            let pane_id = pane_id(pane);
+            hide_pane_with_id(pane_id);
+            self.hidden_floating.push(pane_id);
+        }
+    }
+
+    fn restore_floating_panes(&mut self) {
+        for pane_id in self.hidden_floating.drain(..) {
+            show_pane_with_id(pane_id, true, false);
+        }
+    }
+
+    fn dismiss(&mut self) {
+        self.restore_floating_panes();
+        hide_self();
+    }
+
+    fn show_switcher(&mut self) {
+        self.suppress_other_floating_panes();
+        show_self(true);
+    }
+
     fn focus_selected(&mut self) {
         let Some(selected) = self.selected else {
             self.status = Some("No pane selected".to_string());
             return;
         };
         focus_pane(selected);
-        hide_self();
+        self.dismiss();
         self.status = None;
     }
 
@@ -82,7 +113,7 @@ impl State {
                 true
             }
             BareKey::Esc => {
-                hide_self();
+                self.dismiss();
                 true
             }
             BareKey::Backspace => {
@@ -116,19 +147,19 @@ impl State {
 
     fn focus_starred(&mut self) {
         let Some(starred) = self.starred else {
-            show_self(true);
+            self.show_switcher();
             self.status = Some("No starred pane".to_string());
             return;
         };
-        show_self(true);
+        self.show_switcher();
         focus_pane(starred);
-        hide_self();
+        self.dismiss();
     }
 
     fn handle_message(&mut self, name: String) -> bool {
         match name.as_str() {
             "open" => {
-                show_self(true);
+                self.show_switcher();
                 self.status = None;
                 true
             }
@@ -187,11 +218,17 @@ impl ZellijPlugin for State {
                         tab_position,
                         pane_id: pane.id,
                         is_plugin: pane.is_plugin,
+                        is_floating: pane.is_floating,
+                        is_suppressed: pane.is_suppressed,
                         title: pane.title,
                     })
                     .filter(|pane| !pane.is_zellij_chrome())
                     .collect();
                 self.panes.sort_by_key(Pane::key);
+                if !self.prepared_initially {
+                    self.prepared_initially = true;
+                    self.suppress_other_floating_panes();
+                }
                 if let Some(starred) = self.starred {
                     if !self.panes.iter().any(|pane| identity(pane) == starred) {
                         self.starred = None;
@@ -276,6 +313,14 @@ impl ZellijPlugin for State {
 
 fn identity(pane: &Pane) -> (bool, u32) {
     (pane.is_plugin, pane.pane_id)
+}
+
+fn pane_id(pane: &Pane) -> PaneId {
+    if pane.is_plugin {
+        PaneId::Plugin(pane.pane_id)
+    } else {
+        PaneId::Terminal(pane.pane_id)
+    }
 }
 
 fn pane_index_at_line(matches: &[SearchMatch], target_line: usize) -> Option<usize> {
