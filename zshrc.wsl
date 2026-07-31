@@ -29,7 +29,7 @@ fi
 
 export BROWSER='xdg-open'
 export WINUSER=$(whoami.exe | cut -f 2 -d '\' | tr -d '')
-export WIN_TERM_SETTINGS="/mnt/c/Users/$WINUSER/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json"
+export WIN_TERM_SETTINGS="/mnt/c/Users/$WINUSER/AppData/Local/Microsoft/Windows Terminal/settings.json"
 
 get-wsl-vhdx-path() {
   local distro=""
