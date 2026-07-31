@@ -65,13 +65,11 @@ keybinds {
         bind "Alt y" {
             MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
                 name "open"
-                floating true
             }
         }
         bind "Alt g" {
             MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
                 name "focus-starred"
-                floating true
             }
         }
     }
