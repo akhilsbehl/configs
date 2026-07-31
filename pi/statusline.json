@@ -40,7 +40,5 @@
         "cost": { "prefix": "💸 $", "suffix": "" },
         "context": { "prefix": "🪟 ctx ", "suffix": "" },
         "time": { "prefix": "🕒 ", "suffix": "" }
-    },
-    "stackExtensionStatuses": true,
-    "maxExtensionStatuses": 8
+    }
 }
