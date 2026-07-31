@@ -8,11 +8,13 @@
   "packages": [
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-patty-bg-tasks",
-    "npm:@narumitw/pi-statusline",
     "npm:@gotgenes/pi-permission-system",
     "npm:@mzwing/pi-permission-auto-review",
     "npm:@narumitw/pi-btw",
-    "git:github.com/algal/pi-openai-server-compaction"
+    "git:github.com/algal/pi-openai-server-compaction",
+    "npm:@gotgenes/pi-subagents",
+    "../../warchives/pi-specialists",
+    "../../configs/pi/extensions/pi-statusline"
   ],
   "terminal": {
     "showTerminalProgress": true

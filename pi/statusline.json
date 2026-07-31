@@ -1,44 +1,46 @@
 {
-	"palettePreset": "custom",
-	"palette": {
-		"provider": { "fg": "#fbf1c7", "bg": "#d65d0e" },
-		"model": { "fg": "#fbf1c7", "bg": "#d65d0e" },
-		"thinking": { "fg": "#fbf1c7", "bg": "#d65d0e" },
-		"cwd": { "fg": "#fbf1c7", "bg": "#d79921" },
-		"branch": { "fg": "#fbf1c7", "bg": "#689d6a" },
-		"tokens": { "fg": "#fbf1c7", "bg": "#458588" },
-		"cost": { "fg": "#fbf1c7", "bg": "#3c3836" },
-		"context": { "fg": "#fbf1c7", "bg": "#3c3836" },
-		"time": { "fg": "#fbf1c7", "bg": "#3c3836" }
-	},
-	"density": "compact",
-	"separator": "none",
-	"segments": [
-		"provider",
-		"model",
-		"thinking",
-		"cwd",
-		"branch",
-		"tokens",
-		"cost",
-		"context",
-		"time"
-	],
-	"segmentText": {
-		"provider": { "prefix": "🔌 ", "suffix": "" },
-		"model": {
-			"prefix": "🤖 ",
-			"suffix": "",
-			"truncationLength": 36,
-			"truncationSymbol": "…",
-			"truncationDirection": "start"
-		},
-		"thinking": { "prefix": "🧠 ", "suffix": "" },
-		"cwd": { "prefix": "📁 ", "suffix": "" },
-		"branch": { "prefix": "🌿 ", "suffix": "" },
-		"tokens": { "prefix": "🔢 ", "suffix": "" },
-		"cost": { "prefix": "💸 $", "suffix": "" },
-		"context": { "prefix": "🪟 ctx ", "suffix": "" },
-		"time": { "prefix": "🕒 ", "suffix": "" }
-	}
+    "palettePreset": "custom",
+    "palette": {
+        "provider": { "fg": "#fbf1c7", "bg": "#d65d0e" },
+        "model": { "fg": "#fbf1c7", "bg": "#d65d0e" },
+        "thinking": { "fg": "#fbf1c7", "bg": "#d65d0e" },
+        "cwd": { "fg": "#fbf1c7", "bg": "#d79921" },
+        "branch": { "fg": "#fbf1c7", "bg": "#689d6a" },
+        "tokens": { "fg": "#fbf1c7", "bg": "#458588" },
+        "cost": { "fg": "#fbf1c7", "bg": "#3c3836" },
+        "context": { "fg": "#fbf1c7", "bg": "#3c3836" },
+        "time": { "fg": "#fbf1c7", "bg": "#3c3836" }
+    },
+    "density": "compact",
+    "separator": "none",
+    "segments": [
+        "provider",
+        "model",
+        "thinking",
+        "cwd",
+        "branch",
+        "tokens",
+        "cost",
+        "context",
+        "time"
+    ],
+    "segmentText": {
+        "provider": { "prefix": "🔌 ", "suffix": "" },
+        "model": {
+            "prefix": "🤖 ",
+            "suffix": "",
+            "truncationLength": 36,
+            "truncationSymbol": "…",
+            "truncationDirection": "start"
+        },
+        "thinking": { "prefix": "🧠 ", "suffix": "" },
+        "cwd": { "prefix": "📁 ", "suffix": "" },
+        "branch": { "prefix": "🌿 ", "suffix": "" },
+        "tokens": { "prefix": "🔢 ", "suffix": "" },
+        "cost": { "prefix": "💸 $", "suffix": "" },
+        "context": { "prefix": "🪟 ctx ", "suffix": "" },
+        "time": { "prefix": "🕒 ", "suffix": "" }
+    },
+    "stackExtensionStatuses": true,
+    "maxExtensionStatuses": 8
 }
