@@ -27,7 +27,7 @@ Examples:
 ```text
 my-pane [idle]
 my-pane [waiting]
-my-tab [waiting:2]
+my-tab [☼ Idle 0 / ● Running 1 / ◷ Waiting 0]
 ```
 
 ## Bell

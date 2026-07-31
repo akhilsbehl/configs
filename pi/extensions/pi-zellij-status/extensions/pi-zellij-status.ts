@@ -14,7 +14,10 @@ const PLAN_QUESTION_TOOL = "plan_mode_question";
 const PLAN_STATE_ENTRY = "plan-mode-state";
 
 type Status = "idle" | "running" | "waiting" | undefined;
-type StatusLabel = Exclude<Status, undefined> | `I${number}/R${number}/W${number}`;
+type StatusLabel =
+  | Exclude<Status, undefined>
+  | `I${number}/R${number}/W${number}`
+  | `☼ Idle ${number} / ● Running ${number} / ◷ Waiting ${number}`;
 type Pane = { id: number; title?: string; tab_id?: number; tab_name?: string };
 type Tab = { tab_id: number; name?: string };
 type PlanStateEntry = { type?: string; customType?: string; data?: unknown };
@@ -225,7 +228,9 @@ function isStatusSuffix(suffix: string): boolean {
   });
 }
 
-function isTabTally(suffix: string): suffix is `I${number}/R${number}/W${number}` {
+function isTabTally(suffix: string): suffix is `I${number}/R${number}/W${number}` | `☼ Idle ${number} / ● Running ${number} / ◷ Waiting ${number}` {
+  if (/^☼ Idle \d+ \/ ● Running \d+ \/ ◷ Waiting \d+$/.test(suffix)) return true;
+
   const parts = suffix.split("/");
   if (parts.length !== 3) return false;
   return ["I", "R", "W"].every((prefix, index) => {
@@ -265,7 +270,7 @@ function aggregateTabStatus(panes: Pane[], ownPaneId: string, ownStatus: Status)
   }
   const contributingPanes = counts.idle + counts.running + counts.waiting;
   if (contributingPanes === 0) return undefined;
-  return `I${counts.idle}/R${counts.running}/W${counts.waiting}`;
+  return `☼ Idle ${counts.idle} / ● Running ${counts.running} / ◷ Waiting ${counts.waiting}`;
 }
 
 function planReviewIsReady(ctx: ExtensionContext): boolean {
