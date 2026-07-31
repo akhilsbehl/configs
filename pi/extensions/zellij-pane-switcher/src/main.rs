@@ -8,6 +8,7 @@ use std::collections::BTreeMap;
 #[derive(Default)]
 struct State {
     panes: Vec<Pane>,
+    tabs: BTreeMap<usize, String>,
     query: String,
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
@@ -113,6 +114,32 @@ impl State {
         }
     }
 
+    fn focus_starred(&mut self) {
+        let Some(starred) = self.starred else {
+            show_self(true);
+            self.status = Some("No starred pane".to_string());
+            return;
+        };
+        show_self(true);
+        focus_pane(starred);
+        hide_self();
+    }
+
+    fn handle_message(&mut self, name: String) -> bool {
+        match name.as_str() {
+            "open" => {
+                show_self(true);
+                self.status = None;
+                true
+            }
+            "focus-starred" => {
+                self.focus_starred();
+                true
+            }
+            _ => false,
+        }
+    }
+
     fn handle_mouse(&mut self, mouse: Mouse) -> bool {
         let Some((line, _column)) = mouse.position() else {
             return false;
@@ -121,8 +148,8 @@ impl State {
             return false;
         }
         let matches = self.matches();
-        if let Some(item) = matches.get(line - 3) {
-            self.selected = Some(identity(&item.pane));
+        if let Some(index) = pane_index_at_line(&matches, line) {
+            self.selected = Some(identity(&matches[index].pane));
             self.status = None;
             return true;
         }
@@ -137,6 +164,7 @@ impl ZellijPlugin for State {
             EventType::TabUpdate,
             EventType::Key,
             EventType::Mouse,
+            EventType::CustomMessage,
         ]);
         request_permission(&[
             PermissionType::ReadApplicationState,
@@ -174,7 +202,14 @@ impl ZellijPlugin for State {
             }
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
-            Event::TabUpdate(_) => true,
+            Event::CustomMessage(name, _) => self.handle_message(name),
+            Event::TabUpdate(tabs) => {
+                self.tabs = tabs
+                    .into_iter()
+                    .map(|tab| (tab.position, tab.name))
+                    .collect();
+                true
+            }
             _ => false,
         }
     }
@@ -192,7 +227,18 @@ impl ZellijPlugin for State {
                 ""
             })
         );
+        let mut previous_tab = None;
         for matched in matches {
+            if previous_tab != Some(matched.pane.tab_position) {
+                let tab_name = self
+                    .tabs
+                    .get(&matched.pane.tab_position)
+                    .filter(|name| !name.trim().is_empty())
+                    .cloned()
+                    .unwrap_or_else(|| format!("Tab {}", matched.pane.tab_position + 1));
+                println!("[{tab_name}]");
+                previous_tab = Some(matched.pane.tab_position);
+            }
             let pane_id = identity(&matched.pane);
             let selected = if self.selected == Some(pane_id) {
                 '>'
@@ -216,6 +262,22 @@ impl ZellijPlugin for State {
 
 fn identity(pane: &Pane) -> (bool, u32) {
     (pane.is_plugin, pane.pane_id)
+}
+
+fn pane_index_at_line(matches: &[SearchMatch], target_line: usize) -> Option<usize> {
+    let mut line = 3;
+    let mut previous_tab = None;
+    for (index, matched) in matches.iter().enumerate() {
+        if previous_tab != Some(matched.pane.tab_position) {
+            line += 1;
+            previous_tab = Some(matched.pane.tab_position);
+        }
+        if line == target_line {
+            return Some(index);
+        }
+        line += 1;
+    }
+    None
 }
 
 fn focus_pane(pane: (bool, u32)) {
