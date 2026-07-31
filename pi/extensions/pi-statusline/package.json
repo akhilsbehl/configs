@@ -1,0 +1,45 @@
+{
+	"name": "@narumitw/pi-statusline",
+	"version": "0.41.0",
+	"description": "Pi extension that replaces the footer with an information-rich statusline.",
+	"type": "module",
+	"license": "MIT",
+	"private": false,
+	"keywords": [
+		"pi-package",
+		"pi-extension",
+		"pi",
+		"statusline",
+		"footer"
+	],
+	"files": [
+		"src",
+		"README.md",
+		"LICENSE"
+	],
+	"pi": {
+		"extensions": [
+			"./src/index.ts"
+		]
+	},
+	"scripts": {
+		"check": "biome check --vcs-use-ignore-file=false src test package.json tsconfig.json README.md && npm run typecheck",
+		"format": "biome check --write --vcs-use-ignore-file=false src test package.json tsconfig.json README.md",
+		"typecheck": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.6",
+		"@earendil-works/pi-coding-agent": "0.83.0",
+		"@earendil-works/pi-tui": "0.83.0",
+		"@types/node": "26.1.2",
+		"typescript": "7.0.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/narumiruna/pi-extensions",
+		"directory": "extensions/pi-statusline"
+	},
+	"dependencies": {
+		"@narumitw/pi-tui-kit": "^0.40.0"
+	}
+}
