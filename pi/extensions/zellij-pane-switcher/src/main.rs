@@ -9,6 +9,7 @@ use std::collections::BTreeMap;
 struct State {
     panes: Vec<Pane>,
     tabs: BTreeMap<usize, String>,
+    active_tab_id: Option<usize>,
     query: String,
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
@@ -61,12 +62,12 @@ impl State {
         if self.floating_panes_hidden {
             return;
         }
-        self.floating_panes_hidden = hide_floating_panes(None).unwrap_or(false);
+        self.floating_panes_hidden = hide_floating_panes(self.active_tab_id).unwrap_or(false);
     }
 
     fn restore_floating_panes(&mut self) {
         if self.floating_panes_hidden {
-            let _ = show_floating_panes(None);
+            let _ = show_floating_panes(self.active_tab_id);
             self.floating_panes_hidden = false;
         }
     }
@@ -235,6 +236,7 @@ impl ZellijPlugin for State {
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
             Event::TabUpdate(tabs) => {
+                self.active_tab_id = tabs.iter().find(|tab| tab.active).map(|tab| tab.tab_id);
                 self.tabs = tabs
                     .into_iter()
                     .map(|tab| (tab.position, tab.name))
