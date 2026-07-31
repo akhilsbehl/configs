@@ -16,7 +16,7 @@ The extension is intentionally Zellij-only. It exits without changing anything u
 - `@juicesharp/rpiv-ask-user-question`: `rpiv:ask-user:blocked`.
 - `@narumitw/pi-plan-mode`: `plan_mode_question` tool lifecycle and the persisted completed-plan state. The completed-plan menu has no public event, so the extension detects its persisted ready state after `agent_settled`.
 - User-invoked menus in `pi-btw` and `pi-patty-bg-tasks` are not treated as agent waiting. They are initiated by the user.
-- `pi-web-access`, local `jina.ts`, `pi-statusline`, and automatic permission review do not expose a current human blocking interaction used by this extension.
+- `pi-web-access`, local `jina.ts`, and automatic permission review do not expose a current human blocking interaction used by this extension.
 
 ## Naming
 

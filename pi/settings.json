@@ -13,8 +13,7 @@
     "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:@gotgenes/pi-subagents",
-    "../../warchives/pi-specialists",
-    "../../configs/pi/extensions/pi-statusline"
+    "../../warchives/pi-specialists"
   ],
   "terminal": {
     "showTerminalProgress": true
