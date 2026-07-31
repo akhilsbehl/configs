@@ -20,7 +20,6 @@ interface PowerlineBlock {
 	segments: RenderSegment[];
 }
 
-const TOKYO_NIGHT_LEAD = "#a3aed2";
 const TOKYO_NIGHT_EXTENSION_SEPARATOR = "#394260";
 
 export function renderPowerlineStatusline(
@@ -96,7 +95,8 @@ function joinPowerlineSegments(
 	config: Pick<StatuslineConfig, "palette" | "density" | "separator">,
 ): string {
 	const blocks = contiguousBlocks(segments, config.palette);
-	let line = ansiStyle("░▒▓", { fg: TOKYO_NIGHT_LEAD });
+	const firstBlock = blocks[0];
+	let line = firstBlock ? ansiStyle("", { fg: firstBlock.colors.bg }) : "";
 
 	for (const [index, block] of blocks.entries()) {
 		const previous = index === 0 ? undefined : blocks[index - 1]?.colors;
