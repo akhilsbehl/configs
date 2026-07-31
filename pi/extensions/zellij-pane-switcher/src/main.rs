@@ -9,13 +9,10 @@ use std::collections::BTreeMap;
 struct State {
     panes: Vec<Pane>,
     tabs: BTreeMap<usize, String>,
-    active_tab_id: Option<usize>,
     query: String,
     selected: Option<(bool, u32)>,
     starred: Option<(bool, u32)>,
     status: Option<String>,
-    floating_panes_hidden: bool,
-    prepared_initially: bool,
 }
 
 register_plugin!(State);
@@ -54,31 +51,15 @@ impl State {
             self.status = Some("No pane selected".to_string());
             return;
         };
-        self.starred = (self.starred == Some(selected)).then_some(selected);
+        self.starred = (self.starred != Some(selected)).then_some(selected);
         self.status = None;
     }
 
-    fn suppress_other_floating_panes(&mut self) {
-        if self.floating_panes_hidden {
-            return;
-        }
-        self.floating_panes_hidden = hide_floating_panes(self.active_tab_id).unwrap_or(false);
-    }
-
-    fn restore_floating_panes(&mut self) {
-        if self.floating_panes_hidden {
-            let _ = show_floating_panes(self.active_tab_id);
-            self.floating_panes_hidden = false;
-        }
-    }
-
     fn dismiss(&mut self) {
-        self.restore_floating_panes();
         hide_self();
     }
 
     fn show_switcher(&mut self) {
-        self.suppress_other_floating_panes();
         show_self(true);
     }
 
@@ -221,10 +202,6 @@ impl ZellijPlugin for State {
                     .filter(|pane| !pane.is_zellij_chrome())
                     .collect();
                 self.panes.sort_by_key(Pane::key);
-                if !self.prepared_initially {
-                    self.prepared_initially = true;
-                    self.suppress_other_floating_panes();
-                }
                 if let Some(starred) = self.starred {
                     if !self.panes.iter().any(|pane| identity(pane) == starred) {
                         self.starred = None;
@@ -236,7 +213,6 @@ impl ZellijPlugin for State {
             Event::Key(key) => self.handle_key(key),
             Event::Mouse(mouse) => self.handle_mouse(mouse),
             Event::TabUpdate(tabs) => {
-                self.active_tab_id = tabs.iter().find(|tab| tab.active).map(|tab| tab.tab_id);
                 self.tabs = tabs
                     .into_iter()
                     .map(|tab| (tab.position, tab.name))
