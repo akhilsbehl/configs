@@ -25,7 +25,6 @@ struct State {
     floating_context: Option<FloatingContext>,
     query: String,
     selected: Option<TargetId>,
-    starred: Option<TargetId>,
     status: Option<String>,
     has_permission: bool,
     own_pane_id: Option<u32>,
@@ -62,19 +61,6 @@ impl State {
         self.status = None;
     }
 
-    fn toggle_star(&mut self) {
-        let Some(selected) = self.selected.clone() else {
-            self.status = Some("No pane selected".to_string());
-            return;
-        };
-        if !matches!(selected, TargetId::Pane { .. }) {
-            self.status = Some("Only panes can be starred".to_string());
-            return;
-        }
-        self.starred = (self.starred != Some(selected.clone())).then_some(selected);
-        self.status = None;
-    }
-
     fn dismiss(&mut self) {
         hide_self();
     }
@@ -103,38 +89,6 @@ impl State {
             .into_iter()
             .flat_map(|session| session.tabs.iter())
             .flat_map(|tab| tab.panes.iter())
-    }
-
-    fn pane_target_exists(&self, target: &TargetId) -> bool {
-        let TargetId::Pane {
-            session_name,
-            tab_position,
-            pane_id,
-            is_plugin,
-        } = target
-        else {
-            return false;
-        };
-        self.snapshot.sessions.iter().any(|session| {
-            session.live
-                && session.name == *session_name
-                && session.tabs.iter().any(|tab| {
-                    tab.position == *tab_position
-                        && tab
-                            .panes
-                            .iter()
-                            .any(|pane| pane.pane_id == *pane_id && pane.is_plugin == *is_plugin)
-                })
-        })
-    }
-
-    fn clear_stale_star(&mut self) {
-        if let Some(starred) = &self.starred {
-            if !self.pane_target_exists(starred) {
-                self.starred = None;
-                self.status = Some("Starred pane is no longer available".to_string());
-            }
-        }
     }
 
     fn snapshot_origin(&mut self) {
@@ -263,14 +217,6 @@ impl State {
                 self.status = None;
                 true
             }
-            BareKey::Char(' ')
-                if !has_modifier(KeyModifier::Alt)
-                    && !has_modifier(KeyModifier::Ctrl)
-                    && !has_modifier(KeyModifier::Super) =>
-            {
-                self.toggle_star();
-                true
-            }
             BareKey::Char(character)
                 if !has_modifier(KeyModifier::Alt)
                     && !has_modifier(KeyModifier::Ctrl)
@@ -284,19 +230,6 @@ impl State {
             }
             _ => false,
         }
-    }
-
-    fn focus_starred(&mut self) {
-        self.clear_stale_star();
-        let Some(starred) = self.starred.clone() else {
-            self.show_switcher();
-            if self.status.is_none() {
-                self.status = Some("No starred pane".to_string());
-            }
-            return;
-        };
-        self.show_switcher();
-        self.activate_pane(starred);
     }
 
     fn open(&mut self) {
@@ -317,10 +250,6 @@ impl State {
         match name.as_str() {
             "open" => {
                 self.open();
-                true
-            }
-            "focus-starred" => {
-                self.focus_starred();
                 true
             }
             _ => false,
@@ -368,7 +297,6 @@ impl State {
                     })
                     .collect::<Vec<_>>();
                 self.snapshot = normalize_sessions(&live_sessions, &resurrectable, own_plugin_id);
-                self.clear_stale_star();
                 self.normalize_selection();
                 self.snapshot != previous
             }
@@ -515,11 +443,6 @@ impl ZellijPlugin for State {
                     } else {
                         " "
                     };
-                    let star = if self.starred.as_ref() == Some(&target) {
-                        "★"
-                    } else {
-                        " "
-                    };
                     let kind = if pane.is_plugin {
                         "plugin"
                     } else if pane.is_floating {
@@ -528,7 +451,7 @@ impl ZellijPlugin for State {
                         "split"
                     };
                     let hidden = if pane.is_suppressed { " hidden" } else { "" };
-                    let row = format!("  {marker} {star}  {kind:<6} {}{hidden}", pane.label());
+                    let row = format!("  {marker}  {kind:<6} {}{hidden}", pane.label());
                     if self.selected.as_ref() == Some(&target) {
                         println!("\x1b[1;7m{row}\x1b[0m");
                     } else {
@@ -562,7 +485,7 @@ impl ZellijPlugin for State {
             println!("\n\x1b[1;33m!\x1b[0m {status}");
         }
         println!(
-            "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m activate  \x1b[2mSpace\x1b[0m star  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
+            "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m activate  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
         );
     }
 }

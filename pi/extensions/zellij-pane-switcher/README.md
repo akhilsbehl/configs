@@ -4,7 +4,7 @@ A Rust/WebAssembly Zellij plugin for finding and focusing panes across all live 
 
 ## Status
 
-The plugin discovers panes across all live sessions, groups them by session and tab, supports hierarchical local fuzzy search, keyboard navigation, starring, cross-session focusing, and hiding. Resurrectable sessions appear as session-only targets and are restored through Zellij. It also handles the `open` and `focus-starred` plugin messages for external Zellij keybindings.
+The plugin discovers panes across all live sessions, groups them by session and tab, supports hierarchical local fuzzy search, keyboard navigation, cross-session focusing, and hiding. Resurrectable sessions appear as session-only targets and are restored through Zellij. It handles the `open` plugin message for external Zellij keybindings.
 
 ## Requirements
 
@@ -39,17 +39,14 @@ rustc --test src/model.rs -o /tmp/zellij-pane-switcher-model-tests
 | Binding | Action |
 | --- | --- |
 | `Alt-y` | Open or focus the switcher |
-| `Alt-g` | Focus the starred pane |
 | `Tab` / `Shift-Tab` | Move selection |
 | `Enter` | Focus selected pane and hide the switcher |
 | `Esc` | Hide the switcher |
-| `Space` | Star or unstar the selected pane |
 | `Backspace` | Delete the last search character |
 
-The plugin recognizes these message names for external Zellij bindings:
+The plugin recognizes this message name for external Zellij bindings:
 
-- `open`: show and focus the switcher pane;
-- `focus-starred`: focus the starred pane, or show `No starred pane`.
+- `open`: show and focus the switcher pane.
 
 Example `config.kdl` bindings:
 
@@ -60,11 +57,6 @@ keybinds {
             MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
                 name "open"
                 floating true
-            }
-        }
-        bind "Alt g" {
-            MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
-                name "focus-starred"
             }
         }
     }
