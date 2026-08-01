@@ -77,7 +77,10 @@ impl State {
         // `show_self` focuses the plugin, but does not make the floating layer
         // visible. The latter is per-tab state and may have been hidden by the
         // invoking session.
-        let _ = show_floating_panes(None);
+        let tab_id = self
+            .switcher_tab_position
+            .and_then(|position| self.tab_ids.get(&position).copied());
+        let _ = show_floating_panes(tab_id);
         show_self(true);
     }
 
