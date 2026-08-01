@@ -52,20 +52,6 @@ function Read-TokenCache([string]$Tenant, [string]$Client) {
     }
 }
 
-function Get-AuthErrorText([object]$ErrorRecord) {
-    # OAuth errors are commonly returned in the HTTP response body. Keep this
-    # diagnostic text, but never print tokens or the token cache.
-    $details = @(
-        $ErrorRecord.Exception.Message
-        $ErrorRecord.ErrorDetails.Message
-    ) -join "`n"
-    return $details
-}
-
-function Test-ConditionalAccessError([string]$Message) {
-    return $Message -match "AADSTS53003|AADSTS530033|530033|conditional access|device.*(managed|registered|compliant)|registered.*device"
-}
-
 function Get-AccessToken {
     $tenant = $env:MS_GRAPH_TENANT_ID
     $client = $env:MS_GRAPH_CLIENT_ID
@@ -95,13 +81,7 @@ function Get-AccessToken {
             Save-TokenCache $token $tenant $client
             return $token.access_token
         }
-        catch {
-            $message = Get-AuthErrorText $_
-            if (Test-ConditionalAccessError $message) {
-                throw "Microsoft Entra ID blocked token refresh under Conditional Access. The device or sign-in context does not satisfy the tenant policy. Ask IT to review the sign-in logs for this application and request. Details: $message"
-            }
-            Write-Log "Cached refresh token was rejected; starting device sign-in."
-        }
+        catch { Write-Log "Cached refresh token was rejected; starting device sign-in." }
     }
 
     $deviceEndpoint = "https://login.microsoftonline.com/$tenant/oauth2/v2.0/devicecode"
@@ -129,10 +109,7 @@ function Get-AccessToken {
             }
         }
         catch {
-            $message = Get-AuthErrorText $_
-            if (Test-ConditionalAccessError $message) {
-                throw "Microsoft Entra ID blocked device-code sign-in under Conditional Access. Sign-in succeeded, but the requesting device or sign-in context does not satisfy the tenant policy. Ask IT to review the sign-in logs for this application and request. Details: $message"
-            }
+            $message = $_.Exception.Message
             if ($message -match "authorization_declined|expired_token|bad_verification_code") {
                 throw "Device-code sign-in failed: $message"
             }
