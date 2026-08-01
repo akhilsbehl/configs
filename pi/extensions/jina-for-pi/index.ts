@@ -7,6 +7,7 @@ import { Type, type Static } from "typebox";
 
 const API_KEY_ENV = "JINA_API_KEY";
 const MAX_OUTPUT = 50_000;
+const MAX_RENDER_OUTPUT = 12_000;
 const DEFAULT_REQUEST_TIMEOUT_MS = 120_000;
 const DEFAULT_DEEPSEARCH_TIMEOUT_MS = 900_000;
 const DEFAULT_DEEPSEARCH_IDLE_TIMEOUT_MS = 300_000;
@@ -317,6 +318,36 @@ function toolResult(result: JinaResult) {
   return { content: [{ type: "text" as const, text: JSON.stringify(result) }], details: result };
 }
 
+type RenderTheme = { fg: (color: string, text: string) => string };
+type RenderResult = {
+  content: readonly { type: string; text?: string }[];
+  details?: unknown;
+};
+
+function renderToolResult(result: RenderResult, expanded: boolean, theme: RenderTheme): Text {
+  if (!expanded) return new Text("", 0, 0);
+
+  const details = result.details as Partial<JinaResult> | undefined;
+  const content = typeof details?.content === "string"
+    ? details.content
+    : result.content.find((item) => item.type === "text")?.text ?? "";
+  const visible = content.slice(0, MAX_RENDER_OUTPUT);
+  const rendererTruncation = content.length > visible.length
+    ? `\n\n[Display truncated: showing ${visible.length.toLocaleString()} of ${content.length.toLocaleString()} characters]`
+    : "";
+  const sourceTruncation = details?.truncated
+    && typeof details.returnedLength === "number"
+    && typeof details.contentLength === "number"
+    ? `\n[Tool result was already truncated at ${details.returnedLength.toLocaleString()} of ${details.contentLength.toLocaleString()} characters]`
+    : "";
+
+  return new Text(
+    `\n${theme.fg("toolOutput", visible)}${theme.fg("muted", rendererTruncation + sourceTruncation)}`,
+    0,
+    0,
+  );
+}
+
 export default function (pi: ExtensionAPI): void {
   pi.registerMessageRenderer("jina-result", (message, options, theme) => {
     const details = message.details as { operation?: string } | undefined;
@@ -348,6 +379,9 @@ export default function (pi: ExtensionAPI): void {
     async execute(_toolCallId, params: JinaReadInput, signal) {
       return toolResult(await readUrl(params.url, signal));
     },
+    renderResult(result, { expanded }, theme) {
+      return renderToolResult(result, expanded, theme);
+    },
   });
   pi.registerTool({
     name: "jina_search",
@@ -359,6 +393,9 @@ export default function (pi: ExtensionAPI): void {
     async execute(_toolCallId, params: JinaSearchInput, signal) {
       return toolResult(await search(params.query, signal));
     },
+    renderResult(result, { expanded }, theme) {
+      return renderToolResult(result, expanded, theme);
+    },
   });
   pi.registerTool({
     name: "jina_deepsearch",
@@ -369,6 +406,9 @@ export default function (pi: ExtensionAPI): void {
     parameters: JinaDeepSearchSchema,
     async execute(_toolCallId, params: JinaDeepSearchInput, signal) {
       return toolResult(await deepSearch(params.prompt, signal));
+    },
+    renderResult(result, { expanded }, theme) {
+      return renderToolResult(result, expanded, theme);
     },
   });
 }
