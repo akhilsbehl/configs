@@ -233,8 +233,8 @@ pub fn filter_snapshot(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
 
     for session in &snapshot.sessions {
         if !session.live {
-            let name_score = subsequence_score(&session.name, &query);
-            let metadata_score = subsequence_score("resurrectable", &query);
+            let name_score = contains_case_insensitive(&session.name, &query);
+            let metadata_score = contains_case_insensitive("resurrectable", &query);
             if let Some(score) = name_score.or(metadata_score) {
                 matches.push(SearchMatch::ResurrectableSession {
                     session_name: session.name.clone(),
@@ -245,11 +245,11 @@ pub fn filter_snapshot(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
             continue;
         }
 
-        let session_score = subsequence_score(&session.name, &query);
+        let session_score = contains_case_insensitive(&session.name, &query);
         for tab in &session.tabs {
-            let tab_score = subsequence_score(&tab.name, &query);
+            let tab_score = contains_case_insensitive(&tab.name, &query);
             for pane in &tab.panes {
-                let pane_score = subsequence_score(&pane.label(), &query);
+                let pane_score = contains_case_insensitive(&pane.label(), &query);
                 let score = match (session_score, tab_score, pane_score) {
                     (Some(score), _, _) => score,
                     (None, Some(score), _) => score + 1_000,
@@ -292,33 +292,8 @@ pub fn filter_snapshot(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
     matches
 }
 
-fn subsequence_score(label: &str, query: &str) -> Option<usize> {
-    if query.is_empty() {
-        return Some(0);
-    }
-
-    let label = label.to_lowercase();
-    let mut query_chars = query.chars();
-    let mut next_query = query_chars.next()?;
-    let mut score = 0;
-    let mut previous_index = None;
-
-    for (index, character) in label.chars().enumerate() {
-        if character != next_query {
-            continue;
-        }
-        score += match previous_index {
-            None => index,
-            Some(previous) if previous + 1 == index => 0,
-            Some(previous) => index - previous,
-        };
-        previous_index = Some(index);
-        match query_chars.next() {
-            Some(character) => next_query = character,
-            None => return Some(score),
-        }
-    }
-    None
+fn contains_case_insensitive(label: &str, query: &str) -> Option<usize> {
+    label.to_lowercase().find(query)
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -402,6 +377,21 @@ mod tests {
         assert_eq!(filter_snapshot(&snapshot, "project").len(), 3);
         assert_eq!(filter_snapshot(&snapshot, "tests").len(), 2);
         assert_eq!(filter_snapshot(&snapshot, "cargo").len(), 1);
+    }
+
+    #[test]
+    fn search_is_case_insensitive_and_not_subsequence_based() {
+        let snapshot = normalize_sessions(
+            &[session(
+                "Project API",
+                true,
+                &[("Tests", &[("cargo test", 1)])],
+            )],
+            &[],
+            None,
+        );
+        assert_eq!(filter_snapshot(&snapshot, "PROJECT").len(), 1);
+        assert!(filter_snapshot(&snapshot, "prj").is_empty());
     }
 
     #[test]

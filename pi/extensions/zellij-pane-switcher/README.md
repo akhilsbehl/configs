@@ -4,7 +4,7 @@ A Rust/WebAssembly Zellij plugin for finding and focusing panes across all live 
 
 ## Status
 
-The plugin discovers panes across all live sessions, groups them by session and tab, supports hierarchical local fuzzy search, keyboard navigation, cross-session focusing, and hiding. Resurrectable sessions appear as session-only targets and are restored through Zellij. It handles the `open` plugin message for external Zellij keybindings.
+The plugin discovers panes across all live sessions, groups them by session and tab, supports hierarchical case-insensitive search, keyboard navigation, cross-session focusing, and hiding. Resurrectable sessions appear as session-only targets and are restored through Zellij. It handles the `open` plugin message for external Zellij keybindings.
 
 ## Requirements
 
