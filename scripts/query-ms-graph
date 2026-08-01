@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    cat >&2 <<'EOF'
+Usage: query-ms-graph [--name NAME] [--link URL] [--output-dir DIR] [--debug]
+
+Queries Microsoft Graph using the Windows PowerShell implementation.
+The default download directory is the current working directory.
+EOF
+}
+
+name=''
+link=''
+output_dir="$PWD"
+debug=0
+
+while (($#)); do
+    case "$1" in
+        --name)
+            (($# >= 2)) || { echo "--name requires a value" >&2; exit 2; }
+            name=$2
+            shift 2
+            ;;
+        --link)
+            (($# >= 2)) || { echo "--link requires a value" >&2; exit 2; }
+            link=$2
+            shift 2
+            ;;
+        --output-dir)
+            (($# >= 2)) || { echo "--output-dir requires a value" >&2; exit 2; }
+            output_dir=$2
+            shift 2
+            ;;
+        --debug)
+            debug=1
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown argument: $1" >&2
+            usage
+            exit 2
+            ;;
+    esac
+done
+
+[[ -n "$name" || -n "$link" ]] || {
+    echo "Supply --name, --link, or both." >&2
+    exit 2
+}
+
+command -v powershell.exe >/dev/null 2>&1 || {
+    echo "powershell.exe is not available. WSL Windows interop is required." >&2
+    exit 127
+}
+command -v wslpath >/dev/null 2>&1 || {
+    echo "wslpath is not available." >&2
+    exit 127
+}
+
+[[ -n "${MS_GRAPH_TENANT_ID:-}" && -n "${MS_GRAPH_CLIENT_ID:-}" ]] || {
+    echo "Set MS_GRAPH_TENANT_ID and MS_GRAPH_CLIENT_ID in the WSL environment." >&2
+    exit 2
+}
+
+# WSLENV only forwards exported variables. Export the identifiers for this
+# child process without placing them in the PowerShell command-line arguments.
+export MS_GRAPH_TENANT_ID MS_GRAPH_CLIENT_ID
+
+# Plain WSLENV entries are inherited by Windows processes in this WSL setup.
+# Do not use /u here: this host's WSL interop drops those entries.
+case ":${WSLENV:-}:" in
+    *:MS_GRAPH_TENANT_ID:*) ;;
+    *) WSLENV="${WSLENV:+${WSLENV}:}MS_GRAPH_TENANT_ID" ;;
+esac
+case ":$WSLENV:" in
+    *:MS_GRAPH_CLIENT_ID:*) ;;
+    *) WSLENV="${WSLENV:+${WSLENV}:}MS_GRAPH_CLIENT_ID" ;;
+esac
+export WSLENV
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+script_path="$script_dir/query-ms-graph.ps1"
+if [[ ! -f "$script_path" ]]; then
+    script_path="$(readlink -m "$script_dir/../query-ms-graph.ps1")"
+fi
+[[ -f "$script_path" ]] || {
+    echo "PowerShell script not found beside wrapper or its parent: $script_dir" >&2
+    exit 1
+}
+
+script_win=$(wslpath -w "$script_path")
+output_dir_win=$(wslpath -w "$output_dir")
+
+args=(
+    -NoProfile
+    -NonInteractive
+    -ExecutionPolicy Bypass
+    -File "$script_win"
+    -OutputDir "$output_dir_win"
+)
+[[ -n "$name" ]] && args+=(-Name "$name")
+[[ -n "$link" ]] && args+=(-Link "$link")
+[[ "$debug" -eq 1 ]] && args+=(-Debug)
+
+if [[ "$debug" -eq 1 ]]; then
+    debug_log="/tmp/ms-graph-debug-$(date -u +%Y%m%dT%H%M%SZ).log"
+    set +e
+    powershell.exe "${args[@]}" 2>&1 | tee "$debug_log"
+    status=${PIPESTATUS[0]}
+    set -e
+    printf 'Debug log: %s\n' "$debug_log" >&2
+    exit "$status"
+fi
+
+exec powershell.exe "${args[@]}"
