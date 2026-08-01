@@ -26,7 +26,8 @@ test("keeps replacement previews and equal search navigation sizing in the page 
   assert.match(html, /\.review-target\[data-review-kind=replace\]\[data-review-replacement\]>\*\{text-decoration:line-through/);
   assert.match(html, /\.review-target\[data-review-kind=replace\]\[data-review-replacement\]::after\{content:"Replacement: "/);
   assert.match(html, /::highlight\(richie-replace\)\{background:rgba\(234,157,52,.28\);text-decoration:line-through/);
-  assert.match(html, /\.review-replacement-preview\{/);
+  assert.match(html, /\.review-replacement-inline\{/);
+  assert.match(html, /\.backlink-active\{/);
   assert.match(html, /\.feedback-focus/);
   assert.match(html, /#navigation \.search-box button\{flex:1 1 0;min-width:0;min-height:34px;/);
 });

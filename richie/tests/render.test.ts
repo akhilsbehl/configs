@@ -9,6 +9,8 @@ test("renders inline and display math with source-aware review targets", () => {
   assert.match(html, /class="math-target math-display"[^>]*data-md-range=/);
   assert.match(html, /katex/);
   assert.match(html, /data-math-source="a\^2\+b\^2=c\^2"/);
+  assert.match(html, /class="math-source md-text"[^>]*data-md-range=/);
+  assert.doesNotMatch(html, /katex-mathml/);
 });
 
 test("renders source-aware inline Markdown and GFM tables", () => {

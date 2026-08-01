@@ -21,5 +21,6 @@ test("bundles the targeted interaction regressions", async () => {
   assert.match(client, /feedback-focus/);
   assert.match(client, /feedback-/);
   assert.match(client, /math-target/);
-  assert.match(client, /review-replacement-preview/);
+  assert.match(client, /review-replacement-inline/);
+  assert.match(client, /backlink-active/);
 });

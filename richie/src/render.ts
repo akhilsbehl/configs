@@ -85,6 +85,12 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
     const lastNewline = before.lastIndexOf("\n");
     return { offset, line, column: offset - lastNewline };
   };
+  const mathSourceRange = (node: Node, delimiterLength: number): string => {
+    if (!node.position) return "";
+    const start = positionAt(node.position.start.offset + delimiterLength);
+    const end = positionAt(node.position.end.offset - delimiterLength);
+    return ` data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"`;
+  };
   const imageLocation = (url: string | undefined): { src?: string; error?: string } => {
     if (!url) return { error: "Image reference is missing its definition." };
     if (/^https:/i.test(url)) return { src: url };
@@ -143,16 +149,16 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       case "inlineMath": {
         const value = node.value ?? "";
         let rendered: string;
-        try { rendered = katex.renderToString(value, { displayMode: false, throwOnError: false, output: "htmlAndMathml" }); }
+        try { rendered = katex.renderToString(value, { displayMode: false, throwOnError: false, output: "html" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
-        return `<span class="math-target math-inline"${range(node)} data-math-source="${escape(value)}">${rendered}</span>`;
+        return `<span class="math-target math-inline"${range(node)} data-math-source="${escape(value)}"><span class="math-rendered" aria-hidden="true">${rendered}</span><span class="math-source md-text"${mathSourceRange(node, 1)}>${escape(value)}</span></span>`;
       }
       case "math": {
         const value = node.value ?? "";
         let rendered: string;
-        try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "htmlAndMathml" }); }
+        try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "html" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
-        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}">${rendered}</div>`;
+        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered" aria-hidden="true">${rendered}</div><span class="math-source md-text"${mathSourceRange(node, 2)}>${escape(value)}</span></div>`;
       }
       case "inlineCode": {
         if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;

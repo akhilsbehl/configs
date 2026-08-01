@@ -31,7 +31,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now richie
 ```
 
-The unit uses the currently installed Node 22 binary under Akhil's NVM installation. Update `ExecStart` in `packaging/richie.service` when that Node installation moves.
+The unit uses the currently installed Node 22 binary under Akhil's NVM installation. It intentionally shares the host `/tmp` namespace so drafts and local media there are reviewable. Update `ExecStart` in `packaging/richie.service` when that Node installation moves.
 
 Check it with `systemctl status richie` and inspect logs with `journalctl -u richie`. Stop it with `sudo systemctl disable --now richie`.
 

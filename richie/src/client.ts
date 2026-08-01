@@ -107,7 +107,7 @@ function makeHighlight(ranges: globalThis.Range[]): unknown {
 }
 function clearReviewPresentation(): void {
   document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.removeAttribute("data-review-replacement"); element.removeAttribute("aria-describedby"); element.classList.remove("review-target", "review-column-target"); });
-  document.querySelectorAll(".review-replacement-preview").forEach((element) => element.remove());
+  document.querySelectorAll(".review-replacement-inline").forEach((element) => element.remove());
   const highlights = reviewHighlights(); ["richie-comment", "richie-replace", "richie-delete"].forEach((name) => highlights?.delete(name));
 }
 function columnTargets(operation: Operation): HTMLElement[] {
@@ -120,7 +120,7 @@ function columnTargets(operation: Operation): HTMLElement[] {
 function applyReviewPresentation(operations: Operation[]): void {
   clearReviewPresentation();
   const ranges = new Map<string, globalThis.Range[]>();
-  const previews: Array<{ operation: Operation; range: globalThis.Range }> = [];
+  const inlineReplacements: Array<{ operation: Operation; range: globalThis.Range }> = [];
   operations.filter((operation) => operation.status === "open").forEach((operation) => {
     if (operation.scope === "column") {
       columnTargets(operation).forEach((target) => { target.classList.add("review-column-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); });
@@ -136,16 +136,15 @@ function applyReviewPresentation(operations: Operation[]): void {
     if (operation.scope === "range") {
       const range = domRange(operation); if (range) {
         ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
-        if (operation.kind === "replace" && operation.replacement) previews.push({ operation, range });
+        if (operation.kind === "replace" && operation.replacement) inlineReplacements.push({ operation, range });
       }
     }
   });
   const highlights = reviewHighlights(); ranges.forEach((value, kind) => { const highlight = makeHighlight(value); if (highlight) highlights?.set(`richie-${kind}`, highlight); });
-  previews.forEach(({ operation, range }) => {
-    const rect = range.getBoundingClientRect(); if (!rect.width && !rect.height) return;
-    const preview = document.createElement("span"); preview.className = "review-replacement-preview"; preview.dataset.operationId = operation.id;
-    preview.textContent = `Replacement: ${operation.replacement}`; preview.style.left = `${Math.max(8, rect.left)}px`; preview.style.top = `${Math.min(window.innerHeight - 12, rect.bottom + 4)}px`;
-    preview.id = `replacement-${operation.id}`; document.body.append(preview);
+  inlineReplacements.forEach(({ operation, range }) => {
+    const replacement = document.createElement("span"); replacement.className = "review-replacement-inline"; replacement.dataset.operationId = operation.id;
+    replacement.textContent = ` → ${operation.replacement}`; replacement.id = `replacement-${operation.id}`;
+    const insertion = range.cloneRange(); insertion.collapse(false); insertion.insertNode(replacement);
   });
 }
 function operationSummary(operation: Operation): string {
@@ -253,6 +252,11 @@ function revealFeedback(ids: string[]): void {
   if (!cards.length) return;
   const first = cards[0]; first.scrollIntoView({ behavior: "smooth", block: "nearest" }); first.focus({ preventScroll: true });
   cards.forEach((card) => { card.classList.remove("feedback-focus"); void card.offsetWidth; card.classList.add("feedback-focus"); });
+  document.querySelectorAll<HTMLElement>("#document [data-review-ids]").forEach((element) => {
+    if (!ids.some((id) => (element.dataset.reviewIds ?? "").split(/\\s+/).includes(id))) return;
+    element.classList.remove("backlink-active"); void element.offsetWidth; element.classList.add("backlink-active");
+    window.setTimeout(() => element.classList.remove("backlink-active"), 1800);
+  });
 }
 document.querySelector("#document")!.addEventListener("click", (event) => {
   const target = (event.target as Element).closest<HTMLElement>("[data-review-ids]");
