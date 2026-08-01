@@ -165,14 +165,14 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       case "inlineMath": {
         const value = node.value ?? "";
         let rendered: string;
-        try { rendered = katex.renderToString(value, { displayMode: false, throwOnError: false, output: "html" }); }
+        try { rendered = katex.renderToString(value, { displayMode: false, throwOnError: false, output: "mathml" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
         return `<span class="math-target math-inline"${range(node)} data-math-source="${escape(value)}"><span class="math-rendered" aria-hidden="true">${rendered}</span><span class="math-source md-text"${mathSourceRange(node, 1)}>${escape(value)}</span></span>`;
       }
       case "math": {
         const value = node.value ?? "";
         let rendered: string;
-        try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "html" }); }
+        try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "mathml" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
         return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div><details class="math-source-panel" open><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre></details></div>`;
       }
