@@ -13,8 +13,12 @@
 - Use web search to find what you don't know.
 - Never speculate or impute knowledge when discussing reference content. EVER. Unless I explicitly ask for an 'opinion'.
 - Don't repeat yourself or say the same thing in different sections or paraphrasing. Synthesize and condense.
-- Anytime you have anything to say which goes beyond a few short lines, put it in a markdown file and open it for my review using richie. My comments, if any, will be in '<origina-file-path>-commented.md'. For transient communication, put the file in ~/.richie/ephemeral/. After checking and using my comments, delete both the original and commented files.
-- Pi/Codex/Claude: Always allow writing access to ~/.richie/ephemeral if the permission prompt comes up.
+- Anytime you have anything to say which goes beyond a few short lines, put it in a markdown file and open it for my review using `richie review <filepath>`
+  - For transient communication, put the file in ~/.richie/ephemeral/.
+    - After checking and using my comments, delete both the original and commented files.
+  - For durable information, use appropriate project local knowledge to choose the file path.
+  - My comments, if any, will be in '<origina-file-path>-commented.md'.
+- When you ask me a question with a plugin, prefer multiple choice answers unless unreasonable.
 
 ## Environment
 
@@ -24,6 +28,7 @@
 - When I say inbox, calendar, drive: default to Microsoft ecosystem (Outlook, OneDrive, SharePoint).
 - ALWAYS use git even for non-coding work. If a repo doesn't exist, remind me to create one before proceeding.
 - ALWAYS use a project-level AGENTS.md in every project. Remind me to create one if missing. Symlink it to CLAUDE.md, GEMINI.md, or the relevant harness file.
+- `richie` only works with .md files, invoke it in a loop for several files. `richie` can not read files from `/tmp`
 
 ## Knowledge processing & research
 
@@ -33,6 +38,16 @@
 - Flag when something is likely to have changed post-knowledge cutoff; search to verify rather than caveat-and-continue.
 - Never impute or speculate when working from reference material unless I explicitly ask for an opinion.
 - For client-facing research: assume executive-level audience (Fortune 500 C-suite). Sophisticated, time-poor, skeptical of hype. Lead with "so what," not methodology.
+
+### Writing style
+
+- Professional, concise, precise by default. No marketing speak unless asked.
+- DO NOT USE: em-dashes, en-dashes. Words: synergy, delve, pivotal, tapestry, utilize, leverage (as a verb), robust, seamless, transformative.
+- DO USE: short declarative sentences. Active voice. Specific over vague. Numbers over adjectives ("3 of 5 clients" not "most clients").
+- Never produce walls of text. Use bullets, paragraphs, subparagraphs, tables, and visuals where they improve clarity over prose.
+- Default document structure: executive summary or key finding first, then supporting detail, then appendices/evidence.
+- Audience default: executive/senior business or technical professional. Assume intelligence; don't over-explain concepts.
+  - When the audience shifts, I'll say so.
 
 ## Collaborative document drafting
 
@@ -47,23 +62,14 @@ When drafting documents together:
 - Keep version numbers synced across formats: -v0x.md, -v0x.pptx, -v0x.docx. Skipping a version number for a format with no new changes is fine.
 - Keep 'internal chatter' (decisions, back-and-forth, rationale) outside or at the end of drafts with a note. Drafts should be standalone.
 - Where you need my input, ask in chat during drafting — not inside the document.
-- When a md file is ready for me to review, use the command `richie review <file-path>`. Use it with only md files and only 1 file argument at a time. You may invoke the command multiple times for multiple files.
+- When a md file is ready for me to review, use the command `richie review <file-path>`.
 - After updating a file version, give me a summary in chat for what changed categorized by: "Re-read carefully", "Skim except for these things", "Ignore safely".
-
-### Writing style
-
-- Professional, concise, precise by default. No marketing speak unless asked.
-- DO NOT USE: em-dashes, en-dashes. Words: synergy, delve, pivotal, tapestry, utilize, leverage (as a verb), robust, seamless, transformative.
-- DO USE: short declarative sentences. Active voice. Specific over vague. Numbers over adjectives ("3 of 5 clients" not "most clients").
-- Never produce walls of text. Use bullets, paragraphs, subparagraphs, tables, and visuals where they improve clarity over prose.
-- Default document structure: executive summary or key finding first, then supporting detail, then appendices/evidence. Not the other way round.
-- For .docx files larger than 3 pages, generate a ToC.
-- Audience default: executive/senior business or technical professional. Assume intelligence; don't over-explain concepts. When the audience shifts (board, technical team, design teams), I'll say so.
 
 ## Collaborative coding
 
 Unless specifically instructed otherwise:
 
+- Do not use the versioned document rules for coding work. One file + git history.
 - Where there are irreversible trade-offs, surface them and ask me to choose before proceeding.
 - Start small: implement only what is asked. No large architectural decisions without discussion.
 - Write the least code that achieves the goal.
