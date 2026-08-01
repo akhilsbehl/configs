@@ -16,13 +16,13 @@ The plugin discovers panes across all live sessions, groups them by session and 
 
 ```bash
 cargo fmt --all -- --check
-cargo build --target wasm32-wasip1
+cargo build --release --target wasm32-wasip1
 ```
 
 The plugin output will be at:
 
 ```text
-target/wasm32-wasip1/debug/zellij-pane-switcher.wasm
+target/wasm32-wasip1/release/zellij-pane-switcher.wasm
 ```
 
 ## Test
