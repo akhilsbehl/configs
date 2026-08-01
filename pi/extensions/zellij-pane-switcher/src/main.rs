@@ -1,9 +1,12 @@
 mod model;
 
-use model::{filter_panes, next_index, Navigation, Pane, SearchMatch};
-use zellij_tile::prelude::*;
-
+use model::{
+    filter_snapshot, next_index, normalize_sessions, Navigation, Pane, PaneData, SearchMatch,
+    SessionData, Snapshot, TargetId,
+};
 use std::collections::BTreeMap;
+use std::time::Duration;
+use zellij_tile::prelude::*;
 
 #[derive(Clone, Copy)]
 struct FloatingContext {
@@ -14,16 +17,15 @@ struct FloatingContext {
 
 #[derive(Default)]
 struct State {
-    panes: Vec<Pane>,
-    tabs: BTreeMap<usize, String>,
-    tab_ids: BTreeMap<usize, usize>,
+    snapshot: Snapshot,
     floating_visibility: BTreeMap<usize, bool>,
+    tab_ids: BTreeMap<usize, usize>,
     switcher_tab_position: Option<usize>,
     origin_pane: Option<(bool, u32)>,
     floating_context: Option<FloatingContext>,
     query: String,
-    selected: Option<(bool, u32)>,
-    starred: Option<(bool, u32)>,
+    selected: Option<TargetId>,
+    starred: Option<TargetId>,
     status: Option<String>,
 }
 
@@ -31,39 +33,43 @@ register_plugin!(State);
 
 impl State {
     fn matches(&self) -> Vec<SearchMatch> {
-        filter_panes(&self.panes, &self.query)
+        filter_snapshot(&self.snapshot, &self.query)
     }
 
     fn normalize_selection(&mut self) {
         let matches = self.matches();
         if self
             .selected
-            .is_some_and(|selected| matches.iter().any(|item| identity(&item.pane) == selected))
+            .as_ref()
+            .is_some_and(|selected| matches.iter().any(|item| item.target() == *selected))
         {
             return;
         }
-        self.selected = matches.first().map(|item| identity(&item.pane));
+        self.selected = matches.first().map(SearchMatch::target);
     }
 
     fn move_selection(&mut self, direction: Navigation) {
         let matches = self.matches();
-        let current = self.selected.and_then(|selected| {
-            matches
-                .iter()
-                .position(|item| identity(&item.pane) == selected)
-        });
+        let current = self
+            .selected
+            .as_ref()
+            .and_then(|selected| matches.iter().position(|item| item.target() == *selected));
         self.selected = next_index(current, matches.len(), direction)
             .and_then(|index| matches.get(index))
-            .map(|item| identity(&item.pane));
+            .map(SearchMatch::target);
         self.status = None;
     }
 
     fn toggle_star(&mut self) {
-        let Some(selected) = self.selected else {
+        let Some(selected) = self.selected.clone() else {
             self.status = Some("No pane selected".to_string());
             return;
         };
-        self.starred = (self.starred != Some(selected)).then_some(selected);
+        if !matches!(selected, TargetId::Pane { .. }) {
+            self.status = Some("Only panes can be starred".to_string());
+            return;
+        }
+        self.starred = (self.starred != Some(selected.clone())).then_some(selected);
         self.status = None;
     }
 
@@ -73,6 +79,56 @@ impl State {
 
     fn show_switcher(&mut self) {
         show_self(true);
+    }
+
+    fn current_session_name(&self) -> Option<&str> {
+        self.snapshot
+            .sessions
+            .iter()
+            .find(|session| session.live && session.is_current)
+            .map(|session| session.name.as_str())
+    }
+
+    fn current_panes(&self) -> impl Iterator<Item = &Pane> {
+        self.snapshot
+            .sessions
+            .iter()
+            .find(|session| session.live && session.is_current)
+            .into_iter()
+            .flat_map(|session| session.tabs.iter())
+            .flat_map(|tab| tab.panes.iter())
+    }
+
+    fn pane_target_exists(&self, target: &TargetId) -> bool {
+        let TargetId::Pane {
+            session_name,
+            tab_position,
+            pane_id,
+            is_plugin,
+        } = target
+        else {
+            return false;
+        };
+        self.snapshot.sessions.iter().any(|session| {
+            session.live
+                && session.name == *session_name
+                && session.tabs.iter().any(|tab| {
+                    tab.position == *tab_position
+                        && tab
+                            .panes
+                            .iter()
+                            .any(|pane| pane.pane_id == *pane_id && pane.is_plugin == *is_plugin)
+                })
+        })
+    }
+
+    fn clear_stale_star(&mut self) {
+        if let Some(starred) = &self.starred {
+            if !self.pane_target_exists(starred) {
+                self.starred = None;
+                self.status = Some("Starred pane is no longer available".to_string());
+            }
+        }
     }
 
     fn snapshot_origin(&mut self) {
@@ -95,10 +151,9 @@ impl State {
             return;
         };
         let pane = self
-            .panes
-            .iter()
+            .current_panes()
             .find(|pane| pane.tab_position == tab_position && pane.is_floating && !pane.is_plugin)
-            .map(identity);
+            .map(|pane| (pane.is_plugin, pane.pane_id));
         self.floating_context = Some(FloatingContext {
             tab_id,
             was_visible,
@@ -120,22 +175,60 @@ impl State {
         self.dismiss();
         self.restore_floating_context(None);
         if let Some(origin_pane) = origin_pane {
-            if self.panes.iter().any(|pane| identity(pane) == origin_pane) {
+            if self
+                .current_panes()
+                .any(|pane| (pane.is_plugin, pane.pane_id) == origin_pane)
+            {
                 focus_pane(origin_pane);
             }
         }
     }
 
-    fn focus_selected(&mut self) {
-        let Some(selected) = self.selected else {
-            self.status = Some("No pane selected".to_string());
+    fn activate_pane(&mut self, target: TargetId) {
+        let TargetId::Pane {
+            session_name,
+            tab_position,
+            pane_id,
+            is_plugin,
+        } = target
+        else {
+            self.status = Some("Selected result is not a pane".to_string());
             return;
         };
-        self.origin_pane = None;
-        focus_pane(selected);
-        self.dismiss();
-        self.restore_floating_context(Some(selected));
+
+        if self.current_session_name() == Some(session_name.as_str()) {
+            self.origin_pane = None;
+            focus_pane((is_plugin, pane_id));
+            self.dismiss();
+            self.restore_floating_context(Some((is_plugin, pane_id)));
+        } else {
+            self.origin_pane = None;
+            self.floating_context = None;
+            self.dismiss();
+            switch_session_with_focus(
+                &session_name,
+                Some(tab_position),
+                Some((pane_id, is_plugin)),
+            );
+        }
         self.status = None;
+    }
+
+    fn activate_selected(&mut self) {
+        let Some(selected) = self.selected.clone() else {
+            self.status = Some("No result selected".to_string());
+            return;
+        };
+        match selected {
+            TargetId::Pane { .. } => self.activate_pane(selected),
+            TargetId::ResurrectableSession { session_name } => {
+                self.origin_pane = None;
+                self.floating_context = None;
+                self.dismiss();
+                switch_session_with_focus(&session_name, None, None);
+                self.status = None;
+            }
+        }
     }
 
     fn handle_key(&mut self, key: KeyWithModifier) -> bool {
@@ -151,7 +244,7 @@ impl State {
                 true
             }
             BareKey::Enter => {
-                self.focus_selected();
+                self.activate_selected();
                 true
             }
             BareKey::Esc => {
@@ -188,33 +281,36 @@ impl State {
     }
 
     fn focus_starred(&mut self) {
-        if self.floating_context.is_none() {
-            self.snapshot_floating_context();
-        }
-        let Some(starred) = self.starred else {
+        self.clear_stale_star();
+        let Some(starred) = self.starred.clone() else {
             self.show_switcher();
-            self.status = Some("No starred pane".to_string());
+            if self.status.is_none() {
+                self.status = Some("No starred pane".to_string());
+            }
             return;
         };
         self.show_switcher();
-        focus_pane(starred);
-        self.dismiss();
-        self.restore_floating_context(Some(starred));
+        self.activate_pane(starred);
+    }
+
+    fn open(&mut self) {
+        self.refresh_snapshot();
+        self.query.clear();
+        self.normalize_selection();
+        if self.origin_pane.is_none() {
+            self.snapshot_origin();
+        }
+        if self.floating_context.is_none() {
+            self.snapshot_floating_context();
+        }
+        self.show_switcher();
+        self.status = None;
     }
 
     fn handle_message(&mut self, name: String) -> bool {
         match name.as_str() {
             "open" => {
-                self.query.clear();
-                self.normalize_selection();
-                if self.origin_pane.is_none() {
-                    self.snapshot_origin();
-                }
-                if self.floating_context.is_none() {
-                    self.snapshot_floating_context();
-                }
-                self.show_switcher();
-                self.status = None;
+                self.open();
                 true
             }
             "focus-starred" => {
@@ -224,11 +320,64 @@ impl State {
             _ => false,
         }
     }
+
+    fn refresh_snapshot(&mut self) {
+        match get_session_list() {
+            Ok(session_list) => {
+                let own_plugin_id = get_plugin_ids().plugin_id;
+                let resurrectable = session_list.resurrectable_sessions;
+                let live_sessions = session_list
+                    .live_sessions
+                    .into_iter()
+                    .map(|session| SessionData {
+                        name: session.name,
+                        is_current: session.is_current_session,
+                        connected_clients: session.connected_clients,
+                        tabs: session
+                            .tabs
+                            .into_iter()
+                            .map(|tab| (tab.position, tab.name))
+                            .collect(),
+                        panes: session
+                            .panes
+                            .panes
+                            .into_iter()
+                            .flat_map(|(tab_position, panes)| {
+                                panes.into_iter().map(move |pane| PaneData {
+                                    tab_position,
+                                    pane_id: pane.id,
+                                    is_plugin: pane.is_plugin,
+                                    is_floating: pane.is_floating,
+                                    is_suppressed: pane.is_suppressed,
+                                    title: pane.title,
+                                })
+                            })
+                            .collect(),
+                    })
+                    .collect::<Vec<_>>();
+                self.snapshot =
+                    normalize_sessions(&live_sessions, &resurrectable, Some(own_plugin_id));
+                self.clear_stale_star();
+                self.normalize_selection();
+            }
+            Err(error) => {
+                eprintln!("zellij-pane-switcher: failed to refresh session list: {error}");
+                self.status = Some("Could not refresh sessions".to_string());
+            }
+        }
+    }
 }
 
 impl ZellijPlugin for State {
     fn load(&mut self, _configuration: BTreeMap<String, String>) {
-        subscribe(&[EventType::PaneUpdate, EventType::TabUpdate, EventType::Key]);
+        subscribe(&[
+            EventType::PaneUpdate,
+            EventType::TabUpdate,
+            EventType::SessionUpdate,
+            EventType::Visible,
+            EventType::PermissionRequestResult,
+            EventType::Key,
+        ]);
         request_permission(&[
             PermissionType::ReadApplicationState,
             PermissionType::ChangeApplicationState,
@@ -246,45 +395,31 @@ impl ZellijPlugin for State {
                             .any(|pane| pane.is_plugin && pane.id == own_plugin_id)
                             .then_some(*tab_position)
                     });
-                self.panes = manifest
-                    .panes
-                    .into_iter()
-                    .flat_map(|(tab_position, panes)| {
-                        panes.into_iter().map(move |pane| (tab_position, pane))
-                    })
-                    .filter(|(_, pane)| !(pane.is_plugin && pane.id == own_plugin_id))
-                    .map(|(tab_position, pane)| Pane {
-                        tab_position,
-                        pane_id: pane.id,
-                        is_plugin: pane.is_plugin,
-                        is_floating: pane.is_floating,
-                        is_suppressed: pane.is_suppressed,
-                        title: pane.title,
-                    })
-                    .filter(|pane| !pane.is_zellij_chrome())
-                    .collect();
-                self.panes.sort_by_key(Pane::key);
-                if let Some(starred) = self.starred {
-                    if !self.panes.iter().any(|pane| identity(pane) == starred) {
-                        self.starred = None;
-                    }
-                }
-                self.normalize_selection();
                 true
             }
-            Event::Key(key) => self.handle_key(key),
             Event::TabUpdate(tabs) => {
                 self.tab_ids = tabs.iter().map(|tab| (tab.position, tab.tab_id)).collect();
                 self.floating_visibility = tabs
                     .iter()
                     .map(|tab| (tab.position, tab.are_floating_panes_visible))
                     .collect();
-                self.tabs = tabs
-                    .into_iter()
-                    .map(|tab| (tab.position, tab.name))
-                    .collect();
                 true
             }
+            Event::SessionUpdate(_, _) => {
+                self.refresh_snapshot();
+                true
+            }
+            Event::Visible(visible) => {
+                if visible {
+                    self.refresh_snapshot();
+                }
+                true
+            }
+            Event::PermissionRequestResult(PermissionStatus::Granted) => {
+                self.refresh_snapshot();
+                true
+            }
+            Event::Key(key) => self.handle_key(key),
             _ => false,
         }
     }
@@ -303,62 +438,108 @@ impl ZellijPlugin for State {
             &self.query
         };
 
-        println!("\x1b[1;36m╭─ Pane Switcher\x1b[0m  \x1b[2m{count} results\x1b[0m");
+        println!("\x1b[1;36m╭─ Session and Pane Switcher\x1b[0m  \x1b[2m{count} results\x1b[0m");
         println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
-        println!("\x1b[1;36m╰──────────────────────────────────────\x1b[0m");
+        println!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
 
         if matches.is_empty() {
-            println!("\x1b[2m  No matching panes\x1b[0m");
+            println!("\x1b[2m  No matching panes or sessions\x1b[0m");
         }
 
+        let mut previous_session = String::new();
         let mut previous_tab = None;
         for matched in matches {
-            if previous_tab != Some(matched.pane.tab_position) {
-                let tab_name = self
-                    .tabs
-                    .get(&matched.pane.tab_position)
-                    .filter(|name| !name.trim().is_empty())
-                    .cloned()
-                    .unwrap_or_else(|| format!("Tab {}", matched.pane.tab_position + 1));
-                println!(
-                    "\n\x1b[1;35m▸ Tab {}\x1b[0m  \x1b[2m{}\x1b[0m",
-                    matched.pane.tab_position + 1,
-                    tab_name
-                );
-                previous_tab = Some(matched.pane.tab_position);
+            if previous_session != matched.session_name() {
+                if let Some(session) = self
+                    .snapshot
+                    .sessions
+                    .iter()
+                    .find(|session| session.name == matched.session_name())
+                {
+                    let state = if session.live {
+                        "live"
+                    } else {
+                        "resurrectable"
+                    };
+                    let clients = (session.live)
+                        .then_some(format!(
+                            ", {} client{}",
+                            session.connected_clients,
+                            if session.connected_clients == 1 {
+                                ""
+                            } else {
+                                "s"
+                            }
+                        ))
+                        .unwrap_or_default();
+                    println!(
+                        "\n\x1b[1;36m▸ Session {}\x1b[0m  \x1b[2m{state}{clients}\x1b[0m",
+                        session.name
+                    );
+                }
+                previous_session = matched.session_name().to_string();
+                previous_tab = None;
             }
 
-            let pane_id = identity(&matched.pane);
-            let marker = if self.selected == Some(pane_id) {
-                "›"
-            } else {
-                " "
-            };
-            let star = if self.starred == Some(pane_id) {
-                "★"
-            } else {
-                " "
-            };
-            let kind = if matched.pane.is_plugin {
-                "plugin"
-            } else if matched.pane.is_floating {
-                "float"
-            } else {
-                "split"
-            };
-            let hidden = if matched.pane.is_suppressed {
-                " hidden"
-            } else {
-                ""
-            };
-            let row = format!(
-                "  {marker} {star}  {kind:<6} {}{hidden}",
-                matched.pane.label()
-            );
-            if self.selected == Some(pane_id) {
-                println!("\x1b[1;7m{row}\x1b[0m");
-            } else {
-                println!("{row}");
+            match matched {
+                SearchMatch::Pane { pane, .. } => {
+                    if previous_tab != Some((pane.tab_position, pane.tab_name.clone())) {
+                        println!(
+                            "\n\x1b[1;35m  ▸ Tab {}\x1b[0m  \x1b[2m{}\x1b[0m",
+                            pane.tab_position + 1,
+                            if pane.tab_name.trim().is_empty() {
+                                format!("Tab {}", pane.tab_position + 1)
+                            } else {
+                                pane.tab_name.clone()
+                            }
+                        );
+                        previous_tab = Some((pane.tab_position, pane.tab_name.clone()));
+                    }
+                    let target = pane.target();
+                    let marker = if self.selected.as_ref() == Some(&target) {
+                        "›"
+                    } else {
+                        " "
+                    };
+                    let star = if self.starred.as_ref() == Some(&target) {
+                        "★"
+                    } else {
+                        " "
+                    };
+                    let kind = if pane.is_plugin {
+                        "plugin"
+                    } else if pane.is_floating {
+                        "float"
+                    } else {
+                        "split"
+                    };
+                    let hidden = if pane.is_suppressed { " hidden" } else { "" };
+                    let row = format!("  {marker} {star}  {kind:<6} {}{hidden}", pane.label());
+                    if self.selected.as_ref() == Some(&target) {
+                        println!("\x1b[1;7m{row}\x1b[0m");
+                    } else {
+                        println!("{row}");
+                    }
+                }
+                SearchMatch::ResurrectableSession {
+                    session_name, age, ..
+                } => {
+                    let target = TargetId::ResurrectableSession { session_name };
+                    let marker = if self.selected.as_ref() == Some(&target) {
+                        "›"
+                    } else {
+                        " "
+                    };
+                    let row = format!(
+                        "  {marker}    resurrectable, exited {} ago",
+                        format_age(age)
+                    );
+                    if self.selected.as_ref() == Some(&target) {
+                        println!("\x1b[1;7m{row}\x1b[0m");
+                    } else {
+                        println!("{row}");
+                    }
+                }
             }
         }
 
@@ -367,13 +548,22 @@ impl ZellijPlugin for State {
             println!("\n\x1b[1;33m!\x1b[0m {status}");
         }
         println!(
-            "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m focus  \x1b[2mSpace\x1b[0m star  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
+            "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m activate  \x1b[2mSpace\x1b[0m star  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
         );
     }
 }
 
-fn identity(pane: &Pane) -> (bool, u32) {
-    (pane.is_plugin, pane.pane_id)
+fn format_age(age: Duration) -> String {
+    let seconds = age.as_secs();
+    if seconds < 60 {
+        format!("{seconds}s")
+    } else if seconds < 3_600 {
+        format!("{}m", seconds / 60)
+    } else if seconds < 86_400 {
+        format!("{}h", seconds / 3_600)
+    } else {
+        format!("{}d", seconds / 86_400)
+    }
 }
 
 fn focus_pane(pane: (bool, u32)) {

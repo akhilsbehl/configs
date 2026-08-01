@@ -1,10 +1,10 @@
 # zellij-pane-switcher
 
-A Rust/WebAssembly Zellij plugin for finding and focusing panes across the current session.
+A Rust/WebAssembly Zellij plugin for finding and focusing panes across all live Zellij sessions.
 
 ## Status
 
-The plugin discovers panes across tabs, groups them by tab, supports local fuzzy search, keyboard navigation, starring, focusing, and hiding. It also handles the `open` and `focus-starred` plugin messages for external Zellij keybindings.
+The plugin discovers panes across all live sessions, groups them by session and tab, supports hierarchical local fuzzy search, keyboard navigation, starring, cross-session focusing, and hiding. Resurrectable sessions appear as session-only targets and are restored through Zellij. It also handles the `open` and `focus-starred` plugin messages for external Zellij keybindings.
 
 ## Requirements
 
@@ -27,20 +27,14 @@ target/wasm32-wasip1/debug/zellij-pane-switcher.wasm
 
 ## Test
 
-The normal test command is:
-
-```bash
-cargo test
-```
-
-If dependency downloads are blocked by the network, the dependency-free model tests can be run directly:
+The repository is configured for the WASI plugin target, so run the dependency-free model tests directly:
 
 ```bash
 rustc --test src/model.rs -o /tmp/zellij-pane-switcher-model-tests
 /tmp/zellij-pane-switcher-model-tests
 ```
 
-## Planned controls
+## Controls
 
 | Binding | Action |
 | --- | --- |
@@ -79,6 +73,18 @@ keybinds {
 
 Zellij delivers these bindings through the plugin pipe API. The plugin does not modify the user's configuration. Change the plugin URL or keys to override the defaults.
 
+## Session-manager integration
+
+The cross-session view uses `get_session_list()` and `switch_session_with_focus()` from the Zellij plugin API. It is designed to run as a floating `session-manager` alias, with one plugin window per session where practical:
+
+```kdl
+plugins {
+    session-manager location="file:/absolute/path/to/zellij-pane-switcher.wasm"
+}
+```
+
+Live session and tab names filter their descendant panes. Only pane rows are selectable for live sessions. A resurrectable session is the sole exception because it has no pane until Zellij restores it.
+
 ## Design
 
-See [`pane-switcher-plan.md`](pane-switcher-plan.md) for the current specification and implementation plan.
+See [`pane-switcher-session-design-v02.md`](pane-switcher-session-design-v02.md) for the approved design specification.

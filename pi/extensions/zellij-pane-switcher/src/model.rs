@@ -1,6 +1,10 @@
+use std::time::Duration;
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Pane {
+    pub session_name: String,
     pub tab_position: usize,
+    pub tab_name: String,
     pub pane_id: u32,
     pub is_plugin: bool,
     pub is_floating: bool,
@@ -9,8 +13,22 @@ pub struct Pane {
 }
 
 impl Pane {
-    pub fn key(&self) -> (usize, bool, u32) {
-        (self.tab_position, self.is_plugin, self.pane_id)
+    pub fn key(&self) -> (&str, usize, bool, u32) {
+        (
+            &self.session_name,
+            self.tab_position,
+            self.is_plugin,
+            self.pane_id,
+        )
+    }
+
+    pub fn target(&self) -> TargetId {
+        TargetId::Pane {
+            session_name: self.session_name.clone(),
+            tab_position: self.tab_position,
+            pane_id: self.pane_id,
+            is_plugin: self.is_plugin,
+        }
     }
 
     pub fn label(&self) -> String {
@@ -31,27 +49,245 @@ impl Pane {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct SearchMatch {
-    pub pane: Pane,
-    pub score: usize,
+pub struct TabEntry {
+    pub position: usize,
+    pub name: String,
+    pub panes: Vec<Pane>,
 }
 
-pub fn filter_panes(panes: &[Pane], query: &str) -> Vec<SearchMatch> {
-    let query = query.trim().to_lowercase();
-    let mut matches = panes
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SessionEntry {
+    pub name: String,
+    pub live: bool,
+    pub resurrectable_age: Option<Duration>,
+    pub is_current: bool,
+    pub connected_clients: usize,
+    pub tabs: Vec<TabEntry>,
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct Snapshot {
+    pub sessions: Vec<SessionEntry>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SessionData {
+    pub name: String,
+    pub is_current: bool,
+    pub connected_clients: usize,
+    pub tabs: Vec<(usize, String)>,
+    pub panes: Vec<PaneData>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PaneData {
+    pub tab_position: usize,
+    pub pane_id: u32,
+    pub is_plugin: bool,
+    pub is_floating: bool,
+    pub is_suppressed: bool,
+    pub title: String,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum TargetId {
+    Pane {
+        session_name: String,
+        tab_position: usize,
+        pane_id: u32,
+        is_plugin: bool,
+    },
+    ResurrectableSession {
+        session_name: String,
+    },
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum SearchMatch {
+    Pane {
+        pane: Pane,
+        score: usize,
+    },
+    ResurrectableSession {
+        session_name: String,
+        age: Duration,
+        score: usize,
+    },
+}
+
+impl SearchMatch {
+    pub fn target(&self) -> TargetId {
+        match self {
+            Self::Pane { pane, .. } => pane.target(),
+            Self::ResurrectableSession { session_name, .. } => TargetId::ResurrectableSession {
+                session_name: session_name.clone(),
+            },
+        }
+    }
+
+    pub fn session_name(&self) -> &str {
+        match self {
+            Self::Pane { pane, .. } => &pane.session_name,
+            Self::ResurrectableSession { session_name, .. } => session_name,
+        }
+    }
+}
+
+pub fn normalize_sessions(
+    live_sessions: &[SessionData],
+    resurrectable_sessions: &[(String, Duration)],
+    excluded_current_plugin_id: Option<u32>,
+) -> Snapshot {
+    let mut sessions = live_sessions
         .iter()
-        .filter_map(|pane| {
-            subsequence_score(&pane.label(), &query).map(|score| SearchMatch {
-                pane: pane.clone(),
-                score,
-            })
+        .map(|session| {
+            let mut tabs = session
+                .tabs
+                .iter()
+                .map(|(position, name)| TabEntry {
+                    position: *position,
+                    name: name.clone(),
+                    panes: Vec::new(),
+                })
+                .collect::<Vec<_>>();
+
+            for pane_data in &session.panes {
+                if pane_data.is_plugin
+                    && session.is_current
+                    && excluded_current_plugin_id == Some(pane_data.pane_id)
+                {
+                    continue;
+                }
+                let tab_name = session
+                    .tabs
+                    .iter()
+                    .find(|(position, _)| *position == pane_data.tab_position)
+                    .map(|(_, name)| name.clone())
+                    .unwrap_or_default();
+                let pane = Pane {
+                    session_name: session.name.clone(),
+                    tab_position: pane_data.tab_position,
+                    tab_name: tab_name.clone(),
+                    pane_id: pane_data.pane_id,
+                    is_plugin: pane_data.is_plugin,
+                    is_floating: pane_data.is_floating,
+                    is_suppressed: pane_data.is_suppressed,
+                    title: pane_data.title.clone(),
+                };
+                if pane.is_zellij_chrome() {
+                    continue;
+                }
+                if let Some(tab) = tabs
+                    .iter_mut()
+                    .find(|tab| tab.position == pane_data.tab_position)
+                {
+                    tab.panes.push(pane);
+                } else {
+                    tabs.push(TabEntry {
+                        position: pane_data.tab_position,
+                        name: tab_name,
+                        panes: vec![pane],
+                    });
+                }
+            }
+
+            for tab in &mut tabs {
+                tab.panes
+                    .sort_by(|left, right| left.key().cmp(&right.key()));
+            }
+            tabs.sort_by_key(|tab| tab.position);
+            SessionEntry {
+                name: session.name.clone(),
+                live: true,
+                resurrectable_age: None,
+                is_current: session.is_current,
+                connected_clients: session.connected_clients,
+                tabs,
+            }
         })
         .collect::<Vec<_>>();
 
+    let live_names = sessions
+        .iter()
+        .map(|session| session.name.clone())
+        .collect::<Vec<_>>();
+    for (name, age) in resurrectable_sessions {
+        if !live_names.iter().any(|live_name| live_name == name) {
+            sessions.push(SessionEntry {
+                name: name.clone(),
+                live: false,
+                resurrectable_age: Some(*age),
+                is_current: false,
+                connected_clients: 0,
+                tabs: Vec::new(),
+            });
+        }
+    }
+    sessions.sort_by(|left, right| left.name.cmp(&right.name));
+    Snapshot { sessions }
+}
+
+pub fn filter_snapshot(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
+    let query = query.trim().to_lowercase();
+    let mut matches = Vec::new();
+
+    for session in &snapshot.sessions {
+        if !session.live {
+            let name_score = subsequence_score(&session.name, &query);
+            let metadata_score = subsequence_score("resurrectable", &query);
+            if let Some(score) = name_score.or(metadata_score) {
+                matches.push(SearchMatch::ResurrectableSession {
+                    session_name: session.name.clone(),
+                    age: session.resurrectable_age.unwrap_or_default(),
+                    score,
+                });
+            }
+            continue;
+        }
+
+        let session_score = subsequence_score(&session.name, &query);
+        for tab in &session.tabs {
+            let tab_score = subsequence_score(&tab.name, &query);
+            for pane in &tab.panes {
+                let pane_score = subsequence_score(&pane.label(), &query);
+                let score = match (session_score, tab_score, pane_score) {
+                    (Some(score), _, _) => score,
+                    (None, Some(score), _) => score + 1_000,
+                    (None, None, Some(score)) => score + 2_000,
+                    (None, None, None) => continue,
+                };
+                matches.push(SearchMatch::Pane {
+                    pane: pane.clone(),
+                    score,
+                });
+            }
+        }
+    }
+
     matches.sort_by(|left, right| {
-        left.score
-            .cmp(&right.score)
-            .then_with(|| left.pane.key().cmp(&right.pane.key()))
+        left.session_name()
+            .cmp(right.session_name())
+            .then_with(|| match (left, right) {
+                (SearchMatch::Pane { pane: a, .. }, SearchMatch::Pane { pane: b, .. }) => a
+                    .tab_position
+                    .cmp(&b.tab_position)
+                    .then_with(|| a.key().cmp(&b.key())),
+                (SearchMatch::ResurrectableSession { .. }, SearchMatch::Pane { .. }) => {
+                    std::cmp::Ordering::Less
+                }
+                (SearchMatch::Pane { .. }, SearchMatch::ResurrectableSession { .. }) => {
+                    std::cmp::Ordering::Greater
+                }
+                _ => std::cmp::Ordering::Equal,
+            })
+            .then_with(|| match (left, right) {
+                (SearchMatch::Pane { score: a, .. }, SearchMatch::Pane { score: b, .. })
+                | (
+                    SearchMatch::ResurrectableSession { score: a, .. },
+                    SearchMatch::ResurrectableSession { score: b, .. },
+                ) => a.cmp(b),
+                _ => std::cmp::Ordering::Equal,
+            })
     });
     matches
 }
@@ -71,20 +307,17 @@ fn subsequence_score(label: &str, query: &str) -> Option<usize> {
         if character != next_query {
             continue;
         }
-
         score += match previous_index {
             None => index,
             Some(previous) if previous + 1 == index => 0,
             Some(previous) => index - previous,
         };
         previous_index = Some(index);
-
         match query_chars.next() {
             Some(character) => next_query = character,
             None => return Some(score),
         }
     }
-
     None
 }
 
@@ -98,7 +331,6 @@ pub fn next_index(current: Option<usize>, length: usize, direction: Navigation) 
     if length == 0 {
         return None;
     }
-
     Some(match (current, direction) {
         (None, _) => 0,
         (Some(index), Navigation::Forward) => (index + 1) % length,
@@ -111,37 +343,115 @@ pub fn next_index(current: Option<usize>, length: usize, direction: Navigation) 
 mod tests {
     use super::*;
 
-    fn pane(tab_position: usize, pane_id: u32, title: &str) -> Pane {
-        Pane {
-            tab_position,
-            pane_id,
-            is_plugin: false,
-            is_floating: false,
-            is_suppressed: false,
-            title: title.to_string(),
+    fn session(name: &str, current: bool, tabs: &[(&str, &[(&str, u32)])]) -> SessionData {
+        SessionData {
+            name: name.to_string(),
+            is_current: current,
+            connected_clients: 1,
+            tabs: tabs
+                .iter()
+                .enumerate()
+                .map(|(position, (name, _))| (position, (*name).to_string()))
+                .collect(),
+            panes: tabs
+                .iter()
+                .enumerate()
+                .flat_map(|(position, (_, panes))| {
+                    panes.iter().map(move |(title, pane_id)| PaneData {
+                        tab_position: position,
+                        pane_id: *pane_id,
+                        is_plugin: false,
+                        is_floating: false,
+                        is_suppressed: false,
+                        title: (*title).to_string(),
+                    })
+                })
+                .collect(),
         }
     }
 
     #[test]
-    fn empty_query_returns_all_panes_in_deterministic_order() {
-        let panes = vec![pane(1, 2, "two"), pane(0, 1, "one")];
-        let matches = filter_panes(&panes, "");
-        assert_eq!(matches[0].pane.pane_id, 1);
-        assert_eq!(matches[1].pane.pane_id, 2);
+    fn identical_pane_ids_are_qualified_by_session() {
+        let snapshot = normalize_sessions(
+            &[
+                session("a", true, &[("one", &[("shell", 1)])]),
+                session("b", false, &[("one", &[("shell", 1)])]),
+            ],
+            &[],
+            None,
+        );
+        let matches = filter_snapshot(&snapshot, "");
+        assert_eq!(matches.len(), 2);
+        assert_ne!(matches[0].target(), matches[1].target());
     }
 
     #[test]
-    fn query_matches_pane_labels_only() {
-        let panes = vec![pane(0, 1, "workspace"), pane(3, 2, "shell")];
-        assert_eq!(filter_panes(&panes, "wrk").len(), 1);
-        assert_eq!(filter_panes(&panes, "tab").len(), 0);
+    fn ancestor_matches_include_all_descendant_panes() {
+        let snapshot = normalize_sessions(
+            &[session(
+                "project-api",
+                true,
+                &[
+                    ("Tests", &[("cargo test", 1), ("shell", 2)]),
+                    ("Logs", &[("tail", 3)]),
+                ],
+            )],
+            &[],
+            None,
+        );
+        assert_eq!(filter_snapshot(&snapshot, "project").len(), 3);
+        assert_eq!(filter_snapshot(&snapshot, "tests").len(), 2);
+        assert_eq!(filter_snapshot(&snapshot, "cargo").len(), 1);
     }
 
     #[test]
-    fn contiguous_and_prefix_matches_rank_first() {
-        let panes = vec![pane(0, 1, "workspace"), pane(0, 2, "w x o r k")];
-        let matches = filter_panes(&panes, "work");
-        assert_eq!(matches[0].pane.pane_id, 1);
+    fn resurrectable_sessions_are_session_only_targets() {
+        let snapshot = normalize_sessions(
+            &[],
+            &[("old-project".to_string(), Duration::from_secs(60))],
+            None,
+        );
+        let matches = filter_snapshot(&snapshot, "old");
+        assert_eq!(matches.len(), 1);
+        assert_eq!(
+            matches[0].target(),
+            TargetId::ResurrectableSession {
+                session_name: "old-project".to_string()
+            }
+        );
+    }
+
+    #[test]
+    fn resurrectable_metadata_is_searchable() {
+        let snapshot = normalize_sessions(
+            &[],
+            &[("old-project".to_string(), Duration::from_secs(60))],
+            None,
+        );
+        assert_eq!(filter_snapshot(&snapshot, "resur").len(), 1);
+    }
+
+    #[test]
+    fn empty_query_returns_deterministic_session_tab_pane_order() {
+        let snapshot = normalize_sessions(
+            &[
+                session("z", false, &[("one", &[("z", 2)])]),
+                session("a", true, &[("two", &[("two", 2)]), ("one", &[("one", 1)])]),
+            ],
+            &[],
+            None,
+        );
+        let matches = filter_snapshot(&snapshot, "");
+        assert_eq!(matches[0].session_name(), "a");
+        assert_eq!(
+            matches[0].target(),
+            TargetId::Pane {
+                session_name: "a".to_string(),
+                tab_position: 0,
+                pane_id: 2,
+                is_plugin: false,
+            }
+        );
     }
 
     #[test]
@@ -154,13 +464,12 @@ mod tests {
 
     #[test]
     fn empty_titles_have_explicit_fallback_labels() {
-        assert_eq!(pane(0, 9, "").label(), "terminal 9");
-    }
-
-    #[test]
-    fn zellij_chrome_is_not_a_selectable_pane() {
-        assert!(pane(0, 1, "tab-bar").is_zellij_chrome());
-        assert!(pane(0, 2, "STATUS-BAR").is_zellij_chrome());
-        assert!(!pane(0, 3, "shell").is_zellij_chrome());
+        let data = session("a", true, &[("one", &[("", 9)])]);
+        let snapshot = normalize_sessions(&[data], &[], None);
+        let matches = filter_snapshot(&snapshot, "");
+        match &matches[0] {
+            SearchMatch::Pane { pane, .. } => assert_eq!(pane.label(), "terminal 9"),
+            SearchMatch::ResurrectableSession { .. } => panic!("expected pane"),
+        }
     }
 }
