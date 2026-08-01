@@ -3,3 +3,8 @@ vim/.netrwhist
 *.pyc
 vim
 crclient/crclient.conf
+
+richie/node_modules/
+richie/dist/
+richie/*.review.json
+richie/*.review.html

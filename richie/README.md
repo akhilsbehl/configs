@@ -10,7 +10,10 @@ Richie renders inline, linked, and reference-style Markdown images. Hover an ima
 
 ## Development
 
+From the monorepo root:
+
 ```sh
+cd ~/configs/richie
 npm install
 npm run check
 npm test
