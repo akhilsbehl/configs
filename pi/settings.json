@@ -3,6 +3,7 @@
   "theme": "light",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-luna",
+  "persistModelSelection": false,
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": false,
   "packages": [
@@ -12,8 +13,8 @@
     "npm:@mzwing/pi-permission-auto-review",
     "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
-    "npm:@gotgenes/pi-subagents",
-    "npm:@narumitw/pi-statusline"
+    "npm:@narumitw/pi-statusline",
+    "npm:pi-agent-browser-native"
   ],
   "terminal": {
     "showTerminalProgress": true
