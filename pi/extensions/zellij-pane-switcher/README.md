@@ -19,10 +19,16 @@ cargo fmt --all -- --check
 cargo build --release --target wasm32-wasip1
 ```
 
-The plugin output will be at:
+The build output will be at:
 
 ```text
 target/wasm32-wasip1/release/zellij-pane-switcher.wasm
+```
+
+The checked-in deployment artifact is kept at:
+
+```text
+/home/akhil/configs/pi/extensions/zellij-pane-switcher/zellij-pane-switcher.wasm
 ```
 
 ## Test
@@ -54,7 +60,7 @@ Example `config.kdl` bindings:
 keybinds {
     shared_except "resize" "scroll" {
         bind "Alt y" {
-            MessagePlugin "file:/absolute/path/to/zellij-pane-switcher.wasm" {
+            MessagePlugin "file:/home/akhil/configs/pi/extensions/zellij-pane-switcher/zellij-pane-switcher.wasm" {
                 name "open"
                 floating true
             }
@@ -71,7 +77,7 @@ The cross-session view uses Zellij's `SessionUpdate` events for normal refreshes
 
 ```kdl
 plugins {
-    session-manager location="file:/absolute/path/to/zellij-pane-switcher.wasm"
+    session-manager location="file:/home/akhil/configs/pi/extensions/zellij-pane-switcher/zellij-pane-switcher.wasm"
 }
 ```
 
