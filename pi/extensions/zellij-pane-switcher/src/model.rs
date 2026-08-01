@@ -153,8 +153,8 @@ pub fn normalize_sessions(
 
             for pane_data in &session.panes {
                 if pane_data.is_plugin
-                    && session.is_current
-                    && excluded_current_plugin_id == Some(pane_data.pane_id)
+                    && (excluded_current_plugin_id == Some(pane_data.pane_id)
+                        || pane_data.title.contains("zellij-pane-switcher"))
                 {
                     continue;
                 }
@@ -460,6 +460,21 @@ mod tests {
         assert_eq!(next_index(Some(0), 3, Navigation::Backward), Some(2));
         assert_eq!(next_index(None, 3, Navigation::Forward), Some(0));
         assert_eq!(next_index(Some(0), 0, Navigation::Forward), None);
+    }
+
+    #[test]
+    fn current_switcher_plugin_is_excluded() {
+        let mut data = session("a", true, &[("one", &[("shell", 1)])]);
+        data.panes.push(PaneData {
+            tab_position: 0,
+            pane_id: 99,
+            is_plugin: true,
+            is_floating: true,
+            is_suppressed: false,
+            title: "plugin - file:/old/zellij-pane-switcher.wasm".to_string(),
+        });
+        let snapshot = normalize_sessions(&[data], &[], Some(99));
+        assert_eq!(filter_snapshot(&snapshot, "").len(), 1);
     }
 
     #[test]

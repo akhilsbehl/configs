@@ -27,6 +27,8 @@ struct State {
     selected: Option<TargetId>,
     starred: Option<TargetId>,
     status: Option<String>,
+    has_permission: bool,
+    own_pane_id: Option<u32>,
 }
 
 register_plugin!(State);
@@ -78,6 +80,10 @@ impl State {
     }
 
     fn show_switcher(&mut self) {
+        // `show_self` focuses the plugin, but does not make the floating layer
+        // visible. The latter is per-tab state and may have been hidden by the
+        // invoking session.
+        let _ = show_floating_panes(None);
         show_self(true);
     }
 
@@ -321,10 +327,16 @@ impl State {
         }
     }
 
-    fn refresh_snapshot(&mut self) {
+    fn refresh_snapshot(&mut self) -> bool {
+        if !self.has_permission {
+            return false;
+        }
+        let previous = self.snapshot.clone();
         match get_session_list() {
             Ok(session_list) => {
-                let own_plugin_id = get_plugin_ids().plugin_id;
+                let own_plugin_id = self
+                    .own_pane_id
+                    .or_else(|| Some(get_plugin_ids().plugin_id));
                 let resurrectable = session_list.resurrectable_sessions;
                 let live_sessions = session_list
                     .live_sessions
@@ -355,14 +367,15 @@ impl State {
                             .collect(),
                     })
                     .collect::<Vec<_>>();
-                self.snapshot =
-                    normalize_sessions(&live_sessions, &resurrectable, Some(own_plugin_id));
+                self.snapshot = normalize_sessions(&live_sessions, &resurrectable, own_plugin_id);
                 self.clear_stale_star();
                 self.normalize_selection();
+                self.snapshot != previous
             }
             Err(error) => {
                 eprintln!("zellij-pane-switcher: failed to refresh session list: {error}");
                 self.status = Some("Could not refresh sessions".to_string());
+                false
             }
         }
     }
@@ -387,35 +400,36 @@ impl ZellijPlugin for State {
     fn update(&mut self, event: Event) -> bool {
         match event {
             Event::PaneUpdate(manifest) => {
-                let own_plugin_id = get_plugin_ids().plugin_id;
-                self.switcher_tab_position =
+                if self.own_pane_id.is_none() {
+                    self.own_pane_id = Some(get_plugin_ids().plugin_id);
+                }
+                let new_switcher_tab_position =
                     manifest.panes.iter().find_map(|(tab_position, panes)| {
                         panes
                             .iter()
-                            .any(|pane| pane.is_plugin && pane.id == own_plugin_id)
+                            .any(|pane| pane.is_plugin && Some(pane.id) == self.own_pane_id)
                             .then_some(*tab_position)
                     });
-                true
+                let changed = self.switcher_tab_position != new_switcher_tab_position;
+                self.switcher_tab_position = new_switcher_tab_position;
+                changed
             }
             Event::TabUpdate(tabs) => {
-                self.tab_ids = tabs.iter().map(|tab| (tab.position, tab.tab_id)).collect();
-                self.floating_visibility = tabs
+                let new_tab_ids = tabs.iter().map(|tab| (tab.position, tab.tab_id)).collect();
+                let new_floating_visibility = tabs
                     .iter()
                     .map(|tab| (tab.position, tab.are_floating_panes_visible))
                     .collect();
-                true
+                let changed = self.tab_ids != new_tab_ids
+                    || self.floating_visibility != new_floating_visibility;
+                self.tab_ids = new_tab_ids;
+                self.floating_visibility = new_floating_visibility;
+                changed
             }
-            Event::SessionUpdate(_, _) => {
-                self.refresh_snapshot();
-                true
-            }
-            Event::Visible(visible) => {
-                if visible {
-                    self.refresh_snapshot();
-                }
-                true
-            }
+            Event::SessionUpdate(_, _) => self.refresh_snapshot(),
+            Event::Visible(visible) => visible && self.refresh_snapshot(),
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
+                self.has_permission = true;
                 self.refresh_snapshot();
                 true
             }
