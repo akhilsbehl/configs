@@ -91,6 +91,22 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
     const end = positionAt(node.position.end.offset - delimiterLength);
     return ` data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"`;
   };
+  const mathSourceLines = (node: Node): string => {
+    if (!node.position) return `<span class="math-source-line"><span class="md-text">${escape(node.value ?? "")}</span></span>`;
+    const value = node.value ?? "";
+    const position = node.position;
+    const openingNewline = source.indexOf("\n", position.start.offset);
+    let cursor = openingNewline < 0 ? position.start.offset + 2 : openingNewline + 1;
+    return value.split("\n").map((line, index) => {
+      const lineStart = cursor;
+      const newline = source.indexOf("\n", lineStart);
+      const lineEnd = newline < 0 ? position.end.offset - 2 : newline;
+      cursor = newline < 0 ? position.end.offset - 2 : newline + 1;
+      const start = positionAt(lineStart);
+      const end = positionAt(Math.max(lineStart, lineEnd));
+      return `<span class="math-source-line" data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"><span class="md-text">${escape(line)}</span></span>`;
+    }).join("");
+  };
   const imageLocation = (url: string | undefined): { src?: string; error?: string } => {
     if (!url) return { error: "Image reference is missing its definition." };
     if (/^https:/i.test(url)) return { src: url };
@@ -158,7 +174,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
         let rendered: string;
         try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "html" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
-        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered" aria-hidden="true">${rendered}</div><span class="math-source md-text"${mathSourceRange(node, 2)}>${escape(value)}</span></div>`;
+        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div><details class="math-source-panel" open><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre></details></div>`;
       }
       case "inlineCode": {
         if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;

@@ -409,7 +409,7 @@ document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block]
   const actions = list ? [...selectionActions, { label: "Delete list", kind: "delete", scope: "block", target: list }] : selectionActions;
   targetMenu("block", element, actions);
 });
-[...document.querySelectorAll(".mermaid-source-line,.code-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
+[...document.querySelectorAll(".mermaid-source-line,.code-source-line,.math-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
 document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
 document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
 document.querySelectorAll("[data-md-media]").forEach((element) => targetMenu("media", element, mediaActions));

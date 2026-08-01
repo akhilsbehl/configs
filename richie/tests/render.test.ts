@@ -10,6 +10,8 @@ test("renders inline and display math with source-aware review targets", () => {
   assert.match(html, /katex/);
   assert.match(html, /data-math-source="a\^2\+b\^2=c\^2"/);
   assert.match(html, /class="math-source md-text"[^>]*data-md-range=/);
+  assert.match(html, /class="math-source-panel"/);
+  assert.match(html, /class="math-source-line"[^>]*data-md-range=/);
   assert.doesNotMatch(html, /katex-mathml/);
 });
 
