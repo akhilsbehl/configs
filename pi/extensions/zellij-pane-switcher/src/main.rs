@@ -24,17 +24,23 @@ struct State {
     origin_pane: Option<(bool, u32)>,
     floating_context: Option<FloatingContext>,
     query: String,
+    filtered_matches: Vec<SearchMatch>,
     selected: Option<TargetId>,
     status: Option<String>,
     has_permission: bool,
+    snapshot_loaded: bool,
     own_pane_id: Option<u32>,
 }
 
 register_plugin!(State);
 
 impl State {
-    fn matches(&self) -> Vec<SearchMatch> {
-        filter_snapshot(&self.snapshot, &self.query)
+    fn rebuild_matches(&mut self) {
+        self.filtered_matches = filter_snapshot(&self.snapshot, &self.query);
+    }
+
+    fn matches(&self) -> &[SearchMatch] {
+        &self.filtered_matches
     }
 
     fn normalize_selection(&mut self) {
@@ -46,7 +52,8 @@ impl State {
         {
             return;
         }
-        self.selected = matches.first().map(SearchMatch::target);
+        let first_match = matches.first().map(SearchMatch::target);
+        self.selected = first_match;
     }
 
     fn move_selection(&mut self, direction: Navigation) {
@@ -55,9 +62,10 @@ impl State {
             .selected
             .as_ref()
             .and_then(|selected| matches.iter().position(|item| item.target() == *selected));
-        self.selected = next_index(current, matches.len(), direction)
+        let next_match = next_index(current, matches.len(), direction)
             .and_then(|index| matches.get(index))
             .map(SearchMatch::target);
+        self.selected = next_match;
         self.status = None;
     }
 
@@ -213,6 +221,7 @@ impl State {
             }
             BareKey::Backspace => {
                 self.query.pop();
+                self.rebuild_matches();
                 self.normalize_selection();
                 self.status = None;
                 true
@@ -224,6 +233,7 @@ impl State {
                     && !character.is_control() =>
             {
                 self.query.push(character);
+                self.rebuild_matches();
                 self.normalize_selection();
                 self.status = None;
                 true
@@ -233,8 +243,11 @@ impl State {
     }
 
     fn open(&mut self) {
-        self.refresh_snapshot();
+        if !self.snapshot_loaded {
+            self.refresh_snapshot();
+        }
         self.query.clear();
+        self.rebuild_matches();
         self.normalize_selection();
         if self.origin_pane.is_none() {
             self.snapshot_origin();
@@ -256,50 +269,60 @@ impl State {
         }
     }
 
+    fn apply_session_snapshot(
+        &mut self,
+        live_sessions: Vec<SessionInfo>,
+        resurrectable: Vec<(String, Duration)>,
+    ) -> bool {
+        let own_plugin_id = self
+            .own_pane_id
+            .or_else(|| Some(get_plugin_ids().plugin_id));
+        let live_sessions = live_sessions
+            .into_iter()
+            .map(|session| SessionData {
+                name: session.name,
+                is_current: session.is_current_session,
+                connected_clients: session.connected_clients,
+                tabs: session
+                    .tabs
+                    .into_iter()
+                    .map(|tab| (tab.position, tab.name))
+                    .collect(),
+                panes: session
+                    .panes
+                    .panes
+                    .into_iter()
+                    .flat_map(|(tab_position, panes)| {
+                        panes.into_iter().map(move |pane| PaneData {
+                            tab_position,
+                            pane_id: pane.id,
+                            is_plugin: pane.is_plugin,
+                            is_floating: pane.is_floating,
+                            is_suppressed: pane.is_suppressed,
+                            title: pane.title,
+                        })
+                    })
+                    .collect(),
+            })
+            .collect::<Vec<_>>();
+        let next_snapshot = normalize_sessions(&live_sessions, &resurrectable, own_plugin_id);
+        let changed = self.snapshot != next_snapshot;
+        self.snapshot = next_snapshot;
+        self.snapshot_loaded = true;
+        self.rebuild_matches();
+        self.normalize_selection();
+        changed
+    }
+
     fn refresh_snapshot(&mut self) -> bool {
         if !self.has_permission {
             return false;
         }
-        let previous = self.snapshot.clone();
         match get_session_list() {
-            Ok(session_list) => {
-                let own_plugin_id = self
-                    .own_pane_id
-                    .or_else(|| Some(get_plugin_ids().plugin_id));
-                let resurrectable = session_list.resurrectable_sessions;
-                let live_sessions = session_list
-                    .live_sessions
-                    .into_iter()
-                    .map(|session| SessionData {
-                        name: session.name,
-                        is_current: session.is_current_session,
-                        connected_clients: session.connected_clients,
-                        tabs: session
-                            .tabs
-                            .into_iter()
-                            .map(|tab| (tab.position, tab.name))
-                            .collect(),
-                        panes: session
-                            .panes
-                            .panes
-                            .into_iter()
-                            .flat_map(|(tab_position, panes)| {
-                                panes.into_iter().map(move |pane| PaneData {
-                                    tab_position,
-                                    pane_id: pane.id,
-                                    is_plugin: pane.is_plugin,
-                                    is_floating: pane.is_floating,
-                                    is_suppressed: pane.is_suppressed,
-                                    title: pane.title,
-                                })
-                            })
-                            .collect(),
-                    })
-                    .collect::<Vec<_>>();
-                self.snapshot = normalize_sessions(&live_sessions, &resurrectable, own_plugin_id);
-                self.normalize_selection();
-                self.snapshot != previous
-            }
+            Ok(session_list) => self.apply_session_snapshot(
+                session_list.live_sessions,
+                session_list.resurrectable_sessions,
+            ),
             Err(error) => {
                 eprintln!("zellij-pane-switcher: failed to refresh session list: {error}");
                 self.status = Some("Could not refresh sessions".to_string());
@@ -354,8 +377,11 @@ impl ZellijPlugin for State {
                 self.floating_visibility = new_floating_visibility;
                 changed
             }
-            Event::SessionUpdate(_, _) => self.refresh_snapshot(),
-            Event::Visible(visible) => visible && self.refresh_snapshot(),
+            Event::SessionUpdate(live_sessions, resurrectable) if self.has_permission => {
+                self.apply_session_snapshot(live_sessions, resurrectable)
+            }
+            Event::SessionUpdate(_, _) => false,
+            Event::Visible(visible) => visible && !self.snapshot_loaded && self.refresh_snapshot(),
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
                 self.has_permission = true;
                 self.refresh_snapshot();
@@ -461,7 +487,9 @@ impl ZellijPlugin for State {
                 SearchMatch::ResurrectableSession {
                     session_name, age, ..
                 } => {
-                    let target = TargetId::ResurrectableSession { session_name };
+                    let target = TargetId::ResurrectableSession {
+                        session_name: session_name.clone(),
+                    };
                     let marker = if self.selected.as_ref() == Some(&target) {
                         "›"
                     } else {
@@ -469,7 +497,7 @@ impl ZellijPlugin for State {
                     };
                     let row = format!(
                         "  {marker}    resurrectable, exited {} ago",
-                        format_age(age)
+                        format_age(*age)
                     );
                     if self.selected.as_ref() == Some(&target) {
                         println!("\x1b[1;7m{row}\x1b[0m");

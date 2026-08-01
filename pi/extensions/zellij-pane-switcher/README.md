@@ -67,7 +67,7 @@ Zellij delivers these bindings through the plugin pipe API. The plugin does not 
 
 ## Session-manager integration
 
-The cross-session view uses `get_session_list()` and `switch_session_with_focus()` from the Zellij plugin API. It is designed to run as a floating `session-manager` alias, with one plugin window per session where practical:
+The cross-session view uses Zellij's `SessionUpdate` events for normal refreshes, with `get_session_list()` as the initial snapshot fallback, and `switch_session_with_focus()` for activation. It is designed to run as a floating `session-manager` alias, with one plugin window per session where practical:
 
 ```kdl
 plugins {
