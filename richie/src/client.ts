@@ -396,7 +396,7 @@ document.addEventListener("keydown", (event) => {
   if (dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
   const target = event.target as HTMLElement | null;
   if (target?.closest("input,textarea,select,[contenteditable=true]")) return;
-  if (event.key === "Escape") { event.preventDefault(); hideNow(); return; }
+  if (event.key === "Escape") { event.preventDefault(); document.querySelectorAll(".math-selecting").forEach((element) => element.classList.remove("math-selecting")); hideNow(); return; }
   const kind = event.key === "c" ? "comment" : event.key === "r" ? "replace" : event.key === "d" ? "delete" : undefined;
   if (!kind) return;
   const range = selectionRange(); if (!range) return;
@@ -410,10 +410,11 @@ document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block]
   targetMenu("block", element, actions);
 });
 [...document.querySelectorAll(".mermaid-source-line,.code-source-line,.math-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
-document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
+document.querySelectorAll("details[data-md-mermaid-source],details[data-md-math-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
 document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
 document.querySelectorAll("[data-md-media]").forEach((element) => targetMenu("media", element, mediaActions));
 document.querySelectorAll(".math-target").forEach((element) => targetMenu("range", element, selectionActions));
+document.querySelectorAll<HTMLElement>(".math-inline .math-rendered").forEach((element) => element.addEventListener("pointerdown", () => element.closest<HTMLElement>(".math-inline")?.classList.add("math-selecting")));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; if (!action) return;
   try {

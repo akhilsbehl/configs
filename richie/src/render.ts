@@ -92,7 +92,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
     return ` data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"`;
   };
   const mathSourceLines = (node: Node): string => {
-    if (!node.position) return `<span class="math-source-line"><span class="md-text">${escape(node.value ?? "")}</span></span>`;
+    if (!node.position) return `<span class="mermaid-source-line math-source-line"><span class="md-text">${escape(node.value ?? "")}</span></span>`;
     const value = node.value ?? "";
     const position = node.position;
     const openingNewline = source.indexOf("\n", position.start.offset);
@@ -104,7 +104,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       cursor = newline < 0 ? position.end.offset - 2 : newline + 1;
       const start = positionAt(lineStart);
       const end = positionAt(Math.max(lineStart, lineEnd));
-      return `<span class="math-source-line" data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"><span class="md-text">${escape(line)}</span></span>`;
+      return `<span class="mermaid-source-line math-source-line" data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"><span class="md-text">${escape(line)}</span></span>`;
     }).join("");
   };
   const imageLocation = (url: string | undefined): { src?: string; error?: string } => {
@@ -174,7 +174,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
         let rendered: string;
         try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "mathml" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
-        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div><details class="math-source-panel" open><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre></details></div>`;
+        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div><details class="mermaid-source math-source-panel" data-md-math-source><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre></details></div>`;
       }
       case "inlineCode": {
         if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;
