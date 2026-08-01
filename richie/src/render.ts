@@ -2,6 +2,8 @@ import { unified } from "unified";
 import hljs from "highlight.js";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
+import remarkMath from "remark-math";
+import katex from "katex";
 
 type Node = { type: string; value?: string; depth?: number; url?: string; title?: string | null; alt?: string; identifier?: string; label?: string; lang?: string | null; checked?: boolean | null; ordered?: boolean | null; align?: Array<string | null>; children?: Node[]; position?: { start: Position; end: Position } };
 type Position = { line: number; column: number; offset: number };
@@ -22,7 +24,7 @@ hljs.registerLanguage("mermaid", (language) => ({
 }));
 
 export function parseMarkdown(source: string): Node {
-  return unified().use(remarkParse).use(remarkGfm).parse(source) as unknown as Node;
+  return unified().use(remarkParse).use(remarkGfm).use(remarkMath).parse(source) as unknown as Node;
 }
 
 export function renderReviewHtml(source: string, options: RenderOptions = {}): string {
@@ -138,6 +140,20 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       case "emphasis": return `<em${range(node)}>${renderChildren(node)}</em>`;
       case "strong": return `<strong${range(node)}>${renderChildren(node)}</strong>`;
       case "delete": return `<del${range(node)}>${renderChildren(node)}</del>`;
+      case "inlineMath": {
+        const value = node.value ?? "";
+        let rendered: string;
+        try { rendered = katex.renderToString(value, { displayMode: false, throwOnError: false, output: "htmlAndMathml" }); }
+        catch { rendered = `<code>${escape(value)}</code>`; }
+        return `<span class="math-target math-inline"${range(node)} data-math-source="${escape(value)}">${rendered}</span>`;
+      }
+      case "math": {
+        const value = node.value ?? "";
+        let rendered: string;
+        try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "htmlAndMathml" }); }
+        catch { rendered = `<code>${escape(value)}</code>`; }
+        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}">${rendered}</div>`;
+      }
       case "inlineCode": {
         if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;
         const { start, end } = node.position;

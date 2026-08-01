@@ -2,6 +2,15 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { renderReviewHtml } from "../src/render.js";
 
+test("renders inline and display math with source-aware review targets", () => {
+  const source = "Inline $a^2+b^2=c^2$\n\n$$\n\\int_0^1 x^2 dx\n$$\n";
+  const html = renderReviewHtml(source);
+  assert.match(html, /class="math-target math-inline"[^>]*data-md-range=/);
+  assert.match(html, /class="math-target math-display"[^>]*data-md-range=/);
+  assert.match(html, /katex/);
+  assert.match(html, /data-math-source="a\^2\+b\^2=c\^2"/);
+});
+
 test("renders source-aware inline Markdown and GFM tables", () => {
   const source = "# Heading\n\nA **strong** [link](https://example.com).\n\n| A | B |\n| - | - |\n| 1 | 2 |\n\n```mermaid\ngraph TD; A-->B\n```\n";
   const html = renderReviewHtml(source);

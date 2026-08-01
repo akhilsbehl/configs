@@ -25,6 +25,9 @@ test("keeps replacement previews and equal search navigation sizing in the page 
   assert.match(html, /data-review-replacement/);
   assert.match(html, /\.review-target\[data-review-kind=replace\]\[data-review-replacement\]>\*\{text-decoration:line-through/);
   assert.match(html, /\.review-target\[data-review-kind=replace\]\[data-review-replacement\]::after\{content:"Replacement: "/);
+  assert.match(html, /::highlight\(richie-replace\)\{background:rgba\(234,157,52,.28\);text-decoration:line-through/);
+  assert.match(html, /\.review-replacement-preview\{/);
+  assert.match(html, /\.feedback-focus/);
   assert.match(html, /#navigation \.search-box button\{flex:1 1 0;min-width:0;min-height:34px;/);
 });
 
@@ -42,6 +45,7 @@ test("renders authenticated local image URLs and media presentation styles", () 
   assert.match(html, /\.media-target\.review-target\[data-review-kind=delete\]/);
   assert.match(html, /content:"Delete image"/);
   assert.match(html, /Replacement: /);
+  assert.match(html, /\.math-target/);
 });
 
 test("serves authenticated raster images from absolute paths outside the document directory", async () => {

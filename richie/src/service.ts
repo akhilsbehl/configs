@@ -99,7 +99,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 #operations,#outline{min-height:0;overflow:auto}
 #operations{flex:1;margin-top:8px}
 #outline{flex:1}
-.operation-card{margin:8px 0;padding:9px;background:var(--overlay);border-radius:7px;font-size:.84rem;overflow-wrap:anywhere;border-left:3px solid var(--foam)}
+.operation-card{margin:8px 0;padding:9px;background:var(--overlay);border-radius:7px;font-size:.84rem;overflow-wrap:anywhere;border-left:3px solid var(--foam);scroll-margin:12px}.operation-card:focus{outline:2px solid var(--foam);outline-offset:2px}.operation-card.feedback-focus{animation:feedback-focus .9s ease}@keyframes feedback-focus{0%,100%{box-shadow:0 0 0 0 rgba(86,148,159,0)}35%{box-shadow:0 0 0 5px rgba(86,148,159,.4)}}
 .operation-card[data-kind=delete]{border-left-color:var(--love)}
 .operation-card[data-kind=replace]{border-left-color:var(--gold)}
 .operation-meta{display:flex;justify-content:space-between;gap:8px;color:var(--subtle);font-size:.76rem;text-transform:capitalize}
@@ -118,6 +118,8 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .review-target[data-review-kind=replace][data-review-replacement]>*{text-decoration:line-through;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 .review-target[data-review-kind=replace][data-review-replacement]::after{content:"Replacement: " attr(data-review-replacement);display:block;margin-top:5px;padding:3px 6px;background:#fffaf3;border-left:3px solid var(--gold);color:var(--text);font-style:normal;font-weight:600;text-decoration:none;white-space:pre-wrap}
 .review-target[data-review-kind=comment]{background:rgba(86,148,159,.16)}
+.math-target{display:inline-block;cursor:pointer;border-radius:4px}.math-display{display:block;overflow:auto;margin:1.2rem 0;padding:12px;background:var(--surface);border:1px solid var(--border)}
+.review-replacement-preview{position:fixed;z-index:9;max-width:min(520px,calc(100vw - 16px));padding:3px 7px;background:#fffaf3;border-left:3px solid var(--gold);color:var(--text);font-weight:600;font-size:.86rem;white-space:pre-wrap;pointer-events:none;box-shadow:0 3px 10px rgba(87,82,121,.12)}
 .review-column-target{outline:2px solid rgba(215,130,126,.55);outline-offset:-2px}
 .review-column-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
 .review-column-target[data-review-kind=replace]{background:rgba(234,157,52,.18)}
@@ -125,7 +127,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .search-match{background:rgba(144,122,169,.28);border-radius:2px}
 .search-current{background:rgba(234,157,52,.55)}
 ::highlight(richie-comment){background:rgba(86,148,159,.24);text-decoration:underline;text-decoration-color:var(--foam);text-decoration-thickness:2px}
-::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px}
+::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:line-through;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 ::highlight(richie-delete){background:rgba(180,99,122,.22);text-decoration:line-through;text-decoration-color:var(--love);text-decoration-thickness:2px}
 ::highlight(richie-search){background:rgba(144,122,169,.3)}
 ::highlight(richie-search-current){background:rgba(234,157,52,.6)}
