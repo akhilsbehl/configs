@@ -4,7 +4,7 @@ Richie is a local visual review layer for versioned Markdown. It keeps Markdown 
 
 See the [user guide](user-guide.md) for installation, review, and handoff instructions.
 
-The review surface has document navigation on the left, review actions and feedback inventory on the right, inline range highlights, Markdown image review, and document search. The user guide and search controls remain fixed while the outline scrolls. The review actions remain fixed while the feedback inventory scrolls.
+The review surface has document navigation on the left, review actions and feedback inventory on the right, inline range highlights, Markdown image review, math review, and document search. Replacements show the original struck through with the proposal inline. Clicking review markup reveals and highlights its matching feedback cards. The user guide and search controls remain fixed while the outline scrolls. The review actions remain fixed while the feedback inventory scrolls.
 
 Richie renders inline, linked, and reference-style Markdown images. Hover an image to comment on, replace, or delete its complete Markdown syntax. Remote images load directly over HTTPS. Local PNG, JPEG, GIF, WebP, and AVIF files load through the authenticated review session, including absolute and parent-relative paths. SVG and raw HTML media remain disabled.
 
@@ -31,7 +31,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now richie
 ```
 
-The unit uses the currently installed Node 22 binary under Akhil's NVM installation. Update `ExecStart` in `packaging/richie.service` when that Node installation moves.
+The unit uses the currently installed Node 22 binary under Akhil's NVM installation. It intentionally shares the host `/tmp` namespace so drafts and local media there are reviewable. Update `ExecStart` in `packaging/richie.service` when that Node installation moves.
 
 Check it with `systemctl status richie` and inspect logs with `journalctl -u richie`. Stop it with `sudo systemctl disable --now richie`.
 

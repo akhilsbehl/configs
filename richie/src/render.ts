@@ -2,6 +2,8 @@ import { unified } from "unified";
 import hljs from "highlight.js";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
+import remarkMath from "remark-math";
+import katex from "katex";
 
 type Node = { type: string; value?: string; depth?: number; url?: string; title?: string | null; alt?: string; identifier?: string; label?: string; lang?: string | null; checked?: boolean | null; ordered?: boolean | null; align?: Array<string | null>; children?: Node[]; position?: { start: Position; end: Position } };
 type Position = { line: number; column: number; offset: number };
@@ -22,7 +24,7 @@ hljs.registerLanguage("mermaid", (language) => ({
 }));
 
 export function parseMarkdown(source: string): Node {
-  return unified().use(remarkParse).use(remarkGfm).parse(source) as unknown as Node;
+  return unified().use(remarkParse).use(remarkGfm).use(remarkMath).parse(source) as unknown as Node;
 }
 
 export function renderReviewHtml(source: string, options: RenderOptions = {}): string {
@@ -83,6 +85,28 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
     const lastNewline = before.lastIndexOf("\n");
     return { offset, line, column: offset - lastNewline };
   };
+  const mathSourceRange = (node: Node, delimiterLength: number): string => {
+    if (!node.position) return "";
+    const start = positionAt(node.position.start.offset + delimiterLength);
+    const end = positionAt(node.position.end.offset - delimiterLength);
+    return ` data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"`;
+  };
+  const mathSourceLines = (node: Node): string => {
+    if (!node.position) return `<span class="mermaid-source-line math-source-line"><span class="md-text">${escape(node.value ?? "")}</span></span>`;
+    const value = node.value ?? "";
+    const position = node.position;
+    const openingNewline = source.indexOf("\n", position.start.offset);
+    let cursor = openingNewline < 0 ? position.start.offset + 2 : openingNewline + 1;
+    return value.split("\n").map((line, index) => {
+      const lineStart = cursor;
+      const newline = source.indexOf("\n", lineStart);
+      const lineEnd = newline < 0 ? position.end.offset - 2 : newline;
+      cursor = newline < 0 ? position.end.offset - 2 : newline + 1;
+      const start = positionAt(lineStart);
+      const end = positionAt(Math.max(lineStart, lineEnd));
+      return `<span class="mermaid-source-line math-source-line" data-md-range="${start.offset}:${end.offset}:${start.line}:${start.column}:${end.line}:${end.column}"><span class="md-text">${escape(line)}</span></span>`;
+    }).join("");
+  };
   const imageLocation = (url: string | undefined): { src?: string; error?: string } => {
     if (!url) return { error: "Image reference is missing its definition." };
     if (/^https:/i.test(url)) return { src: url };
@@ -138,6 +162,20 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       case "emphasis": return `<em${range(node)}>${renderChildren(node)}</em>`;
       case "strong": return `<strong${range(node)}>${renderChildren(node)}</strong>`;
       case "delete": return `<del${range(node)}>${renderChildren(node)}</del>`;
+      case "inlineMath": {
+        const value = node.value ?? "";
+        let rendered: string;
+        try { rendered = katex.renderToString(value, { displayMode: false, throwOnError: false, output: "mathml" }); }
+        catch { rendered = `<code>${escape(value)}</code>`; }
+        return `<span class="math-target math-inline"${range(node)} data-math-source="${escape(value)}"><span class="math-rendered" aria-hidden="true">${rendered}</span><span class="math-source md-text"${mathSourceRange(node, 1)}>${escape(value)}</span></span>`;
+      }
+      case "math": {
+        const value = node.value ?? "";
+        let rendered: string;
+        try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "mathml" }); }
+        catch { rendered = `<code>${escape(value)}</code>`; }
+        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div><details class="mermaid-source math-source-panel" data-md-math-source><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre></details></div>`;
+      }
       case "inlineCode": {
         if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;
         const { start, end } = node.position;

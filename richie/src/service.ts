@@ -99,7 +99,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 #operations,#outline{min-height:0;overflow:auto}
 #operations{flex:1;margin-top:8px}
 #outline{flex:1}
-.operation-card{margin:8px 0;padding:9px;background:var(--overlay);border-radius:7px;font-size:.84rem;overflow-wrap:anywhere;border-left:3px solid var(--foam)}
+.operation-card{margin:8px 0;padding:9px;background:var(--overlay);border-radius:7px;font-size:.84rem;overflow-wrap:anywhere;border-left:3px solid var(--foam);scroll-margin:12px}.operation-card:focus{outline:2px solid var(--foam);outline-offset:2px}.operation-card.feedback-focus{animation:feedback-focus .9s ease}@keyframes feedback-focus{0%,100%{box-shadow:0 0 0 0 rgba(86,148,159,0)}35%{box-shadow:0 0 0 5px rgba(86,148,159,.4)}}
 .operation-card[data-kind=delete]{border-left-color:var(--love)}
 .operation-card[data-kind=replace]{border-left-color:var(--gold)}
 .operation-meta{display:flex;justify-content:space-between;gap:8px;color:var(--subtle);font-size:.76rem;text-transform:capitalize}
@@ -118,6 +118,9 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .review-target[data-review-kind=replace][data-review-replacement]>*{text-decoration:line-through;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 .review-target[data-review-kind=replace][data-review-replacement]::after{content:"Replacement: " attr(data-review-replacement);display:block;margin-top:5px;padding:3px 6px;background:#fffaf3;border-left:3px solid var(--gold);color:var(--text);font-style:normal;font-weight:600;text-decoration:none;white-space:pre-wrap}
 .review-target[data-review-kind=comment]{background:rgba(86,148,159,.16)}
+.math-target{position:relative;display:inline-block;cursor:pointer;border-radius:4px}.math-display{display:block;overflow:auto;margin:1.2rem 0;padding:12px;background:var(--surface);border:1px solid var(--border)}.math-rendered{display:block}.math-source{position:absolute;inset:0;z-index:1;display:block;overflow:hidden;color:transparent;white-space:pre;cursor:text;user-select:text;pointer-events:none}.math-source::selection{background:rgba(234,157,52,.45)}.math-inline.math-selecting{display:inline}.math-inline.math-selecting .math-rendered{display:none}.math-inline.math-selecting .math-source{position:static;display:inline;overflow:visible;color:var(--text);background:var(--surface);padding:0 3px;pointer-events:auto}
+.review-replacement-inline{position:relative;z-index:2;display:inline;padding:1px 4px;color:var(--text)!important;background:rgba(234,157,52,.18);border-bottom:2px solid var(--gold);font-weight:600;white-space:pre-wrap}
+.backlink-active{position:relative;z-index:2;outline:4px solid var(--gold)!important;outline-offset:4px!important;box-shadow:0 0 0 8px rgba(234,157,52,.3),0 0 22px 8px rgba(234,157,52,.45)!important;animation:backlink-pulse .7s ease-in-out 3}@keyframes backlink-pulse{0%,100%{filter:none}50%{filter:brightness(1.25)}}
 .review-column-target{outline:2px solid rgba(215,130,126,.55);outline-offset:-2px}
 .review-column-target[data-review-kind=delete]{background:rgba(180,99,122,.15);text-decoration:line-through;text-decoration-thickness:2px}
 .review-column-target[data-review-kind=replace]{background:rgba(234,157,52,.18)}
@@ -125,7 +128,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .search-match{background:rgba(144,122,169,.28);border-radius:2px}
 .search-current{background:rgba(234,157,52,.55)}
 ::highlight(richie-comment){background:rgba(86,148,159,.24);text-decoration:underline;text-decoration-color:var(--foam);text-decoration-thickness:2px}
-::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px}
+::highlight(richie-replace){background:rgba(234,157,52,.28);text-decoration:line-through;text-decoration-color:var(--gold);text-decoration-thickness:2px}
 ::highlight(richie-delete){background:rgba(180,99,122,.22);text-decoration:line-through;text-decoration-color:var(--love);text-decoration-thickness:2px}
 ::highlight(richie-search){background:rgba(144,122,169,.3)}
 ::highlight(richie-search-current){background:rgba(234,157,52,.6)}

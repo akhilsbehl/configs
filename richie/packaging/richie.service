@@ -16,7 +16,8 @@ RestartSec=3
 RuntimeDirectory=richie
 RuntimeDirectoryMode=0700
 NoNewPrivileges=yes
-PrivateTmp=yes
+# The reviewer may open drafts and local media from /tmp. Keep the service in the host /tmp namespace.
+PrivateTmp=no
 
 [Install]
 WantedBy=multi-user.target

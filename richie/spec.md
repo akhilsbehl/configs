@@ -120,11 +120,13 @@ The review UI offers three primary operations plus scope selection and review li
 | Comment on the whole document | `comment` | `scope: "document"` and placement `start` |
 | Review a Markdown image | `comment`, `replace`, or `delete` | `scope: "media"`, complete image or linked-image source range, exact quote |
 
-The UI may render pending deletions with strikethrough and proposed replacements in a tracked-change style. This is a visual representation of a stored operation, not a mutation of the Markdown file.
+The UI may render pending deletions with strikethrough and proposed replacements in a tracked-change style. Replacements appear inline beside the struck source where possible. This is a visual representation of a stored operation, not a mutation of the Markdown file.
 
 For Mermaid fences, the review surface displays both the rendered SVG and the original Mermaid source. The SVG is visual context only. Selection-based operations target source lines or source text, preserving source-aware ranges for agent review. SVG nodes, edges, and labels are not independent review targets. Exported feedback for Mermaid or other fenced-code ranges sits after the closing fence so the source remains valid.
 
 For Markdown images, the renderer supports direct, linked, and reference-style syntax. A whole-image operation targets the complete image node. If an image is the sole child of a link, the target expands to the complete outer link node. The rendered media is disposable visual context; the exact Markdown range remains canonical.
+
+For math, inline and display expressions render as MathML while retaining exact Markdown ranges. Inline expressions provide a rendered reading view and switch to selectable source text when selection begins. Display expressions provide a Mermaid-style source disclosure with source-line ranges. A multi-equation aligned expression remains one display-math block, while its source lines remain independently reviewable.
 
 ## 8. Source identity and mapping
 
@@ -423,6 +425,7 @@ Possible implementation direction:
 - Generate review HTML from that AST through a custom renderer or compiler plugin.
 - Attach `data-md-range`, block IDs, and heading identity while generating HTML.
 - Render Mermaid as a view feature with the SVG and source code displayed together. Mermaid source remains in Markdown and is not directly editable in the review tool, but its lines can be selected for comments, replacements, and deletions.
+- Render math as a view feature with MathML and a source disclosure. Math source lines, not generated MathML nodes, are the fine-grained review targets.
 - Render supported raster images as a view feature while retaining the exact source range for whole-image operations.
 
 The source renderer must be tested against the exact Markdown conventions in existing drafts, especially `<<ASB: ...>>` markers, tables, nested lists, links, and code blocks.

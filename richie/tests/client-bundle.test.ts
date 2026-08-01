@@ -18,4 +18,10 @@ test("bundles the targeted interaction regressions", async () => {
   assert.match(client, /Delete this image/);
   assert.match(client, /data-md-media/);
   assert.match(client, /mediaState\s*=\s*"failed"/);
+  assert.match(client, /feedback-focus/);
+  assert.match(client, /feedback-/);
+  assert.match(client, /math-target/);
+  assert.match(client, /review-replacement-inline/);
+  assert.match(client, /backlink-active/);
+  assert.match(client, /math-source-line/);
 });

@@ -33,9 +33,17 @@ If installed, use `richie review path/to/draft-vNN.md`. The service listens only
 
 Richie saves every operation immediately to `draft-vNN.review.json`. Each range operation retains the exact source quote and source range. Range highlighting applies only to the selection, not its containing paragraph or line.
 
-Pending block and cell replacements show the old content struck through and the proposed replacement beneath it. With a valid document selection active, Richie suppresses the browser context menu so `c`, `r`, and `d` remain available.
+Pending replacements show the original content struck through and the proposed replacement inline beside it. With a valid document selection active, Richie suppresses the browser context menu so `c`, `r`, and `d` remain available.
 
-### Tables, Mermaid, and images
+Click visible review markup to reveal its matching feedback card. The first matching card receives focus and overlapping matches flash together with a prominent outline.
+
+### Math
+
+Inline `$...$` expressions render as MathML. Starting a selection on rendered inline math switches it to its source text so TeX can be selected precisely; press `Escape` to restore the rendered form. Full inline-math actions remain available from the hover menu.
+
+Display `$$...$$` blocks render as MathML and expose a collapsed `Math source` disclosure using the same interaction as Mermaid. Select individual source lines for Comment, Replace, or Delete, or use the rendered block for whole-block actions. Multiple aligned equations in one block remain a single Markdown math node.
+
+### Tables, Mermaid, math, and images
 
 Hover over a table cell to comment, replace, clear, delete its row, or delete its column. A column deletion highlights every cell in that column and exports a marker inside each affected table cell, preserving the Markdown table fences.
 

@@ -55,8 +55,8 @@ right to left where the case requests a reverse selection.
 
 - source-aware Markdown, ordered and unordered lists, tables, code, and Mermaid;
 - retention of invalid Mermaid source when visual rendering fails;
-- right-sidebar action placement, sidebar spacing, search-button sizing, and
-  replacement-preview styling in the generated page;
+- right-sidebar action placement, sidebar spacing, search-button sizing, inline
+  replacement styling, math rendering, and math source controls in the generated page;
 - exact deletion quotes and fence-safe marker placement in commented Markdown; and
 - the existence of every corrected fixture target named by MT-07, MT-08, and MT-13.
 
@@ -170,6 +170,7 @@ The SVG is visual context. The Mermaid source below it is the review target.
 | MT-18 | Review lifecycle | Abort and sidecar cleanup |
 | MT-19 | Source safety | Stale-source banner and blocked writes |
 | MT-20 | Provenance comparison | Original versus commented Markdown |
+| MT-21 | Math | Inline fallback, display rendering, source lines, aligned equations |
 
 ## MT-01. Baseline rendering
 
@@ -924,3 +925,30 @@ The final paragraph is deliberately below a thematic break. Hover the paragraph 
 the break separately. Confirm the break has no review menu, while the paragraph has
 the ordinary block menu. This also verifies that unsupported rendered elements do
 not receive accidental controls.
+
+## MT-21. Math rendering and source selection
+
+Use a fresh review containing inline `$x^2+y^2=z^2$` and a display block with several
+aligned equations, for example:
+
+```markdown
+$$
+\begin{aligned}
+E &= mc^2 \\
+F &= ma \\
+K &= \frac{1}{2}mv^2
+\end{aligned}
+$$
+```
+
+Confirm the inline expression renders as math. Begin a selection on the rendered
+inline expression and confirm Richie switches to readable source text whose full
+width is visible. Select part of the TeX and create a comment; verify the quote and
+range contain only that source text. Press Escape and confirm the rendered form
+returns.
+
+Confirm the display block renders with one equation per aligned row. Its `Math source`
+disclosure should match the Mermaid disclosure pattern and be closed initially. Open
+it, select one source line, and create Comment, Replace, and Delete operations. Repeat
+with two adjacent lines and with the whole rendered block. Confirm the source ranges
+and quotes are exact and no generated MathML text is included.

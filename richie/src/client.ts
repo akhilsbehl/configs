@@ -106,7 +106,8 @@ function makeHighlight(ranges: globalThis.Range[]): unknown {
   return constructor ? new constructor(...ranges) : undefined;
 }
 function clearReviewPresentation(): void {
-  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.removeAttribute("data-review-replacement"); element.classList.remove("review-target", "review-column-target"); });
+  document.querySelectorAll<HTMLElement>("[data-review-ids]").forEach((element) => { element.removeAttribute("data-review-ids"); element.removeAttribute("data-review-kind"); element.removeAttribute("data-review-replacement"); element.removeAttribute("aria-describedby"); element.classList.remove("review-target", "review-column-target"); });
+  document.querySelectorAll(".review-replacement-inline").forEach((element) => element.remove());
   const highlights = reviewHighlights(); ["richie-comment", "richie-replace", "richie-delete"].forEach((name) => highlights?.delete(name));
 }
 function columnTargets(operation: Operation): HTMLElement[] {
@@ -119,22 +120,32 @@ function columnTargets(operation: Operation): HTMLElement[] {
 function applyReviewPresentation(operations: Operation[]): void {
   clearReviewPresentation();
   const ranges = new Map<string, globalThis.Range[]>();
+  const inlineReplacements: Array<{ operation: Operation; range: globalThis.Range }> = [];
   operations.filter((operation) => operation.status === "open").forEach((operation) => {
     if (operation.scope === "column") {
       columnTargets(operation).forEach((target) => { target.classList.add("review-column-target"); target.dataset.reviewKind = operation.kind; target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim(); });
-    } else if (operation.scope !== "range") {
+    } else {
       const target = operationTarget(operation); if (target) {
-        target.classList.add("review-target");
+        if (operation.scope !== "range") target.classList.add("review-target");
         target.dataset.reviewKind = operation.kind;
         target.dataset.reviewIds = `${target.dataset.reviewIds ?? ""} ${operation.id}`.trim();
-        if (operation.kind === "replace" && operation.replacement) target.dataset.reviewReplacement = operation.replacement;
+        target.setAttribute("aria-describedby", [...new Set(`${target.getAttribute("aria-describedby") ?? ""} feedback-${operation.id}`.trim().split(/\\s+/))].join(" "));
+        if (operation.kind === "replace" && operation.replacement && operation.scope !== "range") target.dataset.reviewReplacement = operation.replacement;
       }
     }
     if (operation.scope === "range") {
-      const range = domRange(operation); if (range) ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
+      const range = domRange(operation); if (range) {
+        ranges.set(operation.kind, [...(ranges.get(operation.kind) ?? []), range]);
+        if (operation.kind === "replace" && operation.replacement) inlineReplacements.push({ operation, range });
+      }
     }
   });
   const highlights = reviewHighlights(); ranges.forEach((value, kind) => { const highlight = makeHighlight(value); if (highlight) highlights?.set(`richie-${kind}`, highlight); });
+  inlineReplacements.forEach(({ operation, range }) => {
+    const replacement = document.createElement("span"); replacement.className = "review-replacement-inline"; replacement.dataset.operationId = operation.id;
+    replacement.textContent = ` → ${operation.replacement}`; replacement.id = `replacement-${operation.id}`;
+    const insertion = range.cloneRange(); insertion.collapse(false); insertion.insertNode(replacement);
+  });
 }
 function operationSummary(operation: Operation): string {
   if (operation.kind === "replace") return `Replace with ${operation.replacement ?? "an empty value"}`;
@@ -154,7 +165,7 @@ function renderFeedback(operations: Operation[]): void {
   const container = document.querySelector<HTMLElement>("#operations")!; container.replaceChildren();
   if (!open.length) { const empty = document.createElement("p"); empty.textContent = "No feedback yet. Select text or use a block control to add some."; container.append(empty); return; }
   open.forEach((operation) => {
-    const card = document.createElement("article"); card.className = "operation-card"; card.dataset.kind = operation.kind;
+    const card = document.createElement("article"); card.className = "operation-card"; card.dataset.kind = operation.kind; card.id = `feedback-${operation.id}`; card.tabIndex = -1;
     const meta = document.createElement("div"); meta.className = "operation-meta"; meta.append(operation.id, document.createTextNode(`${operation.kind} · ${operation.scope}`)); card.append(meta);
     if (operation.quote) { const quote = document.createElement("q"); quote.className = "operation-quote"; quote.textContent = operation.quote; card.append(quote); }
     const detail = document.createElement("p"); detail.className = "operation-detail"; detail.textContent = operationSummary(operation); card.append(detail);
@@ -236,6 +247,23 @@ function moveSearch(step: number): void {
   document.querySelector<HTMLOutputElement>("#search-count")!.textContent = `${searchIndex + 1}/${searchMatches.length}`;
 }
 async function refresh(): Promise<void> { const state = await fetch(endpoint("state")).then((response) => response.json()) as { operations: Operation[] }; renderFeedback(state.operations); applyReviewPresentation(state.operations); renderOutline(); }
+function revealFeedback(ids: string[]): void {
+  const cards = ids.map((id) => document.getElementById(`feedback-${id}`)).filter((card): card is HTMLElement => card instanceof HTMLElement);
+  if (!cards.length) return;
+  const first = cards[0]; first.scrollIntoView({ behavior: "smooth", block: "nearest" }); first.focus({ preventScroll: true });
+  cards.forEach((card) => { card.classList.remove("feedback-focus"); void card.offsetWidth; card.classList.add("feedback-focus"); });
+  document.querySelectorAll<HTMLElement>("#document [data-review-ids]").forEach((element) => {
+    if (!ids.some((id) => (element.dataset.reviewIds ?? "").split(/\\s+/).includes(id))) return;
+    element.classList.remove("backlink-active"); void element.offsetWidth; element.classList.add("backlink-active");
+    window.setTimeout(() => element.classList.remove("backlink-active"), 1800);
+  });
+}
+document.querySelector("#document")!.addEventListener("click", (event) => {
+  const target = (event.target as Element).closest<HTMLElement>("[data-review-ids]");
+  if (!target) return;
+  const ids = (target.dataset.reviewIds ?? "").split(/\\s+/).filter(Boolean);
+  if (ids.length) { event.preventDefault(); revealFeedback(ids); }
+});
 async function renderMermaid(): Promise<void> {
   mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
   for (const [index, element] of [...document.querySelectorAll<HTMLElement>(".mermaid")].entries()) {
@@ -368,7 +396,7 @@ document.addEventListener("keydown", (event) => {
   if (dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
   const target = event.target as HTMLElement | null;
   if (target?.closest("input,textarea,select,[contenteditable=true]")) return;
-  if (event.key === "Escape") { event.preventDefault(); hideNow(); return; }
+  if (event.key === "Escape") { event.preventDefault(); document.querySelectorAll(".math-selecting").forEach((element) => element.classList.remove("math-selecting")); hideNow(); return; }
   const kind = event.key === "c" ? "comment" : event.key === "r" ? "replace" : event.key === "d" ? "delete" : undefined;
   if (!kind) return;
   const range = selectionRange(); if (!range) return;
@@ -381,10 +409,12 @@ document.querySelectorAll("h1[data-md-block],h2[data-md-block],h3[data-md-block]
   const actions = list ? [...selectionActions, { label: "Delete list", kind: "delete", scope: "block", target: list }] : selectionActions;
   targetMenu("block", element, actions);
 });
-[...document.querySelectorAll(".mermaid-source-line,.code-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
-document.querySelectorAll("details[data-md-mermaid-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
+[...document.querySelectorAll(".mermaid-source-line,.code-source-line,.math-source-line")].forEach((element) => targetMenu("range", element, selectionActions));
+document.querySelectorAll("details[data-md-mermaid-source],details[data-md-math-source]").forEach((element) => targetMenu("block", element, [{ label: "Comment", kind: "comment" }]));
 document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("cell", element, [{ label: "Comment", kind: "comment" }, { label: "Replace", kind: "replace" }, { label: "Clear cell", kind: "delete" }, { label: "Delete column", kind: "delete", scope: "column" }, { label: "Delete row", kind: "delete", scope: "row", target: element.closest("tr")! }]));
 document.querySelectorAll("[data-md-media]").forEach((element) => targetMenu("media", element, mediaActions));
+document.querySelectorAll(".math-target").forEach((element) => targetMenu("range", element, selectionActions));
+document.querySelectorAll<HTMLElement>(".math-inline .math-rendered").forEach((element) => element.addEventListener("pointerdown", () => element.closest<HTMLElement>(".math-inline")?.classList.add("math-selecting")));
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; if (!action) return;
   try {
