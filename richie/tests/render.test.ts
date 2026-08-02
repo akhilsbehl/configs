@@ -38,6 +38,14 @@ test("renders checklist controls beside paragraph text and source-aware code blo
   assert.doesNotMatch(html, /<\/span>\n<span class="code-source-line"/);
 });
 
+test("adds copy controls for fenced code, Mermaid, and display math blocks", () => {
+  const html = renderReviewHtml("```python\nprint(\"hello\")\n```\n\n```mermaid\ngraph TD\nA-->B\n```\n\n$$\nx^2\n$$\n");
+  assert.match(html, /<pre[^>]*>.*class="copy-block"[^>]*data-copy-source="print\(&quot;hello&quot;\)"[^>]*aria-label="Copy code block"/s);
+  assert.match(html, /<div class="mermaid"[^>]*><pre>.*<\/div><details class="mermaid-source"[^>]*>.*class="copy-block"[^>]*data-copy-source="graph TD\nA--&gt;B"[^>]*aria-label="Copy Mermaid source"/s);
+  assert.match(html, /class="math-target math-display"[^>]*>.*<\/div><details class="mermaid-source math-source-panel"[^>]*>.*class="copy-block"[^>]*data-copy-source="x\^2"/s);
+  assert.match(html, /<svg[^>]*viewBox="0 0 24 24"/);
+});
+
 test("syntax highlights Mermaid source without losing line ranges", () => {
   const html = renderReviewHtml("```mermaid\ngraph TD\nA-->B\n```\n");
   assert.match(html, /class="mermaid-source-line" data-md-range="[^"]+"/);

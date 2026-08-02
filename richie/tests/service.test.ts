@@ -30,6 +30,7 @@ test("keeps replacement previews and equal search navigation sizing in the page 
   assert.match(html, /\.backlink-active\{/);
   assert.match(html, /\.math-inline\.math-selecting\{display:inline\}/);
   assert.match(html, /\.math-inline\.math-selecting \.math-source\{position:static/);
+  assert.match(html, /\.math-display\{display:block;overflow-x:auto;overflow-y:hidden;margin:1\.2rem 0 0/);
   assert.match(html, /\.feedback-focus/);
   assert.match(html, /#navigation \.search-box button\{flex:1 1 0;min-width:0;min-height:34px;/);
 });

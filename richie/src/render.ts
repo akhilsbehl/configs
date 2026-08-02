@@ -49,6 +49,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
     if (language && hljs.getLanguage(language)) return hljs.highlight(value, { language, ignoreIllegals: true }).value;
     return language ? escape(value) : hljs.highlightAuto(value).value;
   };
+  const copyButton = (value: string, label: string): string => `<button class="copy-block" type="button" data-copy-source="${escape(value)}" data-copy-label="${escape(label)}" aria-label="${escape(label)}" title="${escape(label)}"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg></button>`;
   const sourceLines = (node: Node, className: string, language?: string | null): string => {
     const position = node.position;
     const value = node.value ?? "";
@@ -174,7 +175,8 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
         let rendered: string;
         try { rendered = katex.renderToString(value, { displayMode: true, throwOnError: false, output: "mathml" }); }
         catch { rendered = `<code>${escape(value)}</code>`; }
-        return `<div class="math-target math-display"${blockAttrs(node)} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div><details class="mermaid-source math-source-panel" data-md-math-source><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre></details></div>`;
+        const attrs = blockAttrs(node);
+        return `<div class="math-target math-display"${attrs} data-math-source="${escape(value)}"><div class="math-rendered">${rendered}</div></div><details class="mermaid-source math-source-panel"${attrs} data-md-math-source><summary>Math source</summary><pre><code>${mathSourceLines(node)}</code></pre>${copyButton(value, "Copy math source")}</details>`;
       }
       case "inlineCode": {
         if (!node.position) return `<code>${escape(node.value ?? "")}</code>`;
@@ -197,10 +199,10 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       case "code": {
         if (node.lang !== "mermaid") {
           const attrs = blockAttrs(node);
-          return `<pre${attrs}><code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line", node.lang)}</code></pre>`;
+          return `<pre${attrs}><code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line", node.lang)}</code>${copyButton(node.value ?? "", "Copy code block")}</pre>`;
         }
         const attrs = blockAttrs(node);
-        return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}</details>`;
+        return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}${copyButton(node.value ?? "", "Copy Mermaid source")}</details>`;
       }
       case "table": return `<table${blockAttrs(node)}><tbody>${renderChildren(node)}</tbody></table>`;
       case "tableRow": return `<tr${blockAttrs(node)}>${renderChildren(node)}</tr>`;

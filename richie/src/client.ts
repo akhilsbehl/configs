@@ -264,10 +264,32 @@ document.querySelector("#document")!.addEventListener("click", (event) => {
   const ids = (target.dataset.reviewIds ?? "").split(/\\s+/).filter(Boolean);
   if (ids.length) { event.preventDefault(); revealFeedback(ids); }
 });
+async function copyText(value: string): Promise<void> {
+  if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(value); return; }
+  const textarea = document.createElement("textarea"); textarea.value = value; textarea.setAttribute("readonly", ""); textarea.style.position = "fixed"; textarea.style.opacity = "0";
+  document.body.append(textarea); textarea.select();
+  try { if (!document.execCommand("copy")) throw new Error("Copy command failed"); }
+  finally { textarea.remove(); }
+}
+function setupCopyButtons(): void {
+  document.querySelectorAll<HTMLButtonElement>(".copy-block").forEach((button) => button.addEventListener("click", async (event) => {
+    event.preventDefault(); event.stopPropagation();
+    try {
+      await copyText(button.dataset.copySource ?? "");
+      button.classList.add("copied"); button.setAttribute("aria-label", "Copied"); button.title = "Copied";
+      window.setTimeout(() => { button.classList.remove("copied"); button.setAttribute("aria-label", button.dataset.copyLabel ?? "Copy block"); button.title = button.getAttribute("aria-label") ?? "Copy block"; }, 1400);
+    } catch { button.classList.add("copy-failed"); button.setAttribute("aria-label", "Copy failed"); button.title = "Copy failed"; window.setTimeout(() => button.classList.remove("copy-failed"), 1400); }
+  }));
+}
 async function renderMermaid(): Promise<void> {
   mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
   for (const [index, element] of [...document.querySelectorAll<HTMLElement>(".mermaid")].entries()) {
-    try { const result = await mermaid.render(`richie-mermaid-${index}`, element.dataset.mermaid ?? ""); element.innerHTML = result.svg; result.bindFunctions?.(element); }
+    try {
+      const copyButton = element.querySelector<HTMLButtonElement>(".copy-block");
+      const result = await mermaid.render(`richie-mermaid-${index}`, element.dataset.mermaid ?? "");
+      element.replaceChildren(); element.insertAdjacentHTML("afterbegin", result.svg); if (copyButton) element.append(copyButton);
+      result.bindFunctions?.(element);
+    }
     catch (error) {
       const note = document.createElement("p");
       note.className = "review-note";
@@ -441,6 +463,7 @@ document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   } catch (error) { await modal({ title: "Richie could not complete the action", message: (error as Error).message, confirmLabel: "OK" }); }
 });
 refresh();
+setupCopyButtons();
 renderMermaid();
 document.querySelectorAll<HTMLElement>("[data-md-media]").forEach((media) => {
   const image = media.querySelector<HTMLImageElement>("img");
