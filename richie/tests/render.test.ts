@@ -2,6 +2,23 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { renderReviewHtml } from "../src/render.js";
 
+test("renders YAML frontmatter as source-aware, actionable metadata", () => {
+  const source = "---\ntitle: Example\ntags: [one, two]\n---\n\n# Heading\n";
+  const html = renderReviewHtml(source);
+  assert.match(html, /<pre class="frontmatter-source"[^>]*data-md-range="0:.*"[^>]*data-md-frontmatter/);
+  assert.match(html, /class="frontmatter-source-line code-source-line" data-md-range="0:3:1:1:1:4"/);
+  assert.match(html, /class="frontmatter-source-line code-source-line" data-md-range="4:18:2:1:2:15"/);
+  assert.match(html, /class="hljs-attr">title:<\/span>/);
+  assert.match(html, /<h1[^>]*data-md-range="41:50:6:1:6:10"[^>]*id="heading">.*Heading.*<\/h1>/);
+  assert.match(html, /data-copy-label="Copy frontmatter"/);
+});
+
+test("does not treat an ordinary thematic break as frontmatter", () => {
+  const html = renderReviewHtml("---\n\n# Heading\n");
+  assert.doesNotMatch(html, /data-md-frontmatter/);
+  assert.match(html, /<hr>/);
+});
+
 test("renders inline and display math with source-aware review targets", () => {
   const source = "Inline $a^2+b^2=c^2$\n\n$$\n\\int_0^1 x^2 dx\n$$\n";
   const html = renderReviewHtml(source);

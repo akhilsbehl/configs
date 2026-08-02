@@ -27,8 +27,27 @@ export function parseMarkdown(source: string): Node {
   return unified().use(remarkParse).use(remarkGfm).use(remarkMath).parse(source) as unknown as Node;
 }
 
+function frontmatterBoundary(source: string): { end: number; lineCount: number } | undefined {
+  const match = /^(---[ \t]*\r?\n)[\s\S]*?(?:\r?\n)(---|\.\.\.)[ \t]*(?:\r?\n|$)/.exec(source);
+  if (!match) return undefined;
+  return { end: match[0].length, lineCount: match[0].split("\n").length - (match[0].endsWith("\n") ? 1 : 0) };
+}
+
+function shiftPositions(node: Node, offset: number, line: number): void {
+  if (node.position) {
+    node.position.start.offset += offset;
+    node.position.end.offset += offset;
+    node.position.start.line += line;
+    node.position.end.line += line;
+  }
+  for (const child of node.children ?? []) shiftPositions(child, offset, line);
+}
+
 export function renderReviewHtml(source: string, options: RenderOptions = {}): string {
-  const root = parseMarkdown(source);
+  const frontmatter = frontmatterBoundary(source);
+  const bodySource = frontmatter ? source.slice(frontmatter.end) : source;
+  const root = parseMarkdown(bodySource);
+  if (frontmatter) shiftPositions(root, frontmatter.end, frontmatter.lineCount);
   const definitions = new Map<string, Node>();
   const collectDefinitions = (node: Node): void => {
     if (node.type === "definition" && node.identifier) definitions.set(node.identifier, node);
@@ -67,6 +86,19 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       const lineColumn = index === 0 ? position.start.column : 1;
       cursor = newline < 0 ? position.end.offset : newline + 1;
       return `<span class="${className}" data-md-range="${lineStart}:${lineEnd}:${lineNumber}:${lineColumn}:${lineNumber}:${lineColumn + line.length}"><span class="md-text">${highlighted(line, language)}</span></span>`;
+    }).join("");
+  };
+  const frontmatterSource = (end: number): string => {
+    const value = source.slice(0, end);
+    const rawLines = value.split("\n");
+    if (rawLines.at(-1) === "") rawLines.pop();
+    let offset = 0;
+    return rawLines.map((rawLine, index) => {
+      const line = rawLine.endsWith("\r") ? rawLine.slice(0, -1) : rawLine;
+      const start = offset;
+      const finish = start + line.length;
+      offset += rawLine.length + 1;
+      return `<span class="frontmatter-source-line code-source-line" data-md-range="${start}:${finish}:${index + 1}:1:${index + 1}:${line.length + 1}"><span class="md-text">${highlighted(line, "yaml")}</span></span>`;
     }).join("");
   };
   const mermaidSource = (node: Node): string => {
@@ -210,5 +242,8 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       default: return renderChildren(node);
     }
   };
-  return render(root);
+  const renderedFrontmatter = frontmatter
+    ? `<pre class="frontmatter-source"${blockAttrs({ type: "frontmatter", position: { start: positionAt(0), end: positionAt(frontmatter.end) } })} data-md-frontmatter><code class="language-yaml">${frontmatterSource(frontmatter.end)}</code>${copyButton(source.slice(0, frontmatter.end).replace(/\r\n/g, "\n").replace(/\n$/, ""), "Copy frontmatter")}</pre>`
+    : "";
+  return renderedFrontmatter + render(root);
 }
