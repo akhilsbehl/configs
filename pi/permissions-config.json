@@ -33,7 +33,9 @@
       "~/.zscaler-cert.pem": "deny",
       "~/.zshrc.more": "deny",
       "/mnt/c/Users/akhil.behl": "ask",
-      "/mnt/c/Users/akhil.behl/*": "ask"
+      "/mnt/c/Users/akhil.behl/*": "ask",
+      "/home/akhil/configs/CODING_PRINCIPLES.md": "allow",
+      "/home/akhil/configs/WRITING_PRINCIPLES.md": "allow"
     },
     "read": "allow",
     "grep": "allow",
