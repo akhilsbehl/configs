@@ -28,7 +28,7 @@ target/wasm32-wasip1/release/zellij-pane-switcher.wasm
 The checked-in deployment artifact is kept at:
 
 ```text
-/home/akhil/configs/pi/extensions/zellij-pane-switcher/zellij-pane-switcher.wasm
+/home/akhil/configs/zellij-pane-switcher/zellij-pane-switcher.wasm
 ```
 
 ## Test
@@ -60,7 +60,7 @@ Example `config.kdl` bindings:
 keybinds {
     shared_except "resize" "scroll" {
         bind "Alt y" {
-            MessagePlugin "file:/home/akhil/configs/pi/extensions/zellij-pane-switcher/zellij-pane-switcher.wasm" {
+            MessagePlugin "file:/home/akhil/configs/zellij-pane-switcher/zellij-pane-switcher.wasm" {
                 name "open"
                 floating true
             }
@@ -77,12 +77,8 @@ The cross-session view uses Zellij's `SessionUpdate` events for normal refreshes
 
 ```kdl
 plugins {
-    session-manager location="file:/home/akhil/configs/pi/extensions/zellij-pane-switcher/zellij-pane-switcher.wasm"
+    session-manager location="file:/home/akhil/configs/zellij-pane-switcher/zellij-pane-switcher.wasm"
 }
 ```
 
 Live session and tab names filter their descendant panes. Only pane rows are selectable for live sessions. A resurrectable session is the sole exception because it has no pane until Zellij restores it.
-
-## Design
-
-See [`pane-switcher-session-design-v02.md`](pane-switcher-session-design-v02.md) for the approved design specification.
