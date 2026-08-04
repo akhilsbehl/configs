@@ -548,7 +548,7 @@ function launchpad-tmux {
 
 function launchpad-zellij {
   test $ZELLIJ ||
-    zellij attach launchPad || zellij
+    zellij attach launchPad || zellij -s launchPad
 }
 
 function launchpad {
