@@ -1,0 +1,83 @@
+{
+  "name": "pi-permission-auto-review",
+  "version": "0.1.4",
+  "description": "Codex-style automatic approval reviews for @gotgenes/pi-permission-system",
+  "keywords": [
+    "authorizer",
+    "auto-review",
+    "codex",
+    "permissions",
+    "pi",
+    "pi-coding-agent",
+    "pi-extension",
+    "pi-package"
+  ],
+  "homepage": "https://github.com/mzwing/pi-packages/tree/main/packages/pi-permission-auto-review#readme",
+  "bugs": {
+    "url": "https://github.com/mzwing/pi-packages/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "mzwing",
+    "email": "mzwing@mzwing.eu.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mzwing/pi-packages.git",
+    "directory": "packages/pi-permission-auto-review"
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "config/config.example.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "zod": "4.4.3",
+    "@mzwing/pi-polyfill": "^0.0.1"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.80.10",
+    "@earendil-works/pi-coding-agent": "0.80.10",
+    "@gotgenes/pi-permission-system": "20.10.0",
+    "@types/node": "26.1.1",
+    "tsdown": "0.22.13",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "^0.80.10 || ^0.81.0",
+    "@earendil-works/pi-coding-agent": "^0.80.10 || ^0.81.0",
+    "@gotgenes/pi-permission-system": "^20.10.0"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "pi": {
+    "extensions": [
+      "./dist/index.js"
+    ]
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gen:schema": "node --experimental-strip-types scripts/generate-schema.ts"
+  }
+}
