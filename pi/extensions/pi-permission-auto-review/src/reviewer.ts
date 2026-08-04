@@ -305,17 +305,15 @@ export function createPermissionReviewer(
     try {
       startedAt = dependencies.now()
       if (runtime.circuitBreaker.isOpen()) {
-        const reason =
-          'Automatic permission review rejected too many requests in this turn. Ask the user for explicit approval before retrying.'
         log.review(CIRCUIT_OPEN_EVENT, {
           requestId: details.requestId,
           provider: runtime.config.provider,
           model: runtime.config.model,
-          outcome: 'deny',
+          outcome: 'defer',
           durationMs: 0,
           errorCategory: 'circuit-open',
         })
-        return { kind: 'deny', reason }
+        return { kind: 'defer' }
       }
 
       const result = await runReview(runtime, details, dependencies)
@@ -342,11 +340,10 @@ export function createPermissionReviewer(
         return { kind: 'allow' }
       }
 
-      runtime.circuitBreaker.recordDenied()
-      return {
-        kind: 'deny',
-        reason: `Automatic permission review denied this action (risk: ${assessment.riskLevel}, authorization: ${assessment.userAuthorization}): ${assessment.rationale}`,
-      }
+      // A negative model assessment is advisory in this personal fork. Defer
+      // to the normal permission prompt rather than hard-denying the action.
+      runtime.circuitBreaker.recordNonDenial()
+      return { kind: 'defer' }
     } catch {
       try {
         runtime.circuitBreaker.recordNonDenial()

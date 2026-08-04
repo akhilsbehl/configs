@@ -6,7 +6,7 @@ declare const EXTENSION_ID = "pi-permission-auto-review";
 declare const AUTHORIZER_NAME = "auto-review";
 declare const DEFAULT_PROVIDER = "openai-codex";
 declare const DEFAULT_MODEL = "codex-auto-review";
-declare const DEFAULT_TIMEOUT_MS = 9e4;
+declare const DEFAULT_TIMEOUT_MS = 90000;
 declare const CONFIG_SCHEMA_URL = "https://raw.githubusercontent.com/mzwing/pi-packages/main/packages/pi-permission-auto-review/schemas/config.schema.json";
 type AutoReviewConfigSchema = z.ZodObject<{
   $schema: z.ZodOptional<z.ZodString>;
@@ -14,13 +14,13 @@ type AutoReviewConfigSchema = z.ZodObject<{
   provider: z.ZodDefault<z.ZodString>;
   model: z.ZodDefault<z.ZodString>;
   reasoning: z.ZodDefault<z.ZodEnum<{
-    off: "off";
-    minimal: "minimal";
-    low: "low";
-    medium: "medium";
-    high: "high";
-    xhigh: "xhigh";
-    max: "max";
+    off: 'off';
+    minimal: 'minimal';
+    low: 'low';
+    medium: 'medium';
+    high: 'high';
+    xhigh: 'xhigh';
+    max: 'max';
   }>>;
   timeoutMs: z.ZodDefault<z.ZodNumber>;
   includeBaselinePolicy: z.ZodDefault<z.ZodBoolean>;
@@ -60,14 +60,14 @@ declare class DenialCircuitBreaker {
 interface ReviewerFactoryOptions {
   config: AutoReviewConfig;
   registry: ModelRegistry;
-  sessionManager: Pick<SessionManager, "buildContextEntries">;
+  sessionManager: Pick<SessionManager, 'buildContextEntries'>;
   circuitBreaker: DenialCircuitBreaker;
   sessionSignal: AbortSignal;
 }
 interface AutoReviewExtensionDependencies {
   loadConfig?: (cwd: string) => LoadConfigResult;
   getPermissionsService?: () => PermissionsService | undefined;
-  createReviewer?: (options: ReviewerFactoryOptions) => Authorizer["authorize"];
+  createReviewer?: (options: ReviewerFactoryOptions) => Authorizer['authorize'];
 }
 declare function createAutoReviewExtension(pi: ExtensionAPI, dependencies?: AutoReviewExtensionDependencies): void;
 //#endregion
@@ -75,4 +75,3 @@ declare function createAutoReviewExtension(pi: ExtensionAPI, dependencies?: Auto
 declare function permissionAutoReviewExtension(pi: ExtensionAPI): void;
 //#endregion
 export { AUTHORIZER_NAME, type AutoReviewConfig, type AutoReviewExtensionDependencies, CONFIG_SCHEMA_URL, type ConfigIssue, DEFAULT_MODEL, DEFAULT_PROVIDER, DEFAULT_TIMEOUT_MS, EXTENSION_ID, type LoadConfigOptions, type LoadConfigResult, autoReviewConfigSchema, buildAutoReviewJsonSchema, createAutoReviewExtension, permissionAutoReviewExtension as default, loadAutoReviewConfig };
-//# sourceMappingURL=index.d.ts.map

@@ -1,11 +1,18 @@
 import type { AutoReviewConfig } from './config.js'
 import type { Api, Model, Provider } from '@earendil-works/pi-ai'
 import type { ModelRegistry } from '@earendil-works/pi-coding-agent'
-import { getModelRegistryProvider } from '@mzwing/pi-polyfill'
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from './config.js'
 
 export type ReviewModelRegistry = Pick<ModelRegistry, 'find' | 'getAll' | 'getApiKeyAndHeaders'> & {
   getProvider?: (providerId: string) => Provider | undefined
+}
+
+function getModelRegistryProvider(registry: ReviewModelRegistry, providerId: string): Provider | undefined {
+  if (typeof registry.getProvider === 'function') {
+    return registry.getProvider(providerId)
+  }
+  const runtime = (registry as ReviewModelRegistry & { runtime?: { getProvider?: (id: string) => Provider | undefined } }).runtime
+  return typeof runtime?.getProvider === 'function' ? runtime.getProvider(providerId) : undefined
 }
 
 interface ResolvedReviewModel {
@@ -29,10 +36,7 @@ function findCodexTemplate(registry: ReviewModelRegistry, provider: Provider<Api
 }
 
 export function resolveReviewModel(registry: ReviewModelRegistry, config: AutoReviewConfig): ResolveReviewModelResult {
-  const provider =
-    typeof registry.getProvider === 'function'
-      ? registry.getProvider(config.provider)
-      : getModelRegistryProvider(registry as ModelRegistry, config.provider)
+  const provider = getModelRegistryProvider(registry, config.provider)
   if (provider === undefined) {
     return { ok: false, category: 'provider-unresolved' }
   }

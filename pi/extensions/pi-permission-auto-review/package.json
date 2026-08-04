@@ -35,12 +35,12 @@
   ],
   "type": "module",
   "sideEffects": false,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     }
   },
   "publishConfig": {
@@ -48,8 +48,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "zod": "4.4.3",
-    "@mzwing/pi-polyfill": "^0.0.1"
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@earendil-works/pi-ai": "0.80.10",
@@ -66,11 +65,11 @@
     "@gotgenes/pi-permission-system": "^20.10.0"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=22.19.0"
   },
   "pi": {
     "extensions": [
-      "./dist/index.js"
+      "./dist/index.mjs"
     ]
   },
   "scripts": {

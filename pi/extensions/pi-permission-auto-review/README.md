@@ -17,7 +17,7 @@ pi install npm:@gotgenes/pi-permission-system # dependency
 pi install npm:@mzwing/pi-permission-auto-review
 ```
 
-Pi 0.80.10 and Pi 0.81.x are supported. The extension uses `@mzwing/pi-polyfill` transitively for provider lookup on Pi 0.80.10; do not install the polyfill as a separate Pi extension.
+This fork targets the Node.js version supported by the current Pi installation (`>=22.19.0`). Provider lookup compatibility is implemented locally; no polyfill package is required.
 
 ## Enable
 
@@ -60,8 +60,8 @@ Project fields override global fields. `PI_CODING_AGENT_DIR` replaces `~/.pi/age
 | `model`                 | `codex-auto-review` | Model id within the selected provider        |
 | `reasoning`             | `low`               | Reasoning level for reviewer calls           |
 | `timeoutMs`             | `90000`             | Total budget across all retry attempts       |
-| `includeBaselinePolicy` | `true`              | Include the built-in Codex-style risk policy |
-| `additionalPolicy`      | omitted             | Trusted operator policy appended to it       |
+| `includeBaselinePolicy` | `true`              | Include the fork's built-in operator risk policy |
+| `additionalPolicy`      | omitted             | Optional policy appended to the built-in policy |
 
 See the [example config](config/config.example.json) and bundled [JSON Schema](schemas/config.schema.json). Unknown or invalid fields disable automatic decisions and fall through to the normal prompt.
 
@@ -74,12 +74,12 @@ Use `/permission-auto-review` in Pi's interactive TUI to edit and apply global o
 /permission-auto-review help
 ```
 
-Custom providers and models must be defined in Pi's `~/.pi/agent/models.json`, then selected with this extension's `provider` and `model` fields. To replace the built-in risk policy completely, set `includeBaselinePolicy` to `false` and provide a non-empty `additionalPolicy`.
+Custom providers and models must be defined in Pi's `~/.pi/agent/models.json`, then selected with this extension's `provider` and `model` fields. The fork's built-in policy is the normal policy; `additionalPolicy` is retained only for optional refinements.
 
 ## Behavior and Limits
 
-- Model, authentication, timeout, provider, or response-format failures defer to the normal human prompt.
-- Unexpected internal review failures also defer to the human prompt instead of escaping into the permission gate.
+- A model `deny` assessment defers to the normal human prompt; this fork never hard-denies from the reviewer.
+- Circuit-breaker-open, authentication, timeout, provider, response-format, and internal review failures defer to the normal human prompt.
 - Three consecutive denials, or ten denials in the latest fifty reviews, open a circuit breaker until the next Pi turn.
 - pi-permission-system prevents authorizers from auto-approving `path` and `external_directory` requests.
 
