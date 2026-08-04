@@ -42,6 +42,7 @@ impl Pane {
 
     pub fn is_zellij_chrome(&self) -> bool {
         let title = self.title.trim().to_lowercase();
+        let title = title.strip_prefix("zellij:").unwrap_or(&title);
         title == "tab-bar"
             || title == "status-bar"
             || title.starts_with("tab-bar ")
@@ -495,6 +496,22 @@ mod tests {
                 PaneData {
                     tab_position: 0,
                     pane_id: 3,
+                    is_plugin: true,
+                    is_floating: false,
+                    is_suppressed: false,
+                    title: "zellij:tab-bar".to_string(),
+                },
+                PaneData {
+                    tab_position: 0,
+                    pane_id: 4,
+                    is_plugin: true,
+                    is_floating: false,
+                    is_suppressed: false,
+                    title: "zellij:status-bar".to_string(),
+                },
+                PaneData {
+                    tab_position: 0,
+                    pane_id: 5,
                     is_plugin: false,
                     is_floating: false,
                     is_suppressed: false,
