@@ -41,10 +41,11 @@ impl Pane {
     }
 
     pub fn is_zellij_chrome(&self) -> bool {
-        matches!(
-            self.title.trim().to_lowercase().as_str(),
-            "tab-bar" | "status-bar"
-        )
+        let title = self.title.trim().to_lowercase();
+        title == "tab-bar"
+            || title == "status-bar"
+            || title.starts_with("tab-bar ")
+            || title.starts_with("status-bar ")
     }
 }
 
@@ -464,6 +465,44 @@ mod tests {
             title: "plugin - file:/old/zellij-pane-switcher.wasm".to_string(),
         });
         let snapshot = normalize_sessions(&[data], &[], Some(99));
+        assert_eq!(filter_snapshot(&snapshot, "").len(), 1);
+    }
+
+    #[test]
+    fn zellij_chrome_is_excluded_even_with_plugin_suffix() {
+        let data = SessionData {
+            name: "a".to_string(),
+            is_current: true,
+            connected_clients: 1,
+            tabs: vec![(0, "one".to_string())],
+            panes: vec![
+                PaneData {
+                    tab_position: 0,
+                    pane_id: 1,
+                    is_plugin: true,
+                    is_floating: false,
+                    is_suppressed: false,
+                    title: "tab-bar (plugin)".to_string(),
+                },
+                PaneData {
+                    tab_position: 0,
+                    pane_id: 2,
+                    is_plugin: true,
+                    is_floating: false,
+                    is_suppressed: false,
+                    title: "status-bar (plugin)".to_string(),
+                },
+                PaneData {
+                    tab_position: 0,
+                    pane_id: 3,
+                    is_plugin: false,
+                    is_floating: false,
+                    is_suppressed: false,
+                    title: "shell".to_string(),
+                },
+            ],
+        };
+        let snapshot = normalize_sessions(&[data], &[], None);
         assert_eq!(filter_snapshot(&snapshot, "").len(), 1);
     }
 

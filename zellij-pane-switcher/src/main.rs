@@ -246,9 +246,10 @@ impl State {
     }
 
     fn open(&mut self) {
-        if !self.snapshot_loaded {
-            self.refresh_snapshot();
-        }
+        // Session names and resurrectable entries can change while the plugin
+        // remains loaded (for example after `zellij action rename-session`).
+        // Refresh on every invocation so a stale entry cannot be activated.
+        self.refresh_snapshot();
         self.query.clear();
         self.rebuild_matches();
         self.normalize_selection();
