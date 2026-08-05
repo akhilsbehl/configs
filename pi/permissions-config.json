@@ -10,6 +10,11 @@
   "piInfrastructureReadPaths": [
     "~/*"
   ],
+  "shellTools": {
+    "bash_bg": {
+      "commandArgument": "command"
+    }
+  },
   "permission": {
     "*": "ask",
     "path": {
