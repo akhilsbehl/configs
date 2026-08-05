@@ -33,6 +33,13 @@ test("renders fixed sidebar controls with independently scrolling content", () =
   assert.ok(html.indexOf('id="toolbar"') < html.indexOf("Review feedback"));
 });
 
+test("keeps code copy controls overlaid while code scrolls", () => {
+  const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/draft-v00.md" }, "```ts\nconst message = 'hello';\n```\n");
+  assert.match(html, /pre>\.copy-block\{position:sticky;top:8px;left:calc\(100% - 38px\);right:auto;float:right;/);
+  assert.match(html, /<pre[^>]*><button class="copy-block"[^>]*><svg/s);
+  assert.match(html, /<button class="copy-block"[^>]*><svg[\s\S]*<code class="language-ts">/);
+});
+
 test("keeps replacement previews and equal search navigation sizing in the page stylesheet", () => {
   const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/draft-v00.md" }, "# Draft\n");
   assert.match(html, /data-review-replacement/);

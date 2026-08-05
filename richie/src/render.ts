@@ -231,7 +231,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
       case "code": {
         if (node.lang !== "mermaid") {
           const attrs = blockAttrs(node);
-          return `<pre${attrs}><code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line", node.lang)}</code>${copyButton(node.value ?? "", "Copy code block")}</pre>`;
+          return `<pre${attrs}>${copyButton(node.value ?? "", "Copy code block")}<code class="language-${escape(node.lang ?? "")}">${sourceLines(node, "code-source-line", node.lang)}</code></pre>`;
         }
         const attrs = blockAttrs(node);
         return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}${copyButton(node.value ?? "", "Copy Mermaid source")}</details>`;
