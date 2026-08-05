@@ -19,6 +19,7 @@
   - For durable information, use appropriate project local knowledge to choose the file path.
   - My comments, if any, will be in '<origina-file-path>-commented.md'.
 - When you ask me a question with a plugin, prefer multiple choice answers unless unreasonable.
+- Stay proactive, if there is a next task that you can do, just do it instead of telling me about it.
 
 ## Environment
 
