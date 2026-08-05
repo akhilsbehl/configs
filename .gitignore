@@ -8,3 +8,5 @@ richie/node_modules/
 richie/dist/
 richie/*.review.json
 richie/*.review.html
+
+node_modules/

@@ -10,7 +10,7 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-patty-bg-tasks",
     "npm:@gotgenes/pi-permission-system",
-    "npm:@mzwing/pi-permission-auto-review",
+    "./extensions/pi-permission-auto-review",
     "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:@narumitw/pi-statusline",

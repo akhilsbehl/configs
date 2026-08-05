@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/mzwing/pi-packages/main/packages/pi-permission-auto-review/schemas/config.schema.json",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "default": "openai-codex",
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "default": "codex-auto-review",
+      "type": "string",
+      "minLength": 1
+    },
+    "reasoning": {
+      "default": "low",
+      "type": "string",
+      "enum": ["off", "minimal", "low", "medium", "high", "xhigh", "max"]
+    },
+    "timeoutMs": {
+      "default": 90000,
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 300000
+    },
+    "includeBaselinePolicy": {
+      "default": true,
+      "type": "boolean"
+    },
+    "additionalPolicy": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "includeBaselinePolicy": {
+            "const": false
+          }
+        },
+        "required": ["includeBaselinePolicy"]
+      },
+      "then": {
+        "required": ["additionalPolicy"]
+      }
+    }
+  ]
+}
