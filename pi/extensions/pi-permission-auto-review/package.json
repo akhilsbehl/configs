@@ -35,12 +35,12 @@
   ],
   "type": "module",
   "sideEffects": false,
-  "main": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
+  "main": "./dist/pi-permission-auto-review.mjs",
+  "types": "./dist/pi-permission-auto-review.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs"
+      "types": "./dist/pi-permission-auto-review.d.mts",
+      "import": "./dist/pi-permission-auto-review.mjs"
     }
   },
   "publishConfig": {
@@ -69,11 +69,11 @@
   },
   "pi": {
     "extensions": [
-      "./dist/index.mjs"
+      "./dist/pi-permission-auto-review.mjs"
     ]
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown --clean && mv dist/index.mjs dist/pi-permission-auto-review.mjs && mv dist/index.d.mts dist/pi-permission-auto-review.d.mts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
