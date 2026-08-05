@@ -1,0 +1,94 @@
+format = """
+[╰─](color_orange)\
+$provider\
+[](fg:#000000 bg:color_orange)\
+$model\
+[](fg:#000000 bg:color_orange)\
+$thinking\
+[](fg:#000000 bg:color_yellow)\
+$directory\
+[](fg:#000000 bg:color_aqua)\
+$git_branch\
+$git_status\
+[](fg:#000000 bg:color_blue)\
+$tokens\
+[](fg:#000000 bg:color_bg1)\
+$cost\
+[](fg:#000000 bg:color_bg1)\
+$context\
+[](fg:#000000 bg:color_bg1)\
+$time\
+[ ](fg:color_bg1)\
+"""
+
+palette = 'gruvbox_dark'
+
+[palettes.gruvbox_dark]
+color_fg0 = '#fbf1c7'
+color_bg1 = '#3c3836'
+color_blue = '#458588'
+color_aqua = '#689d6a'
+color_orange = '#d65d0e'
+color_yellow = '#d79921'
+
+[provider]
+style = "bg:color_orange fg:color_fg0"
+format = '[ 🔌 $provider ]($style)'
+
+[model]
+style = "bg:color_orange fg:color_fg0"
+format = '[ 🤖 $model ]($style)'
+truncation_length = 36
+truncation_symbol = "…"
+truncation_direction = "start"
+
+[thinking]
+style = "bg:color_orange fg:color_fg0"
+format = '[ 🧠 $level ]($style)'
+
+[directory]
+style = "fg:color_fg0 bg:color_yellow"
+format = '[ 📁 $path ]($style)'
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[git_branch]
+symbol = "🌿"
+style = "bg:color_aqua"
+format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
+
+[git_status]
+style = "bg:color_aqua"
+format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+
+[tokens]
+style = "bg:color_blue fg:color_fg0"
+format = '[ 🔢 in $input | out $output ]($style)'
+
+[cost]
+format = '[ 💸 $subscription \$$cost ]($style)'
+
+[[cost.display]]
+threshold = 0
+style = "bg:color_bg1 fg:color_fg0"
+hidden = false
+
+[context]
+format = '[ 🪟 ctx $tokens / $window ]($style)'
+
+[[context.display]]
+threshold = 0
+style = "bg:color_bg1 fg:color_fg0"
+hidden = false
+
+[time]
+disabled = false
+style = "bg:color_bg1"
+format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
