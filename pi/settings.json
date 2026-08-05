@@ -13,8 +13,8 @@
     "./extensions/pi-permission-auto-review",
     "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
-    "npm:@narumitw/pi-statusline",
-    "npm:pi-agent-browser-native"
+    "npm:pi-agent-browser-native",
+    "npm:@narumitw/pi-starship"
   ],
   "terminal": {
     "showTerminalProgress": true
