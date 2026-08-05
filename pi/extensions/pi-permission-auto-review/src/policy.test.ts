@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { buildSystemPrompt } from './policy.js'
 
 describe('personal default review policy', () => {
-  it('treats reviewer denials as user confirmation rather than hard denial', () => {
+  it('uses concise reviewer semantics without implementation details', () => {
     const prompt = buildSystemPrompt({
       provider: 'openai-codex',
       model: 'codex-auto-review',
@@ -11,8 +11,9 @@ describe('personal default review policy', () => {
       includeBaselinePolicy: true,
     })
 
-    expect(prompt).toContain('This reviewer never hard-denies an action.')
-    expect(prompt).toContain('model deny to the permission-system authorizer verdict')
+    expect(prompt).toContain('Return deny when the action should not proceed')
+    expect(prompt).not.toContain('permission-system authorizer')
+    expect(prompt).not.toContain('{"kind":"defer"}')
     expect(prompt).not.toContain('medim')
   })
 

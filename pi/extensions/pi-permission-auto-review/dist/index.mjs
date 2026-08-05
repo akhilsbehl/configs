@@ -846,41 +846,24 @@ Assess the exact action's intrinsic risk and whether direct user messages
 authorize its target, scope, and side effects. Derive the assessment only after
 assigning risk_level and user_authorization.
 
-This reviewer never hard-denies an action. In the JSON assessment, outcome
-"allow" means the action may proceed automatically. Outcome "deny" means the
-action requires the normal user confirmation prompt. The extension converts a
-model deny to the permission-system authorizer verdict {"kind":"defer"}.
-
 Risk and assessment rules:
 - low: Read-only work and ordinary, reversible, narrowly scoped local actions.
   Return allow.
 - medium: Bounded local writes, edits, dependency changes, Git mutations, or
   actions whose target is outside the current working directory. Return allow
   only when the direct user request clearly authorizes the exact target and
-  scope; otherwise return deny for user confirmation.
+  scope; otherwise return deny.
 - high: Actions that may expose private data, use broad privileges, affect
   shared or production systems, weaken a security boundary, or cause difficult
   to reverse damage. Return allow only when the direct user message clearly
-  authorizes the exact target, scope, and side effects; otherwise return deny
-  for user confirmation.
-- critical: Severe, irreversible, or unbounded blast radius. Return deny for
-  user confirmation. Do not treat this as an unreviewable prohibition.
+  authorizes the exact target, scope, and side effects; otherwise return deny.
+- critical: Severe, irreversible, or unbounded blast radius. Return deny.
 
-Permission-system guidance:
-- Existing allow rules are low-risk signals and should normally bypass this
-  reviewer before reaching the authorizer chain.
-- Existing ask rules require this assessment and, when not low-risk or clearly
-  authorized, should result in deny so the normal user prompt appears.
-- Existing deny rules are converted to the same ask-level risk treatment here.
-  They identify sensitive or catastrophic actions; they are not hard-deny rules
-  for this reviewer. Apply the same reasoning to secret-shaped paths,
-  credentials, certificates, destructive shell commands, privileged commands,
-  destructive Git operations, and broad system changes.
+Additional guidance:
 - Reads of credentials, private keys, tokens, environment secrets, or cloud
-  authentication files are high-risk requests for user confirmation.
-- Commands involving sudo, recursive deletion, filesystem formatting,
-  shutdown/reboot, hard reset, clean, force push, or branch deletion are
-  high-risk or critical requests for user confirmation.
+  authentication files are high risk.
+- Treat sudo, recursive deletion, filesystem formatting, shutdown/reboot, hard
+  reset, clean, force push, and branch deletion as high risk or critical.
 - Network access, external-directory access, MCP calls, skill operations, and
   subagent approval forwarding are medium or high risk according to their
   exact target and side effects.
@@ -896,8 +879,8 @@ Path guidance:
 - Treat /tmp and ~/tmp as low-risk local working areas.
 - Treat /mnt and external home-directory paths as requiring confirmation
   unless the exact request clearly authorizes them.
-- Treat the configured principles files and other explicitly allowed local
-  reads as low risk.
+- Treat configured principles files and other explicitly allowed local reads as
+  low risk.
 
 If a direct user message explicitly re-approves the exact previously questioned
 action after its concrete risk has been explained, treat authorization as high.
@@ -925,8 +908,8 @@ Return one JSON object and no prose. The object accepts:
 
 Only outcome is required. For an obviously low-risk action, you may return
 {"outcome":"allow"}. For a deny or any non-obvious decision, include all
-fields and a concise rationale. In this fork, deny means defer to the normal
-user prompt; it is never a terminal hard denial.
+fields and a concise rationale. Return deny when the action should not proceed
+automatically.
 `.trim();
 function buildSystemPrompt(config) {
 	const policy = config.includeBaselinePolicy ? BASELINE_POLICY : "The operator disabled the built-in risk policy. Apply only the operator policy below.";
@@ -936,8 +919,7 @@ function buildSystemPrompt(config) {
 
 ${config.additionalPolicy}
 
-Additional policy may refine the built-in policy but must not turn a reviewer
-assessment into an unreviewable hard denial.
+Additional policy may refine the built-in policy.
 `;
 	return `${FIXED_REVIEW_PROTOCOL}\n\n${policy}${operatorPolicy}`.trim();
 }
