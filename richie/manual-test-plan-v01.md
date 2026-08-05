@@ -705,7 +705,7 @@ Use a fresh review and create exactly these three operations:
 4. Click `Finish review` again and confirm.
 5. Confirm the completion dialog reports an exported `manual-test-plan-vNN-commented.md`
    path, where `NN` is the next available suffix.
-6. Confirm the review tab attempts to close and the `.review.json` sidecar is gone.
+6. Confirm the review tab attempts to close and the `.review.json` sidecar in `/tmp/richie-review-jsons` is gone.
 7. Open the exported commented file as plain Markdown and inspect the output.
 
 ### Expected output
@@ -737,12 +737,12 @@ There is no phantom export and no leftover open sidecar.
 ### Steps
 
 1. Start a new review and create a document note and a range comment.
-2. Confirm a `.review.json` sidecar exists beside the source while the review is
+2. Confirm a hashed `.review.json` sidecar exists in `/tmp/richie-review-jsons` while the review is
    active.
 3. Click `Abort review`.
 4. Cancel the destructive confirmation. Confirm the session and feedback remain.
 5. Click `Abort review` again and confirm the destructive action.
-6. Confirm the tab attempts to close, the sidecar is deleted, and no commented file
+6. Confirm the tab attempts to close, the sidecar in `/tmp/richie-review-jsons` is deleted, and no commented file
    is created.
 
 ### Expected result
@@ -766,7 +766,7 @@ Use a fresh review with one saved comment.
    with the source-change error.
 6. Click `Finish review`. Confirm it reports that the source changed and that the
    feedback was retained.
-7. Confirm the `.review.json` sidecar still exists and contains the first comment.
+7. Confirm the `.review.json` sidecar in `/tmp/richie-review-jsons` still exists and contains the first comment.
 8. Restore the exact original source from Git. Reload and either finish after a
    deliberate review, or abort.
 

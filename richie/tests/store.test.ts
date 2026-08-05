@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test from "node:test";
 import { commentedPath, reviewSidecarPath } from "../src/paths.js";
 import { hasOpenOperations, newState, renderCommentedMarkdown, sha256 } from "../src/store.js";
 
-test("derives sidecar and commented paths", () => {
-  assert.equal(reviewSidecarPath("/work/draft-v03.md"), "/work/draft-v03.review.json");
+test("derives hashed temporary sidecar and commented paths", () => {
+  const sourcePath = "/work/draft-v03.md";
+  const sourceHash = "file-content-hash";
+  const sidecarId = createHash("sha256").update(`${sourcePath}\0${sourceHash}`).digest("hex").slice(0, 16);
+  assert.equal(reviewSidecarPath(sourcePath, sourceHash), `/tmp/richie-review-jsons/draft-v03-${sidecarId}.review.json`);
+  assert.notEqual(reviewSidecarPath(sourcePath, sourceHash), reviewSidecarPath(sourcePath, "another-file-content-hash"));
   assert.equal(commentedPath("/work/draft-v03.md"), "/work/draft-v03-commented.md");
   assert.equal(commentedPath("/work/draft-v03.md", 2), "/work/draft-v03-commented-2.md");
 });

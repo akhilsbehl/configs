@@ -4,7 +4,8 @@ import { basename, dirname, join, resolve } from "node:path";
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { loadLocalImage, MediaError } from "./media.js";
-import { assertMarkdownFile, hasOpenOperations, newState, nextCommentedPath, readState, renderCommentedMarkdown, reviewSidecarPath, sha256, writeState } from "./store.js";
+import { assertMarkdownFile, hasOpenOperations, newState, nextCommentedPath, readState, renderCommentedMarkdown, sha256, writeState } from "./store.js";
+import { ensureReviewDirectory, reviewSidecarPath } from "./paths.js";
 import { renderReviewHtml } from "./render.js";
 import type { ReviewOperation, ReviewState, Session } from "./types.js";
 
@@ -17,6 +18,12 @@ const style = `
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 350px 56px}
 #document{max-width:900px;margin:0 auto}
+#file-breadcrumb{margin:0 0 22px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);box-shadow:0 3px 12px rgba(87,82,121,.05);overflow:hidden;color:var(--subtle);font-size:.78rem;line-height:1.3}
+#file-breadcrumb ol{display:flex;align-items:center;min-width:max-content;margin:0;padding:0;list-style:none}
+#file-breadcrumb li{display:flex;align-items:center;min-width:0}
+#file-breadcrumb li:not(:last-child)::after{content:"/";margin:0 7px;color:var(--border)}
+#file-breadcrumb li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#file-breadcrumb li[aria-current=page] span{max-width:32ch;color:var(--text);font-weight:700}
 #toolbar{display:grid;gap:8px;margin:0 0 14px;padding:0 0 14px;border-bottom:1px solid var(--border)}
 #toolbar button{width:100%;min-height:36px}
 .search-box{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:.82rem;color:var(--subtle)}
@@ -143,6 +150,17 @@ li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 @media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;display:block;width:auto;height:auto;overflow:visible;margin:0 auto 20px;max-width:900px}#operations,#outline{overflow:visible}.search-box input{width:min(190px,50vw)}}
 `;
 
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>\"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '\"': "&quot;", "'": "&#39;" })[character] ?? character);
+}
+
+function renderFileBreadcrumb(sourcePath: string): string {
+  const parts = sourcePath.split("/").filter(Boolean);
+  const crumbs = ["/"];
+  if (parts.length) crumbs.push(...parts);
+  return `<nav id="file-breadcrumb" aria-label="File path" title="${escapeHtml(sourcePath)}"><ol>${crumbs.map((part, index) => `<li${index === crumbs.length - 1 ? ' aria-current="page"' : ""}><span>${escapeHtml(part)}</span></li>`).join("")}</ol></nav>`;
+}
+
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {
   response.writeHead(code, { "content-type": contentType, "cache-control": "no-store" });
   response.end(contentType === "application/json" ? JSON.stringify(value) : String(value));
@@ -170,7 +188,7 @@ function parseRange(value: unknown): ReviewOperation["range"] | undefined {
 export function renderReviewPage(session: Pick<Session, "id" | "token" | "sourcePath">, source: string, stale = false): string {
   const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
   const localImageUrl = (path: string): string => `/api/media/${encodeURIComponent(session.id)}?token=${encodeURIComponent(session.token)}&path=${encodeURIComponent(path)}`;
-  return `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderReviewHtml(source, { localImageUrl })}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+  return `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderFileBreadcrumb(session.sourcePath)}${renderReviewHtml(source, { localImageUrl })}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
 }
 
 export class RichieService {
@@ -184,9 +202,11 @@ export class RichieService {
     const existing = this.byPath.get(sourcePath);
     if (existing) { const session = this.sessions.get(existing)!; return { id: session.id, url: this.url(session) }; }
     const source = await assertMarkdownFile(sourcePath);
-    const sidecarPath = reviewSidecarPath(sourcePath);
+    const sourceHash = sha256(source);
+    await ensureReviewDirectory();
+    const sidecarPath = reviewSidecarPath(sourcePath, sourceHash);
     const state = (await readState(sidecarPath)) ?? newState(sourcePath, source);
-    if (state.sourceSha256 !== sha256(source)) throw new Error("The existing review sidecar targets a different source version. Finish or remove it before starting a new review.");
+    if (state.sourceSha256 !== sourceHash) throw new Error("The existing review sidecar targets a different source version. Finish or remove it before starting a new review.");
     const session: Session = { id: randomUUID(), token: randomUUID(), sourcePath, sidecarPath, state };
     this.sessions.set(session.id, session); this.byPath.set(sourcePath, session.id);
     await writeState(sidecarPath, state);

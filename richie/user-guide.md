@@ -31,7 +31,7 @@ If installed, use `richie review path/to/draft-vNN.md`. The service listens only
 5. Use the left sidebar to navigate headings. The user guide and search controls stay fixed while a long outline scrolls. The right sidebar keeps its 3 review actions fixed while the feedback inventory scrolls.
 6. Use the search control at the top of the left sidebar. `Previous match` and `Next match`, or `Shift+Enter` and `Enter`, move between results. `Escape` clears the search.
 
-Richie saves every operation immediately to `draft-vNN.review.json`. Each range operation retains the exact source quote and source range. Range highlighting applies only to the selection, not its containing paragraph or line.
+Richie saves every operation immediately to a hashed `.review.json` sidecar in `/tmp/richie-review-jsons`, keeping review state out of the source project. Each range operation retains the exact source quote and source range. Range highlighting applies only to the selection, not its containing paragraph or line.
 
 Pending replacements show the original content struck through and the proposed replacement inline beside it. With a valid document selection active, Richie suppresses the browser context menu so `c`, `r`, and `d` remain available.
 

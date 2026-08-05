@@ -6,6 +6,19 @@ import { join } from "node:path";
 import test from "node:test";
 import { RichieService, renderReviewPage } from "../src/service.js";
 
+test("renders a compact accessible breadcrumb for the reviewed file", () => {
+  const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/client notes/draft-v00.md" }, "# Draft\n");
+  assert.match(html, /<nav id="file-breadcrumb" aria-label="File path" title="\/work\/client notes\/draft-v00\.md"><ol><li><span>\/<\/span>/);
+  assert.match(html, /<li><span>work<\/span><\/li><li><span>client notes<\/span><\/li><li aria-current="page"><span>draft-v00\.md<\/span><\/li>/);
+  assert.match(html, /#file-breadcrumb\{margin:0 0 22px;padding:7px 10px/);
+});
+
+test("escapes reviewed file paths in breadcrumb markup", () => {
+  const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/a&b/<draft>.md" }, "# Draft\n");
+  assert.match(html, /title="\/work\/a&amp;b\/&lt;draft&gt;\.md"/);
+  assert.match(html, /<span>&lt;draft&gt;\.md<\/span>/);
+});
+
 test("renders fixed sidebar controls with independently scrolling content", () => {
   const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/draft-v00.md" }, "# Draft\n");
   assert.match(html, /body\{[^}]*padding:24px 350px 56px/);

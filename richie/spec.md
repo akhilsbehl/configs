@@ -179,11 +179,11 @@ Source position metadata belongs only in review HTML. It must not appear in the 
 
 ## 9. Feedback sidecar
 
-The feedback sidecar sits beside the source draft:
+The feedback sidecar is stored outside the source project in `/tmp/richie-review-jsons`. Its filename includes a hash derived from the source path and file content:
 
 ```text
 strategy-v03.md
-strategy-v03.review.json
+/tmp/richie-review-jsons/strategy-v03-<source-hash>.review.json
 strategy-v03.review.html     # generated, ignored by Git
 ```
 
