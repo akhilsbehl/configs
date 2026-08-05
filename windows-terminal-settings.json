@@ -3,32 +3,32 @@
   "$schema": "https://aka.ms/terminal-profiles-schema",
   "actions": [
     {
-      "command": "resetFontSize",
-      "id": "User.resetFontSize",
-      "keys": "ctrl+0"
+      "command": "paste",
+      "id": "User.paste"
     },
     {
       "command": {
         "action": "adjustFontSize",
         "delta": -1
       },
-      "id": "User.adjustFontSize.E2698FAA",
-      "keys": "ctrl+minus"
+      "id": "User.adjustFontSize.E2698FAA"
+    },
+    {
+      "command": "resetFontSize",
+      "id": "User.resetFontSize"
+    },
+    {
+      "command": {
+        "action": "openSettings"
+      },
+      "id": "User.openSettings.D3F0B923"
     },
     {
       "command": {
         "action": "adjustFontSize",
         "delta": 1
       },
-      "id": "User.adjustFontSize.E04D5229",
-      "keys": "ctrl+plus"
-    },
-    {
-      "command": {
-        "action": "openSettings"
-      },
-      "id": "User.openSettings.D3F0B923",
-      "keys": "ctrl+alt+s"
+      "id": "User.adjustFontSize.E04D5229"
     },
     {
       "command": {
@@ -45,18 +45,11 @@
         "action": "copy",
         "singleLine": false
       },
-      "id": "User.copy.644BA8F2",
-      "keys": "ctrl+shift+c"
-    },
-    {
-      "command": "paste",
-      "id": "User.paste",
-      "keys": "ctrl+shift+v"
+      "id": "User.copy.644BA8F2"
     },
     {
       "command": "toggleFullscreen",
-      "id": "User.toggleFullscreen",
-      "keys": "ctrl+alt+f"
+      "id": "User.toggleFullscreen"
     }
   ],
   "alwaysOnTop": false,
@@ -65,9 +58,37 @@
   "copyOnSelect": true,
   "defaultProfile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
   "focusFollowMouse": true,
-  "largePasteWarning": false,
+  "keybindings": [
+    {
+      "id": "User.copy.644BA8F2",
+      "keys": "ctrl+shift+c"
+    },
+    {
+      "id": "User.resetFontSize",
+      "keys": "ctrl+0"
+    },
+    {
+      "id": "User.adjustFontSize.E04D5229",
+      "keys": "ctrl+plus"
+    },
+    {
+      "id": "User.adjustFontSize.E2698FAA",
+      "keys": "ctrl+minus"
+    },
+    {
+      "id": "User.openSettings.D3F0B923",
+      "keys": "ctrl+alt+s"
+    },
+    {
+      "id": "User.toggleFullscreen",
+      "keys": "ctrl+alt+f"
+    },
+    {
+      "id": "User.paste",
+      "keys": "ctrl+shift+v"
+    }
+  ],
   "launchMode": "fullscreen",
-  "multiLinePasteWarning": false,
   "newTabMenu": [
     {
       "type": "remainingProfiles"
@@ -75,19 +96,23 @@
   ],
   "profiles": {
     "defaults": {
+      "adjustIndistinguishableColors": "always",
+      "antialiasingMode": "cleartype",
       "bellStyle": "window",
       "closeOnExit": "always",
       "colorScheme": "neobones_light",
       "cursorColor": "#FFA500",
-      "cursorShape": "bar",
+      "cursorShape": "filledBox",
       "font": {
         "face": "CaskaydiaCove Nerd Font Mono",
         "size": 8
       },
       "hidden": false,
       "historySize": 100000,
-      "intenseTextStyle": "all",
+      "intenseTextStyle": "bold",
       "padding": "2",
+      "pathTranslationStyle": "wsl",
+      "rightClickContextMenu": true,
       "scrollbarState": "hidden",
       "snapOnInput": true,
       "suppressApplicationTitle": true,
@@ -105,7 +130,9 @@
           "size": 8
         },
         "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
-        "name": "archWizard"
+        "hidden": false,
+        "name": "archWizard",
+        "source": "Microsoft.WSL"
       },
       {
         "colorScheme": "CatppuccinMocha",
@@ -6396,7 +6423,7 @@
       "name": "neobones_light",
       "purple": "#88507D",
       "red": "#A8334C",
-      "selectionBackground": "#ADE48C",
+      "selectionBackground": "#7FA85A",
       "white": "#202E18",
       "yellow": "#944927"
     },
@@ -6955,7 +6982,6 @@
   ],
   "showTabsInTitlebar": true,
   "showTerminalTitleInTitlebar": false,
-  "startOnUserLogin": true,
   "tabSwitcherMode": "disabled",
   "tabWidthMode": "equal",
   "theme": "system",
@@ -7002,5 +7028,8 @@
     }
   ],
   "useAcrylicInTabRow": true,
-  "windowingBehavior": "useExisting"
+  "warning.largePaste": false,
+  "warning.multiLinePaste": false,
+  "windowingBehavior": "useExisting",
+  "startOnUserLogin": true
 }
