@@ -13,6 +13,7 @@ import { parseReviewAssessment } from './verdict.js'
 const DEFAULT_MAX_ATTEMPTS = 3
 const DEFAULT_RETRY_DELAYS_MS = [250, 1_000]
 const MAX_OUTPUT_TOKENS = 1_000
+const MAX_DISPLAY_RATIONALE_LENGTH = 600
 const DECISION_EVENT = 'auto_review.decision'
 const FAILURE_EVENT = 'auto_review.failure'
 const CIRCUIT_OPEN_EVENT = 'auto_review.circuit_open'
@@ -202,6 +203,15 @@ function elapsedMilliseconds(now: () => number, startedAt: number): number {
   }
 }
 
+function annotatePermissionPrompt(
+  details: PromptPermissionDetails,
+  assessment: ReviewAssessment,
+): void {
+  const rationale = assessment.rationale.slice(0, MAX_DISPLAY_RATIONALE_LENGTH)
+  const suffix = assessment.rationale.length > MAX_DISPLAY_RATIONALE_LENGTH ? '…' : ''
+  details.message = `${details.message}\n\n[Automatic review — advisory]\nRisk: ${assessment.riskLevel}\nUser authorization: ${assessment.userAuthorization}\nRationale: ${rationale}${suffix}`
+}
+
 async function runReview(
   runtime: ReviewerRuntime,
   details: PromptPermissionDetails,
@@ -340,8 +350,9 @@ export function createPermissionReviewer(
         return { kind: 'allow' }
       }
 
-      // A negative model assessment is advisory in this personal fork. Defer
-      // to the normal permission prompt rather than hard-denying the action.
+      // Surface the model's assessment in the existing permission prompt, then
+      // defer so the user still makes the terminal decision.
+      annotatePermissionPrompt(details, assessment)
       runtime.circuitBreaker.recordNonDenial()
       return { kind: 'defer' }
     } catch {

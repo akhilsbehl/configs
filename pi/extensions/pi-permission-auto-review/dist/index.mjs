@@ -1205,6 +1205,7 @@ function parseReviewAssessment(text) {
 const DEFAULT_MAX_ATTEMPTS = 3;
 const DEFAULT_RETRY_DELAYS_MS = [250, 1e3];
 const MAX_OUTPUT_TOKENS = 1e3;
+const MAX_DISPLAY_RATIONALE_LENGTH = 600;
 const DECISION_EVENT = "auto_review.decision";
 const FAILURE_EVENT = "auto_review.failure";
 const CIRCUIT_OPEN_EVENT = "auto_review.circuit_open";
@@ -1291,6 +1292,11 @@ function elapsedMilliseconds(now, startedAt) {
 		return 0;
 	}
 }
+function annotatePermissionPrompt(details, assessment) {
+	const rationale = assessment.rationale.slice(0, MAX_DISPLAY_RATIONALE_LENGTH);
+	const suffix = assessment.rationale.length > MAX_DISPLAY_RATIONALE_LENGTH ? "…" : "";
+	details.message = `${details.message}\n\n[Automatic review — advisory]\nRisk: ${assessment.riskLevel}\nUser authorization: ${assessment.userAuthorization}\nRationale: ${rationale}${suffix}`;
+}
 async function runReview(runtime, details, dependencies) {
 	const startedAt = dependencies.now();
 	const timeoutController = new AbortController();
@@ -1376,6 +1382,7 @@ function createPermissionReviewer(runtime, reviewerDependencies = {}) {
 				runtime.circuitBreaker.recordNonDenial();
 				return { kind: "allow" };
 			}
+			annotatePermissionPrompt(details, assessment);
 			runtime.circuitBreaker.recordNonDenial();
 			return { kind: "defer" };
 		} catch {
