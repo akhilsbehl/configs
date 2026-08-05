@@ -1,4 +1,4 @@
 {
      "$schema": "https://raw.githubusercontent.com/mzwing/pi-packages/main/packages/pi-permission-auto-review/schemas/config.schema.json",
-     "includeBaselinePolicy": false
+     "includeBaselinePolicy": true
 }
