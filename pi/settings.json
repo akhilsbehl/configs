@@ -7,8 +7,7 @@
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": false,
   "packages": [
-    "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:pi-patty-bg-tasks",
+    "./extensions/damare",
     "npm:@gotgenes/pi-permission-system",
     "./extensions/pi-permission-auto-review",
     "npm:@narumitw/pi-btw",
