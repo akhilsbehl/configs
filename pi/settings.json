@@ -8,6 +8,20 @@
   "hideThinkingBlock": false,
   "packages": [
     "./extensions/damare",
+    {
+      "source": "npm:@juicesharp/rpiv-ask-user-question",
+      "extensions": [],
+      "skills": [],
+      "prompts": [],
+      "themes": []
+    },
+    {
+      "source": "npm:pi-patty-bg-tasks",
+      "extensions": [],
+      "skills": [],
+      "prompts": [],
+      "themes": []
+    },
     "npm:@gotgenes/pi-permission-system",
     "./extensions/pi-permission-auto-review",
     "npm:@narumitw/pi-btw",
