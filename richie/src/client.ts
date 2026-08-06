@@ -437,6 +437,13 @@ document.querySelectorAll("td[data-md-block]").forEach((element) => targetMenu("
 document.querySelectorAll("[data-md-media]").forEach((element) => targetMenu("media", element, mediaActions));
 document.querySelectorAll(".math-target").forEach((element) => targetMenu("range", element, selectionActions));
 document.querySelectorAll<HTMLElement>(".math-inline .math-rendered").forEach((element) => element.addEventListener("pointerdown", () => element.closest<HTMLElement>(".math-inline")?.classList.add("math-selecting")));
+document.querySelector<HTMLButtonElement>("[data-action=reload-source]")?.addEventListener("click", async () => {
+  try {
+    if (!await modal({ title: "Reload draft", message: "Reloading the new draft will discard all pending review edits. This cannot be undone.", confirmLabel: "Reload draft", destructive: true })) return;
+    await post("reload", {});
+    window.location.reload();
+  } catch (error) { await modal({ title: "Richie could not reload the draft", message: (error as Error).message, confirmLabel: "OK" }); }
+});
 document.querySelector("#toolbar")!.addEventListener("click", async (event) => {
   const action = (event.target as HTMLElement).dataset.action; if (!action) return;
   try {

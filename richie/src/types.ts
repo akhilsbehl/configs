@@ -34,6 +34,7 @@ export type Session = {
   id: string;
   token: string;
   sourcePath: string;
+  source: string;
   sidecarPath: string;
   state: ReviewState;
 };

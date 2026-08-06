@@ -27,5 +27,8 @@ test("bundles the targeted interaction regressions", async () => {
   assert.match(client, /copy-block/);
   assert.match(client, /clipboard/);
   assert.match(client, /querySelector.*copy-block/);
+  assert.match(client, /data-action=reload-source/);
+  assert.match(client, /reload-source/);
+  assert.match(client, /reload",\s*\{\}/);
   assert.match(client, /insertAdjacentHTML/);
 });

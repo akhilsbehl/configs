@@ -59,6 +59,7 @@ test("renders the stale-source warning only when requested", () => {
   const session = { id: "session-1", token: "token-1", sourcePath: "/work/draft-v00.md" };
   assert.doesNotMatch(renderReviewPage(session, "# Draft\n"), /id="stale-banner"/);
   assert.match(renderReviewPage(session, "# Draft\n", true), /id="stale-banner"/);
+  assert.match(renderReviewPage(session, "# Draft\n", true), /data-action="reload-source">Reload new draft/);
 });
 
 test("renders authenticated local image URLs and media presentation styles", () => {
@@ -137,6 +138,16 @@ test("serves authenticated raster images from absolute paths outside the documen
       comment: "Invalid.",
     }));
     assert.equal(invalidScope.status, 400);
+    await writeFile(sourcePath, `${imageSyntax}\n\nUpdated draft.\n`);
+    const stalePage = await call(`/s/${session.id}?token=${encodeURIComponent(token)}`);
+    assert.match(stalePage.body.toString("utf8"), /The Markdown source changed/);
+    assert.doesNotMatch(stalePage.body.toString("utf8"), /Updated draft\./);
+    const reloaded = await call(`/api/reload/${session.id}?token=${encodeURIComponent(token)}`, "POST", "{}");
+    assert.equal(reloaded.status, 200);
+    const state = await call(`/api/state/${session.id}?token=${encodeURIComponent(token)}`);
+    assert.equal(state.status, 200);
+    assert.deepEqual(JSON.parse(state.body.toString("utf8")).operations, []);
+    assert.match((await call(`/s/${session.id}?token=${encodeURIComponent(token)}`)).body.toString("utf8"), /Updated draft\./);
   } finally {
     await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     await rm(directory, { recursive: true, force: true });

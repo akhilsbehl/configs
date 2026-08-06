@@ -145,7 +145,7 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 li:has(>input[type=checkbox])>p{display:inline}
 li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 .richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
-#stale-banner{position:sticky;top:0;z-index:3;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}
+#stale-banner{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}#stale-banner button{flex:none;background:#fffaf3;border-color:#fffaf3;color:var(--love);font-size:.82rem}#stale-banner button:hover{background:#eadfd2;border-color:#eadfd2}
 .review-note{color:var(--love);font-size:.9em}
 @media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;display:block;width:auto;height:auto;overflow:visible;margin:0 auto 20px;max-width:900px}#operations,#outline{overflow:visible}.search-box input{width:min(190px,50vw)}}
 `;
@@ -186,7 +186,7 @@ function parseRange(value: unknown): ReviewOperation["range"] | undefined {
 }
 
 export function renderReviewPage(session: Pick<Session, "id" | "token" | "sourcePath">, source: string, stale = false): string {
-  const banner = stale ? `<div id="stale-banner">The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</div>` : "";
+  const banner = stale ? `<div id="stale-banner"><span>The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</span><button type="button" data-action="reload-source">Reload new draft</button></div>` : "";
   const localImageUrl = (path: string): string => `/api/media/${encodeURIComponent(session.id)}?token=${encodeURIComponent(session.token)}&path=${encodeURIComponent(path)}`;
   return `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderFileBreadcrumb(session.sourcePath)}${renderReviewHtml(source, { localImageUrl })}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
 }
@@ -207,7 +207,7 @@ export class RichieService {
     const sidecarPath = reviewSidecarPath(sourcePath, sourceHash);
     const state = (await readState(sidecarPath)) ?? newState(sourcePath, source);
     if (state.sourceSha256 !== sourceHash) throw new Error("The existing review sidecar targets a different source version. Finish or remove it before starting a new review.");
-    const session: Session = { id: randomUUID(), token: randomUUID(), sourcePath, sidecarPath, state };
+    const session: Session = { id: randomUUID(), token: randomUUID(), sourcePath, source, sidecarPath, state };
     this.sessions.set(session.id, session); this.byPath.set(sourcePath, session.id);
     await writeState(sidecarPath, state);
     return { id: session.id, url: this.url(session) };
@@ -219,7 +219,7 @@ export class RichieService {
     if (host !== `127.0.0.1:${port}` && host !== `localhost:${port}`) return send(response, 421, { error: "Unexpected host" });
     const url = new URL(request.url ?? "/", `http://${host}`); const match = url.pathname.match(/^\/s\/([^/]+)$/);
     const media = url.pathname.match(/^\/api\/media\/([^/]+)$/);
-    const api = url.pathname.match(/^\/api\/(state|operations|finish|abort)\/([^/]+)(?:\/([^/]+))?$/);
+    const api = url.pathname.match(/^\/api\/(state|operations|reload|finish|abort)\/([^/]+)(?:\/([^/]+))?$/);
     if (url.pathname.startsWith("/assets/")) {
       const asset = url.pathname.slice("/assets/".length);
       if (!/^[A-Za-z0-9._-]+\.js$/.test(asset)) return send(response, 404, { error: "Asset not found" });
@@ -231,9 +231,9 @@ export class RichieService {
     }
     if (match && request.method === "GET") {
       const session = this.session(match[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
-      const source = await readFile(session.sourcePath, "utf8");
-      const stale = sha256(source) !== session.state.sourceSha256;
-      return send(response, 200, renderReviewPage(session, source, stale), "text/html");
+      const currentSource = await readFile(session.sourcePath, "utf8");
+      const stale = sha256(currentSource) !== session.state.sourceSha256;
+      return send(response, 200, renderReviewPage(session, session.source, stale), "text/html");
     }
     if (media) {
       const session = this.session(media[1], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
@@ -249,6 +249,16 @@ export class RichieService {
     if (!api) return send(response, 404, { error: "Not found" });
     const session = this.session(api[2], url.searchParams.get("token")); if (!session) return send(response, 404, { error: "Session not found" });
     if (api[1] === "state" && request.method === "GET") return send(response, 200, session.state);
+    if (api[1] === "reload" && request.method === "POST") {
+      const source = await readFile(session.sourcePath, "utf8");
+      const sidecarPath = reviewSidecarPath(session.sourcePath, sha256(source));
+      if (sidecarPath !== session.sidecarPath) await unlink(session.sidecarPath);
+      session.source = source;
+      session.state = newState(session.sourcePath, source);
+      session.sidecarPath = sidecarPath;
+      await writeState(sidecarPath, session.state);
+      return send(response, 200, { reloaded: true });
+    }
     if (api[1] === "operations" && request.method === "DELETE" && api[3]) {
       const operation = session.state.operations.find((candidate) => candidate.id === api[3]);
       if (!operation) return send(response, 404, { error: "Review operation not found" });
