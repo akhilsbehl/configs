@@ -104,9 +104,10 @@ Use Zellij tile APIs directly:
 - create/switch: `switch_session(Some(name))`;
 - kill: `kill_sessions(&[name])`;
 - permanent deletion: `delete_dead_session(name)`;
+- immediate current-session persistence: `save_session()`;
 - state: `get_session_list()` and `SessionUpdate`.
 
-The plugin already requests `ReadApplicationState` and `ChangeApplicationState`; no shell command, CLI process, or additional permission is required. All host calls must be centralized behind testable session-operation helpers rather than spread through key handling.
+The plugin already requests `ReadApplicationState` and `ChangeApplicationState`; no shell command, CLI process, or additional permission is required. On permission grant, the plugin immediately saves the current session. It saves again immediately before killing or deleting the current session. Zellij exposes no plugin API to save an arbitrary remote session by name, so remote-session resurrection remains dependent on that session having already been serialized. All host calls must be centralized behind testable session-operation helpers rather than spread through key handling.
 
 ## State model
 

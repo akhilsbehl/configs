@@ -365,6 +365,12 @@ impl State {
         };
 
         if session.live {
+            if session.is_current {
+                if let Err(error) = save_session() {
+                    self.status = Some(format!("Could not save session {target}: {error}"));
+                    return;
+                }
+            }
             let safety_destination = if session.is_current {
                 let Some(destination) = self.safety_destination(&target) else {
                     self.status = Some("Cannot delete the only live session".to_string());
@@ -455,6 +461,13 @@ impl State {
             return;
         }
 
+        if session.is_current {
+            if let Err(error) = save_session() {
+                self.operation = None;
+                self.status = Some(format!("Could not save session {target}: {error}"));
+                return;
+            }
+        }
         let safety_destination = if session.is_current {
             let Some(destination) = self.safety_destination(&target) else {
                 self.operation = None;
@@ -818,6 +831,9 @@ impl ZellijPlugin for State {
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
                 self.has_permission = true;
                 self.refresh_snapshot();
+                if let Err(error) = save_session() {
+                    self.status = Some(format!("Could not save session: {error}"));
+                }
                 true
             }
             Event::Key(key) => self.handle_key(key),
