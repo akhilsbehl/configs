@@ -22,6 +22,11 @@ enum Mode {
     SessionManager,
 }
 
+#[derive(Clone)]
+enum Prompt {
+    CreateSession(String),
+}
+
 #[derive(Default)]
 struct State {
     snapshot: Snapshot,
@@ -34,6 +39,7 @@ struct State {
     query: String,
     pane_query: String,
     session_query: Option<String>,
+    prompt: Option<Prompt>,
     filtered_matches: Vec<SearchMatch>,
     selected: Option<TargetId>,
     status: Option<String>,
@@ -243,6 +249,40 @@ impl State {
         self.status = None;
     }
 
+    fn start_create_session(&mut self) {
+        self.prompt = Some(Prompt::CreateSession(String::new()));
+        self.status = None;
+    }
+
+    fn submit_create_session(&mut self, input: String) {
+        let name = input.trim().to_string();
+        if name.is_empty() {
+            self.status = Some("Session name cannot be empty".to_string());
+            self.prompt = Some(Prompt::CreateSession(input));
+            return;
+        }
+        if name.contains('\n') || name.contains('\r') {
+            self.status = Some("Session name cannot contain a newline".to_string());
+            self.prompt = Some(Prompt::CreateSession(input));
+            return;
+        }
+        if self
+            .snapshot
+            .sessions
+            .iter()
+            .any(|session| session.name == name)
+        {
+            self.status = Some(format!("Session already exists: {name}"));
+            self.prompt = Some(Prompt::CreateSession(input));
+            return;
+        }
+
+        switch_session(Some(&name));
+        self.prompt = None;
+        self.status = None;
+        self.dismiss();
+    }
+
     fn activate_selected(&mut self) {
         let Some(selected) = self.selected.clone() else {
             self.status = Some("No result selected".to_string());
@@ -262,11 +302,49 @@ impl State {
     }
 
     fn handle_key(&mut self, key: KeyWithModifier) -> bool {
+        if let Some(prompt) = self.prompt.clone() {
+            match (prompt, key.bare_key) {
+                (Prompt::CreateSession(_), BareKey::Esc) => {
+                    self.prompt = None;
+                    self.status = None;
+                }
+                (Prompt::CreateSession(input), BareKey::Enter) => {
+                    self.submit_create_session(input);
+                }
+                (Prompt::CreateSession(mut input), BareKey::Backspace) => {
+                    input.pop();
+                    self.prompt = Some(Prompt::CreateSession(input));
+                    self.status = None;
+                }
+                (Prompt::CreateSession(mut input), BareKey::Char(character))
+                    if !character.is_control()
+                        && !key.key_modifiers.contains(&KeyModifier::Ctrl) =>
+                {
+                    input.push(character);
+                    self.prompt = Some(Prompt::CreateSession(input));
+                    self.status = None;
+                }
+                (prompt, _) => {
+                    self.prompt = Some(prompt);
+                }
+            }
+            return true;
+        }
+
         let modifiers = &key.key_modifiers;
         let has_modifier = |modifier| modifiers.contains(&modifier);
         match key.bare_key {
             BareKey::Char('s') if has_modifier(KeyModifier::Ctrl) => {
                 self.toggle_mode();
+                true
+            }
+            BareKey::Char('n')
+                if self.mode == Mode::SessionManager
+                    && !has_modifier(KeyModifier::Ctrl)
+                    && !has_modifier(KeyModifier::Alt)
+                    && !has_modifier(KeyModifier::Super) =>
+            {
+                self.start_create_session();
                 true
             }
             BareKey::Tab => {
@@ -314,6 +392,7 @@ impl State {
         // Refresh on every invocation so a stale entry cannot be activated.
         self.refresh_snapshot();
         self.mode = Mode::PaneSwitcher;
+        self.prompt = None;
         self.query.clear();
         self.pane_query.clear();
         self.session_query = None;
@@ -482,6 +561,9 @@ impl ZellijPlugin for State {
         };
         println!("\x1b[1;36m╭─ {title}\x1b[0m  \x1b[2m{count} results\x1b[0m");
         println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
+        if let Some(Prompt::CreateSession(input)) = &self.prompt {
+            println!("\x1b[1;36m│\x1b[0m  \x1b[2mNew session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+        }
         println!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
 
         if matches.is_empty() {

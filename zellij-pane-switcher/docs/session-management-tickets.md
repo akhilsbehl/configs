@@ -16,6 +16,8 @@ Make session rows selectable in session manager mode. `Enter` switches to the se
 
 ## SM-03 — Create-session prompt
 
+**Status: complete.**
+
 Add the named-session prompt, validation, `switch_session(Some(name))`, status/error handling, and refresh behavior.
 
 **Depends on:** SM-01, SM-02.
