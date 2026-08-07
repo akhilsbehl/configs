@@ -840,7 +840,9 @@ impl ZellijPlugin for State {
         let mut previous_session = String::new();
         let mut previous_tab = None;
         for matched in matches {
-            if previous_session != matched.session_name() {
+            if !matches!(matched, SearchMatch::Session { .. })
+                && previous_session != matched.session_name()
+            {
                 if let Some(session) = self
                     .snapshot
                     .sessions
@@ -876,6 +878,7 @@ impl ZellijPlugin for State {
                 SearchMatch::Session {
                     session_name,
                     live,
+                    connected_clients,
                     age,
                     ..
                 } => {
@@ -887,13 +890,16 @@ impl ZellijPlugin for State {
                     } else {
                         " "
                     };
-                    let state = if *live { "live" } else { "resurrectable" };
-                    let age = if *live {
-                        String::new()
+                    let state = if *live {
+                        format!(
+                            "live, {} client{}",
+                            connected_clients,
+                            if *connected_clients == 1 { "" } else { "s" }
+                        )
                     } else {
-                        format!(", exited {} ago", format_age(*age))
+                        format!("resurrectable, exited {} ago", format_age(*age))
                     };
-                    let row = format!("  {marker}  {session_name}  {state}{age}");
+                    let row = format!("  {marker}  {session_name}  {state}");
                     if self.selected.as_ref() == Some(&target) {
                         println!("\x1b[1;7m{row}\x1b[0m");
                     } else {

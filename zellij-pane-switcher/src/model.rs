@@ -116,6 +116,7 @@ pub enum SearchMatch {
     Session {
         session_name: String,
         live: bool,
+        connected_clients: usize,
         age: Duration,
         score: usize,
     },
@@ -157,6 +158,7 @@ pub fn filter_sessions(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
             contains_case_insensitive(&session.name, &query).map(|score| SearchMatch::Session {
                 session_name: session.name.clone(),
                 live: session.live,
+                connected_clients: session.connected_clients,
                 age: session.resurrectable_age.unwrap_or_default(),
                 score,
             })
