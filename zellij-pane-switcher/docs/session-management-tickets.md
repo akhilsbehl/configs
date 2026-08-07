@@ -32,6 +32,8 @@ Add confirmation, current-session safety destination selection, `kill_sessions`,
 
 ## SM-05 — Delete-session workflow
 
+**Status: complete.**
+
 Add confirmation and permanent deletion for resurrectable sessions, plus live-session kill → `SessionUpdate` absence → `delete_dead_session` sequencing.
 
 **Depends on:** SM-04.

@@ -30,11 +30,13 @@ enum Prompt {
 #[derive(Clone)]
 enum Confirmation {
     Kill(String),
+    Delete(String),
 }
 
 #[derive(Clone)]
 enum Operation {
     Killing,
+    WaitingForDeletion(String),
 }
 
 #[derive(Default)]
@@ -282,6 +284,29 @@ impl State {
             .next()
     }
 
+    fn start_delete(&mut self) {
+        let Some(TargetId::Session { session_name }) = self.selected.clone() else {
+            self.status = Some("Select a session to delete".to_string());
+            return;
+        };
+        self.refresh_snapshot();
+        let Some(session) = self
+            .snapshot
+            .sessions
+            .iter()
+            .find(|session| session.name == session_name)
+        else {
+            self.status = Some(format!("Session no longer exists: {session_name}"));
+            return;
+        };
+        if session.live && session.is_current && self.safety_destination(&session_name).is_none() {
+            self.status = Some("Cannot delete the only live session".to_string());
+            return;
+        }
+        self.confirmation = Some(Confirmation::Delete(session_name));
+        self.status = None;
+    }
+
     fn start_kill(&mut self) {
         let Some(TargetId::Session { session_name }) = self.selected.clone() else {
             self.status = Some("Select a live session to kill".to_string());
@@ -307,6 +332,77 @@ impl State {
         }
         self.confirmation = Some(Confirmation::Kill(session_name));
         self.status = None;
+    }
+
+    fn execute_delete(&mut self, target: String) {
+        self.confirmation = None;
+        self.refresh_snapshot();
+        let Some(session) = self
+            .snapshot
+            .sessions
+            .iter()
+            .find(|session| session.name == target)
+        else {
+            self.status = Some(format!("Session no longer exists: {target}"));
+            return;
+        };
+
+        if session.live {
+            let safety_destination = if session.is_current {
+                let Some(destination) = self.safety_destination(&target) else {
+                    self.status = Some("Cannot delete the only live session".to_string());
+                    return;
+                };
+                Some(destination)
+            } else {
+                None
+            };
+            if let Some(destination) = safety_destination {
+                switch_session_with_focus(&destination, None, None);
+            }
+            if let Err(error) = kill_sessions(&[target.as_str()]) {
+                self.status = Some(format!("Could not kill session {target}: {error}"));
+                return;
+            }
+            self.operation = Some(Operation::WaitingForDeletion(target));
+            return;
+        }
+
+        match delete_dead_session(&target) {
+            Ok(()) => {
+                self.return_to_pane_switcher();
+                self.status = None;
+            }
+            Err(error) => {
+                self.status = Some(format!("Could not delete session {target}: {error}"));
+            }
+        }
+    }
+
+    fn complete_waiting_delete(&mut self) -> bool {
+        let Some(Operation::WaitingForDeletion(target)) = self.operation.clone() else {
+            return false;
+        };
+        if self
+            .snapshot
+            .sessions
+            .iter()
+            .any(|session| session.name == target && session.live)
+        {
+            return false;
+        }
+        match delete_dead_session(&target) {
+            Ok(()) => {
+                self.operation = None;
+                self.return_to_pane_switcher();
+                self.status = None;
+            }
+            Err(error) => {
+                self.operation = None;
+                self.status = Some(format!("Could not delete session {target}: {error}"));
+            }
+        }
+        true
     }
 
     fn execute_kill(&mut self, target: String) {
@@ -403,6 +499,7 @@ impl State {
             }
             BareKey::Enter => match confirmation {
                 Confirmation::Kill(target) => self.execute_kill(target),
+                Confirmation::Delete(target) => self.execute_delete(target),
             },
             _ => {}
         }
@@ -468,6 +565,15 @@ impl State {
         match key.bare_key {
             BareKey::Char('s') if has_modifier(KeyModifier::Ctrl) => {
                 self.toggle_mode();
+                true
+            }
+            BareKey::Char('d')
+                if self.mode == Mode::SessionManager
+                    && !has_modifier(KeyModifier::Ctrl)
+                    && !has_modifier(KeyModifier::Alt)
+                    && !has_modifier(KeyModifier::Super) =>
+            {
+                self.start_delete();
                 true
             }
             BareKey::Char('k')
@@ -670,7 +776,8 @@ impl ZellijPlugin for State {
                 changed
             }
             Event::SessionUpdate(live_sessions, resurrectable) if self.has_permission => {
-                self.apply_session_snapshot(live_sessions, resurrectable)
+                let changed = self.apply_session_snapshot(live_sessions, resurrectable);
+                self.complete_waiting_delete() || changed
             }
             Event::SessionUpdate(_, _) => false,
             Event::Visible(visible) => visible && !self.snapshot_loaded && self.refresh_snapshot(),
@@ -713,6 +820,11 @@ impl ZellijPlugin for State {
                     "Kill",
                     target,
                     "Session will be terminated but may be resurrected.",
+                ),
+                Confirmation::Delete(target) => (
+                    "Delete",
+                    target,
+                    "Resurrection data will be permanently removed.",
                 ),
             };
             println!(
