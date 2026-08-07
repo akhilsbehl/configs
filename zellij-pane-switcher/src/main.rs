@@ -43,6 +43,7 @@ enum Confirmation {
 enum Operation {
     Killing,
     WaitingForDeletion(String),
+    Renaming { old_name: String, new_name: String },
 }
 
 #[derive(Default)]
@@ -352,6 +353,10 @@ impl State {
 
     fn execute_rename_session(&mut self, session_name: String, name: String) {
         self.confirmation = None;
+        self.operation = Some(Operation::Renaming {
+            old_name: session_name.clone(),
+            new_name: name.clone(),
+        });
         rename_session(&name);
         if let Some(session) = self
             .snapshot
@@ -368,6 +373,41 @@ impl State {
         self.rebuild_matches();
         self.normalize_selection();
         self.status = None;
+        set_timeout(0.25);
+    }
+
+    fn poll_rename(&mut self) -> bool {
+        let Some(Operation::Renaming { old_name, new_name }) = self.operation.clone() else {
+            return false;
+        };
+        self.refresh_snapshot();
+        if self
+            .snapshot
+            .sessions
+            .iter()
+            .any(|session| session.live && session.is_current && session.name == new_name)
+        {
+            self.operation = None;
+            return true;
+        }
+        if let Some(session) = self
+            .snapshot
+            .sessions
+            .iter_mut()
+            .find(|session| session.live && session.is_current && session.name == old_name)
+        {
+            session.name = new_name.clone();
+            self.snapshot
+                .sessions
+                .sort_by(|left, right| left.name.cmp(&right.name));
+            self.selected = Some(TargetId::Session {
+                session_name: new_name,
+            });
+            self.rebuild_matches();
+            self.normalize_selection();
+        }
+        set_timeout(0.25);
+        true
     }
 
     fn start_create_session(&mut self) {
@@ -762,7 +802,6 @@ impl State {
             }
             BareKey::Char('Q')
                 if self.mode == Mode::SessionManager
-                    && has_modifier(KeyModifier::Shift)
                     && !has_modifier(KeyModifier::Ctrl)
                     && !has_modifier(KeyModifier::Alt)
                     && !has_modifier(KeyModifier::Super) =>
@@ -772,7 +811,6 @@ impl State {
             }
             BareKey::Char('R')
                 if self.mode == Mode::SessionManager
-                    && has_modifier(KeyModifier::Shift)
                     && !has_modifier(KeyModifier::Ctrl)
                     && !has_modifier(KeyModifier::Alt)
                     && !has_modifier(KeyModifier::Super) =>
@@ -994,7 +1032,7 @@ impl ZellijPlugin for State {
                 self.complete_waiting_delete() || changed
             }
             Event::SessionUpdate(_, _) => false,
-            Event::Timer(_) => self.poll_waiting_delete(),
+            Event::Timer(_) => self.poll_waiting_delete() || self.poll_rename(),
             Event::Visible(true) => {
                 let changed = !self.snapshot_loaded && self.refresh_snapshot();
                 if self.save_after_switch {
