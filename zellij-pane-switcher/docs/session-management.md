@@ -37,9 +37,9 @@ In session manager mode:
 
 | Key | Action |
 | --- | --- |
-| `n` | Prompt for a new session name |
-| `k` | Kill the selected live session |
-| `d` | Delete the selected live or resurrectable session |
+| `N` | Prompt for a new session name |
+| `K` | Kill the selected live session |
+| `D` | Delete the selected live or resurrectable session |
 | `Ctrl-s` | Toggle between pane switcher and session manager modes |
 | `Esc` | Close the plugin (or cancel the active prompt) |
 | `Enter` | Switch to the selected session |
@@ -139,6 +139,7 @@ While `Executing` or `WaitingForDeletion`, ignore lifecycle keys and render prog
 - Deleting a remote live session performs kill → confirmed absence from live sessions → delete cache, in that order, then returns to pane switcher.
 - Deleting the current session performs switch → kill → wait → delete; with no alternative live session it is refused.
 - `Esc` during name entry or confirmation produces no lifecycle host call.
+- Plain `n`, `k`, and `d` remain searchable; only uppercase `N`, `K`, and `D` trigger session lifecycle actions.
 - Host failures are visible, destructive calls are not automatically retried, and stale selections are revalidated against a fresh snapshot.
 
 ## Test plan

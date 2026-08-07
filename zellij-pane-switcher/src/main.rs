@@ -567,7 +567,7 @@ impl State {
                 self.toggle_mode();
                 true
             }
-            BareKey::Char('d')
+            BareKey::Char('D')
                 if self.mode == Mode::SessionManager
                     && !has_modifier(KeyModifier::Ctrl)
                     && !has_modifier(KeyModifier::Alt)
@@ -576,7 +576,7 @@ impl State {
                 self.start_delete();
                 true
             }
-            BareKey::Char('k')
+            BareKey::Char('K')
                 if self.mode == Mode::SessionManager
                     && !has_modifier(KeyModifier::Ctrl)
                     && !has_modifier(KeyModifier::Alt)
@@ -585,7 +585,7 @@ impl State {
                 self.start_kill();
                 true
             }
-            BareKey::Char('n')
+            BareKey::Char('N')
                 if self.mode == Mode::SessionManager
                     && !has_modifier(KeyModifier::Ctrl)
                     && !has_modifier(KeyModifier::Alt)
