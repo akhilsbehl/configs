@@ -7,7 +7,7 @@ Extend the plugin so session lifecycle operations can be performed from the plug
 The plugin must support:
 
 1. creating a named session and switching to it;
-2. killing a live session while retaining its resurrectable state;
+2. killing a live session, retaining resurrectable state when Zellij has serialized it;
 3. permanently deleting a session, whether it is live or resurrectable.
 
 After a kill or delete, return to the pane switcher so the user can choose where to jump. The only automatic session switch is the safety switch required when the plugin's current session is being killed or deleted.
@@ -16,7 +16,7 @@ After a kill or delete, return to the pane switcher so the user can choose where
 
 - **Live session**: a session returned in `SessionInfo.live_sessions`.
 - **Resurrectable session**: a session returned in `resurrectable_sessions`; it has no live panes.
-- **Kill**: terminate a live session with `kill_sessions`. Its resurrectable cache is retained when Zellij creates one.
+- **Kill**: terminate a live session with `kill_sessions`. Its resurrectable cache is retained only if Zellij has already serialized the session; the plugin cannot force serialization through the available API.
 - **Delete**: permanently remove the session's resurrectable cache with `delete_dead_session`. Deleting a live session therefore means kill first, wait for it to disappear from the live list, then delete its cache.
 - **Safety destination**: the next available live session used only when the plugin's current session is the affected session. It is selected deterministically by ascending session name, wrapping at the end, and excluding the affected session.
 
@@ -133,7 +133,7 @@ While `Executing` or `WaitingForDeletion`, ignore lifecycle keys and render prog
 - Entering session manager carries over the pane switcher's query; switching modes preserves each mode's query.
 - `Ctrl-s` toggles between modes without changing either query; `Esc` closes the plugin from either mode and cancels, rather than submits, an active prompt or confirmation.
 - Creating `new-name` leaves focus in `new-name` and adds no duplicate UI-only entry.
-- Killing a remote live session leaves it absent from live sessions and, if Zellij exposes it, present as resurrectable; the plugin returns to pane switcher without automatically changing the current session.
+- Killing a remote live session leaves it absent from live sessions and, if Zellij exposes it, present as resurrectable; the plugin returns to pane switcher without automatically changing the current session. A freshly created, not-yet-serialized session may disappear completely after kill.
 - Killing the current session switches to the next available live session before sending the kill command, then returns to pane switcher.
 - Deleting a resurrectable session removes it permanently and returns to pane switcher.
 - Deleting a remote live session performs kill → confirmed absence from live sessions → delete cache, in that order, then returns to pane switcher.
