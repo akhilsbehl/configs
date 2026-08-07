@@ -220,6 +220,29 @@ impl State {
         self.status = None;
     }
 
+    fn activate_session(&mut self, session_name: String) {
+        self.refresh_snapshot();
+        let Some(session) = self
+            .snapshot
+            .sessions
+            .iter()
+            .find(|session| session.name == session_name)
+        else {
+            self.status = Some(format!("Session no longer exists: {session_name}"));
+            return;
+        };
+        if !session.live && session.resurrectable_age.is_none() {
+            self.status = Some(format!("Session is no longer available: {session_name}"));
+            return;
+        }
+
+        self.origin_pane = None;
+        self.floating_context = None;
+        self.dismiss();
+        switch_session_with_focus(&session_name, None, None);
+        self.status = None;
+    }
+
     fn activate_selected(&mut self) {
         let Some(selected) = self.selected.clone() else {
             self.status = Some("No result selected".to_string());
@@ -227,9 +250,7 @@ impl State {
         };
         match selected {
             TargetId::Pane { .. } => self.activate_pane(selected),
-            TargetId::Session { .. } => {
-                self.status = Some("Session activation is not implemented yet".to_string());
-            }
+            TargetId::Session { session_name } => self.activate_session(session_name),
             TargetId::ResurrectableSession { session_name } => {
                 self.origin_pane = None;
                 self.floating_context = None;

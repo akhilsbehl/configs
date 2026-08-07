@@ -2,6 +2,8 @@
 
 ## SM-01 — Add pane/session manager modes
 
+**Status: complete.**
+
 Add explicit mode state and `Ctrl-s` toggling. Session manager mode must render and search one selectable row per live or resurrectable session, while pane switcher behavior remains unchanged. Preserve a separate query per mode and carry the pane query into session mode on first entry. Keep `Esc` as close/cancel in both modes.
 
 **Done when:** model tests cover session-only filtering and mode/query transitions; existing pane-switcher tests still pass.
