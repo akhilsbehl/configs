@@ -45,10 +45,13 @@ rustc --test src/model.rs -o /tmp/zellij-pane-switcher-model-tests
 | Binding | Action |
 | --- | --- |
 | `Alt-y` | Open or focus the switcher |
+| `Ctrl-s` | Toggle pane switcher / session manager |
 | `Tab` / `Shift-Tab` | Move selection |
-| `Enter` | Focus selected pane and hide the switcher |
-| `Esc` | Hide the switcher |
+| `Enter` | Activate the selected pane or session |
+| `Esc` | Hide the switcher or cancel a prompt |
 | `Backspace` | Delete the last search character |
+
+In session manager mode, `n` creates a named session, `k` kills a live session, and `d` permanently deletes a session. Destructive actions require confirmation. After a remote kill/delete, the plugin returns to pane switcher mode; killing/deleting the current session first switches to the next live session so the plugin remains available.
 
 The plugin recognizes this message name for external Zellij bindings:
 

@@ -40,6 +40,8 @@ Add confirmation and permanent deletion for resurrectable sessions, plus live-se
 
 ## SM-06 — Manual integration and release artifact
 
+**Status: complete.**
+
 Exercise all acceptance criteria with `scripts/zps-test-env.sh`, then rebuild and verify the checked-in `zellij-pane-switcher.wasm`.
 
 **Depends on:** SM-01 through SM-05.
