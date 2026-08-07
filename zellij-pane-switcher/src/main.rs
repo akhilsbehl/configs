@@ -222,6 +222,23 @@ impl State {
             return;
         };
 
+        self.refresh_snapshot();
+        let pane_exists = self.snapshot.sessions.iter().any(|session| {
+            session.live
+                && session.name == session_name
+                && session.tabs.iter().any(|tab| {
+                    tab.position == tab_position
+                        && tab
+                            .panes
+                            .iter()
+                            .any(|pane| pane.pane_id == pane_id && pane.is_plugin == is_plugin)
+                })
+        });
+        if !pane_exists {
+            self.status = Some(format!("Pane no longer exists in session: {session_name}"));
+            return;
+        }
+
         if self.current_session_name() == Some(session_name.as_str()) {
             self.origin_pane = None;
             focus_pane((is_plugin, pane_id));
@@ -365,6 +382,7 @@ impl State {
                 return;
             }
             self.operation = Some(Operation::WaitingForDeletion(target));
+            set_timeout(0.25);
             return;
         }
 
@@ -405,6 +423,19 @@ impl State {
         true
     }
 
+    fn poll_waiting_delete(&mut self) -> bool {
+        if !matches!(self.operation, Some(Operation::WaitingForDeletion(_))) {
+            return false;
+        }
+        self.refresh_snapshot();
+        if self.complete_waiting_delete() {
+            true
+        } else {
+            set_timeout(0.25);
+            false
+        }
+    }
+
     fn execute_kill(&mut self, target: String) {
         self.confirmation = None;
         self.refresh_snapshot();
@@ -441,6 +472,7 @@ impl State {
         match kill_sessions(&[target.as_str()]) {
             Ok(()) => {
                 self.operation = None;
+                self.refresh_snapshot();
                 self.return_to_pane_switcher();
                 self.status = None;
             }
@@ -736,6 +768,7 @@ impl ZellijPlugin for State {
             EventType::PaneUpdate,
             EventType::TabUpdate,
             EventType::SessionUpdate,
+            EventType::Timer,
             EventType::Visible,
             EventType::PermissionRequestResult,
             EventType::Key,
@@ -780,6 +813,7 @@ impl ZellijPlugin for State {
                 self.complete_waiting_delete() || changed
             }
             Event::SessionUpdate(_, _) => false,
+            Event::Timer(_) => self.poll_waiting_delete(),
             Event::Visible(visible) => visible && !self.snapshot_loaded && self.refresh_snapshot(),
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
                 self.has_permission = true;
