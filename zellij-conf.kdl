@@ -1,5 +1,5 @@
 keybinds clear-defaults=true {
-    shared_among "normal" "pane" "tab" "resize" "move" "session" "tmux" "entersearch" "renametab" "renamepane" {
+    shared_among "normal" "pane" "tab" "resize" "move" "tmux" "entersearch" "renametab" "renamepane" {
         bind "Alt Shift d" { Detach; }
         bind "Alt h" { MoveFocus "left"; }
         bind "Alt j" { MoveFocus "down"; }
@@ -37,7 +37,6 @@ keybinds clear-defaults=true {
         bind "Alt ." { SwitchToMode "move"; }
         bind "Alt /" { SwitchToMode "entersearch"; }
         bind "Alt [" { SwitchToMode "scroll"; }
-        bind "Alt ]" { SwitchToMode "session"; }
         bind "Alt ?" { SwitchToMode "locked"; }
         bind "Alt {" { PreviousSwapLayout; }
         bind "Alt }" { NextSwapLayout; }
@@ -105,9 +104,6 @@ keybinds clear-defaults=true {
         bind "Ctrl b" { PageScrollUp; }
         bind "Ctrl n" { HalfPageScrollDown; }
         bind "Ctrl p" { HalfPageScrollUp; }
-    }
-    session {
-        bind "Esc" { ScrollToBottom; SwitchToMode "normal"; }
     }
     locked {
         bind "Alt ?" { SwitchToMode "normal"; }

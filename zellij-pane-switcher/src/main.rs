@@ -25,6 +25,7 @@ enum Mode {
 #[derive(Clone)]
 enum Prompt {
     CreateSession(String),
+    RenameSession { session_name: String, input: String },
 }
 
 #[derive(Clone)]
@@ -278,6 +279,79 @@ impl State {
         self.floating_context = None;
         self.dismiss();
         switch_session_with_focus(&session_name, None, None);
+        self.status = None;
+    }
+
+    fn detach_current_session(&mut self) {
+        detach();
+    }
+
+    fn start_rename_session(&mut self) {
+        self.refresh_snapshot();
+        let Some(session) = self
+            .snapshot
+            .sessions
+            .iter()
+            .find(|session| session.live && session.is_current)
+        else {
+            self.status = Some("No current live session to rename".to_string());
+            return;
+        };
+        self.prompt = Some(Prompt::RenameSession {
+            session_name: session.name.clone(),
+            input: session.name.clone(),
+        });
+        self.status = None;
+    }
+
+    fn submit_rename_session(&mut self, session_name: String, input: String) {
+        let name = input.trim().to_string();
+        if name.is_empty() {
+            self.status = Some("Session name cannot be empty".to_string());
+            self.prompt = Some(Prompt::RenameSession {
+                session_name,
+                input,
+            });
+            return;
+        }
+        if name.contains('\n') || name.contains('\r') {
+            self.status = Some("Session name cannot contain a newline".to_string());
+            self.prompt = Some(Prompt::RenameSession {
+                session_name,
+                input,
+            });
+            return;
+        }
+        if self
+            .snapshot
+            .sessions
+            .iter()
+            .any(|session| session.name == name && session.name != session_name)
+        {
+            self.status = Some(format!("Session already exists: {name}"));
+            self.prompt = Some(Prompt::RenameSession {
+                session_name,
+                input,
+            });
+            return;
+        }
+
+        rename_session(&name);
+        if let Some(session) = self
+            .snapshot
+            .sessions
+            .iter_mut()
+            .find(|session| session.name == session_name && session.live && session.is_current)
+        {
+            session.name = name.clone();
+        }
+        self.snapshot
+            .sessions
+            .sort_by(|left, right| left.name.cmp(&right.name));
+        self.prompt = None;
+        self.selected = Some(TargetId::Session { session_name: name });
+        self.rebuild_matches();
+        self.normalize_selection();
         self.status = None;
     }
 
@@ -602,6 +676,53 @@ impl State {
                     self.prompt = Some(Prompt::CreateSession(input));
                     self.status = None;
                 }
+                (
+                    Prompt::RenameSession {
+                        session_name,
+                        input,
+                    },
+                    BareKey::Esc,
+                ) => {
+                    self.prompt = None;
+                    self.status = None;
+                    let _ = session_name;
+                    let _ = input;
+                }
+                (
+                    Prompt::RenameSession {
+                        session_name,
+                        input,
+                    },
+                    BareKey::Enter,
+                ) => self.submit_rename_session(session_name, input),
+                (
+                    Prompt::RenameSession {
+                        session_name,
+                        mut input,
+                    },
+                    BareKey::Backspace,
+                ) => {
+                    input.pop();
+                    self.prompt = Some(Prompt::RenameSession {
+                        session_name,
+                        input,
+                    });
+                    self.status = None;
+                }
+                (
+                    Prompt::RenameSession {
+                        session_name,
+                        mut input,
+                    },
+                    BareKey::Char(character),
+                ) if !character.is_control() && !key.key_modifiers.contains(&KeyModifier::Ctrl) => {
+                    input.push(character);
+                    self.prompt = Some(Prompt::RenameSession {
+                        session_name,
+                        input,
+                    });
+                    self.status = None;
+                }
                 (prompt, _) => {
                     self.prompt = Some(prompt);
                 }
@@ -614,6 +735,26 @@ impl State {
         match key.bare_key {
             BareKey::Char('s') if has_modifier(KeyModifier::Ctrl) => {
                 self.toggle_mode();
+                true
+            }
+            BareKey::Char('Q')
+                if self.mode == Mode::SessionManager
+                    && has_modifier(KeyModifier::Shift)
+                    && !has_modifier(KeyModifier::Ctrl)
+                    && !has_modifier(KeyModifier::Alt)
+                    && !has_modifier(KeyModifier::Super) =>
+            {
+                self.detach_current_session();
+                true
+            }
+            BareKey::Char('R')
+                if self.mode == Mode::SessionManager
+                    && has_modifier(KeyModifier::Shift)
+                    && !has_modifier(KeyModifier::Ctrl)
+                    && !has_modifier(KeyModifier::Alt)
+                    && !has_modifier(KeyModifier::Super) =>
+            {
+                self.start_rename_session();
                 true
             }
             BareKey::Char('D')
@@ -877,8 +1018,15 @@ impl ZellijPlugin for State {
         };
         println!("\x1b[1;36m╭─ {title}\x1b[0m  \x1b[2m{count} results\x1b[0m");
         println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
-        if let Some(Prompt::CreateSession(input)) = &self.prompt {
-            println!("\x1b[1;36m│\x1b[0m  \x1b[2mNew session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+        if let Some(prompt) = &self.prompt {
+            match prompt {
+                Prompt::CreateSession(input) => {
+                    println!("\x1b[1;36m│\x1b[0m  \x1b[2mNew session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+                }
+                Prompt::RenameSession { input, .. } => {
+                    println!("\x1b[1;36m│\x1b[0m  \x1b[2mRename session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+                }
+            }
         }
         if let Some(confirmation) = &self.confirmation {
             let (action, target, consequence) = match confirmation {

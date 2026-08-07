@@ -40,6 +40,8 @@ In session manager mode:
 | `N` | Prompt for a new session name |
 | `K` | Kill the selected live session |
 | `D` | Delete the selected live or resurrectable session |
+| `Shift-r` | Rename the current live session |
+| `Shift-q` | Detach the current live session |
 | `Ctrl-s` | Toggle between pane switcher and session manager modes |
 | `Esc` | Close the plugin (or cancel the active prompt) |
 | `Enter` | Switch to the selected session |
@@ -51,7 +53,7 @@ Before `k` or `d`, show a confirmation containing the exact session name and con
 - kill: “Session will be terminated but may be resurrected.”
 - delete: “Resurrection data will be permanently removed.”
 
-The confirmation must require an explicit `Enter`; `Esc` makes no host call.
+The confirmation must require an explicit `Enter`; `Esc` makes no host call. Rename and detach always target the current live session, independently of the selected row and search query.
 
 ## Behavior and invariants
 

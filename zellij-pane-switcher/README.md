@@ -51,7 +51,7 @@ rustc --test src/model.rs -o /tmp/zellij-pane-switcher-model-tests
 | `Esc` | Hide the switcher or cancel a prompt |
 | `Backspace` | Delete the last search character |
 
-In session manager mode, `N` creates a named session, `K` kills a live session, and `D` permanently deletes a session. Destructive actions require confirmation. After a remote kill/delete, the plugin returns to pane switcher mode; killing/deleting the current session first switches to the next live session so the plugin remains available. The plugin requests an immediate save for the session hosting it and before killing/deleting the current session. Zellij does not expose a plugin API to save an arbitrary remote session by name, so remote-session resurrection depends on prior serialization.
+In session manager mode, `N` creates a named session, `K` kills a live session, `D` permanently deletes a session, `Shift-r` renames the current live session, and `Shift-q` detaches the current live session. Rename and detach always target the current live session, independently of the selected row and search query. Destructive actions require confirmation. After a remote kill/delete, the plugin returns to pane switcher mode; killing/deleting the current session first switches to the next live session so the plugin remains available. The plugin requests an immediate save for the session hosting it and before killing/deleting the current session. Zellij does not expose a plugin API to save an arbitrary remote session by name, so remote-session resurrection depends on prior serialization.
 
 The plugin recognizes this message name for external Zellij bindings:
 
