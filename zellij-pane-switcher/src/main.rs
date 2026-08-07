@@ -54,6 +54,7 @@ struct State {
     prompt: Option<Prompt>,
     confirmation: Option<Confirmation>,
     operation: Option<Operation>,
+    save_after_switch: bool,
     filtered_matches: Vec<SearchMatch>,
     selected: Option<TargetId>,
     status: Option<String>,
@@ -526,6 +527,7 @@ impl State {
             return;
         }
 
+        self.save_after_switch = true;
         switch_session(Some(&name));
         self.prompt = None;
         self.status = None;
@@ -827,7 +829,19 @@ impl ZellijPlugin for State {
             }
             Event::SessionUpdate(_, _) => false,
             Event::Timer(_) => self.poll_waiting_delete(),
-            Event::Visible(visible) => visible && !self.snapshot_loaded && self.refresh_snapshot(),
+            Event::Visible(true) => {
+                let changed = !self.snapshot_loaded && self.refresh_snapshot();
+                if self.save_after_switch {
+                    match save_session() {
+                        Ok(()) => self.save_after_switch = false,
+                        Err(error) => {
+                            self.status = Some(format!("Could not save session: {error}"));
+                        }
+                    }
+                }
+                changed || self.status.is_some()
+            }
+            Event::Visible(false) => false,
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
                 self.has_permission = true;
                 self.refresh_snapshot();
