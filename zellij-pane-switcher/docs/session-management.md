@@ -143,6 +143,7 @@ While `Executing` or `WaitingForDeletion`, ignore lifecycle keys and render prog
 - Deleting the current session performs switch → kill → wait → delete; with no alternative live session it is refused.
 - `Esc` during name entry or confirmation produces no lifecycle host call.
 - Plain `n`, `k`, and `d` remain searchable; only uppercase `N`, `K`, and `D` trigger session lifecycle actions.
+- Rename and detach both require explicit confirmation; `Esc` cancels without making the host call.
 - Host failures are visible, destructive calls are not automatically retried, and stale selections are revalidated against a fresh snapshot.
 
 ## Test plan

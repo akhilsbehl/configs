@@ -32,6 +32,11 @@ enum Prompt {
 enum Confirmation {
     Kill(String),
     Delete(String),
+    Rename {
+        session_name: String,
+        new_name: String,
+    },
+    Detach,
 }
 
 #[derive(Clone)]
@@ -282,8 +287,9 @@ impl State {
         self.status = None;
     }
 
-    fn detach_current_session(&mut self) {
-        detach();
+    fn confirm_detach_current_session(&mut self) {
+        self.confirmation = Some(Confirmation::Detach);
+        self.status = None;
     }
 
     fn start_rename_session(&mut self) {
@@ -336,6 +342,16 @@ impl State {
             return;
         }
 
+        self.prompt = None;
+        self.confirmation = Some(Confirmation::Rename {
+            session_name,
+            new_name: name,
+        });
+        self.status = None;
+    }
+
+    fn execute_rename_session(&mut self, session_name: String, name: String) {
+        self.confirmation = None;
         rename_session(&name);
         if let Some(session) = self
             .snapshot
@@ -348,7 +364,6 @@ impl State {
         self.snapshot
             .sessions
             .sort_by(|left, right| left.name.cmp(&right.name));
-        self.prompt = None;
         self.selected = Some(TargetId::Session { session_name: name });
         self.rebuild_matches();
         self.normalize_selection();
@@ -623,6 +638,14 @@ impl State {
             BareKey::Enter => match confirmation {
                 Confirmation::Kill(target) => self.execute_kill(target),
                 Confirmation::Delete(target) => self.execute_delete(target),
+                Confirmation::Rename {
+                    session_name,
+                    new_name,
+                } => self.execute_rename_session(session_name, new_name),
+                Confirmation::Detach => {
+                    self.confirmation = None;
+                    detach();
+                }
             },
             _ => {}
         }
@@ -744,7 +767,7 @@ impl State {
                     && !has_modifier(KeyModifier::Alt)
                     && !has_modifier(KeyModifier::Super) =>
             {
-                self.detach_current_session();
+                self.confirm_detach_current_session();
                 true
             }
             BareKey::Char('R')
@@ -1029,21 +1052,20 @@ impl ZellijPlugin for State {
             }
         }
         if let Some(confirmation) = &self.confirmation {
-            let (action, target, consequence) = match confirmation {
-                Confirmation::Kill(target) => (
-                    "Kill",
-                    target,
-                    "Session will be terminated but may be resurrected.",
-                ),
-                Confirmation::Delete(target) => (
-                    "Delete",
-                    target,
-                    "Resurrection data will be permanently removed.",
-                ),
+            let message = match confirmation {
+                Confirmation::Kill(target) => {
+                    format!("Kill {target}? Session will be terminated but may be resurrected.")
+                }
+                Confirmation::Delete(target) => {
+                    format!("Delete {target}? Resurrection data will be permanently removed.")
+                }
+                Confirmation::Rename {
+                    session_name,
+                    new_name,
+                } => format!("Rename {session_name} to {new_name}?"),
+                Confirmation::Detach => "Detach from the current session?".to_string(),
             };
-            println!(
-                "\x1b[1;33m! {action} {target}? {consequence} Enter=confirm Esc=cancel\x1b[0m"
-            );
+            println!("\x1b[1;33m! {message} Enter=confirm Esc=cancel\x1b[0m");
         }
         println!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
 
