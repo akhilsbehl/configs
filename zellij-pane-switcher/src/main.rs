@@ -27,6 +27,16 @@ enum Prompt {
     CreateSession(String),
 }
 
+#[derive(Clone)]
+enum Confirmation {
+    Kill(String),
+}
+
+#[derive(Clone)]
+enum Operation {
+    Killing,
+}
+
 #[derive(Default)]
 struct State {
     snapshot: Snapshot,
@@ -40,6 +50,8 @@ struct State {
     pane_query: String,
     session_query: Option<String>,
     prompt: Option<Prompt>,
+    confirmation: Option<Confirmation>,
+    operation: Option<Operation>,
     filtered_matches: Vec<SearchMatch>,
     selected: Option<TargetId>,
     status: Option<String>,
@@ -254,6 +266,102 @@ impl State {
         self.status = None;
     }
 
+    fn safety_destination(&self, target: &str) -> Option<String> {
+        let mut live_names = self
+            .snapshot
+            .sessions
+            .iter()
+            .filter(|session| session.live)
+            .map(|session| session.name.clone())
+            .collect::<Vec<_>>();
+        live_names.sort();
+        let target_index = live_names.iter().position(|name| name == target)?;
+        (1..live_names.len())
+            .map(|offset| (target_index + offset) % live_names.len())
+            .map(|index| live_names[index].clone())
+            .next()
+    }
+
+    fn start_kill(&mut self) {
+        let Some(TargetId::Session { session_name }) = self.selected.clone() else {
+            self.status = Some("Select a live session to kill".to_string());
+            return;
+        };
+        self.refresh_snapshot();
+        let Some(session) = self
+            .snapshot
+            .sessions
+            .iter()
+            .find(|session| session.name == session_name)
+        else {
+            self.status = Some(format!("Session no longer exists: {session_name}"));
+            return;
+        };
+        if !session.live {
+            self.status = Some("Only live sessions can be killed".to_string());
+            return;
+        }
+        if session.is_current && self.safety_destination(&session_name).is_none() {
+            self.status = Some("Cannot kill the only live session".to_string());
+            return;
+        }
+        self.confirmation = Some(Confirmation::Kill(session_name));
+        self.status = None;
+    }
+
+    fn execute_kill(&mut self, target: String) {
+        self.confirmation = None;
+        self.refresh_snapshot();
+        let Some(session) = self
+            .snapshot
+            .sessions
+            .iter()
+            .find(|session| session.name == target)
+        else {
+            self.operation = None;
+            self.status = Some(format!("Session no longer exists: {target}"));
+            return;
+        };
+        if !session.live {
+            self.operation = None;
+            self.status = Some("Only live sessions can be killed".to_string());
+            return;
+        }
+
+        let safety_destination = if session.is_current {
+            let Some(destination) = self.safety_destination(&target) else {
+                self.operation = None;
+                self.status = Some("Cannot kill the only live session".to_string());
+                return;
+            };
+            Some(destination)
+        } else {
+            None
+        };
+        self.operation = Some(Operation::Killing);
+        if let Some(destination) = safety_destination {
+            switch_session_with_focus(&destination, None, None);
+        }
+        match kill_sessions(&[target.as_str()]) {
+            Ok(()) => {
+                self.operation = None;
+                self.return_to_pane_switcher();
+                self.status = None;
+            }
+            Err(error) => {
+                self.operation = None;
+                self.status = Some(format!("Could not kill session {target}: {error}"));
+            }
+        }
+    }
+
+    fn return_to_pane_switcher(&mut self) {
+        self.mode = Mode::PaneSwitcher;
+        self.query = self.pane_query.clone();
+        self.rebuild_matches();
+        self.normalize_selection();
+    }
+
     fn submit_create_session(&mut self, input: String) {
         let name = input.trim().to_string();
         if name.is_empty() {
@@ -283,6 +391,24 @@ impl State {
         self.dismiss();
     }
 
+    fn handle_confirmation_key(&mut self, key: BareKey) -> bool {
+        let Some(confirmation) = self.confirmation.clone() else {
+            return false;
+        };
+        match key {
+            BareKey::Esc => {
+                self.confirmation = None;
+                self.operation = None;
+                self.status = None;
+            }
+            BareKey::Enter => match confirmation {
+                Confirmation::Kill(target) => self.execute_kill(target),
+            },
+            _ => {}
+        }
+        true
+    }
+
     fn activate_selected(&mut self) {
         let Some(selected) = self.selected.clone() else {
             self.status = Some("No result selected".to_string());
@@ -302,6 +428,12 @@ impl State {
     }
 
     fn handle_key(&mut self, key: KeyWithModifier) -> bool {
+        if self.operation.is_some() && self.confirmation.is_none() {
+            return true;
+        }
+        if self.confirmation.is_some() {
+            return self.handle_confirmation_key(key.bare_key);
+        }
         if let Some(prompt) = self.prompt.clone() {
             match (prompt, key.bare_key) {
                 (Prompt::CreateSession(_), BareKey::Esc) => {
@@ -336,6 +468,15 @@ impl State {
         match key.bare_key {
             BareKey::Char('s') if has_modifier(KeyModifier::Ctrl) => {
                 self.toggle_mode();
+                true
+            }
+            BareKey::Char('k')
+                if self.mode == Mode::SessionManager
+                    && !has_modifier(KeyModifier::Ctrl)
+                    && !has_modifier(KeyModifier::Alt)
+                    && !has_modifier(KeyModifier::Super) =>
+            {
+                self.start_kill();
                 true
             }
             BareKey::Char('n')
@@ -393,6 +534,8 @@ impl State {
         self.refresh_snapshot();
         self.mode = Mode::PaneSwitcher;
         self.prompt = None;
+        self.confirmation = None;
+        self.operation = None;
         self.query.clear();
         self.pane_query.clear();
         self.session_query = None;
@@ -563,6 +706,18 @@ impl ZellijPlugin for State {
         println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
         if let Some(Prompt::CreateSession(input)) = &self.prompt {
             println!("\x1b[1;36m│\x1b[0m  \x1b[2mNew session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+        }
+        if let Some(confirmation) = &self.confirmation {
+            let (action, target, consequence) = match confirmation {
+                Confirmation::Kill(target) => (
+                    "Kill",
+                    target,
+                    "Session will be terminated but may be resurrected.",
+                ),
+            };
+            println!(
+                "\x1b[1;33m! {action} {target}? {consequence} Enter=confirm Esc=cancel\x1b[0m"
+            );
         }
         println!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
 

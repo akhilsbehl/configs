@@ -24,6 +24,8 @@ Add the named-session prompt, validation, `switch_session(Some(name))`, status/e
 
 ## SM-04 — Kill-session workflow
 
+**Status: complete.**
+
 Add confirmation, current-session safety destination selection, `kill_sessions`, failure handling, and return to pane-switcher mode after success.
 
 **Depends on:** SM-02.
