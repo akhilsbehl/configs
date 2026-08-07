@@ -395,6 +395,7 @@ impl State {
 
         match delete_dead_session(&target) {
             Ok(()) => {
+                self.refresh_snapshot();
                 self.return_to_pane_switcher();
                 self.status = None;
             }
@@ -419,6 +420,7 @@ impl State {
         match delete_dead_session(&target) {
             Ok(()) => {
                 self.operation = None;
+                self.refresh_snapshot();
                 self.return_to_pane_switcher();
                 self.status = None;
             }
