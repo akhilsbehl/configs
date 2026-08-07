@@ -1,8 +1,8 @@
 mod model;
 
 use model::{
-    filter_snapshot, next_index, normalize_sessions, Navigation, Pane, PaneData, SearchMatch,
-    SessionData, Snapshot, TargetId,
+    filter_sessions, filter_snapshot, next_index, normalize_sessions, Navigation, Pane, PaneData,
+    SearchMatch, SessionData, Snapshot, TargetId,
 };
 use std::collections::BTreeMap;
 use std::time::Duration;
@@ -15,6 +15,13 @@ struct FloatingContext {
     pane: Option<(bool, u32)>,
 }
 
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+enum Mode {
+    #[default]
+    PaneSwitcher,
+    SessionManager,
+}
+
 #[derive(Default)]
 struct State {
     snapshot: Snapshot,
@@ -23,7 +30,10 @@ struct State {
     switcher_tab_position: Option<usize>,
     origin_pane: Option<(bool, u32)>,
     floating_context: Option<FloatingContext>,
+    mode: Mode,
     query: String,
+    pane_query: String,
+    session_query: Option<String>,
     filtered_matches: Vec<SearchMatch>,
     selected: Option<TargetId>,
     status: Option<String>,
@@ -36,7 +46,32 @@ register_plugin!(State);
 
 impl State {
     fn rebuild_matches(&mut self) {
-        self.filtered_matches = filter_snapshot(&self.snapshot, &self.query);
+        self.filtered_matches = match self.mode {
+            Mode::PaneSwitcher => filter_snapshot(&self.snapshot, &self.query),
+            Mode::SessionManager => filter_sessions(&self.snapshot, &self.query),
+        };
+    }
+
+    fn toggle_mode(&mut self) {
+        match self.mode {
+            Mode::PaneSwitcher => {
+                self.pane_query = self.query.clone();
+                self.query = self
+                    .session_query
+                    .clone()
+                    .unwrap_or_else(|| self.pane_query.clone());
+                self.session_query = Some(self.query.clone());
+                self.mode = Mode::SessionManager;
+            }
+            Mode::SessionManager => {
+                self.session_query = Some(self.query.clone());
+                self.query = self.pane_query.clone();
+                self.mode = Mode::PaneSwitcher;
+            }
+        }
+        self.rebuild_matches();
+        self.normalize_selection();
+        self.status = None;
     }
 
     fn matches(&self) -> &[SearchMatch] {
@@ -192,6 +227,9 @@ impl State {
         };
         match selected {
             TargetId::Pane { .. } => self.activate_pane(selected),
+            TargetId::Session { .. } => {
+                self.status = Some("Session activation is not implemented yet".to_string());
+            }
             TargetId::ResurrectableSession { session_name } => {
                 self.origin_pane = None;
                 self.floating_context = None;
@@ -206,6 +244,10 @@ impl State {
         let modifiers = &key.key_modifiers;
         let has_modifier = |modifier| modifiers.contains(&modifier);
         match key.bare_key {
+            BareKey::Char('s') if has_modifier(KeyModifier::Ctrl) => {
+                self.toggle_mode();
+                true
+            }
             BareKey::Tab => {
                 self.move_selection(if has_modifier(KeyModifier::Shift) {
                     Navigation::Backward
@@ -250,7 +292,10 @@ impl State {
         // remains loaded (for example after `zellij action rename-session`).
         // Refresh on every invocation so a stale entry cannot be activated.
         self.refresh_snapshot();
+        self.mode = Mode::PaneSwitcher;
         self.query.clear();
+        self.pane_query.clear();
+        self.session_query = None;
         self.rebuild_matches();
         self.normalize_selection();
         if self.origin_pane.is_none() {
@@ -410,7 +455,11 @@ impl ZellijPlugin for State {
             &self.query
         };
 
-        println!("\x1b[1;36m╭─ Session and Pane Switcher\x1b[0m  \x1b[2m{count} results\x1b[0m");
+        let title = match self.mode {
+            Mode::PaneSwitcher => "Session and Pane Switcher",
+            Mode::SessionManager => "Session Manager",
+        };
+        println!("\x1b[1;36m╭─ {title}\x1b[0m  \x1b[2m{count} results\x1b[0m");
         println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
         println!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
 
@@ -454,6 +503,33 @@ impl ZellijPlugin for State {
             }
 
             match matched {
+                SearchMatch::Session {
+                    session_name,
+                    live,
+                    age,
+                    ..
+                } => {
+                    let target = TargetId::Session {
+                        session_name: session_name.clone(),
+                    };
+                    let marker = if self.selected.as_ref() == Some(&target) {
+                        "›"
+                    } else {
+                        " "
+                    };
+                    let state = if *live { "live" } else { "resurrectable" };
+                    let age = if *live {
+                        String::new()
+                    } else {
+                        format!(", exited {} ago", format_age(*age))
+                    };
+                    let row = format!("  {marker}  {session_name}  {state}{age}");
+                    if self.selected.as_ref() == Some(&target) {
+                        println!("\x1b[1;7m{row}\x1b[0m");
+                    } else {
+                        println!("{row}");
+                    }
+                }
                 SearchMatch::Pane { pane, .. } => {
                     if previous_tab != Some((pane.tab_position, pane.tab_name.clone())) {
                         println!(

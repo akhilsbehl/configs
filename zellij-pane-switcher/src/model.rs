@@ -99,6 +99,9 @@ pub enum TargetId {
         pane_id: u32,
         is_plugin: bool,
     },
+    Session {
+        session_name: String,
+    },
     ResurrectableSession {
         session_name: String,
     },
@@ -108,6 +111,12 @@ pub enum TargetId {
 pub enum SearchMatch {
     Pane {
         pane: Pane,
+        score: usize,
+    },
+    Session {
+        session_name: String,
+        live: bool,
+        age: Duration,
         score: usize,
     },
     ResurrectableSession {
@@ -121,6 +130,9 @@ impl SearchMatch {
     pub fn target(&self) -> TargetId {
         match self {
             Self::Pane { pane, .. } => pane.target(),
+            Self::Session { session_name, .. } => TargetId::Session {
+                session_name: session_name.clone(),
+            },
             Self::ResurrectableSession { session_name, .. } => TargetId::ResurrectableSession {
                 session_name: session_name.clone(),
             },
@@ -130,9 +142,28 @@ impl SearchMatch {
     pub fn session_name(&self) -> &str {
         match self {
             Self::Pane { pane, .. } => &pane.session_name,
+            Self::Session { session_name, .. } => session_name,
             Self::ResurrectableSession { session_name, .. } => session_name,
         }
     }
+}
+
+pub fn filter_sessions(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
+    let query = query.trim().to_lowercase();
+    let mut matches = snapshot
+        .sessions
+        .iter()
+        .filter_map(|session| {
+            contains_case_insensitive(&session.name, &query).map(|score| SearchMatch::Session {
+                session_name: session.name.clone(),
+                live: session.live,
+                age: session.resurrectable_age.unwrap_or_default(),
+                score,
+            })
+        })
+        .collect::<Vec<_>>();
+    matches.sort_by(|left, right| left.session_name().cmp(right.session_name()));
+    matches
 }
 
 pub fn normalize_sessions(
@@ -424,6 +455,22 @@ mod tests {
     }
 
     #[test]
+    fn session_filter_returns_one_row_per_live_or_resurrectable_session() {
+        let snapshot = normalize_sessions(
+            &[session("live", true, &[("one", &[("shell", 1)])])],
+            &[("old".to_string(), Duration::from_secs(60))],
+            None,
+        );
+        let matches = filter_sessions(&snapshot, "");
+        assert_eq!(matches.len(), 2);
+        assert!(matches
+            .iter()
+            .all(|matched| matches!(matched, SearchMatch::Session { .. })));
+        assert_eq!(matches[0].session_name(), "live");
+        assert_eq!(matches[1].session_name(), "old");
+    }
+
+    #[test]
     fn empty_query_returns_deterministic_session_tab_pane_order() {
         let snapshot = normalize_sessions(
             &[
@@ -530,7 +577,9 @@ mod tests {
         let matches = filter_snapshot(&snapshot, "");
         match &matches[0] {
             SearchMatch::Pane { pane, .. } => assert_eq!(pane.label(), "terminal 9"),
-            SearchMatch::ResurrectableSession { .. } => panic!("expected pane"),
+            SearchMatch::ResurrectableSession { .. } | SearchMatch::Session { .. } => {
+                panic!("expected pane")
+            }
         }
     }
 }
