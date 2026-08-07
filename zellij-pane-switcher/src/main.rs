@@ -899,11 +899,11 @@ impl ZellijPlugin for State {
                     } else {
                         format!("resurrectable, exited {} ago", format_age(*age))
                     };
-                    let row = format!("  {marker}  {session_name}  {state}");
+                    let row = format!("  {marker} Session {session_name}");
                     if self.selected.as_ref() == Some(&target) {
-                        println!("\x1b[1;7m{row}\x1b[0m");
+                        println!("\x1b[1;7m{row}  {state}\x1b[0m");
                     } else {
-                        println!("{row}");
+                        println!("\x1b[1;36m{row}\x1b[0m  \x1b[2m{state}\x1b[0m");
                     }
                 }
                 SearchMatch::Pane { pane, .. } => {
