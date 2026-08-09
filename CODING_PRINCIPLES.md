@@ -10,11 +10,8 @@
 8. Preserve decisions, not process exhaust
 
 Use judgment, not ceremony. Use these questions in order to apply the principles above:
-
 1. **What kind of uncertainty dominates?** Meaning, external facts, behavior, design, or execution.
 2. **What is the cheapest action that can reduce it?** Inspect, ask, research, prototype, test, or implement.
 3. **What could make this consequential?** Irreversibility, blast radius, shared ownership, cost, safety, or weak observability.
 4. **Which principles address those risks?** Apply only those.
 5. **What evidence will justify the final claim?** Decide before declaring success.
-
-Ensure that you verify & confirm your working model from the sequence of questions above with me before you write any code.
