@@ -105,4 +105,3 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
 ## Further Notes
 
 - All CLI binaries (`pi`, `claude`, `codex`, `agy`) are looked up dynamically in `PATH`.
-- Integrates with `pi-zellij-status` pattern for status reflection in Zellij.
