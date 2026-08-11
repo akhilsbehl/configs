@@ -17,6 +17,7 @@
   },
   "permission": {
     "*": "ask",
+    "skill": "allow",
     "path": {
       "*": "allow",
       "*.env": "ask",
