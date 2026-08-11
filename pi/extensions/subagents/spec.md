@@ -44,6 +44,7 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
    - Primary Pi extension runs a non-blocking Node.js polling loop (`setInterval`) at 0 LLM tokens, scanning `/tmp/pi-subagents/*/status.json`.
    - Fires events (`subagent_blocked`, `subagent_completed`) to update TUI widgets and trigger alerts without consuming context or LLM tokens.
    - On `pi.on("agent_settled")`, if any subagent has `state: "blocked_permission"` or `"blocked_decision"`, the extension injects a non-blocking alert into driver context: *"Subagent <id> is blocked waiting for: <pending_prompt>. Use `/sa-decisions-backlog` or `subagents_respond`."*
+   - **Implementation guidance**: model the `agent_settled` handler on Firstmate's `.pi/extensions/fm-primary-turnend-guard.ts` — its `deliverAs: "followUp"` call to `pi.sendUserMessage()`, guarded by a module-level re-entrancy flag so the alert doesn't re-trigger itself on the settle it just caused.
 
 3. **Restart-Proof Design & Session Start Recovery**:
    - All subagent state is persisted durably in `/tmp/pi-subagents/<id>/status.json` and `meta.json`.
@@ -56,7 +57,7 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
    - Requires `ZELLIJ_SESSION_NAME` in environment; fails gracefully with an informative error if absent.
 
 5. **IPC Protocol & Control Plane Separation (`/tmp/pi-subagents/<id>/`)**:
-   - `status.json`: Contains `{ id, engine, state, pid, created_at, updated_at, pending_prompt, prompt_type, error }`. States: `starting`, `running`, `blocked_permission`, `blocked_decision`, `idle`, `completed`, `failed`, `killed`, `unknown`. Any missing, corrupted, or unparseable `status.json` evaluates to `unknown` (fail-closed) — never assumed `idle` or `completed`. `prompt_type` distinguishes permission approvals (`permission`) from user input/authority questions (`authority`).
+   - `status.json`: Contains `{ id, correlation_id, engine, state, pid, created_at, updated_at, pending_prompt, prompt_type, error }`. States: `starting`, `running`, `blocked_permission`, `blocked_decision`, `idle`, `completed`, `failed`, `killed`, `unknown`. Any missing, corrupted, or unparseable `status.json` evaluates to `unknown` (fail-closed) — never assumed `idle` or `completed`. `prompt_type` distinguishes permission approvals (`permission`) from user input/authority questions (`authority`). `correlation_id` is an opaque identifier minted once at first spawn and persisted unchanged across every `relaunch` (including forced relaunches from the Stuck/Wedge Recovery Ladder, item 13), so all IPC records and log output for one logical piece of work can be correlated regardless of how many times the underlying process has been relaunched.
    - `inbox.jsonl`: Command queue read by runner. Strictly separates control plane commands (`{"type": "control", "verb": "respond" | "kill" | "interrupt" | "relaunch", "value": "..."}`) from conversational prompts (`{"type": "prompt", "text": "..."}`).
    - `output.log`: Streamed stdout/stderr output from the subagent CLI process.
    - `context.jsonl`: Exported conversation context snapshot.
@@ -77,6 +78,7 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
      - `codex`: `-m`, `-c`
      - `agy`: `-i`, `--model`, `--effort`, `--prompt`
    - Injects system prompt guidelines enforcing that subagents must elevate authority/ask-user decisions back to the primary driver rather than making unauthorized assumptions or faking user approvals.
+   - Busy/idle detection is per-engine, never a shared heuristic. `pi` and `claude` have reliable lifecycle signals (extension events / hooks) and classify `running`/`idle` accordingly. `codex` and `agy` have no reliable busy/idle signal today — both fail closed to `unknown` until a concrete signal (hook, log file, or stable rendered token) is empirically verified against a real launch. No rendered-terminal-text heuristic is used as a stopgap; `unknown` is an accepted, explicitly-handled v1 state for these two engines, not an error.
 
 8. **Primary Dispatch Guard**:
    - A `pi.on("tool_call")` hook that intercepts calls matching delegation patterns (`bash_bg`, self-fork via CLI spawn, or future Pi-native subagent tools) issued by the primary Pi driver session.
@@ -84,6 +86,7 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
    - **Pi as primary driver: guard is unconditional and always on.** No toggle, no escape hatch.
    - Scope: **primary driver session only**. The guard explicitly does not fire inside subagent Zellij tabs (linked worktrees), leaving claude/codex/agy subagents free to use their own native delegation tools.
    - If a non-Pi engine is ever used as primary driver in the future, the equivalent guard for that engine is controlled by `PI_SUBAGENTS_ENFORCE_DISPATCH=1` (environment variable at launch time, unforgeable mid-session). Default: **on**.
+   - **Implementation guidance**: model the `pi.on("tool_call")` handler on Firstmate's `.pi/extensions/fm-primary-turnend-guard.ts` — gate on `event.type === "tool_call"`, extract `event.input.command`, and return `{ block: true, reason }` to veto the call before execution.
 
 9. **Transactional Relaunch (`relaunch` control verb)**:
    - The runner accepts `{"type": "control", "verb": "relaunch", "engine": "...", "model": "...", "thinking": "..."}` on `inbox.jsonl`.
@@ -100,7 +103,19 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
     - `subagents_send`: Appends follow-up prompt or context update to `inbox.jsonl`.
     - `subagents_respond`: Sends permission or decision response as a control plane command to unblock subagent.
     - `subagents_kill`: Sends kill control command to inbox, verifies landed work (git status/log), cleans up IPC directory, closes Zellij tab, and tears down git worktree if created.
-    - `/sa-decisions-backlog`: Interactive side-session command loop for reviewing and responding to waiting subagent permission requests and authority questions.
+    - `/sa-decisions-backlog`: Interactive side-session command loop for reviewing and responding to waiting subagent permission requests and authority questions. Each drain cycle scans only status/log bytes newly appended since the previous cycle (a persisted per-subagent byte-offset cursor, falling back to a full re-scan on cursor/file-identity mismatch), so cost does not grow with total session history. A prompt is only removed from the backlog after `subagents_respond` confirms delivery was acknowledged by the runner (an explicit ack-through step) — a crash or lost message between display and delivery leaves the prompt re-drainable rather than silently lost.
+
+12. **Fleet Status Widget & Steer Action**:
+    - The TUI widget is a pure renderer over the supervision loop's aggregated status, never re-deriving state from raw IPC files itself.
+    - The widget caps its "waiting subagents" list at a bounded row count with an explicit "+K more" disclosure line rather than truncating silently or growing unbounded.
+    - Each row exposes a one-click "steer" action that appends a `{"type": "prompt", "text": "..."}` line to that subagent's `inbox.jsonl` — the same path used by `subagents_send`, not a separate direct-pane-injection mechanism, so it inherits the existing TTY-collision safety and durability guarantees rather than reopening that risk for a new code path.
+    - **Implementation guidance**: if a live "fleet status" tool row is needed, model it on Firstmate's `.pi/extensions/fm-primary-pi-watch.ts` `WatchToolShellState`/`refreshWatchToolShell` pattern — one `Box` merging `renderCall` + `renderResult` into a single shell keyed by tool-call state.
+
+13. **Stuck/Wedge Recovery Ladder**:
+    - Detects a subagent that is alive (PID present) but unresponsive — not producing output, not responding to control messages — as a failure mode distinct from process death.
+    - On suspected wedge, escalates through a graduated ladder rather than jumping straight to a forced kill: (1) peek at recent pane output, (2) send a redirect via `inbox.jsonl`, (3) send `interrupt`, (4) if still unresponsive, force a `relaunch` (item 9) into the same Zellij tab, worktree, and branch, carrying a progress note so the replacement understands where the prior attempt left off.
+    - Caps forced relaunches at 2 attempts per wedge episode. If the subagent is still unresponsive after the second forced relaunch, stop retrying, mark it `failed`, and surface the concrete state to the driver rather than looping silently.
+    - The `correlation_id` (item 5) is preserved unchanged across every relaunch triggered by this ladder, so IPC records and logs from all attempts remain correlated.
 
 ## Testing Decisions
 
@@ -111,6 +126,8 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
   3. *Worktree & Zellij Manager*: Unit tests verifying `git worktree` isolation setup/teardown, landed-work safety check before teardown, and Zellij command generation.
   4. *Primary Driver Tools & Auto-Recovery*: Integration tests verifying `subagents_launch`, `subagents_list`, `subagents_send`, `subagents_respond`, `subagents_kill`, and `session_start` fleet digest injection using mocked Zellij execution and mocked IPC directories.
   5. *Firstmate-Adapted Verification Suite (Ticket 07)*: Comprehensive test cases adapted from Firstmate's test suite covering duplicate tab refusal, focus restoration, false-positive exit-code defense, ghost tab prevention, multi-surface liveness classification, engine-specific busy signatures, input buffer retry/clear safety, control vs data plane isolation, worktree teardown safety, and restart-proof disk recovery.
+  6. *Correlation ID & Wedge Recovery (Tickets 13/14)*: Unit tests verifying `correlation_id` is minted once and reused byte-identical across a mocked relaunch chain (including forced relaunches); tests driving the recovery ladder against a mocked unresponsive subagent to verify the peek -> redirect -> interrupt -> relaunch escalation order, the 2-attempt cap, and the `failed` terminal state when recovery is exhausted.
+  7. *Decisions-Backlog Draining (Ticket 12)*: Unit tests verifying the per-subagent byte-offset cursor only re-folds newly appended bytes, falls back to a full re-scan on cursor/identity mismatch, and that a prompt remains re-drainable until `subagents_respond` delivery is explicitly acknowledged.
 
 ## Out of Scope
 
@@ -123,3 +140,4 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
 ## Further Notes
 
 - All CLI binaries (`pi`, `claude`, `codex`, `agy`) are looked up dynamically in `PATH`.
+- Where implementation directly models code from `firstmate` (MIT licensed, © Kun Chen), attribute the source file in a header comment on the ported file. This is a one-time design/code mining pass, not a live dependency — `pi-subagents` does not track or pull from `firstmate`'s upstream after porting. See `.scratch/firstmate-deep-scan/` for the full research trail behind each adopted pattern.
