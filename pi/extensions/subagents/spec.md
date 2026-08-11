@@ -23,23 +23,27 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
 9. As a developer, I want Pi to display a TUI status widget listing waiting subagents, driven by an event-driven zero-token Node.js supervision loop.
 10. As a developer, I want Pi to automatically inject a subagent fleet status digest when starting or resuming a session (`pi.on("session_start")`), ensuring restart-proof session recovery after restarts or crashes.
 11. As a developer, I want to send follow-up prompts or additional context to an active subagent, so that I can steer its work incrementally.
-12. As a developer, I want structural lifecycle control commands (`interrupt`, `respond`, `kill`) explicitly separated from conversational chat text in the IPC queue (Control vs Data Plane split), so that subagents do not reason about control verbs as user prompts.
-13. As a developer, I want to review and respond to pending permission prompts and user authority/input questions across waiting subagents via a `/sa-decisions-backlog` side-session loop, so that I can unblock subagents without polluting the primary driver's context.
-14. As a developer, I want declarative rule-based subagent dispatch (`crew-dispatch.json`), matching task rules to engine/model/effort defaults, while maintaining full explicit override control in `subagents_launch`.
-14. As a developer, I want to manually switch to a subagent's Zellij tab and interact with it directly, so that I have full manual control whenever needed.
-15. As a developer, I want to kill a subagent, close its Zellij tab cleanly, and tear down its disposable git worktree, so that resources are freed when work finishes.
-16. As a developer, I want clear error feedback if I attempt to launch a subagent outside an active Zellij session, so that I know Zellij is required.
+12. As a developer, I want structural lifecycle control commands (`interrupt`, `respond`, `kill`, `relaunch`) explicitly separated from conversational chat text in the IPC queue (Control vs Data Plane split), so that subagents do not reason about control verbs as user prompts.
+13. As a developer, I want a Primary Dispatch Guard on the Pi driver that blocks Pi from launching subagents via roundabout means (`bash_bg`, self-fork, or other native approximations), so that all subagent delegation goes through `pi-subagents` tools — while leaving subagents running in their own tabs free to use whatever delegation tools they judge fit.
+14. As a developer, I want to review and respond to pending permission prompts and user authority/input questions across waiting subagents via a `/sa-decisions-backlog` side-session loop, so that I can unblock subagents without polluting the primary driver's context.
+15. As a developer, I want a Driver Turn-End Guard that alerts me before my driver turn completes if any background subagent is blocked waiting for a decision or permission, so I don't go idle with stuck subagents.
+16. As a developer, I want a `relaunch` control command that lets me change a running subagent's engine, model, or thinking effort without closing its Zellij tab or discarding its worktree.
+17. As a developer, I want declarative rule-based subagent dispatch (`crew-dispatch.json`), matching task rules to engine/model/effort defaults, while maintaining full explicit override control in `subagents_launch`.
+18. As a developer, I want to manually switch to a subagent's Zellij tab and interact with it directly, so that I have full manual control whenever needed.
+19. As a developer, I want to kill a subagent, close its Zellij tab cleanly, and tear down its disposable git worktree, so that resources are freed when work finishes.
+20. As a developer, I want clear error feedback if I attempt to launch a subagent outside an active Zellij session, so that I know Zellij is required.
 
 ## Implementation Decisions
 
 1. **Disposable Worktrees (Git Worktree Isolation)**:
    - `subagents_launch` accepts an optional `worktree?: boolean` flag (defaults to false).
    - When enabled, the extension executes `git worktree add .scratch/worktrees/<id> -b subagent/<id>` and spawns the subagent inside that isolated directory.
-   - On `subagents_kill` or subagent teardown, the temporary worktree is safely removed via `git worktree remove --force .scratch/worktrees/<id>` and branch cleaned up.
+   - On `subagents_kill` or subagent teardown, before removing the worktree, the runner checks `git status` and `git log` in `.scratch/worktrees/<id>`. If uncommitted changes or unmerged commits exist, teardown requires an explicit `force: true` override or prompts the driver for confirmation. Only then runs `git worktree remove --force .scratch/worktrees/<id>` and cleans up the branch.
 
-2. **Event-Driven Zero-Token Supervision**:
+2. **Event-Driven Zero-Token Supervision & Driver Turn-End Guard**:
    - Primary Pi extension runs a non-blocking Node.js polling loop (`setInterval`) at 0 LLM tokens, scanning `/tmp/pi-subagents/*/status.json`.
    - Fires events (`subagent_blocked`, `subagent_completed`) to update TUI widgets and trigger alerts without consuming context or LLM tokens.
+   - On `pi.on("agent_settled")`, if any subagent has `state: "blocked_permission"` or `"blocked_decision"`, the extension injects a non-blocking alert into driver context: *"Subagent <id> is blocked waiting for: <pending_prompt>. Use `/sa-decisions-backlog` or `subagents_respond`."*
 
 3. **Restart-Proof Design & Session Start Recovery**:
    - All subagent state is persisted durably in `/tmp/pi-subagents/<id>/status.json` and `meta.json`.
@@ -52,8 +56,8 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
    - Requires `ZELLIJ_SESSION_NAME` in environment; fails gracefully with an informative error if absent.
 
 5. **IPC Protocol & Control Plane Separation (`/tmp/pi-subagents/<id>/`)**:
-   - `status.json`: Contains `{ id, engine, state, pid, created_at, updated_at, pending_prompt, prompt_type, error }`. States: `starting`, `running`, `blocked_permission`, `blocked_decision`, `idle`, `completed`, `failed`, `killed`. `prompt_type` distinguishes permission approvals (`permission`) from user input/authority questions (`authority`).
-   - `inbox.jsonl`: Command queue read by runner. Strictly separates control plane commands (`{"type": "control", "verb": "respond" | "kill" | "interrupt", "value": "..."}`) from conversational prompts (`{"type": "prompt", "text": "..."}`).
+   - `status.json`: Contains `{ id, engine, state, pid, created_at, updated_at, pending_prompt, prompt_type, error }`. States: `starting`, `running`, `blocked_permission`, `blocked_decision`, `idle`, `completed`, `failed`, `killed`, `unknown`. Any missing, corrupted, or unparseable `status.json` evaluates to `unknown` (fail-closed) — never assumed `idle` or `completed`. `prompt_type` distinguishes permission approvals (`permission`) from user input/authority questions (`authority`).
+   - `inbox.jsonl`: Command queue read by runner. Strictly separates control plane commands (`{"type": "control", "verb": "respond" | "kill" | "interrupt" | "relaunch", "value": "..."}`) from conversational prompts (`{"type": "prompt", "text": "..."}`).
    - `output.log`: Streamed stdout/stderr output from the subagent CLI process.
    - `context.jsonl`: Exported conversation context snapshot.
 
@@ -63,6 +67,8 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
    - Spawns target CLI (`pi`, `claude`, `codex`, `agy`) with PATH binary lookup.
    - Parses TTY stream for permission/approval prompt patterns (e.g., `Allow execution? [y/N]`) and user authority/clarification questions, updating `status.json` with `prompt_type: "permission"` or `"authority"`.
    - Polls `inbox.jsonl` and executes structural control commands or writes prompt text to CLI stdin.
+   - After executing an `interrupt` control command, programmatically sends `Ctrl+U` to the subagent's stdin to flush any partially-written text from the TTY input buffer before the next command is delivered. This is fully automated by the runner — no user keybinding involved.
+   - Enforces subshell execution for `cd` commands in tool calls: bare `cd <dir>` is rewritten as `(cd <dir> && ...)` or uses `git -C <dir>`, preventing persistent working directory mutation across tool calls.
 
 7. **Engine Format Adapters & Authority Rules**:
    - Translates generic launch arguments (`model`, `thinking`, `systemPrompt`, `context`) into native CLI options:
@@ -72,25 +78,37 @@ The `pi-subagents` extension enables Pi to act as a Primary Driver that launches
      - `agy`: `-i`, `--model`, `--effort`, `--prompt`
    - Injects system prompt guidelines enforcing that subagents must elevate authority/ask-user decisions back to the primary driver rather than making unauthorized assumptions or faking user approvals.
 
-8. **Declarative Multi-Agent Dispatch (`crew-dispatch.json`)**:
+8. **Primary Dispatch Guard**:
+   - A `pi.on("tool_call")` hook that intercepts calls matching delegation patterns (`bash_bg`, self-fork via CLI spawn, or future Pi-native subagent tools) issued by the primary Pi driver session.
+   - Denies the call and instructs the model to use `subagents_launch` instead.
+   - **Pi as primary driver: guard is unconditional and always on.** No toggle, no escape hatch.
+   - Scope: **primary driver session only**. The guard explicitly does not fire inside subagent Zellij tabs (linked worktrees), leaving claude/codex/agy subagents free to use their own native delegation tools.
+   - If a non-Pi engine is ever used as primary driver in the future, the equivalent guard for that engine is controlled by `PI_SUBAGENTS_ENFORCE_DISPATCH=1` (environment variable at launch time, unforgeable mid-session). Default: **on**.
+
+9. **Transactional Relaunch (`relaunch` control verb)**:
+   - The runner accepts `{"type": "control", "verb": "relaunch", "engine": "...", "model": "...", "thinking": "..."}` on `inbox.jsonl`.
+   - Stops the currently running CLI process, preserves the Zellij tab and worktree, then respawns the target CLI with updated parameters.
+   - Appends a progress note to the subagent's instruction context so the replacement process understands where work was left off.
+
+10. **Declarative Multi-Agent Dispatch (`crew-dispatch.json`)**:
    - Configurable rule-based dispatch file (e.g. `subagents-dispatch.json` or `crew-dispatch.json`) matching task descriptions/types (e.g. "fresh news" -> `grok`, "rote rename" -> `claude/haiku`, "complex refactor" -> `codex/gpt-5.5` or `claude/sonnet`).
    - `subagents_launch` supports matching task type rules or accepting direct engine/model/effort parameter overrides.
 
-9. **Primary Driver Extension Tools**:
-   - `subagents_launch`: Spawns subagent tab, sets up IPC directory, creates optional git worktree, resolves declarative dispatch rules if specified, and optionally exports context snapshot.
-   - `subagents_list`: Scans IPC directories, verifies PID liveness (marking dead processes as `failed`/`stale`), and returns current statuses and pending prompts.
-   - `subagents_send`: Appends follow-up prompt or context update to `inbox.jsonl`.
-   - `subagents_respond`: Sends permission or decision response as a control plane command to unblock subagent.
-   - `subagents_kill`: Sends kill control command to inbox, cleans up IPC directory, closes Zellij tab, and tears down git worktree if created.
-   - `/sa-decisions-backlog`: Interactive side-session command loop for reviewing and responding to waiting subagent permission requests and authority questions.
+11. **Primary Driver Extension Tools**:
+    - `subagents_launch`: Spawns subagent tab, sets up IPC directory, creates optional git worktree, resolves declarative dispatch rules if specified, and optionally exports context snapshot.
+    - `subagents_list`: Scans IPC directories, verifies PID liveness (marking dead processes as `failed`/`stale`), and returns current statuses and pending prompts.
+    - `subagents_send`: Appends follow-up prompt or context update to `inbox.jsonl`.
+    - `subagents_respond`: Sends permission or decision response as a control plane command to unblock subagent.
+    - `subagents_kill`: Sends kill control command to inbox, verifies landed work (git status/log), cleans up IPC directory, closes Zellij tab, and tears down git worktree if created.
+    - `/sa-decisions-backlog`: Interactive side-session command loop for reviewing and responding to waiting subagent permission requests and authority questions.
 
 ## Testing Decisions
 
 - **Good Test Criteria**: Tests must verify external behavior, IPC control contracts, worktree creation/cleanup, multi-surface process liveness, busy/idle classification, and focus restoration logic without invoking real third-party CLI engines or requiring a live Zellij display session during automated test runs.
 - **Seams Tested**:
   1. *Engine Argument Adapters*: Pure function unit tests verifying CLI flag translation for `pi`, `claude`, `codex`, `agy`.
-  2. *Runner IPC & Control Plane*: Unit/component tests verifying `status.json` serialization, control vs prompt command separation in `inbox.jsonl`, and stream prompt pattern matching.
-  3. *Worktree & Zellij Manager*: Unit tests verifying `git worktree` isolation setup/teardown and Zellij command generation.
+  2. *Runner IPC & Control Plane*: Unit/component tests verifying `status.json` serialization, `unknown` fail-closed handling, control vs prompt command separation in `inbox.jsonl`, `Ctrl+U` buffer clearing post-interrupt, and stream prompt pattern matching.
+  3. *Worktree & Zellij Manager*: Unit tests verifying `git worktree` isolation setup/teardown, landed-work safety check before teardown, and Zellij command generation.
   4. *Primary Driver Tools & Auto-Recovery*: Integration tests verifying `subagents_launch`, `subagents_list`, `subagents_send`, `subagents_respond`, `subagents_kill`, and `session_start` fleet digest injection using mocked Zellij execution and mocked IPC directories.
   5. *Firstmate-Adapted Verification Suite (Ticket 07)*: Comprehensive test cases adapted from Firstmate's test suite covering duplicate tab refusal, focus restoration, false-positive exit-code defense, ghost tab prevention, multi-surface liveness classification, engine-specific busy signatures, input buffer retry/clear safety, control vs data plane isolation, worktree teardown safety, and restart-proof disk recovery.
 
