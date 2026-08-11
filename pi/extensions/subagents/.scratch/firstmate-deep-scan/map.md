@@ -29,9 +29,11 @@ A comprehensive architectural synthesis and feature extraction of `~/warchives/f
 
 ## Not yet specified
 
-- Custom shell alias shortcuts and Zellij bindings for quick `pi-subagents` fleet navigation.
-- Automatic context pruning / compression adapter for subagent prompt history.
-- Empirical verification of per-engine busy/idle signal delivery (hooks, log files, rendered-tail tokens) for `agy` and `codex` against `pi-subagents`' actual Zellij-tab launch shape — can't be ticketed precisely until there's a running implementation to verify against.
+All three items below are gated on a running implementation to observe, not on more research or conversation — do not spend a wayfinder/grilling session on these before their trigger. Revisit each at its trigger during `/implement`, not as a separate map session.
+
+- Custom shell alias shortcuts and Zellij bindings for quick `pi-subagents` fleet navigation. **Trigger**: after the Fleet Status Widget (spec item 12) is implemented and used for a few real sessions — you're picking bindings for behavior that has to exist first.
+- Automatic context pruning / compression adapter for subagent prompt history. **Trigger**: after Context Sharing (spec items 7/8) is implemented and a real payload is observed being slow, expensive, or choking an engine — don't design compression for a problem not yet felt.
+- Empirical verification of per-engine busy/idle signal delivery (hooks, log files, rendered-tail tokens) for `agy` and `codex` against `pi-subagents`' actual Zellij-tab launch shape. **Trigger**: right after the Runner Process (spec item 6) and Engine Format Adapters (spec item 7) are built — the first moment a real `agy`/`codex` launch exists to check a signal against.
 
 ## Out of scope
 
