@@ -2,13 +2,13 @@
 param(
     [string]$Name,
     [string]$Link,
-    [string]$OutputDir = "."
+    [string]$OutputDir = $PSScriptRoot,
+    [switch]$ClearCache
 )
 
 $ErrorActionPreference = "Stop"
-$GraphRoot = "https://graph.microsoft.com/v1.0"
-$Scopes = "User.ReadBasic.All User.Read.All Files.Read.All Sites.Read.All"
-$CachePath = Join-Path $env:LOCALAPPDATA "ms-graph\token-cache.dat"
+$GraphRoot   = "https://graph.microsoft.com/v1.0"
+$Scopes      = @("User.ReadBasic.All", "User.Read.All", "Files.Read.All", "Sites.Read.All")
 $EnableDebug = $PSBoundParameters.ContainsKey("Debug")
 
 function Write-Log([string]$Message) {
@@ -16,40 +16,22 @@ function Write-Log([string]$Message) {
     Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $level $Message"
 }
 
-function Save-TokenCache([object]$Token, [string]$Tenant, [string]$Client) {
-    $directory = Split-Path -Parent $CachePath
-    New-Item -ItemType Directory -Force -Path $directory | Out-Null
-    $record = [ordered]@{
-        tenant_id    = $Tenant
-        client_id    = $Client
-        access_token = $Token.access_token
-        refresh_token = $Token.refresh_token
-        expires_at   = ([DateTimeOffset]::UtcNow.ToUnixTimeSeconds() + [int]$Token.expires_in)
-    }
-    $plaintext = $record | ConvertTo-Json -Compress
-    # DPAPI encrypts this for the current Windows user on this Windows machine.
-    $protected = ConvertFrom-SecureString (ConvertTo-SecureString $plaintext -AsPlainText -Force)
-    Set-Content -Path $CachePath -Value $protected -Encoding ASCII
+# --- Prereqs -----------------------------------------------------------
+# MSAL.PS wraps MSAL.NET, which is what actually knows how to talk to the
+# Windows broker (WAM). This is the piece raw Invoke-RestMethod against
+# /oauth2/v2.0/devicecode can never do — device code flow has no device
+# identity to hand over, broker auth does (it uses the same PRT dsregcmd
+# shows you already have).
+if (-not (Get-Module -ListAvailable -Name MSAL.PS)) {
+    Write-Log "MSAL.PS not found; installing for current user."
+    Install-Module MSAL.PS -Scope CurrentUser -Force -AllowClobber
 }
+Import-Module MSAL.PS -ErrorAction Stop
 
-function Read-TokenCache([string]$Tenant, [string]$Client) {
-    if (-not (Test-Path $CachePath)) { return $null }
-    try {
-        $protected = (Get-Content -Path $CachePath -Raw).Trim()
-        $secure = ConvertTo-SecureString -String $protected
-        $ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-        try { $plaintext = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr) }
-        finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr) }
-        $record = $plaintext | ConvertFrom-Json
-        if ($record.tenant_id -ne $Tenant -or $record.client_id -ne $Client) { return $null }
-        return $record
-    }
-    catch {
-        # Log only the exception metadata. Never log the protected cache contents.
-        Write-Log "Ignoring unreadable token cache: $CachePath"
-        Write-Log "Cache read error: $($_.Exception.GetType().FullName): $($_.Exception.Message)"
-        return $null
-    }
+if ($ClearCache) {
+    Write-Log "Clearing token cache and forcing interactive re-auth."
+    $defaultCacheDir = Join-Path $env:LOCALAPPDATA ".IdentityService"
+    Remove-Item -Path $defaultCacheDir -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 function Get-AccessToken {
@@ -59,64 +41,35 @@ function Get-AccessToken {
         throw "Set MS_GRAPH_TENANT_ID and MS_GRAPH_CLIENT_ID first."
     }
 
-    $tokenEndpoint = "https://login.microsoftonline.com/$tenant/oauth2/v2.0/token"
-    $cached = Read-TokenCache $tenant $client
-    $now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+    # v4.37 of Enable-MsalTokenCacheOnDisk takes no path override — it
+    # persists to its own fixed, DPAPI-protected location under
+    # %LOCALAPPDATA%\.IdentityService automatically. No -CacheFilePath
+    # parameter exists on this version, so we don't try to redirect it.
+    $app = New-MsalClientApplication -ClientId $client -TenantId $tenant |
+        Enable-MsalTokenCacheOnDisk -PassThru
 
-    if ($cached -and $cached.access_token -and [int64]$cached.expires_at -gt ($now + 300)) {
-        Write-Log "Using cached access token."
-        return $cached.access_token
+    # Step 1: silent. If a cached access token or a usable refresh token /
+    # PRT-derived token exists, this returns with no prompt, no browser,
+    # no device code, nothing. This is what makes subsequent runs silent.
+    try {
+        Write-Log "Attempting silent token acquisition from cache/broker."
+        $result = Get-MsalToken -PublicClientApplication $app -Scopes $Scopes -Silent -ErrorAction Stop
+        Write-Log "Silent acquisition succeeded (no interaction required)."
+        return $result.AccessToken
+    }
+    catch {
+        Write-Log "Silent acquisition failed or no cached session: $($_.Exception.Message)"
     }
 
-    if ($cached -and $cached.refresh_token) {
-        Write-Log "Access token expired or near expiry; refreshing from encrypted cache."
-        try {
-            $token = Invoke-RestMethod -Method Post -Uri $tokenEndpoint -ContentType "application/x-www-form-urlencoded" -Body @{
-                grant_type    = "refresh_token"
-                client_id     = $client
-                refresh_token = $cached.refresh_token
-                scope         = $Scopes
-            }
-            if (-not $token.refresh_token) { $token | Add-Member -NotePropertyName refresh_token -NotePropertyValue $cached.refresh_token }
-            Save-TokenCache $token $tenant $client
-            return $token.access_token
-        }
-        catch { Write-Log "Cached refresh token was rejected; starting device sign-in." }
-    }
-
-    $deviceEndpoint = "https://login.microsoftonline.com/$tenant/oauth2/v2.0/devicecode"
-    $device = Invoke-RestMethod -Method Post -Uri $deviceEndpoint -ContentType "application/x-www-form-urlencoded" -Body @{
-        client_id = $client
-        scope     = $Scopes
-    }
-
-    Write-Host "`n$($device.message)`n" -ForegroundColor Yellow
-    $deadline = (Get-Date).AddSeconds([int]$device.expires_in)
-    $delay = [int]$device.interval
-
-    do {
-        Start-Sleep -Seconds $delay
-        try {
-            $token = Invoke-RestMethod -Method Post -Uri $tokenEndpoint -ContentType "application/x-www-form-urlencoded" -Body @{
-                grant_type  = "urn:ietf:params:oauth:grant-type:device_code"
-                client_id   = $client
-                device_code = $device.device_code
-            }
-            if ($token.access_token) {
-                Save-TokenCache $token $tenant $client
-                Write-Log "New token acquired and saved to encrypted Windows cache."
-                return $token.access_token
-            }
-        }
-        catch {
-            $message = $_.Exception.Message
-            if ($message -match "authorization_declined|expired_token|bad_verification_code") {
-                throw "Device-code sign-in failed: $message"
-            }
-        }
-    } while ((Get-Date) -lt $deadline)
-
-    throw "Device-code sign-in timed out."
+    # Step 2: interactive, explicitly routed through the Windows broker
+    # (WAM) via -AuthenticationBroker. This is the actual switch that
+    # carries device identity/PRT to Entra — -Interactive alone can fall
+    # back to an embedded browser with no device binding, which is the
+    # device-code-flow problem all over again under a different name.
+    Write-Log "No valid cached session; requesting interactive broker sign-in."
+    $result = Get-MsalToken -PublicClientApplication $app -Scopes $Scopes -Interactive -AuthenticationBroker -ErrorAction Stop
+    Write-Log "Interactive broker sign-in succeeded; token cached for future runs."
+    return $result.AccessToken
 }
 
 function Invoke-Graph([string]$Method, [string]$Uri, [string]$Token) {
@@ -147,12 +100,12 @@ function Get-SharedFile([string]$SharingLink, [string]$Token) {
     return Invoke-Graph "GET" "$GraphRoot/shares/$shareToken/driveItem?`$select=$select" $Token
 }
 
-if (-not $Name -and -not $Link) {
-    throw "Supply -Name, -Link, or both."
+if (-not $Name -and -not $Link -and -not $ClearCache) {
+    throw "Supply -Name, -Link, or both (or -ClearCache to reset auth)."
 }
 
 $ExitCode = 0
-Write-Log "Starting Microsoft Graph diagnostic from Windows PowerShell."
+Write-Log "Starting Microsoft Graph query via MSAL broker auth."
 $token = Get-AccessToken
 Write-Log "Access token acquired."
 
@@ -173,7 +126,16 @@ if ($Link) {
         $file = Get-SharedFile $Link $token
         if (-not $file.file) { throw "The link resolved to a folder or non-file item." }
 
-        $directory = [IO.Path]::GetFullPath($OutputDir)
+        $directory = if ([IO.Path]::IsPathRooted($OutputDir)) {
+            $OutputDir
+        }
+        else {
+            # [IO.Path]::GetFullPath resolves against .NET's process-level
+            # CurrentDirectory, which broker/WAM sign-in can silently leave
+            # pointed at system32 for the rest of the session. $PWD is
+            # PowerShell's own provider location and doesn't drift with it.
+            Join-Path $PWD.Path $OutputDir
+        }
         New-Item -ItemType Directory -Force -Path $directory | Out-Null
         $filename = [IO.Path]::GetFileName($file.name)
         $destination = Join-Path $directory $filename
