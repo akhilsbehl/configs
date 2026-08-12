@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# clipshot — save the image currently on the Windows clipboard to a file, from WSL.
+# Usage: clipshot [output-name]
+#   clipshot                -> ~/Pictures/Screenshots/2026-08-12_14-30-05.png
+#   clipshot foo            -> ~/Pictures/Screenshots/foo.png
+#   clipshot foo.png        -> ~/Pictures/Screenshots/foo.png
+#   clipshot /abs/path.png  -> /abs/path.png
+
+set -euo pipefail
+
+DEST_DIR="${CLIPSHOT_DIR:-$HOME/tmp/}"
+mkdir -p "$DEST_DIR"
+
+name="${1:-}"
+
+if [[ -z "$name" ]]; then
+    out="$DEST_DIR/$(date +%Y-%m-%d_%H-%M-%S).png"
+elif [[ "$name" == */* ]]; then
+    # looks like a path already
+    out="$name"
+    [[ "$out" == *.* ]] || out="${out}.png"
+else
+    [[ "$name" == *.* ]] || name="${name}.png"
+    out="$DEST_DIR/$name"
+fi
+
+# Convert to a Windows path so powershell.exe can write there directly —
+# avoids WSL<->Windows filesystem interop weirdness.
+win_out="$(wslpath -w "$out")"
+
+ps_script=$(cat <<'EOF'
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+if (-not [System.Windows.Forms.Clipboard]::ContainsImage()) {
+    Write-Error "NO_IMAGE_ON_CLIPBOARD"
+    exit 1
+}
+
+$img = [System.Windows.Forms.Clipboard]::GetImage()
+$img.Save("__OUT__", [System.Drawing.Imaging.ImageFormat]::Png)
+EOF
+)
+
+ps_script="${ps_script/__OUT__/$win_out}"
+
+if ! powershell.exe -NoProfile -NonInteractive -Command "$ps_script" 2>/tmp/clipshot.err; then
+    if grep -q NO_IMAGE_ON_CLIPBOARD /tmp/clipshot.err; then
+        echo "clipshot: no image on clipboard" >&2
+    else
+        echo "clipshot: powershell.exe failed:" >&2
+        cat /tmp/clipshot.err >&2
+    fi
+    exit 1
+fi
+
+echo "$out"
+
+exit 0
