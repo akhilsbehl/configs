@@ -32,6 +32,7 @@
 
 ## Collaborating document writing
 Read this file: ~/configs/WRITING_PRINCIPLES.md
+If writing on my behalf for others, use my ~/configs/VOICE.md
 
 ## Collaborative coding
 Read this file: ~/configs/CODING_PRINCIPLES.md.
