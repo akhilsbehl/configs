@@ -87,6 +87,8 @@
       "tree *": "allow",
       "stat *": "allow",
       "file *": "allow",
+      "sha256sum": "allow",
+      "sha256sum *": "allow",
       "wc *": "allow",
       "du *": "allow",
       "df *": "allow",
@@ -169,7 +171,9 @@
       "make build": "allow",
       "pi *": "allow",
       "zellij *": "allow",
-      "knowledge-system/bin/*": "allow"
+      "knowledge-system/bin/*": "allow",
+      "query-ms-graph": "allow",
+      "query-ms-graph *": "allow"
     },
     "external_directory": {
       "*": "ask",
