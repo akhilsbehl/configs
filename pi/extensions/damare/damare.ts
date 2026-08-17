@@ -17,9 +17,8 @@
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-// These packages are loaded here rather than separately in settings so their
-// original tool definitions can be captured before adding quiet renderers.
-import askUserQuestionExtension from "/home/akhil/.pi/agent/npm/node_modules/@juicesharp/rpiv-ask-user-question/index.ts";
+// This package is loaded here rather than separately in settings so its
+// original tool definition can be captured before adding a quiet renderer.
 import pattyBackgroundTasksExtension from "/home/akhil/.pi/agent/npm/node_modules/pi-patty-bg-tasks/index.ts";
 import {
 	createBashTool,
@@ -70,10 +69,10 @@ function getBuiltInTools(cwd: string) {
 
 type ToolDefinition = Parameters<ExtensionAPI["registerTool"]>[0];
 
-const QUIET_UPSTREAM_TOOLS = new Set(["ask_user_question", "jobs"]);
+const QUIET_UPSTREAM_TOOLS = new Set(["jobs"]);
 
 /**
- * Load the upstream extensions while capturing the two tool definitions whose
+ * Load the upstream extension while capturing the tool definition whose
  * execution must remain upstream-owned. The forwarding API is important for
  * Patty: its other tools and lifecycle handlers must share the same registry
  * as the captured jobs tool.
@@ -96,7 +95,6 @@ function registerQuietUpstreamTools(pi: ExtensionAPI): void {
 		},
 	}) as ExtensionAPI;
 
-	askUserQuestionExtension(forwardingPi);
 	pattyBackgroundTasksExtension(forwardingPi);
 
 	for (const name of QUIET_UPSTREAM_TOOLS) {
