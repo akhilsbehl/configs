@@ -89,6 +89,8 @@
       "file *": "allow",
       "sha256sum": "allow",
       "sha256sum *": "allow",
+      "pdftotext": "allow",
+      "pdftotext *": "allow",
       "wc *": "allow",
       "du *": "allow",
       "df *": "allow",
