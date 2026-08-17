@@ -20,7 +20,8 @@
     "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
-    "npm:@narumitw/pi-starship"
+    "npm:@narumitw/pi-starship",
+    "npm:pi-context-view"
   ],
   "terminal": {
     "showTerminalProgress": true
