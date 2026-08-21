@@ -1,10 +1,10 @@
 {
   "lastChangelogVersion": "0.84.2",
   "theme": "neobones_light_contrast",
-  "defaultProvider": "google",
-  "defaultModel": "gemini-flash-latest",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-luna",
   "persistModelSelection": false,
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "packages": [
     "./extensions/damare",
