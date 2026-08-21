@@ -1,7 +1,18 @@
 import mermaid from "mermaid";
+import { sourceText, type RenderedTextPart } from "./source-offset.js";
 
 declare global { interface Window { __RICHIE__: { id: string; token: string } } }
 const context = window.__RICHIE__;
+const navigation = document.querySelector<HTMLElement>("#navigation")!;
+const navigationToggle = document.querySelector<HTMLButtonElement>("#navigation-toggle")!;
+function setNavigationCollapsed(collapsed: boolean): void {
+  document.body.classList.toggle("navigation-collapsed", collapsed);
+  navigation.classList.toggle("is-collapsed", collapsed);
+  navigationToggle.setAttribute("aria-expanded", String(!collapsed));
+  navigationToggle.textContent = collapsed ? "Show navigation" : "Hide navigation";
+}
+setNavigationCollapsed(true);
+navigationToggle.addEventListener("click", () => setNavigationCollapsed(!document.body.classList.contains("navigation-collapsed")));
 const endpoint = (name: string) => `/api/${name}/${context.id}?token=${encodeURIComponent(context.token)}`;
 const operationEndpoint = (id: string) => `/api/operations/${context.id}/${encodeURIComponent(id)}?token=${encodeURIComponent(context.token)}`;
 type Position = { offset: number; line: number; column: number };
@@ -40,6 +51,17 @@ function excerpt(value: string): string {
   const compact = value.replace(/\s+/g, " ").trim();
   return compact.length > 120 ? `${compact.slice(0, 117)}…` : compact;
 }
+function prefixSourceText(range: globalThis.Range): string {
+  const fragment = range.cloneContents();
+  const parts: RenderedTextPart[] = [];
+  const walker = document.createTreeWalker(fragment, NodeFilter.SHOW_TEXT);
+  let node: Node | null;
+  while ((node = walker.nextNode())) {
+    const text = node as Text;
+    parts.push({ text: text.data, isReplacementPreview: Boolean(text.parentElement?.closest(".review-replacement-inline")) });
+  }
+  return sourceText(parts);
+}
 function parsed(node: Node | null, offset: number): Position | undefined {
   const element = node instanceof Element ? node : node?.parentElement;
   const sourceText = element?.closest(".md-text,code[data-md-range]");
@@ -48,10 +70,11 @@ function parsed(node: Node | null, offset: number): Position | undefined {
   const [start, end, startLine, startColumn, endLine, endColumn] = value.split(":").map(Number);
   const prefix = document.createRange();
   try { prefix.setStart(mapped, 0); prefix.setEnd(node, offset); } catch { return undefined; }
-  const visibleOffset = prefix.toString().length;
+  const sourcePrefix = prefixSourceText(prefix);
+  const visibleOffset = sourcePrefix.length;
   const sourceOffset = Math.min(end, start + visibleOffset);
   if (sourceOffset === end) return { offset: end, line: endLine, column: endColumn };
-  const parts = prefix.toString().split("\n");
+  const parts = sourcePrefix.split("\n");
   return { offset: sourceOffset, line: startLine + parts.length - 1, column: parts.length === 1 ? startColumn + visibleOffset : parts.at(-1)!.length + 1 };
 }
 function selectionRange(): { start: Position; end: Position } | undefined {
@@ -272,7 +295,7 @@ async function copyText(value: string): Promise<void> {
   finally { textarea.remove(); }
 }
 function setupCopyButtons(): void {
-  document.querySelectorAll<HTMLButtonElement>(".copy-block").forEach((button) => button.addEventListener("click", async (event) => {
+  document.querySelectorAll<HTMLButtonElement>(".copy-block,.copy-path").forEach((button) => button.addEventListener("click", async (event) => {
     event.preventDefault(); event.stopPropagation();
     try {
       await copyText(button.dataset.copySource ?? "");

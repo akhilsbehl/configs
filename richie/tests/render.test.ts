@@ -38,7 +38,7 @@ test("renders source-aware inline Markdown and GFM tables", () => {
   const html = renderReviewHtml(source);
   assert.match(html, /data-md-range=/);
   assert.match(html, /<strong/);
-  assert.match(html, /<table/);
+  assert.match(html, /<div class="table-scroll"><table/);
   assert.match(html, /data-mermaid=/);
   assert.match(html, /class="mermaid-source"/);
   assert.match(html, /class="mermaid-source-line" data-md-range=/);

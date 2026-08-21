@@ -236,7 +236,7 @@ export function renderReviewHtml(source: string, options: RenderOptions = {}): s
         const attrs = blockAttrs(node);
         return `<div class="mermaid"${attrs} data-mermaid="${escape(node.value ?? "")}"><pre>${escape(node.value ?? "")}</pre></div><details class="mermaid-source"${attrs} data-md-mermaid-source><summary>Mermaid source</summary>${mermaidSource(node)}${copyButton(node.value ?? "", "Copy Mermaid source")}</details>`;
       }
-      case "table": return `<table${blockAttrs(node)}><tbody>${renderChildren(node)}</tbody></table>`;
+      case "table": return `<div class="table-scroll"><table${blockAttrs(node)}><tbody>${renderChildren(node)}</tbody></table></div>`;
       case "tableRow": return `<tr${blockAttrs(node)}>${renderChildren(node)}</tr>`;
       case "tableCell": return `<td${blockAttrs(node)}>${renderChildren(node)}</td>`;
       default: return renderChildren(node);
