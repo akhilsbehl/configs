@@ -2,27 +2,24 @@
 
 # clipshot — save the image currently on the Windows clipboard to a file, from WSL.
 # Usage: clipshot [output-name]
-#   clipshot                -> ~/Pictures/Screenshots/2026-08-12_14-30-05.png
-#   clipshot foo            -> ~/Pictures/Screenshots/foo.png
-#   clipshot foo.png        -> ~/Pictures/Screenshots/foo.png
+#   clipshot                -> ./2026-08-12_14-30-05.png
+#   clipshot foo            -> ./foo.png
+#   clipshot foo.png        -> ./foo.png
 #   clipshot /abs/path.png  -> /abs/path.png
 
 set -euo pipefail
 
-DEST_DIR="${CLIPSHOT_DIR:-$HOME/tmp/}"
-mkdir -p "$DEST_DIR"
-
 name="${1:-}"
 
 if [[ -z "$name" ]]; then
-    out="$DEST_DIR/$(date +%Y-%m-%d_%H-%M-%S).png"
+    out="$PWD/$(date +%Y-%m-%d_%H-%M-%S).png"
 elif [[ "$name" == */* ]]; then
     # looks like a path already
     out="$name"
     [[ "$out" == *.* ]] || out="${out}.png"
 else
     [[ "$name" == *.* ]] || name="${name}.png"
-    out="$DEST_DIR/$name"
+    out="$PWD/$name"
 fi
 
 # Convert to a Windows path so powershell.exe can write there directly —
