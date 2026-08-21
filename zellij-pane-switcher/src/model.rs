@@ -128,6 +128,14 @@ pub enum SearchMatch {
 }
 
 impl SearchMatch {
+    pub fn is_live(&self) -> bool {
+        match self {
+            Self::Pane { .. } => true,
+            Self::Session { live, .. } => *live,
+            Self::ResurrectableSession { .. } => false,
+        }
+    }
+
     pub fn target(&self) -> TargetId {
         match self {
             Self::Pane { pane, .. } => pane.target(),
@@ -164,7 +172,12 @@ pub fn filter_sessions(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
             })
         })
         .collect::<Vec<_>>();
-    matches.sort_by(|left, right| left.session_name().cmp(right.session_name()));
+    matches.sort_by(|left, right| {
+        right
+            .is_live()
+            .cmp(&left.is_live())
+            .then_with(|| left.session_name().cmp(right.session_name()))
+    });
     matches
 }
 
@@ -230,7 +243,11 @@ pub fn normalize_sessions(
                 tab.panes
                     .sort_by(|left, right| left.key().cmp(&right.key()));
             }
-            tabs.sort_by_key(|tab| tab.position);
+            tabs.sort_by(|left, right| {
+                left.name
+                    .cmp(&right.name)
+                    .then_with(|| left.position.cmp(&right.position))
+            });
             SessionEntry {
                 name: session.name.clone(),
                 live: true,
@@ -300,12 +317,15 @@ pub fn filter_snapshot(snapshot: &Snapshot, query: &str) -> Vec<SearchMatch> {
     }
 
     matches.sort_by(|left, right| {
-        left.session_name()
-            .cmp(right.session_name())
+        right
+            .is_live()
+            .cmp(&left.is_live())
+            .then_with(|| left.session_name().cmp(right.session_name()))
             .then_with(|| match (left, right) {
                 (SearchMatch::Pane { pane: a, .. }, SearchMatch::Pane { pane: b, .. }) => a
-                    .tab_position
-                    .cmp(&b.tab_position)
+                    .tab_name
+                    .cmp(&b.tab_name)
+                    .then_with(|| a.tab_position.cmp(&b.tab_position))
                     .then_with(|| a.key().cmp(&b.key())),
                 (SearchMatch::ResurrectableSession { .. }, SearchMatch::Pane { .. }) => {
                     std::cmp::Ordering::Less
@@ -457,23 +477,50 @@ mod tests {
     }
 
     #[test]
-    fn session_filter_returns_one_row_per_live_or_resurrectable_session() {
+    fn session_filter_returns_live_sessions_before_resurrectable_sessions_sorted_by_name() {
         let snapshot = normalize_sessions(
-            &[session("live", true, &[("one", &[("shell", 1)])])],
-            &[("old".to_string(), Duration::from_secs(60))],
+            &[
+                session("z-live", true, &[("one", &[("shell", 1)])]),
+                session("a-live", false, &[("one", &[("shell", 2)])]),
+            ],
+            &[
+                ("z-old".to_string(), Duration::from_secs(60)),
+                ("a-old".to_string(), Duration::from_secs(60)),
+            ],
             None,
         );
         let matches = filter_sessions(&snapshot, "");
-        assert_eq!(matches.len(), 2);
-        assert!(matches
-            .iter()
-            .all(|matched| matches!(matched, SearchMatch::Session { .. })));
-        assert_eq!(matches[0].session_name(), "live");
-        assert_eq!(matches[1].session_name(), "old");
+        assert_eq!(
+            matches
+                .iter()
+                .map(SearchMatch::session_name)
+                .collect::<Vec<_>>(),
+            vec!["a-live", "z-live", "a-old", "z-old"]
+        );
     }
 
     #[test]
-    fn empty_query_returns_deterministic_session_tab_pane_order() {
+    fn pane_filter_returns_live_sessions_before_resurrectable_sessions_sorted_by_name() {
+        let snapshot = normalize_sessions(
+            &[
+                session("z-live", true, &[("one", &[("shell", 1)])]),
+                session("a-live", false, &[("one", &[("shell", 2)])]),
+            ],
+            &[
+                ("z-old".to_string(), Duration::from_secs(60)),
+                ("a-old".to_string(), Duration::from_secs(60)),
+            ],
+            None,
+        );
+        let matches = filter_snapshot(&snapshot, "");
+        assert_eq!(matches[0].session_name(), "a-live");
+        assert_eq!(matches[1].session_name(), "z-live");
+        assert_eq!(matches[2].session_name(), "a-old");
+        assert_eq!(matches[3].session_name(), "z-old");
+    }
+
+    #[test]
+    fn empty_query_returns_deterministic_session_and_tab_name_order() {
         let snapshot = normalize_sessions(
             &[
                 session("z", false, &[("one", &[("z", 2)])]),
@@ -488,8 +535,8 @@ mod tests {
             matches[0].target(),
             TargetId::Pane {
                 session_name: "a".to_string(),
-                tab_position: 0,
-                pane_id: 2,
+                tab_position: 1,
+                pane_id: 1,
                 is_plugin: false,
             }
         );

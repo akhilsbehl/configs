@@ -68,6 +68,7 @@ struct State {
     has_permission: bool,
     snapshot_loaded: bool,
     own_pane_id: Option<u32>,
+    visible: bool,
 }
 
 register_plugin!(State);
@@ -853,6 +854,14 @@ impl State {
                 });
                 true
             }
+            BareKey::Up => {
+                self.move_selection(Navigation::Backward);
+                true
+            }
+            BareKey::Down => {
+                self.move_selection(Navigation::Forward);
+                true
+            }
             BareKey::Enter => {
                 self.activate_selected();
                 true
@@ -1032,8 +1041,16 @@ impl ZellijPlugin for State {
                 self.complete_waiting_delete() || changed
             }
             Event::SessionUpdate(_, _) => false,
-            Event::Timer(_) => self.poll_waiting_delete() || self.poll_rename(),
+            Event::Timer(_) if self.visible => {
+                self.poll_waiting_delete();
+                self.poll_rename();
+                set_timeout(0.25);
+                true
+            }
+            Event::Timer(_) => false,
             Event::Visible(true) => {
+                self.visible = true;
+                set_timeout(0.25);
                 let changed = !self.snapshot_loaded && self.refresh_snapshot();
                 if self.save_after_switch {
                     match save_session() {
@@ -1045,7 +1062,10 @@ impl ZellijPlugin for State {
                 }
                 changed || self.status.is_some()
             }
-            Event::Visible(false) => false,
+            Event::Visible(false) => {
+                self.visible = false;
+                false
+            }
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
                 self.has_permission = true;
                 self.refresh_snapshot();
@@ -1064,6 +1084,13 @@ impl ZellijPlugin for State {
     }
 
     fn render(&mut self, rows: usize, cols: usize) {
+        let mut rendered_lines = Vec::new();
+        let mut selected_line = None;
+        macro_rules! emit {
+            ($($arg:tt)*) => {
+                rendered_lines.extend(format!($($arg)*).split('\n').map(str::to_owned));
+            };
+        }
         self.normalize_selection();
         let matches = self.matches();
         let count = matches.len();
@@ -1077,15 +1104,15 @@ impl ZellijPlugin for State {
             Mode::PaneSwitcher => "Session and Pane Switcher",
             Mode::SessionManager => "Session Manager",
         };
-        println!("\x1b[1;36m╭─ {title}\x1b[0m  \x1b[2m{count} results\x1b[0m");
-        println!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
+        emit!("\x1b[1;36m╭─ {title}\x1b[0m  \x1b[2m{count} results\x1b[0m");
+        emit!("\x1b[1;36m│\x1b[0m  \x1b[2mSearch\x1b[0m  \x1b[1;33m[ {search} ]\x1b[0m");
         if let Some(prompt) = &self.prompt {
             match prompt {
                 Prompt::CreateSession(input) => {
-                    println!("\x1b[1;36m│\x1b[0m  \x1b[2mNew session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+                    emit!("\x1b[1;36m│\x1b[0m  \x1b[2mNew session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
                 }
                 Prompt::RenameSession { input, .. } => {
-                    println!("\x1b[1;36m│\x1b[0m  \x1b[2mRename session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
+                    emit!("\x1b[1;36m│\x1b[0m  \x1b[2mRename session\x1b[0m  \x1b[1;33m[ {input} ]\x1b[0m");
                 }
             }
         }
@@ -1103,17 +1130,27 @@ impl ZellijPlugin for State {
                 } => format!("Rename {session_name} to {new_name}?"),
                 Confirmation::Detach => "Detach from the current session?".to_string(),
             };
-            println!("\x1b[1;33m! {message} Enter=confirm Esc=cancel\x1b[0m");
+            emit!("\x1b[1;33m! {message} Enter=confirm Esc=cancel\x1b[0m");
         }
-        println!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
+        emit!("\x1b[1;36m╰──────────────────────────────────────────────\x1b[0m");
 
         if matches.is_empty() {
-            println!("\x1b[2m  No matching panes or sessions\x1b[0m");
+            emit!("\x1b[2m  No matching panes or sessions\x1b[0m");
         }
+        let body_start = rendered_lines.len();
 
+        let mut previous_section = None;
         let mut previous_session = String::new();
         let mut previous_tab = None;
         for matched in matches {
+            let section = matched.is_live();
+            if previous_section != Some(section) {
+                let label = if section { "Live" } else { "Resurrectable" };
+                emit!("\n\x1b[1;33m── {label} sessions ──\x1b[0m");
+                previous_section = Some(section);
+                previous_session.clear();
+                previous_tab = None;
+            }
             if !matches!(matched, SearchMatch::Session { .. })
                 && previous_session != matched.session_name()
             {
@@ -1139,7 +1176,7 @@ impl ZellijPlugin for State {
                             }
                         ))
                         .unwrap_or_default();
-                    println!(
+                    emit!(
                         "\n\x1b[1;36m▸ Session {}\x1b[0m  \x1b[2m{state}{clients}\x1b[0m",
                         session.name
                     );
@@ -1175,14 +1212,15 @@ impl ZellijPlugin for State {
                     };
                     let row = format!("  {marker} Session {session_name}");
                     if self.selected.as_ref() == Some(&target) {
-                        println!("\x1b[1;7m{row}  {state}\x1b[0m");
+                        selected_line = Some(rendered_lines.len());
+                        emit!("\x1b[1;7m{row}  {state}\x1b[0m");
                     } else {
-                        println!("\x1b[1;36m{row}\x1b[0m  \x1b[2m{state}\x1b[0m");
+                        emit!("\x1b[1;36m{row}\x1b[0m  \x1b[2m{state}\x1b[0m");
                     }
                 }
                 SearchMatch::Pane { pane, .. } => {
                     if previous_tab != Some((pane.tab_position, pane.tab_name.clone())) {
-                        println!(
+                        emit!(
                             "\n\x1b[1;35m  ▸ Tab {}\x1b[0m  \x1b[2m{}\x1b[0m",
                             pane.tab_position + 1,
                             if pane.tab_name.trim().is_empty() {
@@ -1209,9 +1247,10 @@ impl ZellijPlugin for State {
                     let hidden = if pane.is_suppressed { " hidden" } else { "" };
                     let row = format!("  {marker}  {kind:<6} {}{hidden}", pane.label());
                     if self.selected.as_ref() == Some(&target) {
-                        println!("\x1b[1;7m{row}\x1b[0m");
+                        selected_line = Some(rendered_lines.len());
+                        emit!("\x1b[1;7m{row}\x1b[0m");
                     } else {
-                        println!("{row}");
+                        emit!("{row}");
                     }
                 }
                 SearchMatch::ResurrectableSession {
@@ -1230,22 +1269,87 @@ impl ZellijPlugin for State {
                         format_age(*age)
                     );
                     if self.selected.as_ref() == Some(&target) {
-                        println!("\x1b[1;7m{row}\x1b[0m");
+                        selected_line = Some(rendered_lines.len());
+                        emit!("\x1b[1;7m{row}\x1b[0m");
                     } else {
-                        println!("{row}");
+                        emit!("{row}");
                     }
                 }
             }
         }
+        let body_end = rendered_lines.len();
 
         let status = self.status.as_deref().unwrap_or("");
         if !status.is_empty() {
-            println!("\n\x1b[1;33m!\x1b[0m {status}");
+            emit!("\n\x1b[1;33m!\x1b[0m {status}");
         }
-        println!(
-            "\n\x1b[2mTab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m activate  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
+        emit!(
+            "\n\x1b[2m↑/↓ or Tab/Shift-Tab\x1b[0m navigate  \x1b[2mEnter\x1b[0m activate  \x1b[2mEsc\x1b[0m close  \x1b[2m{rows}×{cols}\x1b[0m"
         );
+
+        let max_lines = rows.max(1);
+        let footer_lines = rendered_lines.len() - body_end;
+        let body_capacity = max_lines
+            .saturating_sub(body_start)
+            .saturating_sub(footer_lines)
+            .saturating_sub(2)
+            .max(1);
+        let body_len = body_end.saturating_sub(body_start);
+        let selected_body_line = selected_line
+            .filter(|line| *line >= body_start && *line < body_end)
+            .map(|line| line - body_start)
+            .unwrap_or_default();
+        let body_view_start = selected_body_line
+            .saturating_sub(body_capacity / 2)
+            .min(body_len.saturating_sub(body_capacity));
+        let body_view_end = (body_view_start + body_capacity).min(body_len);
+
+        print!("\x1b[2J\x1b[H");
+        for line in rendered_lines[..body_start].iter() {
+            println!("{}", truncate_ansi(line, cols));
+        }
+        if body_view_start > 0 {
+            println!("{}", truncate_ansi("\x1b[2m↑ more\x1b[0m", cols));
+        }
+        for line in rendered_lines[body_start + body_view_start..body_start + body_view_end].iter()
+        {
+            println!("{}", truncate_ansi(line, cols));
+        }
+        if body_view_end < body_len {
+            println!("{}", truncate_ansi("\x1b[2m↓ more\x1b[0m", cols));
+        }
+        for line in rendered_lines[body_end..].iter() {
+            println!("{}", truncate_ansi(line, cols));
+        }
     }
+}
+
+fn truncate_ansi(text: &str, width: usize) -> String {
+    if width == 0 {
+        return String::new();
+    }
+
+    let mut output = String::new();
+    let mut visible_width = 0;
+    let mut chars = text.chars().peekable();
+    while let Some(character) = chars.next() {
+        if character == '\x1b' {
+            output.push(character);
+            while let Some(control) = chars.next() {
+                output.push(control);
+                if control.is_ascii_alphabetic() {
+                    break;
+                }
+            }
+        } else if visible_width < width {
+            output.push(character);
+            visible_width += 1;
+        } else {
+            output.push_str("\x1b[0m");
+            break;
+        }
+    }
+    output
 }
 
 fn format_age(age: Duration) -> String {
