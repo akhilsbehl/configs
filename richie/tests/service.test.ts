@@ -10,7 +10,9 @@ test("renders a compact accessible breadcrumb for the reviewed file", () => {
   const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/client notes/draft-v00.md" }, "# Draft\n");
   assert.match(html, /<nav id="file-breadcrumb" aria-label="File path" title="\/work\/client notes\/draft-v00\.md"><ol><li><span>\/<\/span>/);
   assert.match(html, /<li><span>work<\/span><\/li><li><span>client notes<\/span><\/li><li aria-current="page"><span>draft-v00\.md<\/span><\/li>/);
-  assert.match(html, /#file-breadcrumb\{margin:0 0 22px;padding:7px 10px/);
+  assert.match(html, /<button class="copy-path" type="button" data-copy-source="\/work\/client notes\/draft-v00\.md" data-copy-label="Copy file path" aria-label="Copy file path" title="Copy file path"><svg/);
+  assert.match(html, /#file-breadcrumb\{display:flex;align-items:center;gap:8px;margin:0 0 22px/);
+  assert.match(html, /#file-breadcrumb \.copy-path\{flex:none;width:28px;height:28px/);
 });
 
 test("escapes reviewed file paths in breadcrumb markup", () => {
@@ -22,11 +24,18 @@ test("escapes reviewed file paths in breadcrumb markup", () => {
 test("renders fixed sidebar controls with independently scrolling content", () => {
   const html = renderReviewPage({ id: "session-1", token: "token-1", sourcePath: "/work/draft-v00.md" }, "# Draft\n");
   assert.match(html, /body\{[^}]*padding:24px 350px 56px/);
-  assert.match(html, /<aside id="panel"><div id="toolbar">/);
+  assert.match(html, /<aside id="panel"><div id="toolbar"><button id="navigation-toggle" type="button" aria-controls="navigation" aria-expanded="true">Hide navigation<\/button><button data-action="document-note">/);
+  assert.match(html, /body\.navigation-collapsed\{padding-left:48px\}/);
+  assert.match(html, /body\.navigation-collapsed #document\{max-width:none\}/);
+  assert.match(html, /#navigation\.is-collapsed\{opacity:0;pointer-events:none;transform:translateX\(-calc\(100% \+ 24px\)\)\}/);
+  assert.match(html, /#navigation-toggle\{background:var\(--iris\);border-color:var\(--iris\);color:#fffaf3\}/);
+  assert.match(html, /#toolbar button\[data-action=document-note\]\{background:var\(--foam\);border-color:var\(--foam\);color:#fffaf3\}/);
   assert.match(html, /#toolbar\{display:grid;/);
   assert.match(html, /#toolbar button\{width:100%;min-height:36px\}/);
   assert.match(html, /#panel,#navigation\{position:fixed;top:20px;display:flex;flex-direction:column;/);
   assert.match(html, /#operations,#outline\{min-height:0;overflow:auto\}/);
+  assert.match(html, /\.table-scroll\{max-width:100%;margin:1\.4rem 0;overflow-x:auto;overscroll-behavior-inline:contain\}/);
+  assert.match(html, /table\{width:max-content;min-width:100%;border-collapse:separate;/);
   assert.match(html, /#operations\{flex:1;/);
   assert.match(html, /#outline\{flex:1\}/);
   assert.match(html, /#toolbar,#guide-link,#navigation \.search-box,\.panel-heading\{flex:none\}/);

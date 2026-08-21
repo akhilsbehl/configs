@@ -16,10 +16,13 @@ const publicDirectory = resolve(here, "..", "public");
 const style = `
 :root{color-scheme:light;--base:#faf4ed;--surface:#fffaf3;--overlay:#f2e9de;--muted:#9893a5;--subtle:#797593;--text:#575279;--pine:#286983;--foam:#56949f;--rose:#d7827e;--love:#b4637a;--gold:#ea9d34;--iris:#907aa9;--border:#dfd6cc}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 350px 56px}
+body{margin:0;min-height:100vh;background:var(--base);color:var(--text);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px 350px 56px;transition:padding-left .18s ease}
+body.navigation-collapsed{padding-left:48px}
 #document{max-width:900px;margin:0 auto}
-#file-breadcrumb{margin:0 0 22px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);box-shadow:0 3px 12px rgba(87,82,121,.05);overflow:hidden;color:var(--subtle);font-size:.78rem;line-height:1.3}
-#file-breadcrumb ol{display:flex;align-items:center;min-width:max-content;margin:0;padding:0;list-style:none}
+body.navigation-collapsed #document{max-width:none}
+#file-breadcrumb{display:flex;align-items:center;gap:8px;margin:0 0 22px;padding:5px 6px 5px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);box-shadow:0 3px 12px rgba(87,82,121,.05);overflow:hidden;color:var(--subtle);font-size:.78rem;line-height:1.3}
+#file-breadcrumb ol{display:flex;flex:1;align-items:center;min-width:0;margin:0;padding:0;list-style:none}
+#file-breadcrumb .copy-path{flex:none;width:28px;height:28px;padding:5px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--subtle)}#file-breadcrumb .copy-path:hover,#file-breadcrumb .copy-path:focus-visible,#file-breadcrumb .copy-path.copied{border-color:var(--border);background:var(--overlay);color:var(--pine)}#file-breadcrumb .copy-path svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.8}
 #file-breadcrumb li{display:flex;align-items:center;min-width:0}
 #file-breadcrumb li:not(:last-child)::after{content:"/";margin:0 7px;color:var(--border)}
 #file-breadcrumb li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -44,6 +47,8 @@ dialog menu{display:flex;flex-direction:row-reverse;justify-content:flex-start;g
 dialog [hidden]{display:none}
 dialog button[value=confirm]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
 dialog button.destructive{background:var(--love);border-color:var(--love)}
+#toolbar button[data-action=document-note]{background:var(--foam);border-color:var(--foam);color:#fffaf3}
+#toolbar button[data-action=document-note]:hover{background:#3f7e86}
 #toolbar button[data-action=finish]{background:var(--pine);border-color:var(--pine);color:#fffaf3}
 #toolbar button[data-action=finish]:hover{background:#20556a}
 #toolbar button[data-action=abort]{background:var(--love);border-color:var(--love);color:#fffaf3}
@@ -56,7 +61,8 @@ a{color:var(--pine);text-decoration-thickness:1.5px;text-underline-offset:3px}
 a:hover{color:var(--love)}
 blockquote{margin:1.4em 0;padding:12px 18px;background:var(--surface);border-left:4px solid var(--rose);border-radius:0 8px 8px 0;color:var(--subtle)}
 hr{border:0;border-top:1px solid var(--border);margin:2.2rem 0}
-table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;margin:1.4rem 0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 5px 16px rgba(87,82,121,.06)}
+.table-scroll{max-width:100%;margin:1.4rem 0;overflow-x:auto;overscroll-behavior-inline:contain}
+table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 5px 16px rgba(87,82,121,.06)}
 td{padding:10px 13px;border-top:1px solid var(--border);vertical-align:top}
 tr:first-child td{background:var(--pine);border-top:0;color:#fffaf3;font-weight:700}
 tr:nth-child(odd):not(:first-child) td{background:var(--surface)}
@@ -94,7 +100,8 @@ code{font:0.92em ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",mo
 .hljs-title,.hljs-section,.hljs-function .hljs-title{color:var(--iris);font-weight:600}
 .hljs-operator,.hljs-punctuation{color:var(--subtle)}
 #panel,#navigation{position:fixed;top:20px;display:flex;flex-direction:column;width:290px;height:calc(100vh - 40px);overflow:hidden;padding:14px;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--rose);border-radius:10px;box-shadow:0 10px 30px rgba(87,82,121,.14);color:var(--text)}
-#panel{right:20px}#navigation{left:20px;border-top-color:var(--foam)}
+#panel{right:20px}#navigation{left:20px;border-top-color:var(--foam);transition:opacity .18s ease,transform .18s ease}#navigation.is-collapsed{opacity:0;pointer-events:none;transform:translateX(-calc(100% + 24px))}
+#navigation-toggle{background:var(--iris);border-color:var(--iris);color:#fffaf3}#navigation-toggle:hover{background:#725f88;border-color:#725f88}
 #toolbar,#guide-link,#navigation .search-box,.panel-heading{flex:none}
 #guide-link{display:block;margin:0 0 14px;padding:7px 9px;background:var(--overlay);border-radius:7px;font-weight:700;text-decoration:none}
 #guide-link:hover{background:#eadfd2}
@@ -147,7 +154,7 @@ li>input[type=checkbox]{margin:0 7px 0 0;vertical-align:.05em}
 .richie-hover{outline:1px dashed var(--rose);outline-offset:3px;border-radius:3px}
 #stale-banner{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:900px;margin:0 auto 16px;padding:10px 14px;background:var(--love);color:#fffaf3;border-radius:8px;font-size:.92rem}#stale-banner button{flex:none;background:#fffaf3;border-color:#fffaf3;color:var(--love);font-size:.82rem}#stale-banner button:hover{background:#eadfd2;border-color:#eadfd2}
 .review-note{color:var(--love);font-size:.9em}
-@media(max-width:1300px){body{padding:16px}#panel,#navigation{position:static;display:block;width:auto;height:auto;overflow:visible;margin:0 auto 20px;max-width:900px}#operations,#outline{overflow:visible}.search-box input{width:min(190px,50vw)}}
+@media(max-width:1300px){body,body.navigation-collapsed{padding:16px}#panel,#navigation{position:static;display:block;width:auto;height:auto;overflow:visible;margin:0 auto 20px;max-width:900px}#navigation.is-collapsed{display:none}#operations,#outline{overflow:visible}.search-box input{width:min(190px,50vw)}}
 `;
 
 function escapeHtml(value: string): string {
@@ -158,7 +165,8 @@ function renderFileBreadcrumb(sourcePath: string): string {
   const parts = sourcePath.split("/").filter(Boolean);
   const crumbs = ["/"];
   if (parts.length) crumbs.push(...parts);
-  return `<nav id="file-breadcrumb" aria-label="File path" title="${escapeHtml(sourcePath)}"><ol>${crumbs.map((part, index) => `<li${index === crumbs.length - 1 ? ' aria-current="page"' : ""}><span>${escapeHtml(part)}</span></li>`).join("")}</ol></nav>`;
+  const copyIcon = `<svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>`;
+  return `<nav id="file-breadcrumb" aria-label="File path" title="${escapeHtml(sourcePath)}"><ol>${crumbs.map((part, index) => `<li${index === crumbs.length - 1 ? ' aria-current="page"' : ""}><span>${escapeHtml(part)}</span></li>`).join("")}</ol><button class="copy-path" type="button" data-copy-source="${escapeHtml(sourcePath)}" data-copy-label="Copy file path" aria-label="Copy file path" title="Copy file path">${copyIcon}</button></nav>`;
 }
 
 function send(response: ServerResponse, code: number, value: unknown, contentType = "application/json"): void {
@@ -188,7 +196,7 @@ function parseRange(value: unknown): ReviewOperation["range"] | undefined {
 export function renderReviewPage(session: Pick<Session, "id" | "token" | "sourcePath">, source: string, stale = false): string {
   const banner = stale ? `<div id="stale-banner"><span>The Markdown source changed after this review started. Highlights may be misaligned and new feedback is blocked. Restore the source or abort the review.</span><button type="button" data-action="reload-source">Reload new draft</button></div>` : "";
   const localImageUrl = (path: string): string => `/api/media/${encodeURIComponent(session.id)}?token=${encodeURIComponent(session.token)}&path=${encodeURIComponent(path)}`;
-  return `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderFileBreadcrumb(session.sourcePath)}${renderReviewHtml(source, { localImageUrl })}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
+  return `<!doctype html><meta charset="utf-8"><meta name="referrer" content="no-referrer"><title>Richie: ${session.sourcePath}</title><style>${style}</style>${banner}<aside id="panel"><div id="toolbar"><button id="navigation-toggle" type="button" aria-controls="navigation" aria-expanded="true">Hide navigation</button><button data-action="document-note">Document level note</button><button data-action="abort">Abort review</button><button data-action="finish">Finish review</button></div><div class="panel-heading"><strong>Review feedback</strong><span id="feedback-count" aria-live="polite">0 open</span></div><div id="operations"></div></aside><aside id="navigation"><a id="guide-link" href="/guide" target="_blank" rel="noreferrer">User guide</a><div class="search-box" role="search"><label for="document-search"><span>Find in document</span></label><input id="document-search" type="search" placeholder="Search…" autocomplete="off"><output id="search-count" aria-live="polite"></output><button data-action="search-previous" aria-label="Previous search match">Previous match</button><button data-action="search-next" aria-label="Next search match">Next match</button></div><nav id="outline" aria-label="Document outline"><strong>Document outline</strong><div id="outline-items"></div></nav></aside><main id="document">${renderFileBreadcrumb(session.sourcePath)}${renderReviewHtml(source, { localImageUrl })}</main><dialog id="richie-dialog"><form method="dialog"><h2 id="richie-dialog-title"></h2><p id="richie-dialog-message"></p><label id="richie-dialog-field"><span></span><textarea id="richie-dialog-input"></textarea></label><menu><button value="confirm">Confirm</button><button value="cancel">Cancel</button></menu></form></dialog><script>window.__RICHIE__=${JSON.stringify({ id: session.id, token: session.token })}</script><script type="module" src="/assets/client.js"></script>`;
 }
 
 export class RichieService {
