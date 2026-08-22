@@ -7,7 +7,7 @@
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "packages": [
-    "./extensions/damare",
+    "./extensions/pie-damare",
     {
       "source": "npm:pi-patty-bg-tasks",
       "extensions": [],

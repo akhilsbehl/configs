@@ -25,3 +25,6 @@
 [submodule "pi/extensions/pie-jina"]
 	path = pi/extensions/pie-jina
 	url = git@github.com:akhilsbehl/pie-jina.git
+[submodule "pi/extensions/pie-damare"]
+	path = pi/extensions/pie-damare
+	url = git@github.com:akhilsbehl/pie-damare.git
