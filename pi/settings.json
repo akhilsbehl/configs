@@ -17,11 +17,11 @@
     },
     "npm:@gotgenes/pi-permission-system",
     "./extensions/pie-permission-auto-review-codex",
-    "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
     "npm:@narumitw/pi-starship",
-    "npm:pi-context-view"
+    "npm:pi-context-view",
+    "npm:pi-btw"
   ],
   "terminal": {
     "showTerminalProgress": true
