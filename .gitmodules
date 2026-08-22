@@ -16,3 +16,6 @@
 [submodule "richie"]
 	path = richie
 	url = git@github.com:akhilsbehl/richie.git
+[submodule "zellij-pane-switcher"]
+	path = zellij-pane-switcher
+	url = git@github.com:akhilsbehl/zellij-pane-switcher.git
