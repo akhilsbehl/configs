@@ -31,3 +31,6 @@
 [submodule "pi/extensions/pie-permission-auto-review-codex"]
 	path = pi/extensions/pie-permission-auto-review-codex
 	url = git@github.com:akhilsbehl/pie-permission-auto-review-codex.git
+[submodule "pi/extensions/pie-subagents"]
+	path = pi/extensions/pie-subagents
+	url = git@github.com:akhilsbehl/pie-subagents.git
