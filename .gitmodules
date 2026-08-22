@@ -22,3 +22,6 @@
 [submodule "pi/extensions/pie-zellij-status"]
 	path = pi/extensions/pie-zellij-status
 	url = git@github.com:akhilsbehl/pie-zellij-status.git
+[submodule "pi/extensions/pie-jina"]
+	path = pi/extensions/pie-jina
+	url = git@github.com:akhilsbehl/pie-jina.git
