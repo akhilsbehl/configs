@@ -7,7 +7,7 @@
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "packages": [
-    "./extensions/damare",
+    "./extensions/pie-damare",
     {
       "source": "npm:pi-patty-bg-tasks",
       "extensions": [],
@@ -16,12 +16,12 @@
       "themes": []
     },
     "npm:@gotgenes/pi-permission-system",
-    "./extensions/pi-permission-auto-review",
-    "npm:@narumitw/pi-btw",
+    "./extensions/pie-permission-auto-review-codex",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
     "npm:@narumitw/pi-starship",
-    "npm:pi-context-view"
+    "npm:pi-context-view",
+    "npm:pi-btw"
   ],
   "terminal": {
     "showTerminalProgress": true

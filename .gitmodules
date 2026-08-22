@@ -13,3 +13,24 @@
 [submodule "fzf-tab"]
 	path = fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
+[submodule "richie"]
+	path = richie
+	url = git@github.com:akhilsbehl/richie.git
+[submodule "zellij-pane-switcher"]
+	path = zellij-pane-switcher
+	url = git@github.com:akhilsbehl/zellij-pane-switcher.git
+[submodule "pi/extensions/pie-zellij-status"]
+	path = pi/extensions/pie-zellij-status
+	url = git@github.com:akhilsbehl/pie-zellij-status.git
+[submodule "pi/extensions/pie-jina"]
+	path = pi/extensions/pie-jina
+	url = git@github.com:akhilsbehl/pie-jina.git
+[submodule "pi/extensions/pie-damare"]
+	path = pi/extensions/pie-damare
+	url = git@github.com:akhilsbehl/pie-damare.git
+[submodule "pi/extensions/pie-permission-auto-review-codex"]
+	path = pi/extensions/pie-permission-auto-review-codex
+	url = git@github.com:akhilsbehl/pie-permission-auto-review-codex.git
+[submodule "pi/extensions/pie-subagents"]
+	path = pi/extensions/pie-subagents
+	url = git@github.com:akhilsbehl/pie-subagents.git
