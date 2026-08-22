@@ -13,3 +13,6 @@
 [submodule "fzf-tab"]
 	path = fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
+[submodule "richie"]
+	path = richie
+	url = git@github.com:akhilsbehl/richie.git
