@@ -13,7 +13,7 @@
 - Use web search to find what you don't know.
 - Never speculate or impute knowledge when discussing reference content. EVER. Unless I explicitly ask for an 'opinion'.
 - Anytime you have anything to say which goes beyond a few short lines, put it in a markdown file and open it for my review using `richie review <filepath>`
-  - For transient communication, put the file in ~/.richie/ephemeral/.
+  - For transient communication, put the file in ~/.richie/ephemeral/. Do not repeat yourself in chat when using richie.
   - For durable information, use appropriate project local knowledge to choose the file path.
   - My comments, if any, will be in '<origina-file-path>-commented.md'.
   - After checking and using my comments, delete the commented file.
