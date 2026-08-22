@@ -29,6 +29,7 @@
 - ALWAYS use git even for non-coding work. If a repo doesn't exist, remind me to create one before proceeding.
 - ALWAYS use a project-level AGENTS.md in every project. Remind me to create one if missing. Symlink it to CLAUDE.md, GEMINI.md, or the relevant harness file.
 - `richie` only works with .md files, invoke it in a loop for several files. `richie` can not read files from `/tmp`
+- When checking on background jobs in a loop, add a 10s sleep per turn.
 
 ## Collaborating document writing
 Read this file: ~/configs/WRITING_PRINCIPLES.md
