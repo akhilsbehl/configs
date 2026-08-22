@@ -16,7 +16,7 @@
       "themes": []
     },
     "npm:@gotgenes/pi-permission-system",
-    "./extensions/pi-permission-auto-review",
+    "./extensions/pie-permission-auto-review-codex",
     "npm:@narumitw/pi-btw",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
