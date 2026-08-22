@@ -19,3 +19,6 @@
 [submodule "zellij-pane-switcher"]
 	path = zellij-pane-switcher
 	url = git@github.com:akhilsbehl/zellij-pane-switcher.git
+[submodule "pi/extensions/pie-zellij-status"]
+	path = pi/extensions/pie-zellij-status
+	url = git@github.com:akhilsbehl/pie-zellij-status.git
