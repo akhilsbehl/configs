@@ -66,10 +66,10 @@
   "app.tree.filter.all": [],
   "app.tree.filter.cycleForward": [],
   "app.tree.filter.cycleBackward": [],
-  "app.models.save": [],
+  "app.models.save": ["ctrl+s"],
   "app.models.enableAll": [],
-  "app.models.clearAll": [],
+  "app.models.clearAll": ["ctrl+l"],
   "app.models.toggleProvider": [],
-  "app.models.reorderUp": [],
-  "app.models.reorderDown": []
+  "app.models.reorderUp": ["ctrl+up"],
+  "app.models.reorderDown": ["ctrl+down"]
 }
