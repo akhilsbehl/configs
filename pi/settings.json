@@ -28,12 +28,13 @@
   },
   "quietStartup": false,
   "enabledModels": [
-    "google/gemini-flash-latest",
-    "google/gemini-flash-lite-latest",
-    "google/gemini-3.1-pro-preview",
+    "openai-codex/gpt-5.6-luna",
     "openai-codex/gpt-5.6-terra",
     "openai-codex/gpt-5.6-sol",
-    "openai-codex/gpt-5.6-luna"
+    "google/gemini-flash-lite-latest",
+    "google/gemini-flash-latest",
+    "google/gemini-3.1-pro-preview",
+    "openrouter/stealth/ox-alpha"
   ],
   "observational-memory": {
     "observeAfterTokens": 25000,
