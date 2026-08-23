@@ -122,7 +122,7 @@ After the manual gate:
 
 ## Phase 2 — Patch the Podman image
 
-Read the project's corporate-certificate instructions if available. Apply the pattern in `references/podman-corporate-certificates.md`.
+Read the project's corporate-certificate instructions if available. Apply the concrete pattern below.
 
 ### Corporate certificate
 
@@ -168,7 +168,7 @@ Build only after all image patches:
 
 ## Phase 3 — Install the explicit Pi orchestration and prompts
 
-The copied files in `references/workflow-template/` are the source of truth for the workflow. Copy them first. Read `references/patch-snippets.md` only for optional mounts, approval wrappers, and project-specific adaptations. Do not reconstruct the orchestrator from prose or combine it with the vendor's parallel-planner workflow.
+The copied files in `references/workflow-template/` are the source of truth for the workflow. Copy them first. Apply the mount and optional approval-wrapper adaptations shown in this phase. Do not reconstruct the orchestrator from prose or combine it with the vendor's parallel-planner workflow.
 
 The workflow is:
 
@@ -591,14 +591,15 @@ Record the final setup in `custom-pi-setup.md` or the project's equivalent durab
 
 ## Reference material
 
-Read these only when the corresponding branch is active:
+Read the tracker reference only when the user selects Gitea/Forgejo or GitLab:
 
-- [Corporate certificate build pattern](references/podman-corporate-certificates.md)
-- [Issue-tracker migration details](references/issue-tracker-migration.md)
-- [Pi and resource-management preferences](references/pi-and-resources.md)
-- [Concrete TypeScript, prompt, mount, and coding-standard patches](references/patch-snippets.md)
-- [Copyable gated workflow template](references/workflow-template/README.md)
+- [Issue-tracker migration and rewiring](references/issue-tracker-migration.md)
+
+The copyable workflow files live directly under `references/workflow-template/`.
+They are installed as a set in Phase 0; they are not an additional prose
+reference to reconcile.
 
 ## Revision Log
 
 - 2026-08-24: Replaced the vendor workflow guidance with the copyable gated workflow, eight-runner batches, script-owned circuit breakers, explicit `scrun` options, and tracker-adapter instructions.
+- 2026-08-24: Removed duplicated prose references; retained the tracker migration reference and made it cover host-side `main.mts` rewiring.

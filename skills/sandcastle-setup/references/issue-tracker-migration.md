@@ -19,7 +19,17 @@ The planner needs a JSON list of open, labelled issues. The implementer needs on
 - Close an issue.
 - Create the `Sandcastle` label when the user selected label creation.
 
-Preserve the generated prompt's JSON shape. Search every generated prompt and environment example for stale GitHub commands after migration.
+Preserve the generated prompt's JSON shape. Rewire every tracker command, not only the prompts:
+
+- `.sandcastle/main.mts` (or `main.ts`): replace every `gh issue list/view/edit/comment/close/reopen` call in the host-side tracker helpers, plus any tracker authentication or label-creation hook. The copied workflow's `ghJson`, `issueComments`, `issueState`, `addLabel`, `removeLabel`, `commentIssue`, `closeIssue`, `reopenIssue`, and planner acquisition are all part of this seam.
+- `plan-prompt.md`, `implement-prompt.md`, `review-prompt.md`, and `merge-prompt.md`: replace tracker commands and preserve marker/comment ordering.
+- `.sandcastle/Containerfile`: install the selected CLI and retain the certificate setup.
+- `.sandcastle/.env.example` and runtime environment wiring: replace tracker variables without printing tokens.
+
+Search the complete generated setup, including both `main.mts` and prompts, for
+stale `gh`/GitHub commands after migration. Validate that list output still
+normalises to the planner's expected fields and that all label operations use
+the `Sandcastle` label contract.
 
 ## Gitea / Forgejo
 
