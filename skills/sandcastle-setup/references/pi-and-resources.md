@@ -81,7 +81,7 @@ exec pi --approve "$@"
 
 ## Default fan-out
 
-The generated parallel planner normally does:
+The explicit workflow template does not use unbounded fan-out. The generated parallel planner normally does:
 
 ```ts
 await Promise.allSettled(issues.map(runIssuePipeline));
@@ -91,10 +91,10 @@ This starts every returned issue pipeline concurrently. Each pipeline runs its i
 
 ## Bounded fan-out
 
-Add a configurable limit and process batches:
+The explicit workflow template uses `MAX_CONCURRENT_ISSUES = 8` and processes batches:
 
 ```ts
-const MAX_CONCURRENT_ISSUES = 6;
+const MAX_CONCURRENT_ISSUES = 8;
 const settled = [];
 
 for (
@@ -110,7 +110,7 @@ for (
 }
 ```
 
-Ten planned issues therefore run as six and four. A worker pool is only needed if the next issue must start as soon as any individual slot frees.
+Ten planned issues therefore run as eight and two. A worker pool is only needed if the next issue must start as soon as an individual slot frees. Implementer and reviewer calls within one issue pipeline remain sequential; merger units remain sequential.
 
 ## Runtime capacity
 
@@ -136,3 +136,7 @@ podman({ cpus: 1.5 })
 ```
 
 Do not assume the installed Sandcastle version exposes a container memory option.
+
+## Revision Log
+
+- 2026-08-24: Updated resource guidance for the explicit eight-pipeline gated workflow.

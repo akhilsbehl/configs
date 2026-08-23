@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DEFAULT_PLANNER_MODEL="gpt-5.6-luna"
+DEFAULT_PLANNER_THINKING="high"
+DEFAULT_IMPLEMENTER_MODEL="gpt-5.6-luna"
+DEFAULT_IMPLEMENTER_THINKING="medium"
+DEFAULT_REVIEWER_MODEL="gpt-5.6-terra"
+DEFAULT_REVIEWER_THINKING="off"
+DEFAULT_MERGER_MODEL="gpt-5.6-terra"
+DEFAULT_MERGER_THINKING="off"
+
+planner_model="$DEFAULT_PLANNER_MODEL"
+planner_thinking="$DEFAULT_PLANNER_THINKING"
+implementer_model="$DEFAULT_IMPLEMENTER_MODEL"
+implementer_thinking="$DEFAULT_IMPLEMENTER_THINKING"
+reviewer_model="$DEFAULT_REVIEWER_MODEL"
+reviewer_thinking="$DEFAULT_REVIEWER_THINKING"
+merger_model="$DEFAULT_MERGER_MODEL"
+merger_thinking="$DEFAULT_MERGER_THINKING"
+
+usage() {
+  cat <<EOF
+Usage: ./scrun [options]
+
+Options:
+  --planner-model MODEL          Default: $DEFAULT_PLANNER_MODEL
+  --planner-thinking LEVEL       Default: $DEFAULT_PLANNER_THINKING
+  --implementer-model MODEL      Default: $DEFAULT_IMPLEMENTER_MODEL
+  --implementer-thinking LEVEL   Default: $DEFAULT_IMPLEMENTER_THINKING
+  --reviewer-model MODEL         Default: $DEFAULT_REVIEWER_MODEL
+  --reviewer-thinking LEVEL      Default: $DEFAULT_REVIEWER_THINKING
+  --merger-model MODEL           Default: $DEFAULT_MERGER_MODEL
+  --merger-thinking LEVEL        Default: $DEFAULT_MERGER_THINKING
+  -h, --help                     Show this help
+
+Thinking levels: off, minimal, low, medium, high, xhigh
+Model IDs and model-specific thinking levels are validated against:
+  ~/.pi/agent/models-store.json
+EOF
+}
+
+fail_usage() {
+  echo "scrun: $1" >&2
+  echo "Use './scrun --help' for usage." >&2
+  exit 2
+}
+
+require_value() {
+  [[ $# -ge 2 && -n "$2" && "$2" != --* ]] || fail_usage "$1 requires a value"
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --planner-model)
+      require_value "$1" "${2-}"
+      planner_model="$2"
+      shift 2
+      ;;
+    --planner-thinking)
+      require_value "$1" "${2-}"
+      planner_thinking="$2"
+      shift 2
+      ;;
+    --implementer-model)
+      require_value "$1" "${2-}"
+      implementer_model="$2"
+      shift 2
+      ;;
+    --implementer-thinking)
+      require_value "$1" "${2-}"
+      implementer_thinking="$2"
+      shift 2
+      ;;
+    --reviewer-model)
+      require_value "$1" "${2-}"
+      reviewer_model="$2"
+      shift 2
+      ;;
+    --reviewer-thinking)
+      require_value "$1" "${2-}"
+      reviewer_thinking="$2"
+      shift 2
+      ;;
+    --merger-model)
+      require_value "$1" "${2-}"
+      merger_model="$2"
+      shift 2
+      ;;
+    --merger-thinking)
+      require_value "$1" "${2-}"
+      merger_thinking="$2"
+      shift 2
+      ;;
+    *)
+      fail_usage "unknown option or positional argument: $1"
+      ;;
+  esac
+done
+
+validate_thinking() {
+  case "$2" in
+    off|minimal|low|medium|high|xhigh) ;;
+    *) fail_usage "$1 has invalid thinking level '$2'" ;;
+  esac
+}
+
+validate_thinking --planner-thinking "$planner_thinking"
+validate_thinking --implementer-thinking "$implementer_thinking"
+validate_thinking --reviewer-thinking "$reviewer_thinking"
+validate_thinking --merger-thinking "$merger_thinking"
+
+MODEL_STORE="${HOME:?HOME is not set}/.pi/agent/models-store.json"
+[[ -r "$MODEL_STORE" ]] || fail_usage "cannot read $MODEL_STORE"
+
+exec npx tsx .sandcastle/main.mts \
+  --planner-model "$planner_model" \
+  --planner-thinking "$planner_thinking" \
+  --implementer-model "$implementer_model" \
+  --implementer-thinking "$implementer_thinking" \
+  --reviewer-model "$reviewer_model" \
+  --reviewer-thinking "$reviewer_thinking" \
+  --merger-model "$merger_model" \
+  --merger-thinking "$merger_thinking"

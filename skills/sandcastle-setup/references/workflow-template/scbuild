@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+npx @ai-hero/sandcastle podman build-image
+
+exit $?

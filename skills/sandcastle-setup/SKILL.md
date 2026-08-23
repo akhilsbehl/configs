@@ -14,7 +14,7 @@ Use this skill to turn a fresh `sandcastle init` scaffold into the user's prefer
 - Preserve existing project conventions. Read `AGENTS.md`, `CONTEXT.md`, and relevant ADRs when present.
 - Never print, log, commit, or place tokens in command output. Redact credentials as `<REDACTED>`.
 - Do not pin the Pi package version. Install the current `@earendil-works/pi-coding-agent` package in the sandbox image.
-- Keep the final integration branch for the user to review and merge into the default branch through an explicit PR or merge request. Do not add an automatic final merge into the default branch.
+- Use the gated workflow in `references/workflow-template/`: the merger integrates verified issue branches into the target branch and the script closes the issue only after mechanical postconditions pass. Do not replace this with an unguarded automatic merge.
 - Use `tea` for Gitea/Forgejo Issues and `glab` for GitLab Issues. Do not leave mixed GitHub and alternative-tracker commands in prompts or image setup.
 - If a required host binary or certificate is missing, stop and guide the user to install or provide it. Do not invent a workaround.
 
@@ -40,8 +40,8 @@ Present this checklist and ask the user to perform it. Do not run these interact
    - Agent: **Pi**.
    - Sandbox provider: **Podman**.
    - Issue tracker: **GitHub**.
-   - Template: **parallel-planner-with-review**.
-   - Create the Sandcastle GitHub label: **Yes**.
+   - Template: **blank** (the setup will install the repository's explicit workflow rather than extend a vendor workflow implicitly).
+   - Create the `Sandcastle` label: **Yes**. The selected tracker adapter will preserve this label contract.
    - Install `zod` now: **Yes**.
    - Build the default image now: **No**. The generated `Containerfile` needs the corporate-certificate and Pi patches first.
 
@@ -58,6 +58,20 @@ Present this checklist and ask the user to perform it. Do not run these interact
    - **GitLab** — the agent will take over and replace the GitHub wiring before guiding GitLab authentication.
 
 Do not proceed until the user confirms the commands completed and answers the tracker question.
+
+After confirmation, install the explicit workflow from this skill instead of hand-editing the generated template:
+
+```bash
+cp <sandcastle-setup-skill>/references/workflow-template/main.mts .sandcastle/main.mts
+cp <sandcastle-setup-skill>/references/workflow-template/scrun ./scrun
+cp <sandcastle-setup-skill>/references/workflow-template/*-prompt.md .sandcastle/
+cp <sandcastle-setup-skill>/references/workflow-template/Containerfile.github .sandcastle/Containerfile
+cp <sandcastle-setup-skill>/references/workflow-template/sandcastle.gitignore .sandcastle/.gitignore
+cp <sandcastle-setup-skill>/references/workflow-template/scbuild ./scbuild
+chmod u+x scrun scbuild
+```
+
+Replace `<sandcastle-setup-skill>` with the absolute skill directory shown by the skill loader. The copied template is the GitHub implementation. For Gitea/Forgejo or GitLab, apply the tracker adapter in Phase 4 to the copied files; do not mix tracker command sets.
 
 ## Phase 1 — Inspect and establish preferences
 
@@ -93,9 +107,9 @@ After the manual gate:
    podman stats --no-stream
    ```
 
-   Treat CPU count and Podman memory ceiling as stable or slowly changing. Treat available memory, load, swap use, existing containers, test/build spikes, and network/API capacity as runtime variables. Start with `MAX_CONCURRENT_ISSUES = 6` only when runtime observations support it; otherwise choose a lower value and record why.
+   Treat CPU count and Podman memory ceiling as stable or slowly changing. Treat available memory, load, swap use, existing containers, test/build spikes, and network/API capacity as runtime variables. Start with `MAX_CONCURRENT_ISSUES = 8` only when runtime observations support it; otherwise choose a lower value and record why.
 
-5. Apply the user's Pi preferences:
+5. Use the copied `scrun` interface to select Pi preferences. Its defaults are:
 
    | Role | Model | Thinking |
    |---|---|---|
@@ -104,7 +118,7 @@ After the manual gate:
    | Reviewer | `gpt-5.6-terra` | `off` |
    | Merger | `gpt-5.6-terra` | `off` |
 
-   Verify the model IDs with the host Pi installation. If they are unavailable, stop and ask whether to change the model choices. Do not silently substitute models.
+   `./scrun --help` shows all named model and thinking options. The runner validates each selected model and its thinking level against `~/.pi/agent/models-store.json`, including model-specific unsupported levels, before launching an agent. If a default or supplied model is unavailable, stop and ask which model to use. Do not silently substitute models.
 
 ## Phase 2 — Patch the Podman image
 
@@ -152,9 +166,20 @@ Build only after all image patches:
 ./scbuild
 ```
 
-## Phase 3 — Patch Pi orchestration and prompts
+## Phase 3 — Install the explicit Pi orchestration and prompts
 
-Read `references/patch-snippets.md` before editing. It contains concrete TypeScript, prompt, mount, optional Pi-extension, and `CODING_STANDARDS.md` snippets. Apply them to the generated equivalents rather than relying on prose descriptions.
+The copied files in `references/workflow-template/` are the source of truth for the workflow. Copy them first. Read `references/patch-snippets.md` only for optional mounts, approval wrappers, and project-specific adaptations. Do not reconstruct the orchestrator from prose or combine it with the vendor's parallel-planner workflow.
+
+The workflow is:
+
+1. The planner receives the complete mechanically acquired candidate set and emits exact issue IDs, titles, and deterministic branches.
+2. The script validates planner output and runs issue pipelines in batches of up to eight.
+3. Each issue pipeline uses one explicit branch/worktree shared by implementer and reviewer. It runs up to four implement⇄review rounds, with 64 implementer and 16 reviewer iterations per round.
+4. The reviewer is a gate. Approval requires the review marker, the completion signal, and `READY-FOR-MERGER-AGENT` as the final issue comment.
+5. The merger processes approved branches sequentially, integrates each branch, resolves conflicts within its budget, verifies the integrated target branch, posts a merge receipt, and only then permits script-owned issue closure.
+6. The script owns all bookkeeping, labels, branch-integrity checks, failure counts, and circuit breakers. The merger may close only after its per-branch verification receipt; the script remains the final postcondition authority. Agents do not push branches or apply `ready-for-human`.
+
+The exact marker formats, prompts, model interface, and postcondition code are in the template files. Preserve their run ID and round substitutions when adapting tracker commands.
 
 ### Pi authentication, model catalogue, skills, and extensions
 
@@ -243,7 +268,7 @@ exec pi --approve "$@"
 Then create a custom provider wrapper that delegates parsing and session storage to `sandcastle.pi(model)` but replaces the executable with `bin/pi-approved` for print and interactive commands. Add a focused test for that wrapper. Pi's `--approve` trusts project-local files; it is not unrestricted tool permission bypass.
 ### Resource limit
 
-The generated parallel planner usually uses:
+The copied template already implements bounded batches with `MAX_CONCURRENT_ISSUES = 8`. Do not replace it with an unbounded `Promise.all` fan-out. The generated parallel planner usually uses:
 
 ```ts
 await Promise.allSettled(issues.map(runIssuePipeline));
@@ -252,7 +277,7 @@ await Promise.allSettled(issues.map(runIssuePipeline));
 That starts every planned issue immediately. Add:
 
 ```ts
-const MAX_CONCURRENT_ISSUES = 6;
+const MAX_CONCURRENT_ISSUES = 8;
 ```
 
 Then process issues in bounded batches:
@@ -285,9 +310,11 @@ Do not assume a memory option exists. The global concurrency limit is the primar
 
 ### Branch and review workflow
 
-Issue pipelines use explicit named issue branches. Keep the rolling integration branch available for inspection. Do not add an automatic final merge to the default branch. The user should review the accumulated branch and create/approve the final PR or merge request into the default branch.
+Use explicit named issue branches: `sandcastle/issue-<ID>`. The implementer and reviewer share that issue worktree. Planner and merger calls use the target integration branch. The merger handles one approved branch at a time and the script proves ancestry before closing the issue.
 
-If planner or merger branch behaviour is ambiguous, inspect the installed Sandcastle version's branch-strategy documentation and make the intended strategy explicit rather than relying on an undocumented default. Do not delete the integration branch before the user's review.
+The reviewer gate is not a request for an atomic or single-finding review. The reviewer must report every established blocking finding in one comment, using the prescribed finding format. Human scope decisions remain in issue comments; prose is not treated as a machine gate.
+
+If a ticket exhausts the four-round implement⇄review budget, or the merger failure ledger reaches its threshold, the script adds `ready-for-human`, removes `Sandcastle`, and leaves the issue open. Removing `Sandcastle` is the planner circuit breaker. A stale open issue whose final comment is already `READY-FOR-MERGER-AGENT` is not planner work; reconcile it by verifying the branch and merging manually, or explicitly requeue it by superseding the token and restoring the label.
 
 ### Prompt and model validation
 
@@ -490,17 +517,14 @@ worktrees/
 extra-certs.crt
 ```
 
-Create executable root scripts.
+Create executable root scripts by copying `references/workflow-template/scrun` and `scbuild` (or the project's equivalent build command). `scrun` must retain named model/thinking options, `--help`, strict unknown-option handling, and preflight validation. Do not reduce it to a silent `npx tsx` wrapper.
 
-`scrun`:
+The GitHub template's `scrun` defaults are:
 
-```bash
-#!/usr/bin/env bash
-
-npx tsx .sandcastle/main.mts
-
-exit $?
-```
+- Planner: `gpt-5.6-luna`, `high`.
+- Implementer: `gpt-5.6-luna`, `medium`.
+- Reviewer: `gpt-5.6-terra`, `off`.
+- Merger: `gpt-5.6-terra`, `off`.
 
 `scbuild`:
 
@@ -518,7 +542,23 @@ Run:
 chmod u+x scrun scbuild
 ```
 
-## Phase 6 — Validation and hand-off
+## Phase 6 — Cleanup, validation, and hand-off
+
+Only after the run is stopped and no agent is in flight, clean Sandcastle-owned
+resources. Inspect before deleting:
+
+```bash
+git worktree list
+git branch --list 'sandcastle/*'
+podman ps -a --filter ancestor=localhost/sandcastle:pie-subagents
+podman images
+```
+
+Remove only Sandcastle worktrees and branches that no longer need review. Remove
+containers created from the Sandcastle image, then remove that image and dangling
+layers. Do not run broad `podman system prune` and do not remove unrelated
+containers or images such as Gitea, Node, or UV bases. A stale ready token on an
+open issue requires manual branch reconciliation before cleanup.
 
 Run the cheapest checks first, then the container build:
 
@@ -539,7 +579,12 @@ Verify:
 - The selected tracker credentials are passed through `.sandcastle/.env` without being logged.
 - Prompt commands return the JSON shape expected by the planner.
 - At most `MAX_CONCURRENT_ISSUES` issue pipelines start in one batch.
-- The final integration branch remains available for the user's PR review.
+- `scrun --help` lists all eight named role options and their defaults.
+- Invalid options, model IDs, and model-specific thinking levels fail before agent launch.
+- Implementer/reviewer markers, approval-token ordering, and merger receipts are present in the prompts and checked by the script.
+- A failed circuit breaker adds `ready-for-human`, removes `Sandcastle`, and leaves the issue open.
+- The target branch contains only branches whose merger receipt and ancestry postconditions passed.
+- Stale Sandcastle branches and worktrees can be removed safely after the run; unrelated branches remain.
 - Secrets, certificates, logs, worktrees, and generated dependencies are ignored.
 
 Record the final setup in `custom-pi-setup.md` or the project's equivalent durable documentation, including model roles, mounts, tracker choice, resource limit, branch workflow, and build prerequisites.
@@ -552,3 +597,8 @@ Read these only when the corresponding branch is active:
 - [Issue-tracker migration details](references/issue-tracker-migration.md)
 - [Pi and resource-management preferences](references/pi-and-resources.md)
 - [Concrete TypeScript, prompt, mount, and coding-standard patches](references/patch-snippets.md)
+- [Copyable gated workflow template](references/workflow-template/README.md)
+
+## Revision Log
+
+- 2026-08-24: Replaced the vendor workflow guidance with the copyable gated workflow, eight-runner batches, script-owned circuit breakers, explicit `scrun` options, and tracker-adapter instructions.
