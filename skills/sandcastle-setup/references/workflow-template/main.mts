@@ -113,6 +113,8 @@ Options:
   --reviewer-thinking LEVEL      Default: ${DEFAULTS.reviewer.thinking}
   --merger-model MODEL           Default: ${DEFAULTS.merger.model}
   --merger-thinking LEVEL        Default: ${DEFAULTS.merger.thinking}
+  --target-branch BRANCH         Branch issue branches merge into. Default: the
+                                 branch sandcastle is launched from.
   -h, --help                     Show this help
 
 Thinking levels: off, minimal, low, medium, high, xhigh`);
@@ -137,6 +139,11 @@ function parseOptions(): RoleOptions {
     if (argument === "-h" || argument === "--help") {
       printUsage();
       process.exit(0);
+    }
+    if (argument === "--target-branch") {
+      if (index + 1 >= args.length) throw new Error(`Incomplete option: ${argument}. Use --help for usage.`);
+      index += 1; // consumed by targetBranch(); not a role option
+      continue;
     }
     const option = optionMap[argument];
     if (!option || index + 1 >= args.length) {
@@ -391,7 +398,22 @@ function defaultBranch(): string {
     return "master";
   }
 }
-const TARGET_BRANCH = defaultBranch();
+/** Integration target branch: explicit --target-branch flag wins, else the
+ *  branch sandcastle was launched from, else the remote default. Resolved once.
+ *  Note: sandcastle injects TARGET_BRANCH into prompts itself; this is for
+ *  any host-side logic that needs it. */
+function targetBranch(): string {
+  if (targetBranchCache) return targetBranchCache;
+  const flagIndex = process.argv.indexOf("--target-branch");
+  const override = flagIndex >= 0 ? process.argv[flagIndex + 1] : undefined;
+  if (override) {
+    targetBranchCache = override;
+    return targetBranchCache;
+  }
+  targetBranchCache = sh("git rev-parse --abbrev-ref HEAD") || defaultBranch();
+  return targetBranchCache;
+}
+let targetBranchCache: string | undefined;
 
 for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
   const runId = `sandcastle-${Date.now()}-${iteration}`;
@@ -651,7 +673,7 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 
   // ---- Phase 4: Mechanical postconditions & escalation --------------------
   for (const issue of approved) {
-    const integrated = mergerCompleted && branchIsIntegrated(issue.branch, TARGET_BRANCH);
+    const integrated = mergerCompleted && branchIsIntegrated(issue.branch, targetBranch());
     const state = issueState(issue.id);
 
     if (integrated && state === "OPEN") {
@@ -662,13 +684,13 @@ for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
       supersedeToken(
         issue.id,
         mergerCompleted
-          ? `Branch ${issue.branch} was not integrated into ${TARGET_BRANCH}.`
+          ? `Branch ${issue.branch} was not integrated into ${targetBranch()}.`
           : "The merger did not complete; integration and closure were not accepted.",
       );
     }
 
     const finalState = issueState(issue.id);
-    const finalIntegrated = branchIsIntegrated(issue.branch, TARGET_BRANCH);
+    const finalIntegrated = branchIsIntegrated(issue.branch, targetBranch());
     if (finalState === "CLOSED" && finalIntegrated && mergerCompleted) {
       delete ledger.failures[issue.id];
       continue;
