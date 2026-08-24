@@ -18,7 +18,8 @@
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
     "npm:@narumitw/pi-starship",
-    "npm:pi-context-view"
+    "npm:pi-context-view",
+    "npm:pi-subagents"
   ],
   "terminal": {
     "showTerminalProgress": true
