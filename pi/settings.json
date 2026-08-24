@@ -7,9 +7,7 @@
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "packages": [
-    "./extensions/pie-damare",
     "npm:@gotgenes/pi-permission-system",
-    "./extensions/pie-permission-auto-review-codex",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
     "npm:@narumitw/pi-starship",
