@@ -599,7 +599,16 @@ The copyable workflow files live directly under `references/workflow-template/`.
 They are installed as a set in Phase 0; they are not an additional prose
 reference to reconcile.
 
+## Known pitfalls
+
+- **Pi credential lock file:** Pi writes an `auth.json.lock` sibling beside the mounted `auth.json`. If `/home/agent/.pi/agent` does not pre-exist in the image, Podman auto-creates bind-mount parents as `root`, causing `EACCES`. Add before `USER agent` in the Containerfile: `RUN mkdir -p /home/agent/.pi/agent/skills /home/agent/.pi/agent/git`.
+- **Rootless UID mapping:** ad-hoc smoke tests need `--userns=keep-id` and `--entrypoint bash` (the image entrypoint is `sleep infinity`), or mounts appear root-owned/unreadable. Sandcastle's own launcher handles mapping via the `AGENT_UID`/`AGENT_GID` build args.
+- **Default model resolution:** a bare `pi --print` in the container may report "No API key found" even with valid auth; pass the model explicitly (`--model openai-codex/gpt-5.6-luna`).
+- **Vendor leftovers:** the blank template leaves `.sandcastle/main.ts` and `.sandcastle/prompt.md`; delete both when installing the gated workflow template.
+- **zod may be silently skipped:** `sandcastle init` does not always prompt to install `zod`; verify it is in `package.json` after Phase 0 and run `npm install --save-dev zod tsx` if missing (`tsx` runs `main.mts`).
+
 ## Revision Log
 
+- 2026-08-24: Added known pitfalls from first real setup (richie): Pi lock-file mount ownership, rootless UID mapping, explicit model flag, vendor leftover files, silent zod skip.
 - 2026-08-24: Replaced the vendor workflow guidance with the copyable gated workflow, eight-runner batches, script-owned circuit breakers, explicit `scrun` options, and tracker-adapter instructions.
 - 2026-08-24: Removed duplicated prose references; retained the tracker migration reference and made it cover host-side `main.mts` rewiring.
