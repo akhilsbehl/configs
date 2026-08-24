@@ -8,13 +8,6 @@
   "hideThinkingBlock": true,
   "packages": [
     "./extensions/pie-damare",
-    {
-      "source": "npm:pi-patty-bg-tasks",
-      "extensions": [],
-      "skills": [],
-      "prompts": [],
-      "themes": []
-    },
     "npm:@gotgenes/pi-permission-system",
     "./extensions/pie-permission-auto-review-codex",
     "git:github.com/algal/pi-openai-server-compaction",
