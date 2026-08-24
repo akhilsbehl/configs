@@ -7,6 +7,13 @@
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": true,
   "packages": [
+    {
+      "source": "npm:pi-bg-tasks",
+      "extensions": [],
+      "skills": [],
+      "prompts": [],
+      "themes": []
+    },
     "npm:@gotgenes/pi-permission-system",
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-agent-browser-native",
