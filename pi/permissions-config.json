@@ -156,6 +156,8 @@
       "npm run check": "allow",
       "npm run typecheck": "allow",
       "npm run build": "allow",
+      "node": "allow",
+      "python": "allow",
       "pytest": "allow",
       "pytest *": "allow",
       "python -m pytest": "allow",

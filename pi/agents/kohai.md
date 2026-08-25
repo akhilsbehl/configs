@@ -10,9 +10,6 @@ systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
 defaultContext: fresh
-tools: "inherit"
-extensions:
-subagentOnlyExtensions:
 maxSubagentDepth: 2
 async: true
 turnBudget: {"maxTurns":64,"graceTurns":8}

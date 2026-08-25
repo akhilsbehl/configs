@@ -4,12 +4,16 @@
 
 | Agent | Role | Context |
 |---|---|---|
+| `saaqi` | Quick second opinion on direction | fork |
+| `saarthi` | Deep challenge: assumptions, drift, risk | fork |
 | `kohai` | General executor; default for delegated work and/or short-range | fresh |
 | `oni` | General executor for delegated work that is difficult and/or medium-range | fresh |
 | `akuma` | General executor for delegated work that is exceptionally difficult and/or long-range | fresh |
 | `minion` | Fast recon, file searches, quick summaries, rote operations and handoff briefs | fresh |
-| `saaqi` | Quick second opinion on direction | fork |
-| `saarthi` | Deep challenge: assumptions, drift, risk | fork |
+| `codex` | Anything I ask to be run with codex | fresh |
+| `sonnet` | Anything I ask to be run with sonnet | fresh |
+| `opus` | Anything I ask to be run with opus | fresh |
+| `fable` | Anything I ask to be run with fable | fresh |
 
 
 ## When to invoke a minion
@@ -64,3 +68,20 @@ When two tiers seem plausible, start at the lower one; escalate on evidence, not
 Good defaults are set for thinking levels based on model choices and task types.
 However, feel free to over-ride thinking levels up or down depending on task complexity.
 Prefer to adjust thinking effort higher with a lower capability subagent (e.g. kohai with high thinking) before going for a stronger subagent (e.g. oni) first.
+
+## Claude & Codex subagents
+
+Claude & Codex are not subagents native to pi and are fixed profiles.
+You will not be able to modify them or adjust their models or thinking levels.
+They also only provide a one shot interface - no steering or followup available.
+Choose to kill and respawn if you want to steer mid-flight.
+
+### When to invoke codex
+- When I explicitly ask for it
+- When I ask you to check my outlook inbox, outlook calendar, or teams messages
+
+### When to invoke sonnet, opus, or fable
+- When I explicitly ask for `sonnet`, `opus`, or `fable`.
+- When I ask for advice from either of sonnet, opus, or fable:
+  - Copy the smallest relevant chunk of the session log in ~/.pi/agent/session/**.jsonl to /tmp.
+  - Point the selected Claude profile to the file with instructions to read it first.
