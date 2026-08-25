@@ -28,6 +28,6 @@
 [submodule "pi/extensions/pie-damare"]
 	path = pi/extensions/pie-damare
 	url = git@github.com:akhilsbehl/pie-damare.git
-[submodule "pi/extensions/pi-permission-auto-review"]
-	path = pi/extensions/pi-permission-auto-review
+[submodule "pi/extensions/pie-permissions-auto-review-codex"]
+	path = pi/extensions/pie-permissions-auto-review-codex
 	url = git@github.com:akhilsbehl/pie-permission-auto-review-codex.git
