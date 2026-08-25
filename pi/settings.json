@@ -19,7 +19,10 @@
     "npm:pi-agent-browser-native",
     "npm:@narumitw/pi-starship",
     "npm:pi-context-view",
-    "npm:pi-subagents"
+    {
+      "source": "npm:pi-subagents",
+      "prompts": []
+    }
   ],
   "terminal": {
     "showTerminalProgress": true
@@ -55,5 +58,8 @@
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "always",
   "doubleEscapeAction": "none",
-  "treeFilterMode": "all"
+  "treeFilterMode": "all",
+  "subagents": {
+    "disableBuiltins": true
+  }
 }
