@@ -26,6 +26,7 @@ Use aggressively & concurrently but batch operations where reasonable:
 - Mechanical transforms: format conversion, table extraction, boilerplate scaffolding
 - Drafting handoff briefs and context packets consumed by a stronger agent
 - First-pass triage of long documents/logs: extract the sections worth a human or a bigger agent
+- Search / read a webpage and provide an answer to a bounded question. Launch several minions to synthesize research across several web-retrievals.
 
 ## How to determine difficulty
 
