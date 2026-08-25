@@ -21,7 +21,10 @@
     "npm:pi-context-view",
     {
       "source": "npm:pi-subagents",
-      "prompts": []
+      "extensions": [],
+      "skills": [],
+      "prompts": [],
+      "themes": []
     }
   ],
   "terminal": {
