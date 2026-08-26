@@ -1,5 +1,8 @@
 # Subagent Dispatch Principles
 
+Do not duplicate work delegated to a subagent in the primary driver while a child is running.
+Wait for its result or do genuinely independent work in parallel.
+
 ## Roster
 
 | Agent | Role | Context |
@@ -18,7 +21,7 @@
 
 ## When to invoke a minion
 
-Use aggressively & concurrently but batch operations where reasonable:
+Use freely & frequently:
 - Listing & searching files
 - Quick documentation, simple summarization, labeling, classification
 - Creating tickets
