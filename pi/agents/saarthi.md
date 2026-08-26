@@ -7,7 +7,7 @@ systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
 defaultContext: fork
-maxSubagentDepth: 2
+maxSubagentDepth: 1
 async: false
 timeoutMs: 1200000
 completionGuard: false

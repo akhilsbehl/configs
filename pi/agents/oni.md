@@ -10,7 +10,7 @@ systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
 defaultContext: fresh
-maxSubagentDepth: 2
+maxSubagentDepth: 1
 async: true
 turnBudget: {"maxTurns":96,"graceTurns":12}
 timeoutMs: 1200000

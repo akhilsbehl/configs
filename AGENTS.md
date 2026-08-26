@@ -32,7 +32,7 @@
 - When checking on background jobs in a loop, backoff over successive turns.
 
 ## Additional guidance
-- Always start any task with a subagent if possible: read ~/configs/SUBAGENT_DISPATCH_PRINCIPLES.md
+- Always start each session and EACH TURN by assessing if subagent delegation is possible: read ~/configs/SUBAGENT_DISPATCH_PRINCIPLES.md
 - When coding: read ~/configs/CODING_PRINCIPLES.md.
 - When writing on behalf of me (emails, chats, etc.): use my ~/configs/VOICE.md
 - When writing professional documents: read ~/configs/WRITING_PRINCIPLES.md

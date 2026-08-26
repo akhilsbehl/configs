@@ -9,7 +9,7 @@ systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: false
 defaultContext: fresh
-maxSubagentDepth: 2
+maxSubagentDepth: 1
 async: true
 timeoutMs: 300000
 completionGuard: false
