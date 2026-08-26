@@ -4,7 +4,7 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-luna",
   "persistModelSelection": false,
-  "defaultThinkingLevel": "medium",
+  "defaultThinkingLevel": "high",
   "hideThinkingBlock": true,
   "packages": [
     {
