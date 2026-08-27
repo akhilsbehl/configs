@@ -17,8 +17,8 @@
   - For durable information, use appropriate project local knowledge to choose the file path.
   - My comments, if any, will be in '<origina-file-path>-commented.md'.
   - After checking and using my comments, delete the commented file.
+- When you explain something to me or ask me a question with choices to make, ALWAYS use examples, scenario simulations, and hyptotheticals in very simple and natural domain aligned language, rather than abstractions or technical jargon. This is also true when using the grilling or wayfinder skills.
 - Stay proactive, if there is a next task that you can do, just do it instead of telling me about it.
-- When you ask me a question with a plugin, prefer multiple choice answers unless unreasonable.
 
 ## Environment
 
