@@ -2,37 +2,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "enableArtifact": false,
-  "awaySummaryEnabled": false,
-  "editorMode": "vim",
-  "fileCheckpointingEnabled": false,
-  "showTurnDuration": false,
-  "remoteControlAtStartup": false,
   "model": "sonnet",
-  "effortLevel": "low",
-  "outputStyle": "Proactive",
-  "voiceEnabled": false,
-  "allowedMcpServers": [],
-  "askUserQuestionTimeout": "never",
-  "autoCompactEnabled": true,
-  "defaultShell": "bash",
-  "enableArtifact": false,
-  "theme": "light-daltonized",
-  "verbose": false,
-  "statusLine": {
-      "type": "command",
-      "command": "~/.claude/statusline-command.sh"
-  },
-  "enabledPlugins": {
-    "chrome-devtools-mcp@claude-plugins-official": false,
-    "code-review@claude-plugins-official": false,
-    "code-simplifier@claude-plugins-official": false,
-    "frontend-design@claude-plugins-official": false,
-    "mcp-server-dev@claude-plugins-official": false,
-    "security-guidance@claude-plugins-official": false,
-    "skill-creator@claude-plugins-official": false,
-    "superpowers@claude-plugins-official": false
-  },
   "skillOverrides": {
     "dataviz": "off",
     "artifact-design": "off",
@@ -48,5 +18,43 @@
     "security-review": "off",
     "run": "off",
     "fewer-permission-prompts": "off"
-  }
+  },
+  "allowedMcpServers": [],
+  "enableArtifact": false,
+  "defaultShell": "bash",
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "chrome-devtools-mcp@claude-plugins-official": false,
+    "code-review@claude-plugins-official": false,
+    "code-simplifier@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": false,
+    "mcp-server-dev@claude-plugins-official": false,
+    "security-guidance@claude-plugins-official": false,
+    "skill-creator@claude-plugins-official": false,
+    "superpowers@claude-plugins-official": false,
+    "epcc-workflow@aws-claude-code-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "aws-claude-code-plugins": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/aws-solutions-library-samples/guidance-for-claude-code-with-amazon-bedrock.git"
+      }
+    }
+  },
+  "outputStyle": "Proactive",
+  "effortLevel": "low",
+  "awaySummaryEnabled": false,
+  "askUserQuestionTimeout": "never",
+  "theme": "light-daltonized",
+  "editorMode": "vim",
+  "verbose": false,
+  "autoCompactEnabled": true,
+  "fileCheckpointingEnabled": false,
+  "showTurnDuration": false,
+  "remoteControlAtStartup": false,
+  "voiceEnabled": false
 }

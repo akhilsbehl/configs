@@ -5,7 +5,7 @@
   "defaultModel": "gpt-5.6-luna",
   "persistModelSelection": false,
   "defaultThinkingLevel": "high",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "packages": [
     {
       "source": "npm:pi-bg-tasks",
