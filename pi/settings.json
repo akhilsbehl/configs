@@ -15,7 +15,13 @@
       "themes": []
     },
     "git:github.com/algal/pi-openai-server-compaction",
-    "npm:pi-agent-browser-native",
+    {
+      "source": "npm:pi-agent-browser-native",
+      "extensions": [],
+      "skills": [],
+      "prompts": [],
+      "themes": []
+    },
     "npm:@narumitw/pi-starship",
     "npm:pi-context-view",
     {
