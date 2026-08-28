@@ -20,7 +20,9 @@
 
 ## Mechanics
 
-- Always start with .md files unless I specify otherwise. For decks use fractal-pptx skill; for Word docs use fractal-docx skill.
+- Always start with .md files unless I specify otherwise.
+- Always start with lavish when I ask to iterate on a deck with me.
+- When I ask: for decks use fractal-pptx skill; for Word docs use fractal-docx skill.
 - Commit files both before and after either of us make changes (git is always in play).
 - Always create versioned files for binary formats starting from -v00.pptx/.docx and bump version after each editing round.
 - Use git history for .md files instead of versioned files. Each .md file should contain a 'Revision Log' at the bottom of the document. This is to accumulate (brutally summarized) of primary decisions & insights collected during the iterative drafting.
