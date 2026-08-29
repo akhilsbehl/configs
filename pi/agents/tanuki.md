@@ -1,8 +1,8 @@
 ---
-name: oni
-aliases: oni
-description: The base subagent for most unspecialized tasks that are difficult
-model: openai-codex/gpt-5.6-sol
+name: tanuki
+aliases: tanuki
+description: Default subagent for cheap & fast chores
+model: openai-codex/gpt-5.6-luna
 fallbackModels:
 thinking: low
 systemPromptMode: append
@@ -12,8 +12,8 @@ defaultContext: fresh
 maxSubagentDepth: 1
 allowNestedSubagents: false
 async: true
-turnBudget: {"maxTurns":96,"graceTurns":12}
-timeoutMs: 2400000
+turnBudget: {"maxTurns":32,"graceTurns":4}
+timeoutMs: 300000
 defaultProgress: true
 acceptanceRole: writer
 completionGuard: true

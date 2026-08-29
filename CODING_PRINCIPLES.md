@@ -7,7 +7,7 @@
 5. Demand decisive evidence and calibrate claims
 6. Diagnose causes before changing code
 7. Test behavior at the boundary that matters
-8. Preserve decisions, not process exhaust
+8. Inspect code not documentation to learn.
 
 Use judgment, not ceremony. Use these questions in order to apply the principles above:
 1. **What kind of uncertainty dominates?** Meaning, external facts, behavior, design, or execution.

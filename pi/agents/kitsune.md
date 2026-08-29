@@ -1,10 +1,10 @@
 ---
-name: oni
-aliases: oni
-description: The base subagent for most unspecialized tasks that are difficult
-model: openai-codex/gpt-5.6-sol
+name: kitsune
+aliases: kitsune
+description: The base subagent for most unspecialized tasks
+model: openai-codex/gpt-5.6-luna
 fallbackModels:
-thinking: low
+thinking: high
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -12,8 +12,8 @@ defaultContext: fresh
 maxSubagentDepth: 1
 allowNestedSubagents: false
 async: true
-turnBudget: {"maxTurns":96,"graceTurns":12}
-timeoutMs: 2400000
+turnBudget: {"maxTurns":64,"graceTurns":8}
+timeoutMs: 1200000
 defaultProgress: true
 acceptanceRole: writer
 completionGuard: true

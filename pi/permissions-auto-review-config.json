@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/akhilsbehl/pie-permission-auto-review-codex/master/schemas/config.schema.json",
+  "provider": "openai-codex",
+  "model": "codex-auto-review",
+  "reasoning": "low",
+  "timeoutMs": 4000
+}

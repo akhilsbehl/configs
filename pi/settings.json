@@ -1,10 +1,10 @@
 {
-  "lastChangelogVersion": "0.84.3",
+  "lastChangelogVersion": "0.84.4",
   "theme": "neobones_light_contrast",
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-luna",
+  "defaultModel": "gpt-5.6-sol",
   "persistModelSelection": false,
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "off",
   "hideThinkingBlock": false,
   "packages": [
     {
@@ -42,8 +42,7 @@
     "openai-codex/gpt-5.6-sol",
     "google/gemini-flash-lite-latest",
     "google/gemini-flash-latest",
-    "google/gemini-3.1-pro-preview",
-    "openrouter/stealth/ox-alpha"
+    "google/gemini-3.1-pro-preview"
   ],
   "observational-memory": {
     "observeAfterTokens": 25000,
