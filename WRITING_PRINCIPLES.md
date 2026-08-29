@@ -27,5 +27,4 @@
 - For .docx: parse 'Track Changes' and comments. Only action my comments and tracked changes; ask about others'.
 - Keep version numbers synced across formats: -v0x.pptx, -v0x.docx. Skipping a version number for a format with no new changes is fine.
 - Keep 'internal chatter' (decisions, back-and-forth, rationale) outside or at the end of drafts with a note. Drafts should always be standalone & presentation ready.
-- Use `richie review <file-path>.md` when ready for me to look at something.
 - IMP: After interating on a draft version: summarize in chat categorized by: "Re-read carefully", "Skim except for these things", "Ignore safely".

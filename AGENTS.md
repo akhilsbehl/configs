@@ -14,11 +14,7 @@
 - Call out if you detect blindspots in my knowledge, thinking, or reasoning.
 - Never implicitly impute knowledge: surface opinions, hypotheses, speculation explicitly.
 - When grilling me or presenting me options: ALWAYS use concrete examples over abstractions/theoreticals, scenario-simulations/roleplay over lengthy comparisons, prototypes over descriptions when designing visual content or software.
-- Anytime you have anything to say more than a few short lines: put it in a markdown file and open it using `richie review <filepath.md>`
-  - For transient communication, put the file in ~/.richie/ephemeral/. Do not repeat yourself in chat when using richie.
-  - For durable information, use an appropriate project local path.
-  - Look for my comments, if any, in `<original-file-path>-commented.md`.
-  - After checking and using my comments, delete the commented file.
+- Anytime you have more than a few short lines to say, put them in Markdown. Use `~/.richie/ephemeral/` for transient communication and an appropriate project path for durable work. Then use the `using-richie` skill at `skills/using-richie/SKILL.md`.
 
 ## Environment
 
@@ -29,7 +25,6 @@
 - When I say inbox, calendar, drive: default to Microsoft ecosystem (Outlook, OneDrive, SharePoint).
 - ALWAYS use git for any work. If a repo doesn't exist, remind me to create one before proceeding.
 - ALWAYS check for a project-level AGENTS.md. Remind me to create one if missing. Symlink it to CLAUDE.md and GEMINI.md.
-- `richie` only works with .md files; loop for multiple files.
 - When checking on background jobs in a loop, backoff over successive turns.
 
 ## Delegation - Subagent sessions ignore this instruction
