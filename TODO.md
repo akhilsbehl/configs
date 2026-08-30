@@ -20,7 +20,7 @@
 - [ ] Document `pie-zellij-status` installation/loading.
 - [x] Extract `pie-jina` as a personal-use project loaded through a local symlink.
 - [x] Extract `pie-damare` as a personal-use project loaded through a local symlink.
-- [x] Extract `pie-permission-auto-review-codex` as a personal-use project. Retain MIT attribution and upstream provenance, rename package identities, publish/use the child-owned schema URL, and verify generated `dist/` freshness.
+- [x] Extract `pie-ez-pass` as a personal-use project. Retain MIT attribution and upstream provenance, rename package identities, publish/use the child-owned schema URL, and verify generated `dist/` freshness.
 - [x] Extract `pie-subagents` directly from the `pi-subagents` branch and keep `.scratch` tracked.
 - [ ] Prepare `pie-subagents` for public distribution.
 - [x] Add each approved child repository as a submodule at its renamed parent path.

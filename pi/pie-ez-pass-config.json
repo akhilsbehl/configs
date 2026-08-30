@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/akhilsbehl/pie-permission-auto-review-codex/refs/heads/master/schemas/config.schema.json",
+  "$schema": "https://raw.githubusercontent.com/akhilsbehl/pie-ez-pass/refs/heads/master/schemas/config.schema.json",
   "provider": "openai-codex",
   "model": "codex-auto-review",
   "reasoning": "low",
