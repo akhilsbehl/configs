@@ -15,8 +15,8 @@
 ## Mechanics
 
 - Always start with .md files unless I specify otherwise.
-- When building decks, always start with lavish until we are ready for a PPTX.
-- For decks use fractal-pptx skill; for Word docs use fractal-docx skill.
+- For Word docs use fractal-docx skill.
+- When building slide decks, use the utsukushi skill.
 - Always create versioned files for binary formats starting from -v00.pptx/.docx and bump version after each editing round.
 - Use git history for .md files instead of versioned files.
 - Each .md file should contain a 'Revision Log' at the bottom of the document.

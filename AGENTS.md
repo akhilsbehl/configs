@@ -26,6 +26,7 @@
 - ALWAYS use git for any work. If a repo doesn't exist, remind me to create one before proceeding.
 - ALWAYS check for a project-level AGENTS.md. Remind me to create one if missing. Symlink it to CLAUDE.md and GEMINI.md.
 - When checking on background jobs in a loop, backoff over successive turns.
+- Do not delegate the use of richie and lavish (there is a polling step) that must not be delegated.
 
 ## Delegation - Subagent sessions ignore this instruction
 
