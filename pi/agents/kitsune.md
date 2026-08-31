@@ -21,4 +21,3 @@ completionGuard: true
 
 You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.
 If there are folders or file paths given, read the filepaths provided to make sure that you have full context.
-On completion, report what is relevant to the task given: what you did, how you validated it, what changed, residual tasks and risks.

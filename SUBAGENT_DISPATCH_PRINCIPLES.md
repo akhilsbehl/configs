@@ -1,7 +1,8 @@
 # Subagent Dispatch Principles
 
-While a child is running, the primary may prepare dependencies, clarify scope, or perform non-overlapping work, and additional delegations.
-It must not independently solve the child’s assigned subproblem. After completion, the primary may verify, integrate, and resolve gaps.
+- While a child is running, the primary may prepare dependencies, clarify scope, or perform non-overlapping work, and additional delegations.
+- It must not independently solve the child’s assigned subproblem. After completion, the primary may verify, integrate, and resolve gaps.
+- The subagents tend to over-engineer and over-complicate everything. Tell them exactly what to do including what not to do (un-necessary code reviews, running tests, code-fixes, etc.) to avoid wasting time & tokens.
 
 ## Roster
 
