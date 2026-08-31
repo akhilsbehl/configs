@@ -4,7 +4,7 @@ aliases: saarthi
 description: High-powered advisor that challenges assumptions, catches drift, and recommends the safest path before risky actions
 model: openai-codex/gpt-5.6-sol
 fallbackModels:
-thinking: high
+thinking: medium
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
