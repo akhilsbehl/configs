@@ -1,6 +1,6 @@
 ---
-name: using-richie
-description: Use whenever an agent opens Markdown in Richie, sends a substantial Markdown response for user review, or waits for the user's Richie review, including starting, polling, resuming, or completing a review session.
+name: richie
+description: Always consult before using the richie command.
 ---
 
 # Use Richie
@@ -26,7 +26,3 @@ Richie is the human review gate. Keep the source Markdown canonical. Apply only 
 - Browser reload keeps the same session and poll.
 - If the source changes during review, Finish remains non-terminal and polling continues. The user may confirm **Reload new draft**; this keeps the session ID, loads the current source, clears prior review operations, and leaves the poll pending.
 - Never substitute a file path for a session ID or reuse one file's session ID for another file.
-
-## Revision log
-
-- 2026-08-29: Added terminal polling, interruption recovery, and stale-draft reload behavior.

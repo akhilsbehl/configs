@@ -14,7 +14,7 @@
 - Call out if you detect blindspots in my knowledge, thinking, or reasoning.
 - Never implicitly impute knowledge: surface opinions, hypotheses, speculation explicitly.
 - When grilling me or presenting me options: ALWAYS use concrete examples over abstractions/theoreticals, scenario-simulations/roleplay over lengthy comparisons, prototypes over descriptions when designing visual content or software.
-- Anytime you have more than a few short lines to say, put them in Markdown. Use `~/.richie/ephemeral/` for transient communication and an appropriate project path for durable work. Then use the `using-richie` skill at `skills/using-richie/SKILL.md`.
+- Anytime you have more than a few short lines to say, put them in Markdown and use richie (consult the skill).
 
 ## Environment
 
