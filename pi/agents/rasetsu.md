@@ -4,7 +4,7 @@ aliases: rasetsu
 description: The base subagent for most unspecialized tasks that are difficult
 model: openai-codex/gpt-5.6-terra
 fallbackModels:
-thinking: off
+thinking: low
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true

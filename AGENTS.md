@@ -21,7 +21,7 @@
 - Running Ubuntu 26.04 on WSL2 (ThinkPad, Windows host).
 - Corporate network runs Zscaler TLS inspection and can block things sometimes - don't workaround - suggest options to me.
 - If the most straightforward tools to do something are not available, stop and ask me to install it. Do not pick workarounds.
-- `mkenv`: creates a Python venv in `.virtualenv/` and installs from requirements.txt if present. `enact`: activates that venv. Both will always exist once created. Use them; don't reinvent venv management.
+- `mkenv`: creates a Python venv in `.virtualenv/` and installs from requirements.txt if present. Use it, don't reinvent venv management.
 - When I say inbox, calendar, drive: default to Microsoft ecosystem (Outlook, OneDrive, SharePoint).
 - ALWAYS use git for any work. If a repo doesn't exist, remind me to create one before proceeding.
 - ALWAYS check for a project-level AGENTS.md. Remind me to create one if missing. Symlink it to CLAUDE.md and GEMINI.md.
