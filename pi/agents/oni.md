@@ -2,9 +2,9 @@
 name: oni
 aliases: oni
 description: The base subagent for most unspecialized tasks that are difficult
-model: openai-codex/gpt-5.6-terra
+model: openai-codex/gpt-5.6-luna
 fallbackModels:
-thinking: low
+thinking: xhigh
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true

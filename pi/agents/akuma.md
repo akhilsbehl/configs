@@ -2,7 +2,7 @@
 name: akuma
 aliases: akuma
 description: The base subagent for most unspecialized tasks that are exceptionally difficult
-model: openai-codex/gpt-5.6-sol
+model: openai-codex/gpt-5.6-terra
 fallbackModels:
 thinking: medium
 systemPromptMode: append

@@ -1,10 +1,10 @@
 ---
-name: kitsune
-aliases: kitsune
-description: The base subagent for most unspecialized tasks
-model: openai-codex/gpt-5.6-luna
+name: kyubi
+aliases: kyubi
+description: The base subagent for most unspecialized tasks that are exceptionally difficult
+model: openai-codex/gpt-5.6-sol
 fallbackModels:
-thinking: medium
+thinking: off
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -12,8 +12,8 @@ defaultContext: fresh
 maxSubagentDepth: 1
 allowNestedSubagents: false
 async: true
-turnBudget: {"maxTurns":64,"graceTurns":8}
-timeoutMs: 1200000
+turnBudget: {"maxTurns":128,"graceTurns":16}
+timeoutMs: 3600000
 defaultProgress: true
 acceptanceRole: writer
 completionGuard: true

@@ -1,10 +1,10 @@
 ---
-name: kitsune
-aliases: kitsune
-description: The base subagent for most unspecialized tasks
-model: openai-codex/gpt-5.6-luna
+name: rasetsu
+aliases: rasetsu
+description: The base subagent for most unspecialized tasks that are difficult
+model: openai-codex/gpt-5.6-terra
 fallbackModels:
-thinking: medium
+thinking: off
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -12,8 +12,8 @@ defaultContext: fresh
 maxSubagentDepth: 1
 allowNestedSubagents: false
 async: true
-turnBudget: {"maxTurns":64,"graceTurns":8}
-timeoutMs: 1200000
+turnBudget: {"maxTurns":96,"graceTurns":12}
+timeoutMs: 2400000
 defaultProgress: true
 acceptanceRole: writer
 completionGuard: true
