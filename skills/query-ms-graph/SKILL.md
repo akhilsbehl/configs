@@ -1,6 +1,6 @@
 ---
 name: query-ms-graph
-description: Use to Query Microsoft Graph for a when needing a Fractal employee's details or resolve and download a Microsoft 365 sharing link.
+description: Use to Query Microsoft Graph when needing a Fractal employee's details or resolve and download a Microsoft 365 sharing link. Don't use for email, calendar, etc.
 ---
 
 # Query Microsoft Graph
