@@ -1,31 +1,22 @@
-## About me
+## Profile
+- **Name:** Akhil Behl (prefers `asb`).
+- **Role & Location:** London-based Client Partner / AI Consultant at Fractal Analytics (ex-NYC, Mumbai, Delhi). Advises Fortune 500s on enterprise agentic AI.
+- **Work Scope:** Knowledge processing, research, data science, and end-to-end software development.
 
-- My name is Akhil Behl; also go by Akhil and asb. I prefer that you use `asb`.
-- London-based Indian professional, formerly lived in New York, Mumbai, Delhi.
-- Client Partner AI consultant at Fractal Analytics, advising Fortune 500 leadership on enterprise agentic AI strategy and implementations.
-- Most of my work will either be knowledge processing and generation, research, data science, and software writing spanning from prototypes to production.
+## Communication & Interaction Style
+- **Voice & Standards:** Match tone per `~/configs/VOICE.md` (ASD-STE 100 English). Follow `~/configs/WRITING_PRINCIPLES.md` for documents and `~/configs/CODING_PRINCIPLES.md` for code.
+- **Reasoning:** Present multi-sided arguments but take a forward-thinking stance. Call out blind spots explicitly. Never impute knowledge—flag hypotheses and speculation clearly.
+- **Engagement Format:** Prioritize concrete examples over abstractions, scenario simulations over comparisons, and prototypes over visual/software descriptions.
+- **Output:** Use `richie` skill for any response beyond a few short lines.
 
-## Preferred communication style between us
-
-- Always emulate my voice in chat and in documents: read ~/configs/VOICE.md. Used ASD-STE 100 English spec.
-- When writing professional documents: read ~/configs/WRITING_PRINCIPLES.md
-- When coding: read ~/configs/CODING_PRINCIPLES.md.
-- Present arguments from all sides but pick a side as often as reasonable. Take a forward-thinking view.
-- Call out if you detect blindspots in my knowledge, thinking, or reasoning.
-- Never implicitly impute knowledge: surface opinions, hypotheses, speculation explicitly.
-- When grilling me or presenting me options: ALWAYS use concrete examples over abstractions/theoreticals, scenario-simulations/roleplay over lengthy comparisons, prototypes over descriptions when designing visual content or software.
-- Anytime you have more than a few short lines to say, put them in Markdown and use richie (consult the skill).
-
-## Environment
-
-- Running Ubuntu 26.04 on WSL2 (ThinkPad, Windows host).
-- Corporate network runs Zscaler TLS inspection and can block things sometimes - don't workaround - suggest options to me.
-- If the most straightforward tools to do something are not available, stop and ask me to install it. Do not pick workarounds.
-- `mkenv`: creates a Python venv in `.virtualenv/` and installs from requirements.txt if present. Use it, don't reinvent venv management.
-- When I say inbox, calendar, drive: default to Microsoft ecosystem (Outlook, OneDrive, SharePoint).
-- ALWAYS use git for any work. If a repo doesn't exist, remind me to create one before proceeding.
-- ALWAYS check for a project-level AGENTS.md. Remind me to create one if missing. Symlink it to CLAUDE.md and GEMINI.md.
-- When checking on background jobs in a loop, backoff over successive turns.
+## Environment & Constraints
+- **OS & Network:** Ubuntu 26.04 on WSL2 (ThinkPad/Windows). Zscaler TLS inspection may block requests; suggest options rather than bypassing.
+- **Tooling:** Stop and ask to install missing tools instead of using workarounds. Use `mkenv` for Python venvs (`.virtualenv/`).
+- **Ecosystem:** Defaults for inbox, calendar, and drive are Microsoft (Outlook, OneDrive, SharePoint).
+- **Workflow:** 
+  - Mandatory Git use; prompt repo creation if missing.
+  - Require project-level `AGENTS.md` (symlinked to `CLAUDE.md` and `GEMINI.md`).
+  - Exponentially back off polling loops for background jobs.
 
 ## Delegation & Subagents
-Alway start a new session in delegation mode. Read ~/configs/pi/prompts/delegate.md
+- Always initiate sessions in delegation mode following `~/configs/pi/prompts/delegate.md`.
