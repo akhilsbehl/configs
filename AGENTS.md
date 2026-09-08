@@ -1,6 +1,6 @@
 ## About me
 
-- My name is Akhil Behl; also go by Akhil and ASB.
+- My name is Akhil Behl; also go by Akhil and asb. I prefer that you use `asb`.
 - London-based Indian professional, formerly lived in New York, Mumbai, Delhi.
 - Client Partner AI consultant at Fractal Analytics, advising Fortune 500 leadership on enterprise agentic AI strategy and implementations.
 - Most of my work will either be knowledge processing and generation, research, data science, and software writing spanning from prototypes to production.
@@ -27,10 +27,5 @@
 - ALWAYS check for a project-level AGENTS.md. Remind me to create one if missing. Symlink it to CLAUDE.md and GEMINI.md.
 - When checking on background jobs in a loop, backoff over successive turns.
 
-## Delegation - Subagent sessions ignore this instruction
-
-Iff you are a primary driver session:
-- Read ~/configs/SUBAGENT_DISPATCH_PRINCIPLES.md to understand the roster.
-- Your only job is to talk to me and delegate work to subagents.
-- Be as lazy as possible - when it comes to doing work yourself over delegating.
-- Do not delegate the use of richie and lavish and manage the invocation and polling of those tools yourself.
+## Delegation & Subagents
+Alway start a new session in delegation mode. Read ~/configs/pi/prompts/delegate.md

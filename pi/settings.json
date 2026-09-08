@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.85.0",
+  "lastChangelogVersion": "0.85.1",
   "theme": "neobones_light_contrast",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-terra",
@@ -40,6 +40,7 @@
     "openai-codex/gpt-5.6-luna",
     "openai-codex/gpt-5.6-terra",
     "openai-codex/gpt-5.6-sol",
+    "openai-codex/gpt-6-astra",
     "google/gemini-flash-lite-latest",
     "google/gemini-flash-latest",
     "google/gemini-3.1-pro-preview"

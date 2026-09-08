@@ -1,8 +1,8 @@
 ---
-name: saarthi
-aliases: saarthi
-description: High-powered advisor for the exceptionally challenging and complex problems.
-model: openai-codex/gpt-5.6-astra
+name: wazeer
+aliases: wazeer
+description: Strong advisor for second opinions on deep and complex problems.
+model: openai-codex/gpt-5.6-sol
 fallbackModels:
 thinking: medium
 systemPromptMode: append
@@ -12,8 +12,8 @@ defaultContext: fork
 maxSubagentDepth: 1
 allowNestedSubagents: false
 async: false
-turnBudget: {"maxTurns":96,"graceTurns":12}
-timeoutMs: 1200000
+turnBudget: {"maxTurns":64,"graceTurns":8}
+timeoutMs: 600000
 defaultProgress: true
 acceptanceRole: read-only
 completionGuard: true

@@ -21,6 +21,7 @@ Richie is the human review gate. Keep the source Markdown canonical. Apply only 
 
 ## Session lifecycle
 
+- Background a poll immediately; do not block the thread.
 - An interrupted poll stops only that wait. Resume with `richie poll <same-session-id>` while the session remains alive.
 - Closing the browser tab is not terminal. The poll remains pending until the user finishes or aborts.
 - Browser reload keeps the same session and poll.
