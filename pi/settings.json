@@ -1,12 +1,14 @@
 {
   "lastChangelogVersion": "0.85.1",
-  "theme": "neobones_light_contrast",
+  "theme": "neobones-light-contrast",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-terra",
   "persistModelSelection": false,
   "defaultThinkingLevel": "off",
   "hideThinkingBlock": false,
   "packages": [
+    "git:github.com/algal/pi-openai-server-compaction",
+    "npm:pi-context-view",
     {
       "source": "npm:pi-bg-tasks",
       "extensions": [],
@@ -14,7 +16,6 @@
       "prompts": [],
       "themes": []
     },
-    "git:github.com/algal/pi-openai-server-compaction",
     {
       "source": "npm:pi-agent-browser-native",
       "extensions": [],
@@ -22,8 +23,10 @@
       "prompts": [],
       "themes": []
     },
-    "npm:@narumitw/pi-starship",
-    "npm:pi-context-view",
+    {
+      "source": "npm:@narumitw/pi-starship",
+      "skills": []
+    },
     {
       "source": "npm:pi-subagents",
       "extensions": [],
@@ -45,18 +48,6 @@
     "google/gemini-flash-latest",
     "google/gemini-3.1-pro-preview"
   ],
-  "observational-memory": {
-    "observeAfterTokens": 25000,
-    "reflectAfterTokens": 25000,
-    "compactAfterTokens": 100000,
-    "compactAfterTokensMode": "ratio",
-    "compactAfterTokensRatio": 0.25,
-    "observationsPoolMaxTokens": 20000,
-    "observationsPoolTargetTokens": 10000,
-    "agentMaxTurns": 16,
-    "passive": true,
-    "debugLog": false
-  },
   "showHardwareCursor": true,
   "editorPaddingX": 0,
   "autocompleteMaxVisible": 10,
