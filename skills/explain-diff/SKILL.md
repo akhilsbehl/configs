@@ -36,4 +36,4 @@ Produce a single long-form HTML file explaining a code change. Make it accessibl
 - **Accessibility & CSS:** Responsive, visible focus states, WCAG contrast compliance, no reliance on color alone.
 
 ## Handoff
-Open the html file using $BROWSER. State inspected source targets, core assumptions, and validation results.
+Open the html file using $BROWSER. Ignore exit code 4 - false alarm.
