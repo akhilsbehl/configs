@@ -114,9 +114,9 @@ After the manual gate:
    | Role | Model | Thinking |
    |---|---|---|
    | Planner | `gpt-5.6-luna` | `high` |
-   | Implementer | `gpt-5.6-luna` | `medium` |
+   | Implementer | `gpt-5.6-terra` | `off` |
    | Reviewer | `gpt-5.6-terra` | `off` |
-   | Merger | `gpt-5.6-terra` | `off` |
+   | Merger | `gpt-5.6-luna` | `high` |
 
    `./scrun --help` shows all named model and thinking options. The runner validates each selected model and its thinking level against `~/.pi/agent/models-store.json`, including model-specific unsupported levels, before launching an agent. If a default or supplied model is unavailable, stop and ask which model to use. Do not silently substitute models.
 
@@ -196,13 +196,7 @@ Use this standard mount shape:
 
 ```ts
 const PI_SKILLS = [
-  "code-review",
-  "codebase-design",
-  "diagnosing-bugs",
-  "implement",
-  "improve-codebase-architecture",
   "resolving-merge-conflicts",
-  "tdd",
   "triage",
 ];
 
@@ -246,10 +240,10 @@ Pi creates a sibling lock file while refreshing provider availability. A read-on
 
 The standard role mapping is:
 
-- Planner: `triage`, `codebase-design`.
-- Implementer: `implement`, `tdd`, and diagnosis/architecture/conflict skills when relevant.
-- Reviewer: `code-review`, `codebase-design`, architecture and test skills when relevant.
-- Merger: conflict-resolution and test skills when relevant.
+- Planner: `triage`
+- Implementer: none
+- Reviewer: none
+- Merger: `resolving-merge-conflicts`
 
 Prompts must tell agents to read `CONTEXT.md` and relevant ADRs before changing domain concepts or architecture.
 
@@ -266,6 +260,7 @@ exec pi --approve "$@"
 ```
 
 Then create a custom provider wrapper that delegates parsing and session storage to `sandcastle.pi(model)` but replaces the executable with `bin/pi-approved` for print and interactive commands. Add a focused test for that wrapper. Pi's `--approve` trusts project-local files; it is not unrestricted tool permission bypass.
+
 ### Resource limit
 
 The copied template already implements bounded batches with `MAX_CONCURRENT_ISSUES = 8`. Do not replace it with an unbounded `Promise.all` fan-out. The generated parallel planner usually uses:
@@ -522,9 +517,9 @@ Create executable root scripts by copying `references/workflow-template/scrun` a
 The GitHub template's `scrun` defaults are:
 
 - Planner: `gpt-5.6-luna`, `high`.
-- Implementer: `gpt-5.6-luna`, `medium`.
+- Implementer: `gpt-5.6-terra`, `off`.
 - Reviewer: `gpt-5.6-terra`, `off`.
-- Merger: `gpt-5.6-terra`, `off`.
+- Merger: `gpt-5.6-luna`, `high`.
 
 `scbuild`:
 
@@ -606,9 +601,3 @@ reference to reconcile.
 - **Default model resolution:** a bare `pi --print` in the container may report "No API key found" even with valid auth; pass the model explicitly (`--model openai-codex/gpt-5.6-luna`).
 - **Vendor leftovers:** the blank template leaves `.sandcastle/main.ts` and `.sandcastle/prompt.md`; delete both when installing the gated workflow template.
 - **zod may be silently skipped:** `sandcastle init` does not always prompt to install `zod`; verify it is in `package.json` after Phase 0 and run `npm install --save-dev zod tsx` if missing (`tsx` runs `main.mts`).
-
-## Revision Log
-
-- 2026-08-24: Added known pitfalls from first real setup (richie): Pi lock-file mount ownership, rootless UID mapping, explicit model flag, vendor leftover files, silent zod skip.
-- 2026-08-24: Replaced the vendor workflow guidance with the copyable gated workflow, eight-runner batches, script-owned circuit breakers, explicit `scrun` options, and tracker-adapter instructions.
-- 2026-08-24: Removed duplicated prose references; retained the tracker migration reference and made it cover host-side `main.mts` rewiring.

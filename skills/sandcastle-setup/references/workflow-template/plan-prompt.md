@@ -1,13 +1,10 @@
 # SKILLS
 
-The following skills are mounted at `~/.pi/agent/skills/`. Read the relevant
+Discover the skills mounted at `~/.pi/agent/skills/`. Read the relevant
 `SKILL.md` before acting and follow it where applicable:
 
-- `triage` — issue intake, labels, and readiness.
-- `codebase-design` — dependency and module-boundary reasoning.
-
-Use only the skills relevant to this planning task. Do not invent issue or
-triage facts that are not present in the issue data.
+Use only the skills relevant to this task. Read `CONTEXT.md` and relevant ADRs
+before changing domain concepts or architectural decisions.
 
 # ISSUES
 

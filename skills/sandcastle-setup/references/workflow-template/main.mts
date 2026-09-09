@@ -60,13 +60,8 @@ const piSandbox = () =>
         readonly: true,
       },
       ...[
-        "code-review",
-        "codebase-design",
-        "diagnosing-bugs",
-        "implement",
         "improve-codebase-architecture",
         "resolving-merge-conflicts",
-        "tdd",
         "triage",
       ].map((skill) => ({
         hostPath: `~/.agents/skills/${skill}`,
@@ -96,9 +91,9 @@ type RoleOptions = Record<Role, { model: string; thinking: ThinkingLevel }>;
 
 const DEFAULTS: RoleOptions = {
   planner: { model: "gpt-5.6-luna", thinking: "high" },
-  implementer: { model: "gpt-5.6-luna", thinking: "medium" },
+  implementer: { model: "gpt-5.6-terra", thinking: "off" },
   reviewer: { model: "gpt-5.6-terra", thinking: "off" },
-  merger: { model: "gpt-5.6-terra", thinking: "off" },
+  merger: { model: "gpt-5.6-luna", thinking: "high" },
 };
 
 function printUsage(): void {

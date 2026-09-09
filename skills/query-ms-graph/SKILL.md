@@ -1,33 +1,26 @@
 ---
 name: query-ms-graph
-description: Use to Query Microsoft Graph when needing a Fractal employee's details or resolve and download a Microsoft 365 sharing link. Don't use for email, calendar, etc.
+description: Query Microsoft Graph for Fractal employee details or resolve and download M365 sharing links. Not for email or calendar.
 ---
 
 # Query Microsoft Graph
 
-Use `query-ms-graph` which should be in path:
+Execute via CLI:
 
 ```bash
 query-ms-graph --name "Akhil Behl"
 query-ms-graph --link "https://..." --output-dir "$PWD"
 query-ms-graph --name "Akhil Behl" --link "https://..."
+
 ```
 
-Good to know:
-* Query by name - not email.
-  * Use full name if available
-  * Full name if matched will find the exact person (or multiple matches if available)
-  * Partial name matches FirstName and returns all names that match (fuzzy).
-* `--output-dir` defaults to the caller's current working directory.
-  * Pass a Linux path. The wrapper converts it for Windows PowerShell. Sharing links are opaque values. Quote them.
+## Usage Guidelines
 
-## Authentication
+* **Name Search:** Query by full name when available (exact match). Partial names match `FirstName` fuzzily. Do not query by email.
+* **Sharing Links & Paths:** Quote link URLs. `--output-dir` defaults to current working directory; pass Linux paths (auto-converted for Windows PowerShell).
 
-The credentials should be cached but if auth fails, do not reattempt and just inform me to refresh auth cache.
+## Auth & Execution Rules
 
-## Output and safety
-
-- Directory results are JSON preceded by log lines.
-- Successful downloads print the saved path.
-- Surface a non-zero exit as an error. Do not silently retry authentication or Graph requests.
-- Use `--debug` only when diagnosing a failure. It writes output to `/tmp/ms-graph-debug-<timestamp>.log` and prints the log path.
+* **Authentication:** Credentials are cached. On auth failure, **do not retry**; notify the user to refresh the auth cache.
+* **Errors & Output:** Surface non-zero exit codes as errors. JSON/download results include pre-pended log lines.
+* **Debugging:** Use `--debug` only for diagnosing failures. Log outputs to `/tmp/ms-graph-debug-<timestamp>.log`.

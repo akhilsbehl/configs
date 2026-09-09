@@ -1,14 +1,7 @@
 # SKILLS
 
-The following skills are mounted at `~/.pi/agent/skills/`. Read the relevant
+Discover the skills mounted at `~/.pi/agent/skills/`. Read the relevant
 `SKILL.md` before acting and follow it where applicable:
-
-- `implement` — implementation workflow and delivery discipline.
-- `tdd` — use for red-green-refactor when the task has a suitable test seam.
-- `diagnosing-bugs` — use when the issue reports a bug, failure, or regression.
-- `improve-codebase-architecture` — use when the task is an architectural or
-  design improvement.
-- `resolving-merge-conflicts` — use only if Git reports an active conflict.
 
 Use only the skills relevant to this task. Read `CONTEXT.md` and relevant ADRs
 before changing domain concepts or architectural decisions.

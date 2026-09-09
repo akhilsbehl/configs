@@ -1,13 +1,10 @@
 # SKILLS
 
-The following skills are mounted at `~/.pi/agent/skills/`. Read the relevant
+Discover the skills mounted at `~/.pi/agent/skills/`. Read the relevant
 `SKILL.md` before acting and follow it where applicable:
 
-- `resolving-merge-conflicts` — use when a merge conflict occurs.
-- `tdd` — use when verification requires test changes or test diagnosis.
-
-Use only the skills relevant to this merge. Read `CONTEXT.md` and relevant ADRs
-when resolving conflicts involving domain concepts or architectural decisions.
+Use only the skills relevant to this task. Read `CONTEXT.md` and relevant ADRs
+before changing domain concepts or architectural decisions.
 
 # ROLE
 
