@@ -3,7 +3,6 @@ name: saarthi
 aliases: saarthi
 description: High-powered advisor for the exceptionally challenging and complex problems.
 model: openai-codex/gpt-5.6-astra
-fallbackModels:
 thinking: medium
 systemPromptMode: append
 inheritProjectContext: true

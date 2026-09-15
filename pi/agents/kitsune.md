@@ -3,7 +3,6 @@ name: kitsune
 aliases: kitsune
 description: The base subagent for most unspecialized tasks
 model: openai-codex/gpt-5.6-luna
-fallbackModels:
 thinking: medium
 systemPromptMode: append
 inheritProjectContext: true

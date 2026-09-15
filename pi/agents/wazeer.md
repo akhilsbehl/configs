@@ -3,7 +3,6 @@ name: wazeer
 aliases: wazeer
 description: Strong advisor for second opinions on deep and complex problems.
 model: openai-codex/gpt-5.6-sol
-fallbackModels:
 thinking: medium
 systemPromptMode: append
 inheritProjectContext: true

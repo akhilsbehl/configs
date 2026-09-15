@@ -3,7 +3,6 @@ name: tanuki
 aliases: tanuki
 description: Default subagent for cheap & fast chores
 model: openai-codex/gpt-5.6-luna
-fallbackModels:
 thinking: off
 systemPromptMode: append
 inheritProjectContext: true
