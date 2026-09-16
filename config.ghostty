@@ -1,0 +1,76 @@
+# Ghostty configuration mapped from Windows Terminal and Zellij settings.
+# Zellij is replaced here; supported pane/tab bindings are preserved below.
+
+command = /usr/bin/zsh
+working-directory = /home/akhil/configs
+font-family = JetBrainsMonoNL Nerd Font Propo
+font-size = 8
+font-style-italic = Italic
+
+background = #E5EDE6
+foreground = #202E18
+cursor-color = #202E18
+cursor-style = block
+selection-background = #7FA85A
+selection-foreground = #E5EDE6
+window-padding-x = 2
+window-padding-y = 2
+background-opacity = 1
+background-blur = true
+fullscreen = true
+copy-on-select = true
+scrollback-limit = 100000000
+shell-integration-features = no-cursor
+
+# neobones_light ANSI palette (indices 0-15).
+palette = 0=#E5EDE6
+palette = 1=#A8334C
+palette = 2=#567A30
+palette = 3=#944927
+palette = 4=#286486
+palette = 5=#88507D
+palette = 6=#3B8992
+palette = 7=#202E18
+palette = 8=#B3C6B6
+palette = 9=#94253E
+palette = 10=#3F5A22
+palette = 11=#803D1C
+palette = 12=#1D5573
+palette = 13=#7B3B70
+palette = 14=#2B747C
+palette = 15=#415934
+
+# Windows Terminal controls with native Ghostty actions.
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+keybind = ctrl+0=reset_font_size
+keybind = ctrl+shift+equal=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+alt+f=toggle_fullscreen
+
+# Supported Zellij replacements (Alt is intentionally used as the leader).
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:down
+keybind = alt+k=goto_split:up
+keybind = alt+l=goto_split:right
+keybind = alt+n=new_split
+keybind = alt+minus=new_split:down
+keybind = alt+backslash=new_split:right
+keybind = alt+z=toggle_split_zoom
+keybind = alt+w=close_surface
+keybind = alt+shift+w=close_tab
+keybind = alt+1=goto_tab:1
+keybind = alt+2=goto_tab:2
+keybind = alt+3=goto_tab:3
+keybind = alt+4=goto_tab:4
+keybind = alt+5=goto_tab:5
+keybind = alt+6=goto_tab:6
+keybind = alt+7=goto_tab:7
+keybind = alt+8=goto_tab:8
+keybind = alt+9=goto_tab:9
+keybind = alt+shift+j=previous_tab
+keybind = alt+shift+k=next_tab
+keybind = alt+shift+n=new_tab
+keybind = alt+shift+q=quit
+keybind = alt+slash=start_search
+keybind = alt+[=scroll_page_up
