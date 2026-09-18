@@ -34,7 +34,7 @@
       "prompts": [],
       "themes": []
     },
-    "git:github.com/nicklambourne/pi-muse-spark"
+    "git:github.com/akhilsbehl/pi-muse-spark"
   ],
   "terminal": {
     "showTerminalProgress": true
