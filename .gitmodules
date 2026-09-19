@@ -31,3 +31,6 @@
 [submodule "pi/extensions/pie-ez-pass"]
 	path = pi/extensions/pie-ez-pass
 	url = git@github.com:akhilsbehl/pie-ez-pass.git
+[submodule "pi/extensions/pie-jev"]
+	path = pi/extensions/pie-jev
+	url = git@github.com:akhilsbehl/pie-jev.git
