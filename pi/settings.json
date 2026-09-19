@@ -1,11 +1,11 @@
 {
-  "lastChangelogVersion": "0.85.1",
+  "lastChangelogVersion": "0.86.0",
   "theme": "neobones-light-contrast",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-terra",
   "persistModelSelection": false,
   "defaultThinkingLevel": "off",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "packages": [
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-context-view",
