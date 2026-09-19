@@ -4,6 +4,8 @@
   "model": "codex-auto-review",
   "reasoning": "low",
   "timeoutMs": 90000,
+  "use_jev": true,
+  "jev_accept_confidence_threshold": 0.95,
   "rules": {
     "allow": {
       "commands": [
