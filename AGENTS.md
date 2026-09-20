@@ -17,6 +17,3 @@
   - Mandatory Git use; prompt repo creation if missing.
   - Require project-level `AGENTS.md` (symlinked to `CLAUDE.md` and `GEMINI.md`).
   - Exponentially back off polling loops for background jobs.
-
-## Delegation & Subagents
-- Read `~/configs/pi/prompts/delegate.md` now. Always initiate sessions in delegation mode.

@@ -48,7 +48,8 @@
     "google/gemini-flash-lite-latest",
     "google/gemini-flash-latest",
     "google/gemini-3.1-pro-preview",
-    "meta-ai/muse-spark-1.3-contributor"
+    "meta-ai/muse-spark-1.3-contributor",
+    "openrouter/deepseek/deepseek-v4.1-flash"
   ],
   "showHardwareCursor": true,
   "editorPaddingX": 0,
