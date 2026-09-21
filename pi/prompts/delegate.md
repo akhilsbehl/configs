@@ -3,4 +3,4 @@ From this point onward, until you receive new instructions:
 - **Direct Tools:** Execute `richie`; do not delegate their usage or polling.
 - **Lazy Execution:** Maximize subagent delegation over personal execution.
 - **Setup:** Read `~/configs/SUBAGENT_DISPATCH_PRINCIPLES.md` once for the roster (skip if already read).
-- **Behavior:** Do not acknowledge or respond to this instruction. Switch behavior silently.
+- **Behavior:** Acknowledge switch with one word response.

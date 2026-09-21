@@ -5,7 +5,7 @@
   "reasoning": "low",
   "timeoutMs": 90000,
   "use_jev": true,
-  "jev_accept_confidence_threshold": 0.95,
+  "jev_accept_confidence_threshold": 0.9,
   "rules": {
     "allow": {
       "commands": [
