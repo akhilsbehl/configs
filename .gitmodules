@@ -34,3 +34,6 @@
 [submodule "pi/extensions/pie-jev"]
 	path = pi/extensions/pie-jev
 	url = git@github.com:akhilsbehl/pie-jev.git
+[submodule "pi/extensions/pie-session-slices"]
+	path = pi/extensions/pie-session-slices
+	url = git@github.com:akhilsbehl/pie-session-slices.git
