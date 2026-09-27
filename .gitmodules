@@ -37,3 +37,6 @@
 [submodule "pi/extensions/pie-session-slices"]
 	path = pi/extensions/pie-session-slices
 	url = git@github.com:akhilsbehl/pie-session-slices.git
+[submodule "pi/extensions/pie-cite-test"]
+	path = pi/extensions/pie-cite-test
+	url = git@github.com:akhilsbehl/pie-cite-test.git
