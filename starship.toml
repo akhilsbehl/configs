@@ -26,6 +26,7 @@ $docker_context\
 $conda\
 [](fg:color_bg3 bg:color_bg1)\
 $time\
+${custom.battery}\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
@@ -157,6 +158,13 @@ disabled = false
 time_format = "%I:%M %p"
 style = "bg:color_bg1"
 format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+
+[custom.battery]
+command = "$HOME/configs/scripts/battery"
+when = true
+shell = ["bash", "--noprofile", "--norc"]
+style = "bg:color_bg1"
+format = '[[ $output ](fg:color_fg0 bg:color_bg1)]($style)'
 
 [line_break]
 disabled = false

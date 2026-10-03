@@ -40,3 +40,6 @@
 [submodule "pi/extensions/pie-cite-test"]
 	path = pi/extensions/pie-cite-test
 	url = git@github.com:akhilsbehl/pie-cite-test.git
+[submodule "pi/extensions/pie-battery"]
+	path = pi/extensions/pie-battery
+	url = git@github.com:akhilsbehl/pie-battery.git

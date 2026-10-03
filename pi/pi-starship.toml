@@ -18,6 +18,7 @@ $cost\
 $context\
 [](fg:#000000 bg:color_bg1)\
 $time\
+$extension_status\
 [ ](fg:color_bg1)\
 """
 
@@ -92,3 +93,11 @@ hidden = false
 disabled = false
 style = "bg:color_bg1"
 format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+
+[extension_status]
+format = '[ $statuses ]($style)'
+style = "bg:color_bg1 fg:color_fg0"
+max_statuses = 1
+
+[extension_status.icons]
+battery = "▤"

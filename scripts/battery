@@ -1,33 +1,11 @@
 #!/usr/bin/env bash
 
-function exists_command {
-  command -v "$1" > /dev/null
-}
+for f in /sys/class/power_supply/BAT*/capacity; do
+  if [ -r "$f" ]; then
+    echo "▤ $(cat "$f")%"
+    exit 0
+  fi
+done
 
-function get_first_available {
-  local first
-  for candidate in "$@"; do
-    exists_command "$candidate" && first="$candidate"
-    (test "$first" && echo "$first") && break
-  done
-}
-
-util=$(get_first_available powershell.exe upower)
-
-if [ -z "$util" ]; then
-  echo "Error: Couldn't find a battery utility."
-  exit 1
-fi
-
-if [ "$util" = "upower" ]; then
-  LEVEL="$(upower -d | grep 'percentage' | head -1 | cut -f 2 -d ':' | tr -dc '[0-9]')"
-elif [ "$util" = "powershell.exe" ]; then
-  LEVEL="$(powershell.exe WMIC PATH Win32_Battery Get EstimatedChargeRemaining | grep -P "^\d+" | tr -dc '0-9')"
-else
-  echo "Error: How did you get here?"
-  exit 2
-fi
-
-echo "▤ $LEVEL%"
-
-exit 0
+echo "▤ ?%"
+exit 1
