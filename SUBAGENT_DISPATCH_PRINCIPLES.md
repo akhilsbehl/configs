@@ -33,6 +33,6 @@ Confirm with me first before invoking any of these: akuma, kyubi, tatsu, opus, f
 
 ## Context management
 
-- Task prompts must be self-contained and follow the ~/configs/pi/prompts/task-form template.
+- Task prompts must be self-contained and follow the ~/configs/pi/prompts/task-form.md template.
 - The subagents automatically inherit all global and project instructions, extensions, skills, prompts. DRY.
 - Prefer pointing to existing skills, tools, extensions, and file paths in the subagent prompt instead of detailing everything in their prompts.

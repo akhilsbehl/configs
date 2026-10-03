@@ -2,7 +2,7 @@
 name: saaqi
 aliases: saaqi
 description: Light advisor for quick second opinions and sanity checks on direction.
-model: openai-codex/gpt-5.6-terra
+model: anthropic/claude-sonnet-5-5
 thinking: medium
 systemPromptMode: append
 inheritProjectContext: true

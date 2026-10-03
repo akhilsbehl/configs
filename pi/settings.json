@@ -1,6 +1,5 @@
 {
   "lastChangelogVersion": "1.0.0",
-  "theme": "neobones-light-contrast",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-terra",
   "persistModelSelection": false,
@@ -37,19 +36,24 @@
     "git:github.com/akhilsbehl/pi-muse-spark"
   ],
   "terminal": {
-    "showTerminalProgress": true
+    "showTerminalProgress": true,
+    "imageWidthCells": 120,
+    "clearOnShrink": false
   },
   "quietStartup": false,
   "enabledModels": [
-    "openai-codex/gpt-5.6-luna",
     "openai-codex/gpt-5.6-terra",
     "openai-codex/gpt-5.6-sol",
-    "openai-codex/gpt-6-astra",
-    "google/gemini-flash-lite-latest",
+    "anthropic/claude-sonnet-5-5",
+    "anthropic/claude-opus-5-5",
     "google/gemini-flash-latest",
-    "google/gemini-3.1-pro-preview",
     "meta-ai/muse-spark-1.3-contributor",
-    "openrouter/deepseek/deepseek-v4.1-flash"
+    "openrouter/deepseek/deepseek-v4.1-flash",
+    "openai-codex/gpt-6-astra",
+    "anthropic/claude-fable-5-1",
+    "openai-codex/gpt-5.6-luna",
+    "google/gemini-flash-lite-latest",
+    "google/gemini-3.1-pro-preview"
   ],
   "showHardwareCursor": true,
   "editorPaddingX": 0,
@@ -63,5 +67,19 @@
   "treeFilterMode": "all",
   "subagents": {
     "disableBuiltins": true
-  }
+  },
+  "extensions": [
+    "-builtin:llama.cpp",
+    "-builtin:mcp",
+    "-builtin:codemode",
+    "-builtin:tool-search"
+  ],
+  "images": {
+    "autoResize": true
+  },
+  "showCacheMissNotices": true,
+  "warnings": {
+    "anthropicExtraUsage": false
+  },
+  "fullscreenExitOutput": "transcript"
 }

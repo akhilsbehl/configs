@@ -2,8 +2,8 @@
 name: saarthi
 aliases: saarthi
 description: High-powered advisor for the exceptionally challenging and complex problems.
-model: openai-codex/gpt-5.6-astra
-thinking: medium
+model: anthropic/claude-opus-5-5
+thinking: high
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -12,7 +12,7 @@ maxSubagentDepth: 1
 allowNestedSubagents: false
 async: false
 turnBudget: {"maxTurns":96,"graceTurns":12}
-timeoutMs: 1200000
+timeoutMs: 2400000
 defaultProgress: true
 acceptanceRole: read-only
 completionGuard: true

@@ -2,8 +2,8 @@
 name: rasetsu
 aliases: rasetsu
 description: The base subagent for most unspecialized tasks that are difficult
-model: openai-codex/gpt-5.6-terra
-thinking: medium
+model: anthropic/claude-sonnet-5-5
+thinking: high
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true

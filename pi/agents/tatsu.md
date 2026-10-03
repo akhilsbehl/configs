@@ -2,8 +2,8 @@
 name: tatsu
 aliases: tatsu
 description: The base subagent for most unspecialized tasks that are exceptionally difficult
-model: openai-codex/gpt-5.6-astra
-thinking: low
+model: anthropic/claude-opus-5-5
+thinking: high
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true

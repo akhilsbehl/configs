@@ -12,7 +12,7 @@ maxSubagentDepth: 1
 allowNestedSubagents: false
 async: false
 turnBudget: {"maxTurns":64,"graceTurns":8}
-timeoutMs: 600000
+timeoutMs: 1200000
 defaultProgress: true
 acceptanceRole: read-only
 completionGuard: true

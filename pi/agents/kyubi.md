@@ -3,7 +3,7 @@ name: kyubi
 aliases: kyubi
 description: The base subagent for most unspecialized tasks that are exceptionally difficult
 model: openai-codex/gpt-5.6-sol
-thinking: medium
+thinking: high
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true

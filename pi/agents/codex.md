@@ -12,7 +12,7 @@ runner:
     - --model
     - gpt-5.6-luna
     - --config
-    - model_reasoning_effort=low
+    - model_reasoning_effort=high
   promptDelivery: stdin
 async: true
 ---
