@@ -69,7 +69,7 @@ function get_first_available {
 }
 
 function cpf() {
-    copier=$(get_first_available wl-copy xclip clip.exe)
+    copier=$(get_first_available clip.exe wl-copy xclip)
     [[ -n "$copier" ]] && "$copier" < "$1"
 }
 

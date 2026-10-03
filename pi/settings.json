@@ -1,10 +1,10 @@
 {
   "lastChangelogVersion": "1.0.0",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-terra",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-sonnet-5-5",
   "persistModelSelection": false,
   "defaultThinkingLevel": "off",
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "packages": [
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-context-view",
@@ -38,7 +38,8 @@
   "terminal": {
     "showTerminalProgress": true,
     "imageWidthCells": 120,
-    "clearOnShrink": false
+    "clearOnShrink": false,
+    "showImages": false
   },
   "quietStartup": false,
   "enabledModels": [
@@ -75,7 +76,7 @@
     "-builtin:tool-search"
   ],
   "images": {
-    "autoResize": true
+    "autoResize": false
   },
   "showCacheMissNotices": true,
   "warnings": {
