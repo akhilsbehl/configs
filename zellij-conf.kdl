@@ -222,6 +222,7 @@ scroll_buffer_size 1000000
 // copy_command "pbcopy"                     // osx
 //
 // copy_command "pbcopy"
+copy_command "/mnt/c/Windows/System32/clip.exe"
 
 // Choose the destination for copied text
 // Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
@@ -230,7 +231,7 @@ scroll_buffer_size 1000000
 //   - system (default)
 //   - primary
 //
-copy_clipboard "primary"
+// copy_clipboard "primary"
 
 // Enable automatic copying (and clearing) of selection when releasing mouse
 // Default: true

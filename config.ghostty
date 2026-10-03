@@ -22,6 +22,9 @@ copy-on-select = true
 scrollback-limit = 100000000
 shell-integration-features = no-cursor
 
+title = Quake
+gtk-single-instance = true
+
 # neobones_light ANSI palette (indices 0-15).
 palette = 0=#E5EDE6
 palette = 1=#A8334C
