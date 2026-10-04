@@ -1,11 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/akhilsbehl/pie-ez-pass/refs/heads/master/schemas/config.schema.json",
   "provider": "openai-codex",
-  "model": "codex-auto-review",
+  "model": "gpt-5.6-luna",
   "reasoning": "low",
   "timeoutMs": 90000,
-  "use_jev": false,
-  "jev_accept_confidence_threshold": 0.9,
+  "use_jev": true,
+  "jev_escalate_confidence_threshold": 0.6,
   "rules": {
     "allow": {
       "commands": [
@@ -109,6 +109,7 @@
         "~/tmp",
         "~/.richie",
         "~/.pi",
+        "~/configs",
         "~/warchives"
       ]
     },
