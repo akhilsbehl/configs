@@ -1,0 +1,67 @@
+/* default: sumi ink, washi paper, kintsugi gold seam. Derived from the kintsugitoma design system.
+   Rules of the house: left-aligned, one large void per slide, gold used sparingly, never italic. */
+@font-face { font-family:"Shippori Mincho B1"; font-weight:400; font-display:swap; src:url(assets/fonts/shippori-mincho-b1-400.woff2) format("woff2"); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212; }
+@font-face { font-family:"Shippori Mincho B1"; font-weight:400; font-display:swap; src:url(assets/fonts/shippori-mincho-b1-kanji-logo.woff2) format("woff2"); unicode-range:U+7D99,U+91D1,U+9593; }
+@font-face { font-family:"Zen Kaku Gothic New"; font-weight:400; font-display:swap; src:url(assets/fonts/zen-kaku-gothic-new-400.woff2) format("woff2"); }
+@font-face { font-family:"Zen Kaku Gothic New"; font-weight:500; font-display:swap; src:url(assets/fonts/zen-kaku-gothic-new-500.woff2) format("woff2"); }
+@font-face { font-family:"IBM Plex Mono"; font-weight:400; font-display:swap; src:url(assets/fonts/ibm-plex-mono-400.woff2) format("woff2"); }
+
+:root {
+  --accent:#8A6A26; --on-accent:#FFFDFA; --bg:#F7F3EC; --surface:#E4DCD0; --card:#FFFDFA;
+  --border:rgb(20 17 15 / .10); --title:#14110F; --body:#3A332D; --muted:#6B635A;
+  --shadow:rgb(20 17 15 / .10); --scrim:#14110F; --on-photo:#FFFDFA;
+  --font:"Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
+  --font-title:"Shippori Mincho B1", Georgia, "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --seam:linear-gradient(90deg, transparent, #B08D3E 12%, #DCC48C 50%, #B08D3E 88%, transparent);
+  --edge-x:clamp(28px, 5.6vw, 90px); --edge-y:clamp(28px, 5.6vw, 90px);
+  --heading-weight:400; --subtitle-weight:400; --label-weight:500; --label-track:.18em; --heading-track:-.02em;
+  --fs-label:clamp(12px, .95vw, 14px); --fs-footer:clamp(12px, .85vw, 13px);
+  --fs-body:clamp(14px, 1.1vw, 17px); --fs-desc:clamp(15px, 1.3vw, 20px);
+  --fs-h1:clamp(34px, 5.4vw, 86px); --fs-h2:clamp(26px, 3.1vw, 49px);
+  --fs-agenda:clamp(20px, 2.4vw, 38px); --fs-agenda-sub:clamp(20px, 2.4vw, 38px); --fs-quote:clamp(24px, 3.5vw, 56px);
+}
+h1, h2, h3 { line-height:1.12; }
+:root { --agenda-row-extra:calc(2 * clamp(7px, 1.35vw, 22px) + 1px); }
+.eyebrow { color:var(--muted); }
+.footer { left:var(--edge-x); right:var(--edge-x); bottom:clamp(20px, 3.1vw, 40px); font-family:var(--font-mono); }
+.controls button { border-radius:2px; }
+
+/* ink grounds: title, closing; paper-sunken: divider, statement */
+.title-slide, .closing-slide { --bg:#14110F; --title:#F7F3EC; --body:#C8C1B7; --muted:#9A9288; --accent:#DCC48C; --border:rgb(255 253 250 / .16); }
+.divider, .statement-slide { --bg:#EFE9DF; }
+
+/* seam: the repair mark */
+.title-slide h1::after, .closing-slide h1::after { content:""; display:block; height:1px; background:var(--seam); margin:.5em 0 .3em; }
+.divider .content::before, .statement-slide .content::before { content:""; display:block; width:min(180px, 30%); height:1px; background:var(--seam); margin-bottom:clamp(28px, 3.6vw, 48px); }
+
+/* title and closing: label top-left, kanji mark top-right, text group low and left */
+.title-slide, .closing-slide { align-items:flex-start; }
+.title-slide { justify-content:flex-end; padding-bottom:clamp(60px, 11.7vw, 150px); }
+.title-slide .content, .closing-slide .content { position:static; max-width:78%; }
+.title-slide h1 { max-width:22ch; }
+.title-slide .eyebrow { position:absolute; left:var(--edge-x); top:var(--edge-y); margin:0; }
+.title-slide .subtitle { max-width:none; margin:0 0 .4em; color:var(--body); font-size:var(--fs-desc); }
+.title-slide .description, .closing-slide .description { max-width:46ch; color:var(--muted); }
+.closing-slide h1 { max-width:22ch; font-size:clamp(30px, 4.8vw, 76px); }
+.logo { position:absolute; right:var(--edge-x); top:var(--edge-y); display:flex; flex-direction:column; align-items:center; gap:.9em; width:auto; margin:0; }
+.logo__mark { writing-mode:vertical-rl; color:var(--title); font-family:var(--font-title); font-size:clamp(22px, 2.2vw, 34px); letter-spacing:.32em; line-height:1; }
+.logo__caption { color:var(--muted); font-family:var(--font-mono); font-size:var(--fs-footer); letter-spacing:.04em; }
+
+/* agenda: hairline ledger, numerals in gold */
+.agenda { max-width:none; align-content:start; gap:0; margin:clamp(24px, 3.5vw, 48px) 0 0; }
+.agenda li { grid-template-columns:clamp(44px, 6.3vw, 80px) 1fr 1fr; align-items:baseline; gap:0 clamp(16px, 2.5vw, 32px); padding:clamp(7px, 1.35vw, 22px) 0; border-top:1px solid var(--border); line-height:1.25; }
+.agenda li::before { font-family:var(--font-mono); font-size:var(--fs-body); font-weight:400; }
+.agenda li > span { white-space:normal; font-size:inherit; }
+.agenda li > small { grid-column:3; grid-row:1; color:var(--muted); font-size:var(--fs-body); }
+.eyebrow--agenda { font-size:var(--fs-label); }
+
+/* divider and statement */
+.divider h2 { max-width:12ch; }
+.statement-slide .content { max-width:min(84%, 1120px); }
+.statement { line-height:1.26; letter-spacing:-.01em; }
+
+/* full-bleed photograph */
+.bleed-slide { --accent:#DCC48C; }
+.bleed-slide .eyebrow { color:var(--accent); }
+.bleed-slide h2 { line-height:1.16; }

@@ -1,0 +1,19 @@
+/* minimalist: system fonts, white and near-black grounds, one blue accent, hairlines. */
+:root {
+  --accent:#1D4ED8; --on-accent:#FFFFFF; --bg:#FFFFFF; --surface:#F3F4F6; --card:#F5F6F8;
+  --border:#E2E4E8; --title:#111827; --body:#374151; --muted:#6B7280;
+  --shadow:rgb(17 24 39 / .08);
+  --font:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --heading-weight:650; --subtitle-weight:500; --label-weight:600; --label-track:.08em;
+  --fs-footer:clamp(12px, .8vw, 13px);
+}
+[data-theme="dark"] {
+  --accent:#8AB4FF; --on-accent:#0B1220; --bg:#0B0F17; --surface:#111827; --card:#111827;
+  --border:#263041; --title:#F9FAFB; --body:#C7CDD8; --muted:#8B94A5; --shadow:rgb(0 0 0 / .35);
+}
+:root { --agenda-row-extra:7px; }
+.title-slide .content, .closing-slide .content, .statement-slide .content { max-width:84%; }
+.title-slide h1, .closing-slide h1 { max-width:24ch; }
+.agenda li { border-top:1px solid var(--border); padding-top:6px; }
+.agenda li:last-child { border-bottom:1px solid var(--border); }
+.statement-slide .content { border-left:3px solid var(--accent); padding-left:clamp(18px, 2.4vw, 40px); }

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-theme="{{MODE}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{DECK_TITLE}}">
+  <meta name="html-deck-theme" content="{{THEME_NAME}}">
+  <title>{{DECK_TITLE}}</title>
+  <style data-engine>
+{{ENGINE_CSS}}
+  </style>
+  <style data-theme-css="{{THEME_NAME}}">
+{{THEME_CSS}}
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="{{DECK_TITLE}}">
+    <section class="slide title-slide" aria-labelledby="title">
+      <img class="motif motif--title" data-slot="motif:title" alt="" aria-hidden="true">
+      <div class="content">
+        <!-- Hero titles (title, closing, statement, divider): max 15 words; other titles: max 25. -->
+        <span class="logo" data-slot="logo"></span>
+        <p class="eyebrow">Strategy brief</p>
+        <h1 id="title">Make the next move matter.</h1>
+        <p class="subtitle">A concise, decision-ready point of view</p>
+        <p class="description">A short description that frames the audience, opportunity, and desired outcome.</p>
+      </div>
+      <footer class="footer"><span data-slot="footer"></span></footer>
+    </section>
+
+    <!-- Agenda items map 1:1, in order, to numbered divider slides (01 … NN). -->
+    <section class="slide content-slide agenda-slide" aria-label="Agenda">
+      <img class="motif motif--agenda" data-slot="motif:agenda" alt="" aria-hidden="true">
+      <p class="eyebrow eyebrow--agenda">Agenda</p>
+      <ol class="agenda body-area"><li><span>The opportunity</span></li></ol>
+      <footer class="footer"><span data-slot="footer"></span><span>02</span></footer>
+    </section>
+
+    <section class="slide divider" aria-labelledby="section-title">
+      <img class="motif motif--divider" data-slot="motif:divider" alt="" aria-hidden="true">
+      <div class="content"><p class="eyebrow">Section 01</p><h2 id="section-title">The opportunity</h2><p class="description">One sentence that earns the transition.</p></div>
+    </section>
+
+    <!-- Every content, statement, and full-bleed slide repeats its current section number in the eyebrow. -->
+    <section class="slide content-slide" aria-labelledby="insight-title">
+      <!-- Keep this individual slide title to 25 words or fewer. -->
+      <p class="eyebrow">01 · Key insight</p><h2 id="insight-title">State the decision-relevant conclusion here</h2>
+      <div class="body-area">
+        <!-- Before adding elements, identify what the reader must perceive: importance, sequence,
+             containment, contrast, convergence, dependency, uncertainty, or comparison. Compose
+             the slide from that relationship. Style only with theme tokens (var(--accent) etc.);
+             never write literal colours. Do not copy a default card grid or diagram. -->
+      </div>
+      <footer class="footer"><span data-slot="footer"></span><span>04</span></footer>
+    </section>
+
+    <section class="slide statement-slide" aria-label="Statement">
+      <div class="content">
+        <p class="eyebrow">01 · Statement</p>
+        <blockquote class="statement"><p>One sentence the audience should carry out of the room.</p></blockquote>
+        <p class="attribution">Source or context</p>
+      </div>
+      <footer class="footer"><span data-slot="footer"></span><span>05</span></footer>
+    </section>
+
+    <section class="slide bleed-slide" aria-labelledby="bleed-title">
+      <!-- Replace this placeholder with <img class="bleed" src="assets/photo.jpg" alt="Describe the photograph">
+           and save the generation prompt beside it, e.g. assets/photo.prompt.txt. Delete the slide if unused. -->
+      <div class="bleed" data-placeholder="photograph"></div>
+      <div class="scrim" aria-hidden="true"></div>
+      <div class="content"><p class="eyebrow">01 · Evidence</p><h2 id="bleed-title">A photograph that is the evidence</h2></div>
+      <footer class="footer"><span data-slot="footer"></span><span>06</span></footer>
+    </section>
+
+    <section class="slide closing-slide" aria-labelledby="closing-title">
+      <img class="motif motif--closing" data-slot="motif:closing" alt="" aria-hidden="true">
+      <div class="content"><span class="logo" data-slot="logo"></span><h1 id="closing-title">Thank you.</h1><p class="description">Discussion, questions, and next steps.</p></div>
+      <footer class="footer"><span data-slot="footer"></span></footer>
+    </section>
+  </main>
+  <nav class="controls" aria-label="Presentation controls"><button type="button" data-action="previous">Previous</button><button type="button" data-action="next">Next</button></nav>
+  <script>
+{{ENGINE_JS}}
+  </script>
+</body>
+</html>

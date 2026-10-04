@@ -1,0 +1,10 @@
+{
+  "name": "default",
+  "description": "Quiet Japanese-minimalist look from kintsugitoma: ink and paper, mincho titles, a gold seam, a kanji mark.",
+  "modes": ["light"],
+  "defaultMode": "light",
+  "footer": "kintsugitoma · {{client}}",
+  "logo": { "kind": "text", "text": "金継間", "caption": "kintsugitoma", "lang": "ja", "label": "kintsugitoma" },
+  "motifs": {},
+  "rules": { "logoOnlyOn": ["title", "closing"], "minLabelPx": 12 }
+}

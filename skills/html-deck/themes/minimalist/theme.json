@@ -1,0 +1,10 @@
+{
+  "name": "minimalist",
+  "description": "Least branding: no logo, no motifs, no web fonts, one blue accent.",
+  "modes": ["light", "dark"],
+  "defaultMode": "light",
+  "footer": "",
+  "logo": { "kind": "none" },
+  "motifs": {},
+  "rules": { "logoOnlyOn": [], "minLabelPx": 12 }
+}

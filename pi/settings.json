@@ -1,10 +1,10 @@
 {
-  "lastChangelogVersion": "1.0.0",
+  "lastChangelogVersion": "1.0.2",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-sonnet-5-5",
   "persistModelSelection": false,
   "defaultThinkingLevel": "off",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "packages": [
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-context-view",
@@ -78,9 +78,11 @@
   "images": {
     "autoResize": false
   },
+  "cacheWarming": "idle",
   "showCacheMissNotices": true,
   "warnings": {
     "anthropicExtraUsage": false
   },
-  "fullscreenExitOutput": "transcript"
+  "fullscreenExitOutput": "transcript",
+  "deviceId": "bc66ecf4-6fc6-4139-bcc1-6298cdd8fb0d"
 }
