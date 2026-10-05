@@ -1,9 +1,9 @@
 {
-  "lastChangelogVersion": "1.0.2",
-  "defaultProvider": "openai-codex/gpt-6.1-sol",
-  "defaultModel": "claude-sonnet-5-5",
+  "lastChangelogVersion": "1.0.3",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-6.1-sol",
   "persistModelSelection": false,
-  "defaultThinkingLevel": "off",
+  "defaultThinkingLevel": "low",
   "hideThinkingBlock": false,
   "packages": [
     "git:github.com/algal/pi-openai-server-compaction",
