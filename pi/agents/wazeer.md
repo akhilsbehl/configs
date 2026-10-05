@@ -2,8 +2,8 @@
 name: wazeer
 aliases: wazeer
 description: Strong advisor for second opinions on deep and complex problems.
-model: openai-codex/gpt-5.6-sol
-thinking: medium
+model: openai-codex/gpt-6.1-sol
+thinking: xhigh
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":64,"graceTurns":8}
 timeoutMs: 1200000
 defaultProgress: true
 acceptanceRole: read-only
-completionGuard: true
 ---
 
 You are an advisory agent.

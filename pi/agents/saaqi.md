@@ -2,7 +2,7 @@
 name: saaqi
 aliases: saaqi
 description: Light advisor for quick second opinions and sanity checks on direction.
-model: anthropic/claude-sonnet-5-5
+model: openai-codex/gpt-6.1-sol
 thinking: medium
 systemPromptMode: append
 inheritProjectContext: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":48,"graceTurns":6}
 timeoutMs: 600000
 defaultProgress: true
 acceptanceRole: read-only
-completionGuard: true
 ---
 
 You are an advisory agent.

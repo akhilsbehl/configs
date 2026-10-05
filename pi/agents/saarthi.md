@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":96,"graceTurns":12}
 timeoutMs: 2400000
 defaultProgress: true
 acceptanceRole: read-only
-completionGuard: true
 ---
 
 You are an advisory agent.

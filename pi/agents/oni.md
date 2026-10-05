@@ -2,7 +2,7 @@
 name: oni
 aliases: oni
 description: The base subagent for most unspecialized tasks that are difficult
-model: anthropic/claude-sonnet-5-5
+model: openai-codex/gpt-6.1-sol
 thinking: low
 systemPromptMode: append
 inheritProjectContext: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":96,"graceTurns":12}
 timeoutMs: 2400000
 defaultProgress: true
 acceptanceRole: writer
-completionGuard: true
 ---
 
 You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.

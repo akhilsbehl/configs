@@ -2,8 +2,8 @@
 name: akuma
 aliases: akuma
 description: The base subagent for most unspecialized tasks that are exceptionally difficult
-model: openai-codex/gpt-5.6-sol
-thinking: medium
+model: openai-codex/gpt-6.1-sol
+thinking: xhigh
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":128,"graceTurns":16}
 timeoutMs: 3600000
 defaultProgress: true
 acceptanceRole: writer
-completionGuard: true
 ---
 
 You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.

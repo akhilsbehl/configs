@@ -2,8 +2,8 @@
 name: rasetsu
 aliases: rasetsu
 description: The base subagent for most unspecialized tasks that are difficult
-model: anthropic/claude-sonnet-5-5
-thinking: high
+model: openai-codex/gpt-6.1-sol
+thinking: medium
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":96,"graceTurns":12}
 timeoutMs: 2400000
 defaultProgress: true
 acceptanceRole: writer
-completionGuard: true
 ---
 
 You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.

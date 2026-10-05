@@ -2,7 +2,7 @@
 name: kitsune
 aliases: kitsune
 description: The base subagent for most unspecialized tasks
-model: openai-codex/gpt-5.6-luna
+model: openai-codex/gpt-6.1-luna
 thinking: high
 systemPromptMode: append
 inheritProjectContext: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":64,"graceTurns":8}
 timeoutMs: 1200000
 defaultProgress: true
 acceptanceRole: writer
-completionGuard: true
 ---
 
 You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.

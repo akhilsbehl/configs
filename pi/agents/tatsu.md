@@ -3,7 +3,7 @@ name: tatsu
 aliases: tatsu
 description: The base subagent for most unspecialized tasks that are exceptionally difficult
 model: anthropic/claude-opus-5-5
-thinking: high
+thinking: xhigh
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -15,7 +15,6 @@ turnBudget: {"maxTurns":128,"graceTurns":16}
 timeoutMs: 3600000
 defaultProgress: true
 acceptanceRole: writer
-completionGuard: true
 ---
 
 You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.

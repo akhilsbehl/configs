@@ -10,7 +10,7 @@ runner:
     - --skip-git-repo-check
     - --approve-for-me
     - --model
-    - gpt-5.6-luna
+    - gpt-6.1-luna
     - --config
     - model_reasoning_effort=high
   promptDelivery: stdin
