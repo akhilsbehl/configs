@@ -4,7 +4,7 @@
   "defaultModel": "claude-sonnet-5-5",
   "persistModelSelection": false,
   "defaultThinkingLevel": "off",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "packages": [
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-context-view",
@@ -48,14 +48,11 @@
     "openai-codex/gpt-5.6-sol",
     "anthropic/claude-sonnet-5-5",
     "anthropic/claude-opus-5-5",
-    "google/gemini-flash-latest",
     "meta-ai/muse-spark-1.3-contributor",
     "openrouter/deepseek/deepseek-v4.1-flash",
     "openai-codex/gpt-6-astra",
     "anthropic/claude-fable-5-1",
     "openai-codex/gpt-5.6-luna",
-    "google/gemini-flash-lite-latest",
-    "google/gemini-3.1-pro-preview"
   ],
   "showHardwareCursor": true,
   "editorPaddingX": 0,
