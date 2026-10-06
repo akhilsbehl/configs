@@ -1,0 +1,12 @@
+{
+  "operation": "calendar",
+  "action": "create-invite",
+  "subject": "REPLACE_WITH_APPROVED_SUBJECT",
+  "start": "2030-01-15T10:30:00",
+  "durationMinutes": 30,
+  "timezone": "REPLACE_WITH_WINDOWS_TIMEZONE_ID",
+  "attendees": [
+    "recipient@example.com"
+  ],
+  "approved": false
+}

@@ -1,0 +1,7 @@
+{
+  "operation": "mail",
+  "action": "search",
+  "folder": "Sent Items",
+  "query": "Graph",
+  "limit": 25
+}

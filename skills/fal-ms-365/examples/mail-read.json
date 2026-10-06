@@ -1,0 +1,6 @@
+{
+  "operation": "mail",
+  "action": "read",
+  "entryId": "REPLACE_WITH_EXACT_ENTRY_ID",
+  "storeId": "REPLACE_WITH_STORE_ID"
+}

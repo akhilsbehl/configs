@@ -1,0 +1,8 @@
+{
+  "operation": "mail",
+  "action": "export",
+  "entryId": "REPLACE_WITH_EXACT_ENTRY_ID",
+  "name": "message",
+  "outputDir": "/tmp",
+  "includeAttachments": true
+}

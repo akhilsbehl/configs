@@ -1,0 +1,7 @@
+{
+  "operation": "calendar",
+  "action": "list",
+  "start": "2030-01-15T00:00:00",
+  "end": "2030-01-16T00:00:00",
+  "limit": 25
+}

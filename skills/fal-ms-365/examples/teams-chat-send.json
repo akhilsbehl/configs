@@ -1,0 +1,7 @@
+{
+  "operation": "teams",
+  "action": "send-chat",
+  "chatId": "REPLACE_WITH_APPROVED_CHAT_ID",
+  "body": "REPLACE_WITH_APPROVED_BODY",
+  "approved": false
+}

@@ -1,0 +1,10 @@
+{
+  "operation": "mail",
+  "action": "send",
+  "to": [
+    "recipient@example.com"
+  ],
+  "subject": "REPLACE_WITH_APPROVED_SUBJECT",
+  "body": "REPLACE_WITH_APPROVED_BODY",
+  "approved": false
+}

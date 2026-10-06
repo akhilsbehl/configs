@@ -1,0 +1,6 @@
+{
+  "operation": "teams",
+  "action": "chat-messages",
+  "chatId": "REPLACE_WITH_CHAT_ID",
+  "limit": 25
+}

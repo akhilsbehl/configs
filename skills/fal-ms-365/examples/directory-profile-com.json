@@ -1,0 +1,7 @@
+{
+  "operation": "directory",
+  "action": "profile",
+  "backend": "com",
+  "identity": "REPLACE_WITH_RESOLVABLE_IDENTITY",
+  "relationships": true
+}

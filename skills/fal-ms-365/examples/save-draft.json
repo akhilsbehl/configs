@@ -1,0 +1,10 @@
+{
+  "operation": "mail",
+  "action": "save-draft",
+  "to": [
+    "recipient@example.com"
+  ],
+  "subject": "Draft",
+  "body": "Draft text",
+  "approved": false
+}

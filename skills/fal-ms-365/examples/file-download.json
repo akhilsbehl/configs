@@ -1,0 +1,6 @@
+{
+  "operation": "files",
+  "action": "download",
+  "link": "https://REPLACE_WITH_M365_SHARING_LINK",
+  "outputDir": "/tmp"
+}
