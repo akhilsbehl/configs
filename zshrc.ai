@@ -1,0 +1,171 @@
+_piu () {
+    command pi update --all
+    command npm install --global \
+        --allow-scripts=agent-browser agent-browser@latest
+}
+
+_pi () {
+    local model="${__PI_MODEL}"
+    if [[ -z "$model" ]]; then
+        local default_provider default_model
+        default_provider=$(grep 'defaultProvider' "$HOME/configs/pi/settings.json" | awk '{print $2}' | tr -d ',"')
+        default_model=$(grep 'defaultModel' "$HOME/configs/pi/settings.json" | awk '{print $2}' | tr -d ',"')
+        model="${default_provider}/${default_model}"
+    fi
+
+    local thinking="${__PI_THINKING}"
+    if [[ -z "$thinking" ]]; then
+        thinking=$(grep 'defaultThinkingLevel' "$HOME/configs/pi/settings.json" | awk '{print $2}' | tr -d ',"')
+    fi
+
+    local delegate_prompt=""
+    if [[ "${__DELEGATE_MODE}" == "delegate" ]]; then
+        delegate_prompt="$(cat "$HOME/configs/pi/prompts/delegate.md")"
+    elif [[ "${__DELEGATE_MODE}" == "diy" ]]; then
+        delegate_prompt="$(cat "$HOME/configs/pi/prompts/diy.md")"
+    fi
+
+    _piu
+
+    # Collect prompt arguments dynamically to avoid passing empty string arguments
+    local pi_args=()
+    if [[ -n "$delegate_prompt" ]]; then
+        pi_args+=("$delegate_prompt")
+    fi
+    pi_args+=("$@")
+
+    command pi \
+        --cache-warm-enabled \
+        --cache-warm-duration 90 \
+        --cache-warm-rate on \
+        --exclude-tools powershell,subagents_enable \
+        --model "$model" \
+        --thinking "$thinking" \
+        "${pi_args[@]}"
+}
+
+alias pi=_pi
+
+pie() {
+    __DELEGATE_MODE="delegate" _pi "$@"
+}
+
+piy() {
+    __DELEGATE_MODE="diy" _pi "$@"
+}
+
+pim() {
+    __PI_MODEL="meta-ai/muse-spark-1.3-contributor" \
+    __PI_THINKING="high" \
+    __DELEGATE_MODE="diy" \
+    _pi "$@"
+}
+
+pids() {
+    __PI_MODEL="deepseek/deepseek-v4.1-flash" \
+    __PI_THINKING="high" \
+    __DELEGATE_MODE="diy" \
+    _pi "$@"
+}
+
+pist() {
+    __PI_MODEL="stealth/space-bunny-alpha" \
+    __PI_THINKING="high" \
+    __DELEGATE_MODE="diy" \
+    _pi "$@"
+}
+
+cld () {
+    command claude update \
+        && command claude --model sonnet-5-5 --effort low "$@"
+}
+
+update-codex() {
+    emulate -L zsh
+    setopt pipefail
+    local current="" latest_tag latest target tmpdir archive bindir
+    local codex_cmd="${commands[codex]:-}"
+    local -a pkgs
+    pkgs=(codex-package codex-app-server-package)
+    [[ "$(uname -s)" == Linux && "$(uname -m)" == x86_64 ]] || {
+        print -u2 "This function is for x86_64 Linux only"
+        return 1
+    }
+    if [[ -n "$codex_cmd" ]]
+    then
+        target="$(readlink -f "$codex_cmd")"  || return 1
+        [[ -x "$target" ]] || {
+            print -u2 "Codex target is not executable: $target"
+            return 1
+        }
+        current="$(codex --version | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)"
+    else
+        target="$HOME/.local/bin/codex"
+        mkdir -v -p "${target:h}" || return 1
+        print "Codex is not installed; installing latest stable version."
+    fi
+    latest_tag="$(curl -fsSL \
+        -H 'Accept: application/vnd.github+json' \
+        -H 'X-GitHub-Api-Version: 2022-11-28' \
+        'https://api.github.com/repos/openai/codex/releases?per_page=100' |
+        jq -r '[.[]
+    | select(.draft == false and .prerelease == false)
+    | .tag_name
+    | select(test("^rust-v[0-9]+\\.[0-9]+\\.[0-9]+$"))
+    ][0] // empty')"  || {
+        print -u2 "Could not query Codex releases"
+        return 1
+    }
+    [[ -n "$latest_tag" ]] || {
+        print -u2 "Could not determine latest stable version"
+        return 1
+    }
+    latest="${latest_tag#rust-v}"
+    if [[ -n "$current" ]]
+    then
+        print "Installed: $current"
+        print "Latest stable: $latest"
+        [[ "$current" == "$latest" ]] && {
+            print "Codex is already up to date."
+            return 0
+        }
+        [[ "$(printf '%s\n' "$current" "$latest" | sort -V | tail -n 1)" == "$latest" ]] || {
+            print "Installed version is newer; no change made."
+            return 0
+        }
+    fi
+    tmpdir="$(mktemp -d)"  || return 1
+    bindir="${target:h}"
+    for pkg in $pkgs
+    do
+        archive="$tmpdir/$pkg.tar.gz"
+        curl -fL --retry 3 -o "$archive" \
+            "https://github.com/openai/codex/releases/download/$latest_tag/$pkg-x86_64-unknown-linux-musl.tar.gz" \
+            && mkdir "$tmpdir/$pkg" \
+            && tar -xzf "$archive" -C "$tmpdir/$pkg" \
+            && [[ -x "$tmpdir/$pkg/bin/codex" || -x "$tmpdir/$pkg/bin/codex-app-server" ]] || {
+                print -u2 "Could not download or extract $pkg"
+                rm -rf "$tmpdir"
+                return 1
+            }
+        local -a bins
+        bins=("$tmpdir/$pkg"/bin/*(N))
+        for bin in $bins
+        do
+            chmod 755 "$bin"
+            mv -v "$bin" "$bindir/${bin:t}" || {
+                print -u2 "Could not install ${bin:t} to $bindir"
+                rm -rf "$tmpdir"
+                return 1
+            }
+        done
+    done
+    rm -rf "$tmpdir"
+    rehash
+    print "Installed: $(codex --version)"
+}
+
+cdx () {
+    update-codex \
+        && command codex --model "gpt-5.6-luna" --config model_reasoning_effort="medium" "$@"
+}

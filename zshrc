@@ -52,6 +52,17 @@ setopt globdots extendedglob nomatch
 # Send me a notification if possible
 setopt notify
 
+# Bind Shift+Tab to expand aliases without adding a space
+expand-alias-no-space() {
+  zle _expand_alias
+  # If the character just before the cursor is a space, remove it
+  if [[ "$LBUFFER" == *' ' ]]; then
+    LBUFFER="${LBUFFER% }"
+  fi
+}
+zle -N expand-alias-no-space
+bindkey '^[[Z' expand-alias-no-space
+
 ###################
 # Command Aliases #
 ###################
@@ -221,6 +232,11 @@ else
   alias upgrade='echo Unknown OS!'
   alias autorm='echo Unknown OS!'
 fi
+
+alias zj='zellij'
+alias rr='richie review'
+alias rrr='richie review ~/.richie/ephemeral/;;'
+alias www='cdl ~/warchives/;;'
 
 #########################
 # Variables and Exports #
@@ -579,4 +595,5 @@ eval "$(starship init zsh)"
 [[ -f ~/.zshrc.fzf ]] && source ~/.zshrc.fzf
 [[ -f ~/.zshrc.wsl ]] && source ~/.zshrc.wsl
 [[ -f ~/.zshrc.docker ]] && source ~/.zshrc.docker
+[[ -f ~/.zshrc.ai ]] && source ~/.zshrc.ai
 [[ -f ~/.zshrc.more ]] && source ~/.zshrc.more
