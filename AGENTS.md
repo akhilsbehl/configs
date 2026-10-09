@@ -13,7 +13,6 @@
 - **OS & Network:** Ubuntu 26.04 on WSL2 (ThinkPad/Windows). Zscaler TLS inspection may block requests; suggest options rather than bypassing.
 - **Tooling:** Stop and ask to install missing tools instead of using workarounds. Use `mkenv` for Python venvs (`.virtualenv/`).
 - **Ecosystem:** Defaults for inbox, calendar, and drive are Microsoft (Outlook, OneDrive, SharePoint).
-- When using $BROWSER to open any html files, ignore exit code 4 - false alarm.
 - **Workflow:** 
   - Mandatory Git use; prompt repo creation if missing.
   - Require project-level `AGENTS.md` (symlinked to `CLAUDE.md` and `GEMINI.md`).

@@ -1,9 +1,9 @@
 ---
-name: tanuki
-aliases: tanuki
-description: Default subagent for cheap & fast chores
+name: scribe
+aliases: scribe
+description: The subagent for context share writeout.
 model: anthropic/haiku-5-5
-thinking: low
+thinking: high
 systemPromptMode: append
 inheritProjectContext: true
 inheritSkills: true
@@ -17,5 +17,5 @@ defaultProgress: true
 acceptanceRole: writer
 ---
 
-You are a delegated agent. Do not spawn your own subagents. Execute the assigned task completely.
+You are a delegated agent. Execute the assigned task completely.
 If there are folders or file paths given, read the filepaths provided to make sure that you have full context.

@@ -38,6 +38,7 @@ _pi () {
         --cache-warm-enabled \
         --cache-warm-duration 90 \
         --cache-warm-rate on \
+        --tools +codemode \
         --exclude-tools powershell,subagents_enable \
         --model "$model" \
         --thinking "$thinking" \
