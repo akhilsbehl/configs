@@ -2,7 +2,7 @@
 name: tanuki
 aliases: tanuki
 description: Default subagent for cheap & fast chores
-model: anthropic/haiku-5-5
+model: anthropic/claude-haiku-5-5
 thinking: low
 systemPromptMode: append
 inheritProjectContext: true

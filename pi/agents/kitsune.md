@@ -2,7 +2,7 @@
 name: kitsune
 aliases: kitsune
 description: The base subagent for most unspecialized tasks
-model: anthropic/haiku-5-5
+model: anthropic/claude-haiku-5-5
 thinking: high
 systemPromptMode: append
 inheritProjectContext: true

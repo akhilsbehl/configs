@@ -2,7 +2,7 @@
 name: scribe
 aliases: scribe
 description: The subagent for context share writeout.
-model: anthropic/haiku-5-5
+model: anthropic/claude-haiku-5-5
 thinking: high
 systemPromptMode: append
 inheritProjectContext: true
