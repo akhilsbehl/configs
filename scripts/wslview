@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Open URLs and WSL paths with the default Windows application.
+target="${1:-}"
+case "$target" in
+    --help|-h)
+        echo 'Usage: wslview <url|file|directory>'
+        exit 0
+        ;;
+    --version|-v)
+        echo 'wslview-compat 1.0'
+        exit 0
+        ;;
+    '')
+        echo 'Usage: wslview <url|file|directory>' >&2
+        exit 1
+        ;;
+    http://*|https://*|ftp://*) ;;
+    *)
+        target="$(wslpath -w "$target" 2>/dev/null || printf '%s' "$target")"
+        ;;
+esac
+# Escape single quotes for a literal PowerShell string.
+target="${target//\'/\'\'}"
+powershell.exe -NoProfile -NonInteractive -Command "Start-Process '$target'" 2>/dev/null
