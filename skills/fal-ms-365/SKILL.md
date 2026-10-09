@@ -23,6 +23,7 @@ Resolve all relative paths against this skill directory. The runner returns JSON
 ## Routing
 
 - **Mail/calendar: classic Outlook COM first.** Attach to running Outlook in the same Windows session. Another virtual desktop is fine. No mail/calendar Graph implementation in this draft.
+- Calendar reads include local response/recurrence evidence; `free-busy` reads an explicitly resolved recipient. `respond` is approval-gated and currently supports non-recurring received meetings only; it submits a native Outlook response.
 - **Files/Teams: Microsoft Graph.** Use the existing app, environment variables and protected MSAL cache. Teams permissions remain unverified until endpoint probes pass.
 - **Directory: Graph search or COM profile lookup.** An explicit alternative read route can be tried only when authentication failure is not the cause and the user’s request allows it. Surface the first failure and label the new source.
 - **No browser fallback.** If the appropriate route(s) fail, escalate to the user. Never repeat an uncertain mutation through another route.
@@ -41,7 +42,7 @@ Resolve all relative paths against this skill directory. The runner returns JSON
 
 ## Task references
 
-- [Mail and calendar](references/mail-and-calendar.md): folders, search, exports, drafting, sending and invitations.
+- [Mail and calendar](references/mail-and-calendar.md): folders, search, exports, drafting, sending, invitations, free/busy and exact meeting responses.
 - [Directory, files and Teams](references/directory-files-teams.md): query forms, paging and IDs.
 - [Outlook sync and item types](references/outlook-sync-and-item-types.md): diagnostics and known failure modes.
 - [Exports and downloads](references/exports-and-downloads.md): formats, paths and integrity.

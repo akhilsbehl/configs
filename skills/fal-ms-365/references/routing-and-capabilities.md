@@ -9,7 +9,10 @@ Generalise user requests; session examples are evidence, not hard-coded workflow
 | Triage unread items | COM reads + model review | mail / list with unreadOnly; no bundled classification policy |
 | Send emails; save drafts; mark read; move items | COM, specific authorisation | mail / send, save-draft, mark-read, move |
 | Export email and attachments | COM + verified WSL transfer | mail / export (HTML only) |
-| Read calendar; send invitations | COM, authorise invitation | calendar / list, create-invite |
+| Read calendar; inspect response and recurrence evidence | COM | calendar / list |
+| Read explicit recipient free/busy | COM, resolve recipient | calendar / free-busy |
+| Accept, decline or tentatively accept one exact non-recurring received meeting | COM, approval of exact response and target | calendar / respond |
+| Send invitations | COM, authorise invitation | calendar / create-invite |
 | Verify sends/invitations | COM reads | mail list/search/read + calendar list; no delivery guarantee |
 | Inspect sync, request Send/Receive | COM | diagnose / sync-status, sync |
 | Search people and read profile/reporting relationships | Graph; COM profile alternative | directory / search, profile, page |
@@ -29,4 +32,4 @@ Initial Outlook cache was incomplete: inbox counts rose from 252 to 2,138 after 
 
 No browser fallback. COM is preferred for mail/calendar; no Graph mail/calendar module is bundled. No automatic Outlook startup. Directory read alternatives must be explicit and source-labelled; stop immediately on authentication failure. Surface every failure. Unknown mutations must not be repeated.
 
-No calendar updates/cancellations, deletion, Teams chat creation, cross-chat full-text search, Planner, SharePoint list operations, transcripts, or org reports in this draft. Do not claim these work merely because Graph supports them.
+No calendar event edits, cancellation as organiser, deletion, any recurring-meeting response (series, occurrence or exception), Teams chat creation, cross-chat full-text search, Planner, SharePoint list operations, transcripts, or org reports in this draft. `respond` supports non-recurring received meetings only. Do not claim these work merely because Graph supports them.

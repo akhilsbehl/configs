@@ -13,7 +13,7 @@ try{
     if($operation -eq 'diagnose' -and $backend -ne $defaultBackend){throw 'Diagnostic backend is determined by the selected action'}
     # Reject unauthorised writes before attaching to Outlook or acquiring a token.
     if(($operation -eq 'mail' -and $action -in @('send','save-draft','mark-read','move')) -or
-       ($operation -eq 'calendar' -and $action -eq 'create-invite') -or
+       ($operation -eq 'calendar' -and $action -in @('create-invite','respond')) -or
        ($operation -eq 'teams' -and $action -in @('send-chat','send-channel')) -or
        ($operation -eq 'diagnose' -and $action -eq 'sync')){Assert-Approval $request}
     $data=switch($operation){

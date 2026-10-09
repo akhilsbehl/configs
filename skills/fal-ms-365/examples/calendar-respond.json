@@ -1,0 +1,13 @@
+{
+  "operation": "calendar",
+  "action": "respond",
+  "response": "accept",
+  "entryId": "REPLACE_WITH_EXACT_OUTLOOK_ENTRY_ID",
+  "storeId": "REPLACE_WITH_STORE_ID_IF_NEEDED",
+  "expectedSubject": "REPLACE_WITH_EXACT_SUBJECT",
+  "expectedOrganizer": "REPLACE_WITH_EXACT_ORGANIZER",
+  "start": "2030-01-15T09:00:00",
+  "end": "2030-01-15T10:00:00",
+  "timezone": "REPLACE_WITH_WINDOWS_TIMEZONE_ID",
+  "approved": false
+}
