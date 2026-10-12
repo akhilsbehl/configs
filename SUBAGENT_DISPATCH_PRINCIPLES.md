@@ -4,8 +4,8 @@
 
 - Dispatch a self-contained task with a clear outcome, scope, constraints, and definition of done.
 - While a child runs, the primary may prepare dependencies or do non-overlapping work, but must not independently solve the child’s assigned subproblem. Afterward, the primary may verify, integrate, and close gaps.
-- Write subagent prompts using the `~/configs/pi/prompts/task-form.md` template.
-  - Make sure that the agent is clear on un-necessary and harmful things not to do.
+- Write subagent prompts using the `~/configs/pi/prompts/task-form.md` template <== Parent's task - not for the subagent to read and/or fill.
+  - Make sure that the subagent is clear on un-necessary and harmful things not to do.
 
 ## Roster
 
@@ -32,10 +32,13 @@
 - **Advisors (A1-A3):** `saaqi` (A1), `wazeer` (A2), `saarthi` (A3)
 - **Utility:** `scribe`
 - **Engines:** `codex`
-### Allowe to spawn children subagents within bounds
+### Allowed to spawn children subagents within bounds
 - **Task subagents (S1–S7):** - `tanuki` (S1), `kitsune` (S2), `oni` (S3), `rasetsu` (S4), `akuma` (S5), `kyubi` (S6), `tatsu` (S7).
 - **Strict Descending Nesting:** An agent at level $S_n$ can only spawn subagents up to level $S_{n-1}$
   - E.g., $S_3$ can spawn $S_1$ or $S_2$, but not $S_3$ or above.
+- S1-S3 must not spawn any advisors A1-A3.
+- S4-S5 may spwan A1 only if necessary. A2-A3 spawning is not allowed.
+- S6-S7 may spawn A2 only if necessary. A3 spawning is not allowed.
 
 ## Routing and gates
 
