@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agent-browser": {
+      "command": "/home/akhil/.nvm/versions/node/v24.21.0/bin/agent-browser",
+      "args": ["mcp", "--tools", "all"],
+      "exposure": "codemode"
+    }
+  }
+}

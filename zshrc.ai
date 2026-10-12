@@ -38,14 +38,11 @@ _pi () {
         --cache-warm-enabled \
         --cache-warm-duration 90 \
         --cache-warm-rate on \
-        --tools +codemode \
         --exclude-tools powershell,subagents_enable \
         --model "$model" \
         --thinking "$thinking" \
         "${pi_args[@]}"
 }
-
-alias pi=_pi
 
 pie() {
     __DELEGATE_MODE="delegate" _pi "$@"

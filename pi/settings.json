@@ -4,19 +4,12 @@
   "defaultModel": "gpt-6.1-sol",
   "persistModelSelection": false,
   "defaultThinkingLevel": "low",
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "packages": [
     "git:github.com/algal/pi-openai-server-compaction",
     "npm:pi-context-view",
     {
       "source": "npm:pi-bg-tasks",
-      "extensions": [],
-      "skills": [],
-      "prompts": [],
-      "themes": []
-    },
-    {
-      "source": "npm:pi-agent-browser-native",
       "extensions": [],
       "skills": [],
       "prompts": [],
@@ -67,11 +60,14 @@
     "disableBuiltins": true
   },
   "extensions": [
-    "-builtin:llama.cpp",
-    "-builtin:mcp",
-    "-builtin:codemode",
-    "-builtin:tool-search"
+    "-builtin:llama.cpp"
   ],
+  "defaultTools": [
+    "+codemode"
+  ],
+  "codemode": {
+      "mode": "on"
+  },
   "images": {
     "autoResize": false
   },
