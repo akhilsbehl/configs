@@ -4,7 +4,7 @@
 
 - Dispatch a self-contained task with a clear outcome, scope, constraints, and definition of done.
 - While a child runs, the primary may prepare dependencies or do non-overlapping work, but must not independently solve the child’s assigned subproblem. Afterward, the primary may verify, integrate, and close gaps.
-- Write subagent prompts using the `~/configs/pi/prompts/task-form.md` template <== Parent's task - not for the subagent to read and/or fill.
+- Write subagent task directives using the `~/configs/pi/prompts/task-form.md` template <== Parent's task - not for the subagent to read and/or fill.
   - Make sure that the subagent is clear on un-necessary and harmful things not to do.
 
 ## Roster
