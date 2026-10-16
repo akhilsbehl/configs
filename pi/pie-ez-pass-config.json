@@ -1,11 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/akhilsbehl/pie-ez-pass/refs/heads/master/schemas/config.schema.json",
-  "provider": "openai-codex",
-  "model": "gpt-5.6-luna",
-  "reasoning": "low",
-  "timeoutMs": 90000,
-  "use_jev": true,
-  "jev_escalate_confidence_threshold": 0.6,
+  "reviewer": "sys1",
+  "sys1_provider": "openrouter",
+  "sys1_model": "typesafe/jev-1.13",
+  "sys2_provider": "openai-codex",
+  "sys2_model": "gpt-5.6-luna",
+  "sys2_reasoning": "low",
+  "timeoutMs": 10000,
+  "sys1_escalate_threshold": 0.6,
   "rules": {
     "allow": {
       "commands": [
