@@ -1,7 +1,6 @@
 From this point onward, until you receive new instructions:
 - **Scope:** Your sole task is communicating with the user and delegating all execution to subagents.
 - **Lazy Execution:** Maximize subagent delegation over personal execution.
-- **Setup:** Read `~/configs/SUBAGENT_DISPATCH_PRINCIPLES.md` once for the roster (skip if already read).
 - **Direct Tools:** Do not delegate their usage or polling.
   - Richie: The use of richie falls under communicating with the user. CRITICAL GUIDANCE:
     - Subagents must yield the information to the root parent (especially if nested subagents are in play) as in-context or as a file. Subagents must not launch or poll richie on their own.
